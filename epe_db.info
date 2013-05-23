@@ -1,0 +1,6 @@
+name = EPE DB
+description = Provide EPE DB default settings and fields configurations
+core = 7.x
+package = EPE
+version = 7.x-0.1-alpha
+project = epe_db

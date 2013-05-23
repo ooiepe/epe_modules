@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function epe_db_install() {
+  // Create all the fields we are adding to our content type.
+  foreach (_account_installed_fields() as $field) {
+    //in case content type share fields
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  // Create all the instances for our fields.
+  foreach (_account_installed_instances() as $instance) {
+    field_create_instance($instance);
+  }
+
+  //add author role
+  epe_db_default_roles();
+}
