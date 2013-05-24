@@ -1,0 +1,16 @@
+name = EPE Image resource
+description = EPE Image resource content type package with list view, search index
+core = 7.x
+package = EPE
+version = 7.x-0.1-alpha
+project = epe_dbimage
+
+dependencies[] = epe_db
+dependencies[] = epe_dbfiles
+dependencies[] = entity
+dependencies[] = context
+dependencies[] = semanticviews
+dependencies[] = views_php
+dependencies[] = token
+
+files[] = epe_dbimage.views_default.inc

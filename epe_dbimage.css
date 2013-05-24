@@ -1,0 +1,7 @@
+.block-list .image {
+  float: left;
+}
+.block-list .text {
+  margin-left: 110px;
+}
+.block-list .text label { font-weight: normal; float: left; margin-right: 10px; }
