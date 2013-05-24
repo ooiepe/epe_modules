@@ -1,0 +1,335 @@
+<?php
+define('RESOURCE_FILE_CONTENT_TYPES','document,image,video,audio');
+
+/**
+  * Implement hook_permission
+  */
+function epe_dbfiles_permission() {
+  return array(
+    'epe dbfiles interface' => array(
+      'title' => 'EPE DB File Interface',
+      'description' => 'Allow user to use EPE db file interface.',
+    ),
+  );
+}
+
+/**
+  * Implement hook_menu
+  */
+function epe_dbfiles_menu() {
+  $items = array();
+
+  $items['node/add/file-resource'] = array(
+    'title' => t('Create EPE File Resrouce'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('epe_dbfiles_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbfiles interface,create image_resource content,create document_resource content,create audio_resource content,create video_resource content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+  * Implement hook_form
+  */
+function epe_dbfiles_form($node, &$form_state) {
+  $validate_msgs = epe_dbfiles_requirements_validation();
+
+  $form = array();
+  if(!empty($validate_msgs)) {
+    drupal_set_message(implode('<br/>', $validate_msgs),'error');
+  } else {
+    $depend_modules = epe_dbfiles_enabled_dependent_modules();
+    $file_field_desc = 'Upload a file resource <em>(' . ucwords(implode(',', $depend_modules)) . ')</em>, allowed extensions are:<br/>';
+    foreach($depend_modules as $module) {
+      $field_instance = field_info_instance('node','field_'. $module .'srcfile',$module . '_resource');
+      $file_field_desc .= ucwords("{$module} resource: ") . $field_instance['settings']['file_extensions'] . '<br/>';
+    }
+
+    $form['file'] = array(
+      '#type' => 'file',
+      '#title' => t('Upload file resource'),
+      '#description' => t($file_field_desc),
+      '#attributes' => array('class'=>array('form-file-field')),
+    );
+
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#required' => TRUE,
+    );
+
+    $form['description'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Description'),
+      '#required' => TRUE,
+    );
+
+    $form['thumbnail'] = array(
+      '#type' => 'file',
+      '#title' => t('Upload thumbnail'),
+      '#description' => t('Upload a file resource <em>(Document, Image, Video, Audio)</em>, allowed extensions: jpg, jpeg, png, gif'),
+    );
+
+    $permission = array(1=>t('Yes'),0=>t('No'));
+    $form['permission'] = array(
+      '#type' => 'radios',
+      '#title' => t('Permission'),
+      '#default_value' => 0,
+      '#options' => $permission,
+      '#field_prefix' => t('I hereby certify that this file is either my own work or I have been given permission to use it within an educational context'),
+      '#ajax' => array(
+        'callback' => 'epe_dbfiles_permission_check',
+        'wrapper' => 'wrapper_submit'
+      ),
+    );
+
+    $form['node_type'] = array('#type' => 'hidden', '#value' => '');
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Submit',
+      '#attributes' => array('disabled'=>'disabled'),
+      '#prefix' => '<div id="wrapper_submit">',
+      '#suffix' => '</div>',
+    );
+
+    //add form specific js & css
+    $form['#attached']['css'][] = drupal_get_path('module', 'epe_dbfiles') . '/epe_dbfiles.css';
+    $form['#attached']['js'][] = drupal_get_path('module', 'epe_dbfiles') . '/epe.dbfiles.js';
+    $form['#attached']['js'][] = array(
+      'data' => epe_dbfiles_js_settings(),
+      'type' => 'setting',
+    );
+  }
+
+  return $form;
+}
+
+/*
+ * ajax call back from $form['permission'] field, returns drupal ajax css command
+ */
+function epe_dbfiles_permission_check($form, $form_state) {
+  if($form_state['values']['permission'] == 1) {
+    unset($form['submit']['#attributes']['disabled']);
+  } else {
+    $form['submit']['#attributes']['disabled'] = 'disabled';
+  }
+  return $form['submit'];
+}
+
+/**
+ * Validate handler for file_resource_form().
+ */
+function epe_dbfiles_form_validate($form, &$form_state) {
+  $allowed_extensions = '';
+  $depend_modules = epe_dbfiles_enabled_dependent_modules();
+
+  foreach($depend_modules as $type) {
+    $field_instance = field_info_instance('node','field_'. $type .'srcfile',$type . '_resource');
+    $allowed_extensions .= ' ' . $field_instance['settings']['file_extensions'];
+  }
+
+  $file = file_save_upload('file', array('file_validate_extensions' => array(trim($allowed_extensions)))); // Validate extensions.
+
+  // If the file passed validation:
+  if ($file) {
+    // Move the file, into the Drupal file system
+    if ($file = file_move($file, 'private://')) {
+      $fileext = pathinfo($file->filename, PATHINFO_EXTENSION);
+      // Save the file for use in the submit handler.
+      $form_state['storage']['file'] = $file;
+      foreach($depend_modules as $type) {
+        //determine which type of content we should create base on the file uploaded
+        $field_instance = field_info_instance('node','field_'. $type .'srcfile',$type . '_resource');
+        $allowed_extensions = explode(' ', $field_instance['settings']['file_extensions']);
+        if(in_array(strtolower($fileext), $allowed_extensions)) {
+          $form_state['values']['node_type'] = $type;
+          break;
+        }
+      }
+    }
+    else {
+      form_set_error('file', t('Failed to write the uploaded file to the site\'s file folder.'));
+    }
+  }
+  else {
+    form_set_error('file', t('No file was uploaded.'));
+  }
+
+  $thumb = file_save_upload('thumbnail', array('file_validate_extensions' => array('jpg gif png')));
+  //if file pass validation
+  if($thumb) {
+    if($thumb = file_move($thumb, 'private://')) { $form_state['storage']['thumbnail'] = $thumb; }
+  }
+}
+
+/*
+ * Submit handler for file_resource_form()
+ */
+function epe_dbfiles_form_submit($form, &$form_state) {
+  global $user;
+
+  //create corresponding node with entity api
+  $node_values = array(
+    'type' => $form_state['values']['node_type'] . '_resource',
+    'uid' => $user->uid,
+    'status' => 0
+  );
+  $entity = entity_create('node', $node_values);
+
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->title->set($form_state['values']['title']);
+  $wrapper->body->set(array('value'=>$form_state['values']['description']));
+  $entity_file_field = 'field_' . $form_state['values']['node_type'] . 'srcfile';
+  $wrapper->{$entity_file_field}->file->set($form_state['storage']['file']);
+  $entity_thumb_field = 'field_' . $form_state['values']['node_type'] . '_thumb';
+
+  if(isset($form_state['storage']['thumbnail'])) {
+    $entity_thumb_field = 'field_' . $form_state['values']['node_type'] . '_thumb';
+    $wrapper->{$entity_thumb_field}->file->set($form_state['storage']['thumbnail']);
+  }
+
+  $wrapper->save(true);
+
+  $form_state['redirect'] = 'node/' . $entity->nid;
+
+  drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
+}
+
+/*
+ * menu [js/epe_dbfiles.js] callback function
+ */
+function epe_dbfiles_js_settings() {
+  $depend_modules = epe_dbfiles_enabled_dependent_modules();
+
+  $image_exts = array();
+  $other_exts = array();
+  foreach($depend_modules as $type) {
+    $field_instance = field_info_instance('node','field_'. $type .'srcfile',$type . '_resource');
+    if($field_instance['settings']['file_extensions']) {
+      if($type == 'image') {
+        $image_exts = explode(" ",$field_instance['settings']['file_extensions']);
+      } else {
+        $other_exts = array_merge($other_exts, explode(" ",$field_instance['settings']['file_extensions']));
+      }
+    }
+  }
+
+  return array(
+    'image_exts' => json_encode($image_exts),
+    'other_exts' => json_encode($other_exts),
+  );
+}
+
+/**
+ * Implements hook_default_search_api_server().
+ */
+function epe_dbfiles_default_search_api_server() {
+  $items = array();
+  $items['database_service'] = entity_create('search_api_server', array(
+    'name' => 'database-service',
+    'machine_name' => 'database_service',
+    'description' => '',
+    'class' => 'search_api_db_service',
+    'options' => array(
+      'database' => 'default:default',
+      'min_chars' => 3,
+    ),
+    'enabled' => 1,
+  ));
+  return $items;
+}
+
+function epe_dbfiles_requirements_validation() {
+  $messages = array();
+
+  $depend_modules = epe_dbfiles_enabled_dependent_modules();
+  if(empty($depend_modules)): $messages[] = 'You must have at the minimum 1 of the file type resource module enabled.'; endif;
+
+  $private_file_scheme = variable_get('file_default_scheme','');
+  $private_file_path = variable_get('file_private_path','');
+
+  if(!$private_file_path): $messages[] = 'Please enter a valid Drupal private file system path.'; endif;
+  if(!$private_file_scheme): $messages[] = 'Please set Drupal default download method to "Private".'; endif;
+
+  return $messages;
+}
+
+function epe_dbfiles_enabled_dependent_modules() {
+  //check for enabled image/document/video/audio epe modules
+  $all_enabled_modules = module_list();
+  $depend_modules = array();
+  foreach(explode(',', RESOURCE_FILE_CONTENT_TYPES) as $type) {
+    if(in_array("epe_db{$type}", $all_enabled_modules)): $depend_modules[] = $type; endif;
+  }
+
+  return $depend_modules;
+}
+
+/*
+ * Implement hook_menu_local_tasks_alter()
+ */
+function epe_dbfiles_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  $addtabs = false;
+  if(arg(0) == 'node' && !arg(2)) {
+    $node = node_load(arg(1));
+    if($node && node_is_page($node)) {
+      foreach(explode(',',RESOURCE_FILE_CONTENT_TYPES) as $type) {
+        if($node->type == "{$type}_resource"): $addtabs = true; break; endif;
+      }
+    }
+  }
+  //no implementation to copy, publish just yet
+  if($addtabs) {
+    $copy = array();
+    $copy['#theme'] = 'menu_local_task';
+    $copy['#link'] = array(
+      'path' => 'node/%/copy',
+      'load_functions' => array('node_load'),
+      'access_callback' => 'node_access',
+      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
+      'title' => t('Copy'),
+      'access' => 1,
+      'href' => 'node/' . arg(1) . '/copy',
+      'tab_root_href' => 'node/' . arg(1),
+      'tab_parent_href' => 'node/' . arg(1),
+      'localized_options' => array(),
+    );
+    array_push($data['tabs'][0]['output'], $copy);
+
+    $delete = array();
+    $delete['#theme'] = 'menu_local_task';
+    $delete['#link'] = array(
+      'path' => 'node/%/delete',
+      'load_functions' => array('node_load'),
+      'access_callback' => 'node_access',
+      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
+      'title' => t('Delete'),
+      'access' => 1,
+      'href' => 'node/' . arg(1) . '/delete',
+      'tab_root_href' => 'node/' . arg(1),
+      'tab_parent_href' => 'node/' . arg(1),
+      'localized_options' => array(),
+    );
+    array_push($data['tabs'][0]['output'], $delete);
+
+    $publish = array();
+    $publish['#theme'] = 'menu_local_task';
+    $publish['#link'] = array(
+      'path' => 'node/%/publish',
+      'load_functions' => array('node_load'),
+      'access_callback' => 'node_access',
+      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
+      'title' => t('Publish'),
+      'access' => 1,
+      'href' => 'node/' . arg(1) . '/publish',
+      'tab_root_href' => 'node/' . arg(1),
+      'tab_parent_href' => 'node/' . arg(1),
+      'localized_options' => array(),
+    );
+    array_push($data['tabs'][0]['output'], $publish);
+  }
+}
