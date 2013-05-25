@@ -1,0 +1,466 @@
+<?php
+/**
+ * Implements hook_views_api().
+ */
+function epe_dbdocument_views_api() {
+  return array("api" => "3.0");
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function epe_dbdocument_node_info() {
+  $items = array(
+    'document_resource' => array(
+      'name' => t('Document resource'),
+      'base' => 'node_content',
+      'description' => t('Use <em>Document resource</em> when creating document file resource object'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_node_type_insert().
+ */
+function epe_dbdocument_node_type_insert($content_type) {
+  if ($content_type->type == 'document_resource') {
+    // Create all the fields we are adding to our content type.
+    foreach (_document_resource_installed_fields() as $field) {
+      //in case content type share fields
+      if(!field_info_field($field['field_name'])) {
+        field_create_field($field);
+      }
+    }
+
+    // Create all the instances for our fields.
+    foreach (_document_resource_installed_instances() as $instance) {
+      field_create_instance($instance);
+    }
+
+    _assign_epe_dbdocument_permission();
+  }
+}
+
+
+/**
+ * Define the fields for our content type.
+ *
+ * This big array is factored into this function for readability.
+ *
+ * @return
+ *  An associative array specifying the fields we wish to add to our
+ *  new node type.
+ */
+function _document_resource_installed_fields() {
+  $fields = array();
+
+  $fields['node-document_resource-body'] = array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(
+        0 => 'node',
+      ),
+      'field_name' => 'body',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(),
+      'translatable' => '0',
+      'type' => 'text_with_summary',
+  );
+
+  $fields['node-document_resource-field_documentsrcfile'] = array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_documentsrcfile',
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'file',
+      'settings' => array(
+        'display_default' => 0,
+        'display_field' => 0,
+        'uri_scheme' => 'public',
+      ),
+      'translatable' => '0',
+      'type' => 'file',
+  );
+
+  $fields['node-document_resource-field_document_thumb'] = array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_document_thumb',
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'image',
+      'settings' => array(
+        'default_image' => 0,
+        'uri_scheme' => 'private',
+      ),
+      'translatable' => '0',
+      'type' => 'image',
+  );
+
+  return $fields;
+}
+
+/**
+ * Define the field instances for our content type.
+ *
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "node_example_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This big array is factored into this function for readability.
+ *
+ * @return
+ *  An associative array specifying the instances we wish to add to our new
+ *  node type.
+ */
+function _document_resource_installed_instances() {
+  $instances = array();
+
+  $instances['node-document_resource-body'] = array(
+      'bundle' => 'document_resource',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => 600,
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'body',
+      'label' => 'Description',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 1,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
+  );
+
+  $instances['node-document_resource-field_documentsrcfile'] = array(
+      'bundle' => 'document_resource',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'file',
+          'settings' => array(),
+          'type' => 'file_default',
+          'weight' => 1,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_documentsrcfile',
+      'label' => 'Document resource file',
+      'required' => 1,
+      'settings' => array(
+        'description_field' => 1,
+        'file_directory' => '',
+        'file_extensions' => 'txt pdf doc docx ppt pptx xls xlsx',
+        'max_filesize' => '',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'file',
+        'settings' => array(
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'file_generic',
+        'weight' => '-3',
+      ),
+  );
+
+  $instances['node-document_resource-field_document_thumb'] = array(
+      'bundle' => 'document_resource',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => 2,
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'field_document_thumb',
+      'label' => 'Document resource thumbnail',
+      'required' => 0,
+      'settings' => array(
+        'alt_field' => 1,
+        'default_image' => 0,
+        'file_directory' => '',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '',
+        'min_resolution' => '',
+        'title_field' => 0,
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'image',
+        'settings' => array(
+          'preview_image_style' => 'thumbnail',
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'image_image',
+        'weight' => '-2',
+      ),
+  );
+
+  return $instances;
+}
+
+function _assign_epe_dbdocument_permission() {
+  foreach(explode(",",SUPPORTED_AUTHOR_ROLES) as $role_name) {
+    $role = user_role_load_by_name($role_name);
+    $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
+    $author_permissions = array(
+      'epe dbfiles interface' => array('grant' => TRUE, 'module' => 'epe_dbfiles'),
+      'create document_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'delete any document_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'delete own document_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'edit any document_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'edit own document_resource content' => array('grant' => TRUE, 'module' => 'node'),
+    );
+    //I am not sure what hook I should use to invoke user_role_grant_permissions function
+    //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
+    foreach($author_permissions as $key=>$assignment) {
+      if($assignment['grant'] && !array_key_exists($key, $role_perm[$role->rid])) {
+        db_insert('role_permission')
+          ->fields(array(
+            'rid' => $role->rid,
+            'permission' => $key,
+            'module' => $assignment['module'],
+          ))
+          ->execute();
+      }
+    }
+  }
+
+  // Clear the user access cache.
+  drupal_static_reset('user_access');
+  drupal_static_reset('user_role_permissions');
+}
+
+/**
+ * Implements hook_block_view_alter()
+ */
+function epe_dbdocument_block_view_alter(&$data, $block) {
+  $views_block_hashes = variable_get('views_block_hashes',array());
+  foreach($views_block_hashes as $hash=>$value) {
+    if($value == 'document_resource_index-block_list' && $block->delta == $hash) {
+      drupal_add_css(drupal_get_path('module','epe_dbdocument') . '/epe_dbdocument.css');
+    }
+  }
+}
+
+
+/**
+ * Implements hook_default_search_api_index().
+ */
+function epe_dbdocument_default_search_api_index() {
+  $items = array();
+  $items['document_resource_index'] = entity_create('search_api_index', array(
+    'name' => 'document resource index',
+    'machine_name' => 'document_resource_index',
+    'description' => null,
+    'server' => 'database_service',
+    'item_type' => 'node',
+    'options' => array(
+      'index_directly' => 1,
+      'cron_limit' => '50',
+      'fields' => array(
+        'nid' => array('type'=>'integer'),
+        'type' => array('type'=>'string'),
+        'title' => array('type'=>'text'),
+        'status' => array('type'=>'integer'),
+        'promote' => array('type'=>'boolean'),
+        'created' => array('type'=>'date'),
+        'changed' => array('type'=>'date'),
+        'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'search_api_language' => array('type'=>'string'),
+        'author:name' => array('type'=>'string'),
+        'author:mail' => array('type'=>'string'),
+        'author:field_account_fname' => array('type'=>'text'),
+        'author:field_account_lname' => array('type'=>'text'),
+        'body:value' => array('type'=>'text'),
+      ),
+      'data_alter_callbacks' => array(
+        'search_api_alter_bundle_filter' => array(
+          'status' => 1,
+          'weight' => '-10',
+          'settings' => array(
+            'default' => 0,
+            'bundles' => array('document_resource'=>'document_resource'),
+          ),
+          'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
+          'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
+          'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+        ),
+        'processors' => array(
+          'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),
+          'search_api_html_filter' => array('status'=>0, 'weight'=>'10',
+            'settings'=>array(
+              'fields'=>array('title'=>true, 'body:value'=>true),
+              'title'=>0, 'alt'=>1, 'tags'=>array('h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5'),
+            ),
+          ),
+          'search_api_tokenizer' => array('status'=>0, 'weight'=>'20',
+            'fields'=>array('title'=>true, 'body:value'=>true),
+            'spaces'=>'[^[:alnum:]]','ignorable'=>'[\\u0027]',
+          ),
+          'search_api_stopwords' => array('status'=>0, 'weight'=>'30', 'fields'=>array('title'=>true, 'body:value'=>true),'file'=>'','stopwords'=>'but\\r\\ndid\\r\\nthe this that those\\r\\netc',
+          )
+        ),
+      ),
+    ),
+    'enabled' => '1',
+    'read_only' => '0',
+    'rdf_mapping' => array(),
+  ));
+  return $items;
+}
+
+/*
+ * custom function for creating test node
+ * this function may be removed in the future pending design
+ */
+function epe_dbdocument_default_nodes() {
+  global $user;
+  //default node for document resource list block layout
+  $node_values = array(
+    'type' => 'page',
+    'uid' => $user->uid,
+    'status' => 1
+  );
+  $entity = entity_create('node', $node_values);
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->title->set('document resource list');
+  //$wrapper->url = 'document-resource-list';
+  $wrapper->save(true);
+
+  ctools_include('export');
+  $context = ctools_export_new_object('context');
+  $context->name = 'document-resource-list';
+  $context->description = 'default document resource list page';
+  $context->tag = 'block layout';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'document-resource-list' => 'document-resource-list',
+      ),
+    ),
+  );
+  /*
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'views-4b5995069acedbe7bfa31e2745b013e6' => array(
+          'module' => 'views',
+          'delta' => '4b5995069acedbe7bfa31e2745b013e6',
+          'region' => 'content',
+          'weight' => '-10',
+        ),
+      ),
+    ),
+  );
+  */
+  $context->condition_mode = 0;
+  $saved = context_save($context);
+}

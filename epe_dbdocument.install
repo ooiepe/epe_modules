@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function epe_dbdocument_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_document_resource',0);
+  variable_set('comment_default_mode_document_resource',1);
+  variable_set('comment_default_per_page_document_resource','50');
+  variable_set('comment_image_resource','2');
+  variable_set('comment_form_location_document_resource',1);
+  variable_set('comment_preview_document_resource','1');
+  variable_set('comment_subject_field_document_resource',1);
+  variable_set('field_bundle_settings_node__document_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_document_resource',array());
+  variable_set('menu_parent_document_resource','main-menu:0');
+  variable_set('node_options_document_resource',array());
+  variable_set('node_preview_document_resource','0');
+  variable_set('node_submitted_document_resource',0);
+}
