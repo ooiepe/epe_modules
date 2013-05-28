@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function epe_dbvideo_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_video_resource',0);
+  variable_set('comment_default_mode_video_resource',1);
+  variable_set('comment_default_per_page_video_resource','50');
+  variable_set('comment_form_location_video_resource',1);
+  variable_set('comment_video_resource','2');
+  variable_set('comment_preview_video_resource','1');
+  variable_set('comment_subject_field_video_resource',1);
+  variable_set('field_bundle_settings_node__video_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_video_resource',array());
+  variable_set('menu_parent_video_resource','main-menu:0');
+  variable_set('node_options_video_resource',array());
+  variable_set('node_preview_video_resource','0');
+  variable_set('node_submitted_video_resource',0);
+
+  epe_dbvideo_default_nodes();
+}
