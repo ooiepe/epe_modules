@@ -28,4 +28,6 @@ function epe_dbdocument_install() {
   variable_set('node_options_document_resource',array());
   variable_set('node_preview_document_resource','0');
   variable_set('node_submitted_document_resource',0);
+
+  epe_dbdocument_default_nodes();
 }
