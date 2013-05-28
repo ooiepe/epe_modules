@@ -276,12 +276,11 @@ function _assign_epe_dbimage_permission() {
 function epe_dbimage_block_view_alter(&$data, $block) {
   $views_block_hashes = variable_get('views_block_hashes',array());
   foreach($views_block_hashes as $hash=>$value) {
-    if($value == 'image_resource_index_search-block_list' && $block->delta == $hash) {
+    if($value == 'image_resource_index-block_list' && $block->delta == $hash) {
       drupal_add_css(drupal_get_path('module','epe_dbimage') . '/epe_dbimage.css');
     }
   }
 }
-
 
 /**
  * Implements hook_default_search_api_index().
