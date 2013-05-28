@@ -29,4 +29,6 @@ function epe_dbaudio_install() {
   variable_set('node_options_audio_resource',array());
   variable_set('node_preview_audio_resource','0');
   variable_set('node_submitted_audio_resource',0);
+
+  epe_dbaudio_default_nodes()
 }
