@@ -1,0 +1,228 @@
+<?php
+define('SUPPORTED_AUTHOR_ROLES','administrator,author'); //declare suppored role to assign permission to
+define('EPE_CONTENT_MODULES','epe_dbdocument,epe_dbimage,epe_dbvideo,epe_dbaudio,epe_ev,epe_llb'); //
+
+function epe_wp_default_roles() {
+  $role = new stdClass();
+  $role->name = 'author';
+  user_role_save($role);
+}
+
+function _account_installed_fields() {
+  $fields = array();
+
+  $fields['user-user-field_account_fname'] = array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_account_fname',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+  );
+
+  $fields['user-user-field_account_lname'] = array(
+      'active' => '1',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_account_lname',
+      'foreign keys' => array(
+        'format' => array(
+          'columns' => array(
+            'format' => 'format',
+          ),
+          'table' => 'filter_format',
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'text',
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'translatable' => '0',
+      'type' => 'text',
+  );
+
+  return $fields;
+}
+
+function _account_installed_instances() {
+  $instances = array();
+
+  $instances['user-user-field_account_fname'] = array(
+      'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_account_fname',
+      'label' => 'First Name',
+      'required' => 1,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => 1,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '7',
+      ),
+  );
+
+  $instances['user-user-field_account_lname'] = array(
+    'bundle' => 'user',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 1,
+        ),
+      ),
+      'entity_type' => 'user',
+      'field_name' => 'field_account_lname',
+      'label' => 'Last Name',
+      'required' => 1,
+      'settings' => array(
+        'text_processing' => '0',
+        'user_register_form' => 1,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'size' => '60',
+        ),
+        'type' => 'text_textfield',
+        'weight' => '8',
+      ),
+  );
+
+  return $instances;
+}
+
+/**
+ * Implements hook_default_search_api_server().
+ */
+function epe_wp_default_search_api_server() {
+  $items = array();
+  $items['database_service'] = entity_create('search_api_server', array(
+    'name' => 'database-service',
+    'machine_name' => 'database_service',
+    'description' => '',
+    'class' => 'search_api_db_service',
+    'options' => array(
+      'database' => 'default:default',
+      'min_chars' => 3,
+    ),
+    'enabled' => 1,
+  ));
+  return $items;
+}
+
+/*
+ * Implement hook_menu_local_tasks_alter()
+ */
+function epe_wp_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  $addtabs = false;
+  //we want to alter local task for epe resource content type only
+  if(arg(0) == 'node' && !arg(2)) {
+    $node = node_load(arg(1));
+    if($node && node_is_page($node)) {
+      foreach(explode(',',RESOURCE_FILE_CONTENT_TYPES) as $type) {
+        if($node->type == "{$type}_resource"): $addtabs = true; break; endif;
+      }
+    }
+  }
+  //no implementation to copy, publish just yet
+  if($addtabs) {
+    $copy = array();
+    $copy['#theme'] = 'menu_local_task';
+    $copy['#link'] = array(
+      'path' => 'node/%/copy',
+      'load_functions' => array('node_load'),
+      'access_callback' => 'node_access',
+      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
+      'title' => t('Copy'),
+      'access' => 1,
+      'href' => 'node/' . arg(1) . '/copy',
+      'tab_root_href' => 'node/' . arg(1),
+      'tab_parent_href' => 'node/' . arg(1),
+      'localized_options' => array(),
+    );
+    array_push($data['tabs'][0]['output'], $copy);
+
+    $delete = array();
+    $delete['#theme'] = 'menu_local_task';
+    $delete['#link'] = array(
+      'path' => 'node/%/delete',
+      'load_functions' => array('node_load'),
+      'access_callback' => 'node_access',
+      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
+      'title' => t('Delete'),
+      'access' => 1,
+      'href' => 'node/' . arg(1) . '/delete',
+      'tab_root_href' => 'node/' . arg(1),
+      'tab_parent_href' => 'node/' . arg(1),
+      'localized_options' => array(),
+    );
+    array_push($data['tabs'][0]['output'], $delete);
+
+    $publish = array();
+    $publish['#theme'] = 'menu_local_task';
+    $publish['#link'] = array(
+      'path' => 'node/%/publish',
+      'load_functions' => array('node_load'),
+      'access_callback' => 'node_access',
+      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
+      'title' => t('Publish'),
+      'access' => 1,
+      'href' => 'node/' . arg(1) . '/publish',
+      'tab_root_href' => 'node/' . arg(1),
+      'tab_parent_href' => 'node/' . arg(1),
+      'localized_options' => array(),
+    );
+    array_push($data['tabs'][0]['output'], $publish);
+  }
+}
