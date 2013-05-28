@@ -224,25 +224,6 @@ function epe_dbfiles_js_settings() {
   );
 }
 
-/**
- * Implements hook_default_search_api_server().
- */
-function epe_dbfiles_default_search_api_server() {
-  $items = array();
-  $items['database_service'] = entity_create('search_api_server', array(
-    'name' => 'database-service',
-    'machine_name' => 'database_service',
-    'description' => '',
-    'class' => 'search_api_db_service',
-    'options' => array(
-      'database' => 'default:default',
-      'min_chars' => 3,
-    ),
-    'enabled' => 1,
-  ));
-  return $items;
-}
-
 function epe_dbfiles_requirements_validation() {
   $messages = array();
 
@@ -267,69 +248,4 @@ function epe_dbfiles_enabled_dependent_modules() {
   }
 
   return $depend_modules;
-}
-
-/*
- * Implement hook_menu_local_tasks_alter()
- */
-function epe_dbfiles_menu_local_tasks_alter(&$data, $router_item, $root_path) {
-  $addtabs = false;
-  if(arg(0) == 'node' && !arg(2)) {
-    $node = node_load(arg(1));
-    if($node && node_is_page($node)) {
-      foreach(explode(',',RESOURCE_FILE_CONTENT_TYPES) as $type) {
-        if($node->type == "{$type}_resource"): $addtabs = true; break; endif;
-      }
-    }
-  }
-  //no implementation to copy, publish just yet
-  if($addtabs) {
-    $copy = array();
-    $copy['#theme'] = 'menu_local_task';
-    $copy['#link'] = array(
-      'path' => 'node/%/copy',
-      'load_functions' => array('node_load'),
-      'access_callback' => 'node_access',
-      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
-      'title' => t('Copy'),
-      'access' => 1,
-      'href' => 'node/' . arg(1) . '/copy',
-      'tab_root_href' => 'node/' . arg(1),
-      'tab_parent_href' => 'node/' . arg(1),
-      'localized_options' => array(),
-    );
-    array_push($data['tabs'][0]['output'], $copy);
-
-    $delete = array();
-    $delete['#theme'] = 'menu_local_task';
-    $delete['#link'] = array(
-      'path' => 'node/%/delete',
-      'load_functions' => array('node_load'),
-      'access_callback' => 'node_access',
-      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
-      'title' => t('Delete'),
-      'access' => 1,
-      'href' => 'node/' . arg(1) . '/delete',
-      'tab_root_href' => 'node/' . arg(1),
-      'tab_parent_href' => 'node/' . arg(1),
-      'localized_options' => array(),
-    );
-    array_push($data['tabs'][0]['output'], $delete);
-
-    $publish = array();
-    $publish['#theme'] = 'menu_local_task';
-    $publish['#link'] = array(
-      'path' => 'node/%/publish',
-      'load_functions' => array('node_load'),
-      'access_callback' => 'node_access',
-      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
-      'title' => t('Publish'),
-      'access' => 1,
-      'href' => 'node/' . arg(1) . '/publish',
-      'tab_root_href' => 'node/' . arg(1),
-      'tab_parent_href' => 'node/' . arg(1),
-      'localized_options' => array(),
-    );
-    array_push($data['tabs'][0]['output'], $publish);
-  }
 }
