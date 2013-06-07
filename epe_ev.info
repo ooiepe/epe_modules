@@ -1,0 +1,19 @@
+name = EPE Visualization
+description = Visualization service for adding new tools and customizing instances
+core = 7.x
+package = EPE
+version = 7.x-0.1-alpha
+project = epe_ev
+
+dependencies[] = epe_wp
+dependencies[] = ctools
+dependencies[] = search_api
+dependencies[] = search_api_db
+dependencies[] = views
+dependencies[] = entity
+dependencies[] = context
+dependencies[] = semanticviews
+dependencies[] = views_php
+dependencies[] = token
+
+files[] = epe_ev.views_default.inc

@@ -1,0 +1,431 @@
+<?php
+
+/**
+* @file
+* Module file for the EPE Educational Visualization service
+*
+* Part of the EPE System
+*/
+
+/**
+  * Implement hook_menu
+  */
+function epe_ev_menu() {
+  $items = array();
+
+  $items['node/add/ev'] = array(
+    'title' => t('Create a Visualization Instance'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('epe_ev_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('create ev content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['ev/add'] = array(
+    'title' => t('Create a Visualization Instance'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('epe_ev_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('create ev content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function epe_ev_node_info() {
+  $items = array(
+    'ev_resource' => array(
+      'name' => t('EPE EV Resource'),
+      'base' => 'node_content',
+      'description' => t('Use <em>EV Resource</em> to create visualization instances'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_node_type_insert().
+ */
+function epe_ev_node_type_insert($content_type) {
+  if ($content_type->type == 'ev_resource') {
+    // Create all the fields we are adding to our content type.
+    foreach (_ev_resource_installed_fields() as $field) {
+      //in case content type share fields
+      if(!field_info_field($field['field_name'])) {
+        field_create_field($field);
+      }
+    }
+
+    // Create all the instances for our fields.
+    foreach (_ev_resource_installed_instances() as $instance) {
+      field_create_instance($instance);
+    }
+
+    _assign_epe_ev_permission();
+  }
+}
+
+
+/**
+ * Define the fields for our content type.
+ *
+ * @return
+ *  An associative array specifying the fields we wish to add to our
+ *  new node type.
+ */
+function _ev_resource_installed_fields() {
+  $fields = array();
+
+  $fields['node-ev_resource-body'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'deleted' => '0',
+    'entity_types' => array(
+      0 => 'node',
+    ),
+    'field_name' => 'body',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => '0',
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => '0',
+    'type' => 'text_with_summary',
+  );
+
+  $fields['node-ev_resource-vis_config'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'deleted' => '0',
+    'entity_types' => array(
+      0 => 'node',
+    ),
+    'field_name' => 'vis_config',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => '0',
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => '0',
+    'type' => 'text_with_summary',
+  );
+  
+  $fields['node-ev_resource-questions'] = array(
+    'active' => '1',
+    'cardinality' => '1',
+    'deleted' => '0',
+    'entity_types' => array(
+      0 => 'node',
+    ),
+    'field_name' => 'questions',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => '0',
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => '0',
+    'type' => 'text_with_summary',
+  );
+   
+  return $fields;
+}
+
+/**
+ * Define the field instances for our content type.
+ *
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "node_example_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This big array is factored into this function for readability.
+ *
+ * @return
+ *  An associative array specifying the instances we wish to add to our new
+ *  node type.
+ */
+function _ev_resource_installed_instances() {
+  $instances = array();
+
+  $instances['node-ev_resource-body'] = array(
+      'bundle' => 'ev_resource',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => 600,
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => '0',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'body',
+      'label' => 'Description',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 1,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
+  );
+
+  $instances['node-ev_resource-vis_config'] = array(
+      'bundle' => 'ev_resource',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => 600,
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => '0',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'vis_config',
+      'label' => 'Visualization Configuration',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 1,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
+  );
+
+  $instances['node-ev_resource-questions'] = array(
+      'bundle' => 'ev_resource',
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => 600,
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => '0',
+        ),
+      ),
+      'entity_type' => 'node',
+      'field_name' => 'questions',
+      'label' => 'Investigation Questions',
+      'required' => 0,
+      'settings' => array(
+        'display_summary' => 1,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
+  );
+
+  return $instances;
+}
+
+function _assign_epe_ev_permission() {
+  foreach(explode(",",SUPPORTED_AUTHOR_ROLES) as $role_name) {
+    $role = user_role_load_by_name($role_name);
+    $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
+    $author_permissions = array(
+      'epe ev interface' => array('grant' => TRUE, 'module' => 'epe_dbfiles'),
+      'create ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'delete any ev_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'delete own ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'edit any ev_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'edit own ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
+    );
+    //I am not sure what hook I should use to invoke user_role_grant_permissions function
+    //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
+    foreach($author_permissions as $key=>$assignment) {
+      if($assignment['grant'] && !array_key_exists($key, $role_perm[$role->rid])) {
+        db_insert('role_permission')
+          ->fields(array(
+            'rid' => $role->rid,
+            'permission' => $key,
+            'module' => $assignment['module'],
+          ))
+          ->execute();
+      }
+    }
+  }
+
+  // Clear the user access cache.
+  drupal_static_reset('user_access');
+  drupal_static_reset('user_role_permissions');
+}
+
+
+/**
+  * Implement hook_form
+  */
+function epe_ev_form($node, &$form_state) {
+
+  $form = array();
+  if(!empty($validate_msgs)) {
+    drupal_set_message(implode('<br/>', $validate_msgs),'error');
+  } else {
+
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#required' => TRUE,
+    );
+
+    $form['description'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Description'),
+      '#required' => TRUE,
+    );
+    
+    $form['vis_config'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Visualization Configuration'),
+      '#required' => TRUE,
+    );
+
+    $form['questions'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Investigation Questions'),
+      '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Submit',
+    );
+
+  }
+
+  return $form;
+}
+
+/*
+ * Submit handler for epe_ev_form()
+ */
+function epe_ev_form_submit($form, &$form_state) {
+  global $user;
+
+  //create corresponding node with entity api
+  $node_values = array(
+    'type' => 'ev_resource',
+    'uid' => $user->uid,
+    'status' => 0
+  );
+  $entity = entity_create('node', $node_values);
+
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->title->set($form_state['values']['title']);
+  $wrapper->body->set(array('value'=>$form_state['values']['description']));
+  $wrapper->vis_config->set(array('value'=>$form_state['values']['vis_config']));
+  $wrapper->questions->set(array('value'=>$form_state['values']['questions']));
+
+  $wrapper->save(true);
+
+  $form_state['redirect'] = 'node/' . $entity->nid;
+
+  drupal_set_message("You have save a new visualization: " . $wrapper->title->value() );
+}
+
+
+
