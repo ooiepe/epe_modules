@@ -13,21 +13,13 @@
 function epe_ev_menu() {
   $items = array();
 
-  $items['node/add/ev'] = array(
-    'title' => t('Create a Visualization Instance'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('epe_ev_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('create ev content'),
-    'type' => MENU_CALLBACK,
-  );
   $items['ev/add'] = array(
-    'title' => t('Create a Visualization Instance'),
+    'title' => t('Create a Visualization'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_ev_form'),
     'access callback' => 'user_access',
     'access arguments' => array('create ev content'),
-    'type' => MENU_CALLBACK,
+//    'type' => MENU_CALLBACK,
   );
 
   return $items;
@@ -39,9 +31,9 @@ function epe_ev_menu() {
 function epe_ev_node_info() {
   $items = array(
     'ev_resource' => array(
-      'name' => t('EPE EV Resource'),
+      'name' => t('EPE Visualization'),
       'base' => 'node_content',
-      'description' => t('Use <em>EV Resource</em> to create visualization instances'),
+      'description' => t('Use <em>Visualizations</em> to create visualization instances'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -84,88 +76,56 @@ function _ev_resource_installed_fields() {
   $fields = array();
 
   $fields['node-ev_resource-body'] = array(
-    'active' => '1',
-    'cardinality' => '1',
-    'deleted' => '0',
-    'entity_types' => array(
-      0 => 'node',
-    ),
     'field_name' => 'body',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => '0',
-    'module' => 'text',
-    'settings' => array(),
-    'translatable' => '0',
-    'type' => 'text_with_summary',
+    'cardinality' => '1',
+    'type' => 'text_long',
   );
 
-  $fields['node-ev_resource-vis_config'] = array(
-    'active' => '1',
+  $fields['node-ev_resource-vis_tool'] = array(
+    'field_name' => 'vis_tool',
     'cardinality' => '1',
-    'deleted' => '0',
-    'entity_types' => array(
-      0 => 'node',
-    ),
-    'field_name' => 'vis_config',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => '0',
-    'module' => 'text',
-    'settings' => array(),
-    'translatable' => '0',
-    'type' => 'text_with_summary',
+    'type' => 'text',
   );
   
-  $fields['node-ev_resource-questions'] = array(
-    'active' => '1',
+  $fields['node-ev_resource-vis_config'] = array(
+    'field_name' => 'vis_config',
     'cardinality' => '1',
-    'deleted' => '0',
-    'entity_types' => array(
-      0 => 'node',
-    ),
-    'field_name' => 'questions',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => '0',
-    'module' => 'text',
-    'settings' => array(),
-    'translatable' => '0',
-    'type' => 'text_with_summary',
+    'type' => 'text_long',
   );
+
+  $fields['node-ev_resource-questions'] = array(
+    'field_name' => 'questions',
+    'cardinality' => '1',
+    'type' => 'text_long',
+  );
+
+  $fields['node-ev_resource-thumbnail'] = array(
+      'field_name' => 'thumbnail',
+      'cardinality' => '1',
+      'type' => 'image',
+      'entity_types' => array(),
+      'foreign keys' => array(
+        'fid' => array(
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+          'table' => 'file_managed',
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'locked' => '0',
+      'module' => 'image',
+      'settings' => array(
+        'default_image' => 0,
+        'uri_scheme' => 'private',
+      ),
+      'translatable' => '0',
+  );
+
    
   return $fields;
 }
@@ -189,10 +149,21 @@ function _ev_resource_installed_instances() {
   $instances = array();
 
   $instances['node-ev_resource-body'] = array(
+      'entity_type' => 'node',
       'bundle' => 'ev_resource',
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
+      'field_name' => 'body',
+      'label' => 'Description',
+      'required' => 0,
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -211,15 +182,22 @@ function _ev_resource_installed_instances() {
           'weight' => '0',
         ),
       ),
-      'entity_type' => 'node',
-      'field_name' => 'body',
-      'label' => 'Description',
-      'required' => 0,
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
       'settings' => array(
-        'display_summary' => 1,
+        'display_summary' => 0,
         'text_processing' => '1',
         'user_register_form' => FALSE,
       ),
+  );
+
+  $instances['node-ev_resource-vis_tool'] = array(
+      'entity_type' => 'node',
+      'bundle' => 'ev_resource',
+      'field_name' => 'vis_tool',
+      'label' => 'Visualization Tool',
+      'required' => 0,
       'widget' => array(
         'active' => 1,
         'module' => 'text',
@@ -230,96 +208,158 @@ function _ev_resource_installed_instances() {
         'type' => 'text_textarea_with_summary',
         'weight' => '-4',
       ),
-  );
-
-  $instances['node-ev_resource-vis_config'] = array(
-      'bundle' => 'ev_resource',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'module' => 'text',
+          'settings' => array(
+            'trim_length' => 600,
+          ),
+          'type' => 'text_summary_or_trimmed',
+          'weight' => '0',
+        ),
+      ),
       'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
+      'settings' => array(
+        'display_summary' => 0,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+  );
+  
+  $instances['node-ev_resource-vis_config'] = array(
+      'entity_type' => 'node',
+      'bundle' => 'ev_resource',
+      'field_name' => 'vis_config',
+      'label' => 'Visualization Config',
+      'required' => 0,
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
       'display' => array(
         'default' => array(
           'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'settings' => array(
+        'display_summary' => 0,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+  );
+  
+  $instances['node-ev_resource-questions'] = array(
+      'entity_type' => 'node',
+      'bundle' => 'ev_resource',
+      'field_name' => 'questions',
+      'label' => 'Investigation Questions',
+      'required' => 0,
+      'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+          'rows' => '20',
+          'summary_rows' => 5,
+        ),
+        'type' => 'text_textarea_with_summary',
+        'weight' => '-4',
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
           'module' => 'text',
+          'settings' => array(),
+          'type' => 'text_default',
+          'weight' => 0,
+        ),
+        'teaser' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+      'default_value' => NULL,
+      'deleted' => '0',
+      'description' => '',
+      'settings' => array(
+        'display_summary' => 0,
+        'text_processing' => '1',
+        'user_register_form' => FALSE,
+      ),
+  );  
+
+  $instances['node-ev_resource-thumbnail'] = array(
+      'entity_type' => 'node',
+      'bundle' => 'ev_resource',
+      'field_name' => 'thumbnail',
+      'label' => 'Thumbnail',
+      'required' => 0,
+      'widget' => array(
+        'active' => 1,
+        'module' => 'image',
+        'settings' => array(
+          'preview_image_style' => 'thumbnail',
+          'progress_indicator' => 'throbber',
+        ),
+        'type' => 'image_image',
+        'weight' => '-2',
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => '',
+            'image_style' => '',
+          ),
+          'type' => 'image',
+          'weight' => 2,
+        ),
+        'teaser' => array(
+          'label' => 'above',
           'settings' => array(),
           'type' => 'hidden',
           'weight' => 0,
         ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'module' => 'text',
-          'settings' => array(
-            'trim_length' => 600,
-          ),
-          'type' => 'text_summary_or_trimmed',
-          'weight' => '0',
-        ),
       ),
-      'entity_type' => 'node',
-      'field_name' => 'vis_config',
-      'label' => 'Visualization Configuration',
-      'required' => 0,
-      'settings' => array(
-        'display_summary' => 1,
-        'text_processing' => '1',
-        'user_register_form' => FALSE,
-      ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '20',
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
-      ),
-  );
-
-  $instances['node-ev_resource-questions'] = array(
-      'bundle' => 'ev_resource',
-      'default_value' => NULL,
       'deleted' => '0',
       'description' => '',
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'module' => 'text',
-          'settings' => array(
-            'trim_length' => 600,
-          ),
-          'type' => 'text_summary_or_trimmed',
-          'weight' => '0',
-        ),
-      ),
-      'entity_type' => 'node',
-      'field_name' => 'questions',
-      'label' => 'Investigation Questions',
-      'required' => 0,
       'settings' => array(
-        'display_summary' => 1,
-        'text_processing' => '1',
+        'alt_field' => 1,
+        'default_image' => 0,
+        'file_directory' => '',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '',
+        'min_resolution' => '',
+        'title_field' => 0,
         'user_register_form' => FALSE,
       ),
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '20',
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
-      ),
   );
-
+  
   return $instances;
 }
 
@@ -360,7 +400,6 @@ function _assign_epe_ev_permission() {
   * Implement hook_form
   */
 function epe_ev_form($node, &$form_state) {
-
   $form = array();
   if(!empty($validate_msgs)) {
     drupal_set_message(implode('<br/>', $validate_msgs),'error');
@@ -372,22 +411,37 @@ function epe_ev_form($node, &$form_state) {
       '#required' => TRUE,
     );
 
-    $form['description'] = array(
+    $form['body'] = array(
       '#type' => 'textarea',
       '#title' => t('Description'),
-      '#required' => TRUE,
+      '#required' => FALSE,
     );
     
+    $form['vis_tool'] = array(
+      '#type' => 'hidden',
+      '#title' => t('Visualization Tool'),
+      '#required' => TRUE,
+      '#value' => "Tool1",
+    );
+
     $form['vis_config'] = array(
-      '#type' => 'textarea',
+      '#type' => 'hidden',
       '#title' => t('Visualization Configuration'),
       '#required' => TRUE,
+      '#value' => "{}",
     );
 
     $form['questions'] = array(
       '#type' => 'textarea',
       '#title' => t('Investigation Questions'),
-      '#required' => TRUE,
+      '#required' => FALSE,
+    );
+
+    $form['thumbnail'] = array(
+      '#type' => 'file',
+      '#title' => t('Upload thumbnail'),
+      '#description' => t('Upload a thumbnail, allowed extensions: jpg, jpeg, png, gif'),
+      '#required' => FALSE,
     );
 
     $form['submit'] = array(
@@ -398,11 +452,27 @@ function epe_ev_form($node, &$form_state) {
   }
 
   return $form;
+
 }
+
+
+/**
+ * Validate handler for file_resource_form().
+ */
+function epe_ev_form_validate($form, &$form_state) {
+  $thumb = file_save_upload('thumbnail', array('file_validate_extensions' => array('jpg gif png')));
+  //if file pass validation
+  if($thumb) {
+    if($thumb = file_move($thumb, 'private://')) { $form_state['storage']['thumbnail'] = $thumb; }
+  }
+}
+
+
 
 /*
  * Submit handler for epe_ev_form()
  */
+
 function epe_ev_form_submit($form, &$form_state) {
   global $user;
 
@@ -416,10 +486,13 @@ function epe_ev_form_submit($form, &$form_state) {
 
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->title->set($form_state['values']['title']);
-  $wrapper->body->set(array('value'=>$form_state['values']['description']));
+  $wrapper->body->set(array('value'=>$form_state['values']['body']));
+  $wrapper->vis_tool->set(array('value'=>$form_state['values']['vis_tool']));
   $wrapper->vis_config->set(array('value'=>$form_state['values']['vis_config']));
   $wrapper->questions->set(array('value'=>$form_state['values']['questions']));
-
+  if(isset($form_state['storage']['thumbnail'])) {
+    $wrapper->thumbnail->file->set($form_state['storage']['thumbnail']);
+  }
   $wrapper->save(true);
 
   $form_state['redirect'] = 'node/' . $entity->nid;
@@ -428,4 +501,11 @@ function epe_ev_form_submit($form, &$form_state) {
 }
 
 
+
+/**
+ * Implements hook_views_api().
+ */
+function epe_ev_views_api() {
+  return array("api" => "3.0");
+}
 
