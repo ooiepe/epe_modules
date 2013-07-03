@@ -7,6 +7,24 @@ function epe_dbdocument_views_api() {
 }
 
 /**
+  * Implements hook_menu
+  */
+function epe_dbdocument_menu() {
+  $items = array();
+
+  $items['api/resource/document'] = array(
+    'title' => t('Restful Document Resource Query'),
+    'page callback' => 'epe_dbdocument_restful_api',
+    'file' => 'epe_dbdocument.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbdocument') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_node_info().
  */
 function epe_dbdocument_node_info() {
@@ -41,6 +59,7 @@ function epe_dbdocument_node_type_insert($content_type) {
       field_create_instance($instance);
     }
 
+    //assign custom content type permission
     _assign_epe_dbdocument_permission();
   }
 }
@@ -303,8 +322,12 @@ function _document_resource_installed_instances() {
   return $instances;
 }
 
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
 function _assign_epe_dbdocument_permission() {
-  foreach(explode(",",SUPPORTED_AUTHOR_ROLES) as $role_name) {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
     $role = user_role_load_by_name($role_name);
     $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
     $author_permissions = array(
@@ -337,7 +360,9 @@ function _assign_epe_dbdocument_permission() {
 
 /**
  * Implements hook_block_view_alter()
+ * (******NOT USED NOW******)
  */
+/*
 function epe_dbdocument_block_view_alter(&$data, $block) {
   $views_block_hashes = variable_get('views_block_hashes',array());
   foreach($views_block_hashes as $hash=>$value) {
@@ -346,7 +371,7 @@ function epe_dbdocument_block_view_alter(&$data, $block) {
     }
   }
 }
-
+*/
 
 /**
  * Implements hook_default_search_api_index().
@@ -366,12 +391,14 @@ function epe_dbdocument_default_search_api_index() {
         'nid' => array('type'=>'integer'),
         'type' => array('type'=>'string'),
         'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
         'status' => array('type'=>'integer'),
         'promote' => array('type'=>'boolean'),
         'created' => array('type'=>'date'),
         'changed' => array('type'=>'date'),
         'author' => array('type'=>'integer', 'entity_type'=>'user'),
         'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),
         'author:mail' => array('type'=>'string'),
         'author:field_account_fname' => array('type'=>'text'),
@@ -420,7 +447,9 @@ function epe_dbdocument_default_search_api_index() {
 /*
  * custom function for creating test node
  * this function may be removed in the future pending design
+ * (******NOT USED NOW******)
  */
+/*
 function epe_dbdocument_default_nodes() {
   global $user;
   //default node for document resource list block layout
@@ -447,20 +476,21 @@ function epe_dbdocument_default_nodes() {
       ),
     ),
   );
-  /*
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-4b5995069acedbe7bfa31e2745b013e6' => array(
-          'module' => 'views',
-          'delta' => '4b5995069acedbe7bfa31e2745b013e6',
-          'region' => 'content',
-          'weight' => '-10',
-        ),
-      ),
-    ),
-  );
-  */
+
+  //$context->reactions = array(
+  //  'block' => array(
+  //    'blocks' => array(
+  //      'views-4b5995069acedbe7bfa31e2745b013e6' => array(
+  //        'module' => 'views',
+  //        'delta' => '4b5995069acedbe7bfa31e2745b013e6',
+  //        'region' => 'content',
+  //        'weight' => '-10',
+  //      ),
+  //    ),
+  //  ),
+  //);
+
   $context->condition_mode = 0;
   $saved = context_save($context);
 }
+*/
