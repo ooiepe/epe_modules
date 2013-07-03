@@ -1,0 +1,196 @@
+<?php
+/**
+  * Implement hook_menu
+  */
+function epe_dbresource_browser_menu() {
+  $items = array();
+
+  $items['resource-browser'] = array(
+    'title' => t('Resource Browser'),
+    'page callback' => 'epe_dbresource_browser_index',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+/*
+  $items['dialog/resource-browser'] = array(
+    'title' => t('Resource Browser'),
+    'page callback' => 'resource_browser_dialog_index',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+*/
+  $items['resource-browser/partial/index.html'] = array(
+    'title' => t('Index Page'),
+    'page callback' => 'epe_dbresource_browser_view_partial',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['resource-browser/partial/search.html'] = array(
+    'title' => t('Search Page'),
+    'page callback' => 'epe_dbresource_browser_view_partial',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['resource-browser/partial/search-grid.html'] = array(
+    'title' => t('Search Grid'),
+    'page callback' => 'epe_dbresource_browser_view_partial',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['resource-browser/partial/search-list.html'] = array(
+    'title' => t('Search List'),
+    'page callback' => 'epe_dbresource_browser_view_partial',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['resource-browser/partial/search-list-table-tpl.html'] = array(
+    'title' => t('Search List Table Template'),
+    'page callback' => 'epe_dbresource_browser_view_partial',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['resource-browser/partial/search-list-grid-tpl.html'] = array(
+    'title' => t('Search List Grid Template'),
+    'page callback' => 'epe_dbresource_browser_view_partial',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function epe_dbresource_browser_theme() {
+  $path = drupal_get_path( 'module' , 'epe_dbresource_browser' ) . '/app';
+  return array(
+    'resource_browser_main'=>array(
+      'path' => "$path",
+      'template'=> "resource_browser_main",
+    ),
+    'resource_browser.index.html'=>array(
+      'path' => "$path/partial",
+      'template'=> "resource_browser.index.html",
+    ),
+    'resource_browser.search.html'=>array(
+      'path' => "$path/partial",
+      'template'=> "resource_browser.search.html",
+    ),
+    'resource_browser.search-grid.html'=>array(
+      'path' => "$path/partial",
+      'template'=> "resource_browser.search-grid.html",
+    ),
+    'resource_browser.search-list.html'=>array(
+      'path' => "$path/partial",
+      'template'=> "resource_browser.search-list.html",
+    ),
+    'resource_browser.search-list-table-tpl.html' => array(
+      'path' => "$path/partial",
+      'template'=> "resource_browser.search-list-table-tpl.html",
+    ),
+    'resource_browser.search-list-grid-tpl.html' => array(
+      'path' => "$path/partial",
+      'template'=> "resource_browser.search-list-grid-tpl.html",
+    ),
+  );
+}
+/*
+function epe_dbresource_browser_dialog_index() {
+  module_invoke('admin_menu', 'suppress');
+  return resource_browser_index();
+}
+*/
+function epe_dbresource_browser_index() {
+  global $user;
+
+  $app_path = drupal_get_path('module', 'epe_dbresource_browser') . '/app';
+
+  drupal_add_js($app_path . '/app.js');
+  drupal_add_js($app_path . '/js/controllers/indexController.js');
+  drupal_add_js($app_path . '/js/controllers/searchController.js');
+  drupal_add_js($app_path . '/js/resourceBrowserServices.js');
+  drupal_add_js($app_path . '/js/resourceBrowserDirectives.js');
+  drupal_add_js($app_path . '/js/resourceBrowserFilters.js');
+
+  //maybe this should be under .install with hook_requirement?  but can't get hook_requirement to work correctly
+  if(!libraries_get_path('angular-ui-bootstrap')):
+    drupal_set_message(t('Library angular-ui-bootstrap not found under /sites/libraries'),'error');
+  endif;
+
+  /* angular ui bootstrap */
+  drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.4.0.min.js');
+  drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
+  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid)), 'setting');
+
+  /* restangular, need to figure out how to use it */
+  /*drupal_add_js('http://cdn.jsdelivr.net/restangular/0.6.1/restangular.js','external'); */
+
+  angularjs_init_application('resourceBrowserApp');
+
+  return theme('resource_browser_main');
+}
+
+function epe_dbresource_browser_view_partial($partial) {
+  switch ($partial) {
+    case 'index.html':
+      echo theme('resource_browser.index.html');
+    break;
+
+    case 'search.html':
+      echo theme('resource_browser.search.html');
+    break;
+
+    case 'search-grid.html':
+      echo theme('resource_browser.search-grid.html');
+    break;
+
+    case 'search-list.html':
+      echo theme('resource_browser.search-list.html');
+    break;
+
+    case 'search-list-table-tpl.html':
+      echo theme('resource_browser.search-list-table-tpl.html');
+    break;
+
+    case 'search-list-grid-tpl.html':
+      echo theme('resource_browser.search-list-grid-tpl.html');
+    break;
+  }
+}
+
+/*
+ * Following are not working, why?? they are better then adding drupal_add_js, need to figure out why
+ */
+/*
+function epe_dbresource_browser_library_alter(&$libraries, $module) {
+  if($module == 'angularjs') {
+    $libraries['angular-ui-bootstrap'] = drupal_get_library('epe_dbresource_browser','angular-ui-bootstrap');
+  }
+}
+
+function epe_dbresource_browser_library() {
+  $libraries['angular-ui-bootstrap'] = array(
+    'title' => 'Angular UI Bootstrap',
+    'website' => 'http://angular-ui.github.io/bootstrap/',
+    'version' => '0.4',
+    'js' => array(
+      libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.4.0.min.js' => array(),
+    ),
+    'css' => array(
+      'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css' => array(
+        'type' => 'external',
+      ),
+    ),
+  );
+  return $libraries;
+}
+*/

@@ -1,0 +1,11 @@
+name = EPE Resource Browser
+description = EPE Resource Browser
+core = 7.x
+package = EPE
+version = 7.x-0.1-alpha
+project = epe_dbresource_browser
+
+dependencies[] = angularjs
+dependencies[] = epe_dbimage
+dependencies[] = epe_dbdocument
+dependencies[] = epe_dbmultimedia
