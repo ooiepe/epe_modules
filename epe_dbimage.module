@@ -8,12 +8,30 @@ function epe_dbimage_views_api() {
 }
 
 /**
+  * Implements hook_menu
+  */
+function epe_dbimage_menu() {
+  $items = array();
+
+  $items['api/resource/image'] = array(
+    'title' => t('Restful Image Resource Query'),
+    'page callback' => 'epe_dbimage_restful_api',
+    'file' => 'epe_dbimage.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbimage') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_node_info().
  */
 function epe_dbimage_node_info() {
   $items = array(
     'image_resource' => array(
-      'name' => t('EPE Image resource'),
+      'name' => t('Image resource'),
       'base' => 'node_content',
       'description' => t('Use <em>Image resource</em> when creating image file resource'),
       'has_title' => '1',
@@ -41,7 +59,7 @@ function epe_dbimage_node_type_insert($content_type) {
     foreach (_image_resource_installed_instances() as $instance) {
       field_create_instance($instance);
     }
-
+    //assign custom content type permission
     _assign_epe_dbimage_permission();
   }
 }
@@ -236,8 +254,12 @@ function _image_resource_installed_instances() {
   return $instances;
 }
 
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
 function _assign_epe_dbimage_permission() {
-  foreach(explode(",",SUPPORTED_AUTHOR_ROLES) as $role_name) {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
     $role = user_role_load_by_name($role_name);
     $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
     $author_permissions = array(
@@ -271,8 +293,9 @@ function _assign_epe_dbimage_permission() {
 /**
  * Implements hook_block_view_alter()
  * Provide default styling to views block
- * This may change pending design
+ * (******NOT USED NOW******)
  */
+/*
 function epe_dbimage_block_view_alter(&$data, $block) {
   $views_block_hashes = variable_get('views_block_hashes',array());
   foreach($views_block_hashes as $hash=>$value) {
@@ -281,6 +304,7 @@ function epe_dbimage_block_view_alter(&$data, $block) {
     }
   }
 }
+*/
 
 /**
  * Implements hook_default_search_api_index().
@@ -300,12 +324,14 @@ function epe_dbimage_default_search_api_index() {
         'nid' => array('type'=>'integer'),
         'type' => array('type'=>'string'),
         'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
         'status' => array('type'=>'integer'),
         'promote' => array('type'=>'boolean'),
         'created' => array('type'=>'date'),
         'changed' => array('type'=>'date'),
         'author' => array('type'=>'integer', 'entity_type'=>'user'),
         'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),
         'author:mail' => array('type'=>'string'),
         'author:field_account_fname' => array('type'=>'text'),
@@ -354,7 +380,9 @@ function epe_dbimage_default_search_api_index() {
 /*
  * custom function for creating test node
  * this function may be removed in the future pending design
+ * (******NOT USED NOW******)
  */
+/*
 function epe_dbimage_default_nodes() {
   global $user;
   //default node for image resource list block layout
@@ -396,3 +424,4 @@ function epe_dbimage_default_nodes() {
   $context->condition_mode = 0;
   $saved = context_save($context);
 }
+*/
