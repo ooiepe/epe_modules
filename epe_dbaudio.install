@@ -29,6 +29,54 @@ function epe_dbaudio_install() {
   variable_set('node_options_audio_resource',array());
   variable_set('node_preview_audio_resource','0');
   variable_set('node_submitted_audio_resource',0);
+}
 
-  epe_dbaudio_default_nodes()
+/*
+ * Implement hook_enable
+ * this adds epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbaudio_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  //module=>type
+  $modules['epe_dbaudio'] = 'file';
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbaudio_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_dbaudio']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of document resource content type
+ */
+function epe_dbaudio_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('audio_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+  }
+
+  node_type_delete('audio_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%audio_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
 }
