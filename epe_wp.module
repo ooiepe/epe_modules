@@ -1,6 +1,4 @@
 <?php
-define('SUPPORTED_AUTHOR_ROLES','administrator,author'); //declare suppored role to assign permission to
-define('EPE_CONTENT_MODULES','epe_dbdocument,epe_dbimage,epe_dbvideo,epe_dbaudio,epe_ev,epe_llb'); //
 
 function epe_wp_default_roles() {
   $role = new stdClass();
@@ -163,7 +161,9 @@ function epe_wp_default_search_api_server() {
 
 /*
  * Implement hook_menu_local_tasks_alter()
+ * (******NOT USED RIGHT NOW******)
  */
+/*
 function epe_wp_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   $addtabs = false;
   //we want to alter local task for epe resource content type only
@@ -226,3 +226,4 @@ function epe_wp_menu_local_tasks_alter(&$data, $router_item, $root_path) {
     array_push($data['tabs'][0]['output'], $publish);
   }
 }
+*/
