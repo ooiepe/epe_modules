@@ -7,6 +7,24 @@ function epe_dbvideo_views_api() {
 }
 
 /**
+  * Implements hook_menu
+  */
+function epe_dbvideo_menu() {
+  $items = array();
+
+  $items['api/resource/video'] = array(
+    'title' => t('Restful Video Resource Query'),
+    'page callback' => 'epe_dbdocument_restful_api',
+    'file' => 'epe_dbvideo.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbvideo') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_node_info().
  */
 function epe_dbvideo_node_info() {
@@ -41,6 +59,7 @@ function epe_dbvideo_node_type_insert($content_type) {
       field_create_instance($instance);
     }
 
+    //assign custom content type permission
     _assign_epe_dbvideo_permission();
   }
 }
@@ -108,7 +127,7 @@ function _video_resource_installed_fields() {
       'locked' => '0',
       'module' => 'video',
       'settings' => array(
-        'autoconversion' => 1,
+        'autoconversion' => 0,
         'autothumbnail' => 'manual_upload',
         'default_video_thumbnail' => array(
           'fid' => 0,
@@ -118,7 +137,6 @@ function _video_resource_installed_fields() {
         ),
         'presets' => array(),
         'preview_video_thumb_style' => 'thumbnail',
-        'profile2_private' => FALSE,
         'thumbnail_format' => 'jpg',
         'uri_scheme' => 'private',
         'uri_scheme_converted' => 'private',
@@ -240,8 +258,12 @@ function _video_resource_installed_instances() {
   return $instances;
 }
 
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
 function _assign_epe_dbvideo_permission() {
-  foreach(explode(",",SUPPORTED_AUTHOR_ROLES) as $role_name) {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
     $role = user_role_load_by_name($role_name);
     $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
     $author_permissions = array(
@@ -273,19 +295,6 @@ function _assign_epe_dbvideo_permission() {
 }
 
 /**
- * Implements hook_block_view_alter()
- */
-function epe_dbvideo_block_view_alter(&$data, $block) {
-  $views_block_hashes = variable_get('views_block_hashes');
-  foreach($views_block_hashes as $hash=>$value) {
-    if($value == 'video_resource_index-block_list' && $block->delta == $hash) {
-      drupal_add_css(drupal_get_path('module','epe_dbvideo') . '/epe_dbvideo.css');
-    }
-  }
-}
-
-
-/**
  * Implements hook_default_search_api_index().
  */
 function epe_dbvideo_default_search_api_index() {
@@ -303,12 +312,14 @@ function epe_dbvideo_default_search_api_index() {
         'nid' => array('type'=>'integer'),
         'type' => array('type'=>'string'),
         'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
         'status' => array('type'=>'integer'),
         'promote' => array('type'=>'boolean'),
         'created' => array('type'=>'date'),
         'changed' => array('type'=>'date'),
         'author' => array('type'=>'integer', 'entity_type'=>'user'),
         'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),
         'author:mail' => array('type'=>'string'),
         'author:field_account_fname' => array('type'=>'text'),

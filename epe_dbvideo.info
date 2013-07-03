@@ -2,7 +2,7 @@ name = EPE Video resource
 description = EPE video resource content type package with list view, search index
 core = 7.x
 package = EPE
-version = 7.x-0.1-alpha
+version = 7.x-0.2-alpha
 project = epe_dbvideo
 
 dependencies[] = epe_wp
