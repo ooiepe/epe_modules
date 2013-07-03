@@ -1,8 +1,8 @@
-name = Common File Resource Interface
-description = Common File resources object interface
+name = EPE File Resource Common Interface
+description = EPE File resources common interface
 core = 7.x
 package = EPE
-version = 7.x-0.1-alpha
+version = 7.x-0.2-alpha
 project = epe_dbfiles
 
 dependencies[] = epe_wp
