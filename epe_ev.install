@@ -30,44 +30,31 @@ function epe_ev_install() {
   variable_set('node_submitted_ev_resource',0);
 }
 
-
-
-/**
- * Implements hook_uninstall().
+/*
+ * remove content type and all nodes of image resource content type
  */
-function epe_ev_uninstall() { 
-  // machine name of the content type
-  $name = 'ev_resource';
-
-  // gather all job nodes created
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => $name));
-  $nids = array();
-  foreach ($result as $row) {
-    $nids[] = $row->nid;
-  }
-  
-  // delete all the job nodes at once
-  node_delete_multiple($nids);
-
-  // remove persistant variables that control settings
-//  variable_del('additional_settings__active_tab_' . $name);
-
-  // delete our content type
-  node_type_delete($name);
-
-  // find all fields and delete them
-  module_load_include('module', 'epe_ev', 'epe_ev');
-  foreach (array_keys(_ev_resource_installed_fields()) as $field) {
-    field_delete_field($field);
+function epe_ev_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('ev_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
   }
 
-  // find all fields and delete instance
-  $instances = field_info_instances('node', $name);
-  foreach ($instances as $instance_name => $instance) {
-    field_delete_instance($instance);
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
   }
 
-  // purge all field info
-  field_purge_batch(1000);
+  node_type_delete('ev_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%ev_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
 }

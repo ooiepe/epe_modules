@@ -8,22 +8,40 @@
 */
 
 /**
+ * Implements hook_views_api().
+ */
+function epe_ev_views_api() {
+  return array("api" => "3.0");
+}
+
+
+/**
   * Implement hook_menu
   */
 function epe_ev_menu() {
   $items = array();
 
-  $items['ev/add'] = array(
+  $items['api/resource/ev'] = array(
+    'title' => t('Restful EV Resource Query'),
+    'page callback' => 'epe_ev_restful_api',
+    'file' => 'epe_ev.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_ev') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/add/visualization'] = array(
     'title' => t('Create a Visualization'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_ev_form'),
     'access callback' => 'user_access',
     'access arguments' => array('create ev content'),
-//    'type' => MENU_CALLBACK,
+    //'type' => MENU_CALLBACK,
   );
 
   return $items;
 }
+
 
 /**
  * Implements hook_node_info().
@@ -31,7 +49,7 @@ function epe_ev_menu() {
 function epe_ev_node_info() {
   $items = array(
     'ev_resource' => array(
-      'name' => t('EPE Visualization'),
+      'name' => t('Visualization'),
       'base' => 'node_content',
       'description' => t('Use <em>Visualizations</em> to create visualization instances'),
       'has_title' => '1',
@@ -41,6 +59,7 @@ function epe_ev_node_info() {
   );
   return $items;
 }
+
 
 /**
  * Implements hook_node_type_insert().
@@ -59,7 +78,8 @@ function epe_ev_node_type_insert($content_type) {
     foreach (_ev_resource_installed_instances() as $instance) {
       field_create_instance($instance);
     }
-
+    
+    //assign custom content type permission
     _assign_epe_ev_permission();
   }
 }
@@ -129,6 +149,7 @@ function _ev_resource_installed_fields() {
    
   return $fields;
 }
+
 
 /**
  * Define the field instances for our content type.
@@ -363,12 +384,16 @@ function _ev_resource_installed_instances() {
   return $instances;
 }
 
+
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
 function _assign_epe_ev_permission() {
-  foreach(explode(",",SUPPORTED_AUTHOR_ROLES) as $role_name) {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
     $role = user_role_load_by_name($role_name);
     $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
     $author_permissions = array(
-      'epe ev interface' => array('grant' => TRUE, 'module' => 'epe_dbfiles'),
       'create ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
       'delete any ev_resource content' => array('grant' => FALSE, 'module' => 'node'),
       'delete own ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
@@ -397,6 +422,78 @@ function _assign_epe_ev_permission() {
 
 
 /**
+ * Implements hook_default_search_api_index().
+ */
+function epe_ev_default_search_api_index() {
+  $items = array();
+  $items['ev_resource_index'] = entity_create('search_api_index', array(
+    'name' => 'ev resource index',
+    'machine_name' => 'ev_resource_index',
+    'description' => null,
+    'server' => 'database_service',
+    'item_type' => 'node',
+    'options' => array(
+      'index_directly' => 1,
+      'cron_limit' => '50',
+      'fields' => array(
+        'nid' => array('type'=>'integer'),
+        'type' => array('type'=>'string'),
+        'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
+        'status' => array('type'=>'integer'),
+        'promote' => array('type'=>'boolean'),
+        'created' => array('type'=>'date'),
+        'changed' => array('type'=>'date'),
+        'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
+        'author:name' => array('type'=>'string'),
+        'author:mail' => array('type'=>'string'),
+        'author:field_account_fname' => array('type'=>'text'),
+        'author:field_account_lname' => array('type'=>'text'),
+        'body:value' => array('type'=>'text'),
+      ),
+      'data_alter_callbacks' => array(
+        'search_api_alter_bundle_filter' => array(
+          'status' => 1,
+          'weight' => '-10',
+          'settings' => array(
+            'default' => 0,
+            'bundles' => array('ev_resource'=>'ev_resource'),
+          ),
+          'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
+          'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
+          'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+        ),
+        'processors' => array(
+          'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),
+          'search_api_html_filter' => array('status'=>0, 'weight'=>'10',
+            'settings'=>array(
+              'fields'=>array('title'=>true, 'body:value'=>true),
+              'title'=>0, 'alt'=>1, 'tags'=>array('h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5'),
+            ),
+          ),
+          'search_api_tokenizer' => array('status'=>0, 'weight'=>'20',
+            'fields'=>array('title'=>true, 'body:value'=>true),
+            'spaces'=>'[^[:alnum:]]','ignorable'=>'[\\u0027]',
+          ),
+          'search_api_stopwords' => array('status'=>0, 'weight'=>'30', 'fields'=>array('title'=>true, 'body:value'=>true),'file'=>'','stopwords'=>'but\\r\\ndid\\r\\nthe this that those\\r\\netc',
+          )
+        ),
+      ),
+    ),
+    'enabled' => '1',
+    'read_only' => '0',
+    'rdf_mapping' => array(),
+  ));
+  return $items;
+}
+
+
+/**
   * Implement hook_form
   */
 function epe_ev_form($node, &$form_state) {
@@ -411,10 +508,12 @@ function epe_ev_form($node, &$form_state) {
       '#required' => TRUE,
     );
 
-    $form['body'] = array(
-      '#type' => 'textarea',
+    $form['description'] = array(
+      '#type' => 'text_format',
+      '#base_type' => 'textarea',
       '#title' => t('Description'),
       '#required' => FALSE,
+      '#format' => 'filtered_html',
     );
     
     $form['vis_tool'] = array(
@@ -468,11 +567,9 @@ function epe_ev_form_validate($form, &$form_state) {
 }
 
 
-
 /*
  * Submit handler for epe_ev_form()
  */
-
 function epe_ev_form_submit($form, &$form_state) {
   global $user;
 
@@ -486,7 +583,7 @@ function epe_ev_form_submit($form, &$form_state) {
 
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->title->set($form_state['values']['title']);
-  $wrapper->body->set(array('value'=>$form_state['values']['body']));
+  $wrapper->body->set($form_state['values']['description']);
   $wrapper->vis_tool->set(array('value'=>$form_state['values']['vis_tool']));
   $wrapper->vis_config->set(array('value'=>$form_state['values']['vis_config']));
   $wrapper->questions->set(array('value'=>$form_state['values']['questions']));
@@ -499,13 +596,3 @@ function epe_ev_form_submit($form, &$form_state) {
 
   drupal_set_message("You have save a new visualization: " . $wrapper->title->value() );
 }
-
-
-
-/**
- * Implements hook_views_api().
- */
-function epe_ev_views_api() {
-  return array("api" => "3.0");
-}
-
