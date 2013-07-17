@@ -140,25 +140,6 @@ function _account_installed_instances() {
   return $instances;
 }
 
-/**
- * Implements hook_default_search_api_server().
- */
-function epe_wp_default_search_api_server() {
-  $items = array();
-  $items['database_service'] = entity_create('search_api_server', array(
-    'name' => 'database-service',
-    'machine_name' => 'database_service',
-    'description' => '',
-    'class' => 'search_api_db_service',
-    'options' => array(
-      'database' => 'default:default',
-      'min_chars' => 3,
-    ),
-    'enabled' => 1,
-  ));
-  return $items;
-}
-
 /*
  * Implement hook_menu_local_tasks_alter()
  * (******NOT USED RIGHT NOW******)

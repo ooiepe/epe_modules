@@ -5,5 +5,3 @@ package = EPE
 version = 7.x-0.2-alpha
 project = epe_wp
 
-dependencies[] = search_api
-dependencies[] = search_api_db
