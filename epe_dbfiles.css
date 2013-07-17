@@ -1,1 +1,15 @@
-.form-item-files-thumbnail { display: none; }
+.content form { border: 1px solid #bdcedc; padding: 20px; background: #c1ced7; }
+.field-container { position: relative; }
+.field-container.thumbnail { display: none; }
+.field-label { float: left; width: 190px; text-align: right; }
+.input-container { margin-left: 200px; }
+.filter-help,
+.form-type-select
+{ display: none; }
+.filter-wrapper .fieldset-wrapper { margin-top: 0; }
+.form-radios .form-item-permission { width: 70px; float: left; }
+input.form-text, textarea.form-textarea { border: 1px solid #6d8c9f; }
+.text-format-wrapper .filter-wrapper { padding: 0; border: 1px solid #6d8c9f; border-top: 1px solid #c1ced7;}
+.filter-wrapper.form-wrapper { background: #c1ced7; }
+#wrapper_submit { clear: left; }
+.action-container { text-align: center; }
