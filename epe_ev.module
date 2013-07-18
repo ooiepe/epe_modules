@@ -39,6 +39,12 @@ function epe_ev_menu() {
     //'type' => MENU_CALLBACK,
   );
 
+  $items['ev/tools'] = array(
+    'title' => 'Tool List',
+    'page callback' => 'epe_ev_tools_page',
+    'access arguments' => array('access content'),
+  );
+
   return $items;
 }
 
@@ -153,18 +159,6 @@ function _ev_resource_installed_fields() {
 
 /**
  * Define the field instances for our content type.
- *
- * The instance lets Drupal know which widget to use to allow the user to enter
- * data and how to react in different view modes.  We are going to display a
- * page that uses a custom "node_example_list" view mode.  We will set a
- * cardinality of three allowing our content type to give the user three color
- * fields.
- *
- * This big array is factored into this function for readability.
- *
- * @return
- *  An associative array specifying the instances we wish to add to our new
- *  node type.
  */
 function _ev_resource_installed_instances() {
   $instances = array();
@@ -183,7 +177,7 @@ function _ev_resource_installed_instances() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
+        'weight' => '2',
       ),
       'display' => array(
         'default' => array(
@@ -191,7 +185,7 @@ function _ev_resource_installed_instances() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => 2,
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -200,7 +194,7 @@ function _ev_resource_installed_instances() {
             'trim_length' => 600,
           ),
           'type' => 'text_summary_or_trimmed',
-          'weight' => '0',
+          'weight' => '2',
         ),
       ),
       'default_value' => NULL,
@@ -227,24 +221,19 @@ function _ev_resource_installed_instances() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
+        'weight' => '3',
       ),
       'display' => array(
         'default' => array(
           'label' => 'above',
           'module' => 'text',
           'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 0,
+          'type' => 'evtool',
+          'weight' => 3,
         ),
         'teaser' => array(
           'label' => 'hidden',
-          'module' => 'text',
-          'settings' => array(
-            'trim_length' => 600,
-          ),
-          'type' => 'text_summary_or_trimmed',
-          'weight' => '0',
+          'type' => 'hidden',
         ),
       ),
       'default_value' => NULL,
@@ -271,7 +260,7 @@ function _ev_resource_installed_instances() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
+        'weight' => '5',
       ),
       'display' => array(
         'default' => array(
@@ -307,7 +296,7 @@ function _ev_resource_installed_instances() {
           'summary_rows' => 5,
         ),
         'type' => 'text_textarea_with_summary',
-        'weight' => '-4',
+        'weight' => '5',
       ),
       'display' => array(
         'default' => array(
@@ -315,7 +304,7 @@ function _ev_resource_installed_instances() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => 0,
+          'weight' => 5,
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -346,24 +335,28 @@ function _ev_resource_installed_instances() {
           'progress_indicator' => 'throbber',
         ),
         'type' => 'image_image',
-        'weight' => '-2',
+        'weight' => '1',
       ),
       'display' => array(
         'default' => array(
           'label' => 'above',
           'module' => 'image',
           'settings' => array(
-            'image_link' => '',
-            'image_style' => '',
+            'image_link' => 'content',
+            'image_style' => 'medium',
           ),
           'type' => 'image',
-          'weight' => 2,
+          'weight' => 1,
         ),
         'teaser' => array(
           'label' => 'above',
-          'settings' => array(),
-          'type' => 'hidden',
-          'weight' => 0,
+          'module' => 'image',
+          'settings' => array(
+            'image_link' => 'content',
+            'image_style' => 'thumbnail',
+          ),
+          'type' => 'image',
+          'weight' => 1,
         ),
       ),
       'deleted' => '0',
@@ -520,7 +513,7 @@ function epe_ev_form($node, &$form_state) {
       '#type' => 'hidden',
       '#title' => t('Visualization Tool'),
       '#required' => TRUE,
-      '#value' => "Tool1",
+      '#value' => 'Tool1',
     );
 
     $form['vis_config'] = array(
@@ -596,3 +589,100 @@ function epe_ev_form_submit($form, &$form_state) {
 
   drupal_set_message("You have save a new visualization: " . $wrapper->title->value() );
 }
+
+
+
+
+
+
+
+
+/**
+ * Page to list tools
+ */
+function epe_ev_tools_page() {
+  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type AND n.status = :status';
+  $result = db_query($sql,
+    array(
+      ':type' => 'ev_resource',
+      ':status' => 0,
+    )
+  );
+  $renderable_array = array();
+  $renderable_array['explanation'] = array(
+    '#markup' => t("This page lists the tools currently available in the system."),
+    );
+  foreach ($result as $row) {
+    $node = node_load($row->nid);
+    $renderable_array['node_list'][]= node_view($node, 'teaser');
+  }
+  return $renderable_array;
+}
+
+/**
+ * Implements hook_help().
+ */
+function epe_ev_help($path, $arg) {
+  switch ($path) {
+    case 'ev/tools':
+      return "<p>" . t("The EV module allows users to create customized visualization tools.
+        You can create your own customized visualization using one of the <a href='!evadd'>EPE Visualization Tools</a>.",
+        array('!evadd' => url('ev/tools'))) . "</p>";
+  }
+}
+
+
+
+
+
+
+
+
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function epe_ev_field_formatter_info() { 
+  return array( 
+    'evtool' => array( 
+      'label' => t('Visualization Tool'), 
+      'field types' => array('text'), 
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT, 
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ * This code just passes straight through to a theme function.
+ */ 
+function epe_ev_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array(); 
+  foreach ($items as $delta => $item) { 
+    $element = array('element' => $item, 'field' => $instance, 'display' => $display); 
+    $elements[$delta] = array( '#markup' => theme('ev_formatter_'. $display['type'], $element), ); 
+  }
+  return $elements; 
+}
+
+/**
+ * Implements hook_theme().
+ */
+function epe_ev_theme($existing, $type, $theme, $path) {
+  return array(
+    'ev_formatter_evtool' => array('variables' => array('element' => NULL),),
+  );
+}
+    
+    
+/** 
+ * Custom theme function 
+*/ 
+function theme_ev_formatter_evtool($element) {
+//  drupal_add_js(drupal_get_path('module', 'epe_ev') .'/EduVis/EduVis_ALL.js');
+//  drupal_add_js('(function(){ EduVis.parameters.local_resource_url = "' . drupal_get_path('module', 'epe_ev') .'/EduVis/"; ' . 'EduVis.tool.load({ "name" : "NDBC_Time_Series" });}());', 'inline');
+  $output = '<p><strong><em>' . $element['element']['value'] . '</em></strong></p>';
+  return $output;
+} 
+
+
