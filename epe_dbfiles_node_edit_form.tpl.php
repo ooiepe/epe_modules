@@ -1,6 +1,6 @@
 <div class="field-container">
-<label for="edit-file" class="field-label">Upload file resource:</label>
-<?php echo render($form['file']); ?>
+<label for="edit-file" class="field-label">* Upload file resource:</label>
+<?php echo render($form['file-container']); ?>
 </div>
 
 <div class="field-container">
@@ -13,19 +13,14 @@
 <?php echo render($form['body']); ?>
 </div>
 
+<?php if(!empty($form['thumb-container']['#attributes'])): ?>
 <div class="field-container thumbnail">
 <label for="edit-thumbnail" class="field-label">Thumbnail:</label>
-<?php echo render($form['thumbnail']); ?>
+<?php echo render($form['thumb-container']); ?>
 </div>
+<?php endif; ?>
 
-<div class="field-container">
-<label for="edit-permission-1" class="field-label">Permission:</label>
-<?php echo render($form['permission']); ?>
-</div>
-
-<?php echo render($form['node_type']); ?>
-
-<?php echo render($form['submit']); ?>
+<?php echo render($form['actions']); ?>
 
 <?php
   /* form identifier */

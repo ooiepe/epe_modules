@@ -26,6 +26,15 @@ function epe_dbfiles_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['resource/file/%/edit'] = array(
+    'title' => t('Edit EPE File Resrouce'),
+    'page callback' => 'epe_dbfile_node_edit',
+    'page arguments' => array(2),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbfiles interface,create image_resource content,create document_resource content,create audio_resource content,create video_resource content'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -53,21 +62,7 @@ function epe_dbfiles_node_form($node, &$form_state) {
     }
     $file_field_desc = 'Upload a file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions are:<br/>' . $file_field_extensions;
 
-    $form['form-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('epe_dbfiles'),
-      ),
-    );
-
-    $form['form-container']['file-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('input-container'),
-      ),
-    );
-
-    $form['form-container']['file-container']['file'] = array(
+    $form['file'] = array(
       '#type' => 'file',
       '#title_display' => 'invisible',
       '#title' => t('Upload file resource'),
@@ -75,28 +70,14 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#attributes' => array('class'=>array('form-file-field')),
     );
 
-    $form['form-container']['title-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('input-container'),
-      ),
-    );
-
-    $form['form-container']['title-container']['title'] = array(
+    $form['title'] = array(
       '#type' => 'textfield',
       '#title' => t('Title'),
       '#title_display' => 'invisible',
       '#required' => TRUE,
     );
 
-    $form['form-container']['desc-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('input-container'),
-      ),
-    );
-
-    $form['form-container']['desc-container']['description'] = array(
+    $form['body'] = array(
       '#type' => 'text_format',
       '#base_type' => 'textarea',
       '#title_display' => 'invisible',
@@ -105,31 +86,16 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#format'=>'filtered_html',
     );
 
-
-    $form['form-container']['thumbnail-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('input-container'),
-      ),
-    );
-
     if (($key = array_search('Image', $file_field_modules)) !== false) { unset($file_field_modules[$key]); }
-    $form['form-container']['thumbnail-container']['thumbnail'] = array(
+    $form['thumbnail'] = array(
       '#type' => 'file',
       '#title' => t('Upload thumbnail'),
       '#title_display' => 'invisible',
       '#description' => t('Upload a thumbnail image for the file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions: jpg, jpeg, png, gif'),
     );
 
-    $form['form-container']['permission-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('input-container'),
-      ),
-    );
-
     $permission = array(1=>t('Yes'),0=>t('No'));
-    $form['form-container']['permission-container']['permission'] = array(
+    $form['permission'] = array(
       '#type' => 'radios',
       '#title' => t('Permission'),
       '#title_display' => 'invisible',
@@ -142,24 +108,17 @@ function epe_dbfiles_node_form($node, &$form_state) {
       ),
     );
 
-    $form['form-container']['action-container'] = array(
-      '#type' => 'container',
-      '#attributes' => array(
-        'class' => array('action-container'),
-      ),
+    $form['form-container']['node_type'] = array(
+      '#type' => 'hidden',
+      '#value' => '',
     );
 
-    $form['form-container']['action-container']['submit'] = array(
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Submit',
       '#attributes' => array('disabled'=>'disabled'),
       '#prefix' => '<div id="wrapper_submit">',
       '#suffix' => '</div>',
-    );
-
-    $form['form-container']['node_type'] = array(
-      '#type' => 'hidden',
-      '#value' => '',
     );
 
     //add form specific js & css
@@ -176,16 +135,108 @@ function epe_dbfiles_node_form($node, &$form_state) {
   return $form;
 }
 
+function epe_dbfile_node_edit($nid) {
+  $node = node_load($nid);
+  //MUST DO, load node form for edit
+  module_load_include('inc', 'node', 'node.pages');
+  $form_id = $node->type . '_node_form';
+
+  $form = drupal_get_form($form_id, $node);
+
+  $form['title']['#title_display'] = 'invisible';
+  $form['body']['und'][0]['value']['#title_display'] = 'invisible';
+  unset($form['body']['und'][0]['summary']);
+
+  $form['file-container'] = array( '#type' => 'container', '#attributes' => array() );
+  $form['thumb-container'] = array( '#type' => 'container', '#attributes' => array() );
+
+  switch($node->type) {
+    case 'image_resource':
+      $form['field_imagesrcfile']['und'][0]['#title_display'] = 'invisible';
+      $form['file-container'][] = $form['field_imagesrcfile'];
+    break;
+
+    case 'document_resource':
+      $form['field_documentsrcfile']['und'][0]['#title_display'] = 'invisible';
+      $form['field_document_thumb']['und'][0]['#title_display'] = 'invisible';
+      $form['file-container'][] = $form['field_documentsrcfile'];
+      $form['thumb-container'][] = $form['field_document_thumb'];
+      $form['thumb-container']['#attributes'] = array('class' => 'field');
+    break;
+
+    case 'video_resource':
+      $form['field_videosrcfile']['und'][0]['#title_display'] = 'invisible';
+      //have problem separating thumbnail field from video file field, comment out for now to look for work around
+      /*$form['field_videosrcfile']['und'][0]['thumbnail']['#title_display'] = 'invisible';
+      $form['thumb-container'][] = $form['field_videosrcfile']['und'][0]['thumbnail'];
+      $form['thumb-container']['#attributes'] = array('class' => 'field');
+      unset($form['field_videosrcfile']['und'][0]['thumbnail']);*/
+      $form['file-container'][] = $form['field_videosrcfile'];
+    break;
+
+    case 'audio_resource':
+      $form['field_audiosrcfile']['und'][0]['#title_display'] = 'invisible';
+      $form['field_audio_thumb']['und'][0]['#title_display'] = 'invisible';
+      $form['file-container'][] = $form['field_audiosrcfile'];
+      $form['thumb-container'][] = $form['field_audio_thumb'];
+      $form['thumb-container']['#attributes'] = array('class' => 'field');
+    break;
+  }
+
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'epe_dbfiles') . '/epe_dbfiles.css' => array('type'=>'file','group'=>CSS_THEME),
+  );
+
+  return $form;
+}
+/*
+ * implement hook_menu_alter
+ * this is to ensure our custom edit form's file field knows how to detail with it's own ajax action
+ * without this, add/remove file/thumbnail will break
+ */
+function epe_dbfiles_menu_alter(&$items) {
+  $items['file/ajax']['file'] = 'node.pages.inc';
+  $items['file/ajax']['file path'] = drupal_get_path('module', 'node');
+}
+
+/*
+ * implement hook_ajax_render_alter
+ * return a modified output to fit our custom styling
+ */
+function epe_dbfiles_ajax_render_alter(&$commands) {
+  if(arg(0) == 'file' && arg(1) == 'ajax') {
+    //only want to execute changes if calling to our file resource content type asset fields
+    $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+    $field_found = false;
+    foreach($depend_modules as $module=>$type) {
+      if($type == 'file') {
+        $file_type = str_replace('epe_db', '', $module);
+        if(arg(2) === "field_{$file_type}srcfile" || arg(2) === "field_{$file_type}_thumb") {
+          $field_found = true;
+          break;
+        }
+      }
+    }
+    if($field_found):
+    foreach($commands as &$command) {
+      if($command['command'] == 'insert' && $command['method'] == 'replaceWith') {
+        $command['data'] = preg_replace("/<label(.)+<\/label>/i", '', $command['data']);
+      }
+    }
+    endif;
+  }
+}
+
 /*
  * ajax call back from $form['permission'] field, returns drupal ajax css command
  */
 function epe_dbfiles_permission_check($form, $form_state) {
   if($form_state['values']['permission'] == 1) {
-    unset($form['form-container']['action-container']['submit']['#attributes']['disabled']);
+    unset($form['submit']['#attributes']['disabled']);
   } else {
-    $form['form-container']['action-container']['submit']['#attributes']['disabled'] = 'disabled';
+    $form['submit']['#attributes']['disabled'] = 'disabled';
   }
-  return $form['form-container']['action-container']['submit'];
+  return $form['submit'];
 }
 
 /**
@@ -256,7 +307,7 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
 
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->title->set($form_state['values']['title']);
-  $wrapper->body->set($form_state['values']['description']);
+  $wrapper->body->set($form_state['values']['body']);
   //we'll deal with video file upload separately
   if($form_state['values']['node_type'] != 'video') {
     $entity_file_field = 'field_' . $form_state['values']['node_type'] . 'srcfile';
@@ -383,6 +434,22 @@ function epe_dbfiles_theme() {
   return array(
     'epe_dbfiles_node_form' => array(
       'template' => 'epe_dbfiles_node_form',
+      'render element' => 'form',
+    ),
+    'image_resource_node_form' => array(
+      'template' => 'epe_dbfiles_node_edit_form',
+      'render element' => 'form',
+    ),
+    'document_resource_node_form' => array(
+      'template' => 'epe_dbfiles_node_edit_form',
+      'render element' => 'form',
+    ),
+    'video_resource_node_form' => array(
+      'template' => 'epe_dbfiles_node_edit_form',
+      'render element' => 'form',
+    ),
+    'audio_resource_node_form' => array(
+      'template' => 'epe_dbfiles_node_edit_form',
       'render element' => 'form',
     ),
   );
