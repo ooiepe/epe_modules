@@ -2,7 +2,7 @@
 /**
  * Implements hook_default_search_api_server().
  */
-function epe_wp_default_search_api_server() {
+function epe_db_default_search_api_server() {
   $items = array();
   $items['database_service'] = entity_create('search_api_server', array(
     'name' => 'database-service',
