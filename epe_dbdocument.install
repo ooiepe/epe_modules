@@ -10,7 +10,7 @@ function epe_dbdocument_install() {
   variable_set('comment_default_per_page_document_resource','50');
   variable_set('comment_image_resource','2');
   variable_set('comment_form_location_document_resource',1);
-  variable_set('comment_preview_document_resource','1');
+  variable_set('comment_preview_document_resource','0');
   variable_set('comment_subject_field_document_resource',1);
   variable_set('field_bundle_settings_node__document_resource',array(
     'view_modes' => array(),

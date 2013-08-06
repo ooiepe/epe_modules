@@ -5,12 +5,11 @@ package = EPE
 version = 7.x-0.2-alpha
 project = epe_dbdocument
 
-dependencies[] = epe_wp
+dependencies[] = epe_db
 dependencies[] = epe_dbfiles
 dependencies[] = entity
 dependencies[] = context
 dependencies[] = semanticviews
-dependencies[] = views
 dependencies[] = views_php
 dependencies[] = views_json
 dependencies[] = token
