@@ -5,14 +5,13 @@ package = EPE
 version = 7.x-0.2-alpha
 project = epe_dbvideo
 
-dependencies[] = epe_wp
+dependencies[] = epe_db
 dependencies[] = epe_dbfiles
 dependencies[] = entity
 dependencies[] = context
 dependencies[] = semanticviews
 dependencies[] = video
 dependencies[] = videojs
-dependencies[] = views
 dependencies[] = views_php
 dependencies[] = token
 

@@ -7,7 +7,7 @@
 /**
  * Implements hook_views_default_views().
  */
-function ooi_video_resource_object_views_default_views() {
+function epe_dbvideo_views_default_views() {
   $export = array();
 
   $view = new view();
