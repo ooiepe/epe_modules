@@ -28,3 +28,27 @@ function epe_dbimage_restful_api() {
   $view->execute();
   echo $view->render();
 }
+
+function epe_dbimage_restful_api_node($nid) {
+  $item = array(
+    'nid' => '',
+    'type' => '',
+    'title' => '',
+    'body' => '',
+    'thumbnail' => ''
+  );
+
+  $node = node_load($nid);
+  if($node) {
+    $wrapper = entity_metadata_wrapper('node',$node);
+    $item['nid'] = $wrapper->getIdentifier();
+    $item['type'] = $wrapper->getBundle();
+    $item['title'] = $wrapper->label();
+    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+
+    $image = $wrapper->field_imagesrcfile->value();
+    $item['thumbnail'] = image_style_url('thumbnail', $image);
+  }
+
+  echo json_encode($item);
+}

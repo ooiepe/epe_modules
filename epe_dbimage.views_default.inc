@@ -198,8 +198,8 @@ function epe_dbimage_views_default_views() {
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
   $node = node_load($data->entity);
-  $image = field_get_items(\'node\', $node, \'field_image_resource_file\');
-  $output = field_view_value(\'node\', $node, \'field_image_resource_file\', $image[0], array(
+  $image = field_get_items(\'node\', $node, \'field_imagesrcfile\');
+  $output = field_view_value(\'node\', $node, \'field_imagesrcfile\', $image[0], array(
     \'type\' => \'image\',
     \'settings\' => array(
       \'image_style\' => \'thumbnail\', //place your image style here

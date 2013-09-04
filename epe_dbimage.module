@@ -14,8 +14,18 @@ function epe_dbimage_menu() {
   $items = array();
 
   $items['api/resource/image'] = array(
-    'title' => t('Restful Image Resource Query'),
+    'title' => t('Restful Images Resource Query'),
     'page callback' => 'epe_dbimage_restful_api',
+    'file' => 'epe_dbimage.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbimage') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['api/resource/image/%'] = array(
+    'title' => t('Restful Single Image Resource Query'),
+    'page callback' => 'epe_dbimage_restful_api_node',
+    'page arguments' => array(3),
     'file' => 'epe_dbimage.rest.api.inc',
     'file path' => drupal_get_path('module', 'epe_dbimage') . '/inc',
     'access callback' => TRUE,
