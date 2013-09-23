@@ -21,6 +21,16 @@ function epe_dbdocument_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['api/resource/document/%'] = array(
+    'title' => t('Restful Single Document Resource Query'),
+    'page callback' => 'epe_dbdocument_restful_api_node',
+    'page arguments' => array(3),
+    'file' => 'epe_dbdocument.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbdocument') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 

@@ -2,7 +2,7 @@ name = EPE Document resource
 description = EPE Document resource content type package with list view, search index
 core = 7.x
 package = EPE
-version = 7.x-0.2-alpha
+version = 7.x-0.3-alpha
 project = epe_dbdocument
 
 dependencies[] = epe_db

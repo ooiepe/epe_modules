@@ -32,18 +32,22 @@ function epe_dbdocument_install() {
 
 /*
  * Implement hook_enable
- * this adds epe_image module to epe_content_modules variable which is used in epe_files module
+ * this adds epe_document module to epe_content_modules variable which is used in epe_files module
  */
 function epe_dbdocument_enable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  //module=>type
-  $modules['epe_dbdocument'] = 'file';
+  /*
+   * resource_name: identifing which file resource type this module is (use in dbfiles)
+   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
+   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
+   */
+  $modules['epe_dbdocument'] = array('resource_name' => 'document','resource_type' => 'file', 'resource_browser_tab' => array('label'=>'Document','api'=>'document','default'=>FALSE,'order'=>2));
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
 /*
  * Implement hook_disable
- * this remove epe_image module to epe_content_modules variable which is used in epe_files module
+ * this remove epe_document module to epe_content_modules variable which is used in epe_files module
  */
 function epe_dbdocument_disable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
