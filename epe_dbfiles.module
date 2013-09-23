@@ -31,7 +31,7 @@ function epe_dbfiles_menu() {
     'page callback' => 'epe_dbfile_node_edit',
     'page arguments' => array(2),
     'access callback' => 'user_access',
-    'access arguments' => array('epe dbfiles interface,create image_resource content,create document_resource content,create audio_resource content,create video_resource content'),
+    'access arguments' => array('epe dbfiles interface,edit own image_resource content,edit own document_resource content,edit own audio_resource content,edit own video_resource content'),
     'type' => MENU_CALLBACK,
   );
 
@@ -52,12 +52,11 @@ function epe_dbfiles_node_form($node, &$form_state) {
 
     $file_field_modules = array();
     $file_field_extensions = '';
-    foreach($depend_modules as $module=>$type) {
-      if($type == 'file') {
-        $file_type = str_replace('epe_db', '', $module);
-        $file_field_modules[] = ucwords($file_type);
-        $field_instance = field_info_instance('node','field_'. $file_type .'srcfile', $file_type . '_resource');
-        $file_field_extensions .= ucwords("{$file_type} resource: ") . $field_instance['settings']['file_extensions'] . '<br/>';
+    foreach($depend_modules as $module) {
+      if($module['resource_type'] == 'file') {
+        $file_field_modules[] = ucwords($module['resource_name']);
+        $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile', $module['resource_name'] . '_resource');
+        $file_field_extensions .= ucwords("{$module['resource_name']} resource: ") . $field_instance['settings']['file_extensions'] . '<br/>';
       }
     }
     $file_field_desc = 'Upload a file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions are:<br/>' . $file_field_extensions;
@@ -208,10 +207,9 @@ function epe_dbfiles_ajax_render_alter(&$commands) {
     //only want to execute changes if calling to our file resource content type asset fields
     $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
     $field_found = false;
-    foreach($depend_modules as $module=>$type) {
-      if($type == 'file') {
-        $file_type = str_replace('epe_db', '', $module);
-        if(arg(2) === "field_{$file_type}srcfile" || arg(2) === "field_{$file_type}_thumb") {
+    foreach($depend_modules as $module) {
+      if($module['resource_type'] == 'file') {
+        if(arg(2) === "field_{$module['resource_name']}srcfile" || arg(2) === "field_{$module['resource_name']}_thumb") {
           $field_found = true;
           break;
         }
@@ -246,10 +244,9 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
   $allowed_extensions = '';
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
 
-  foreach($depend_modules as $module=>$type) {
-    if($type == 'file') {
-      $file_type = str_replace('epe_db', '', $module);
-      $field_instance = field_info_instance('node','field_'. $file_type .'srcfile',$file_type . '_resource');
+  foreach($depend_modules as $module) {
+    if($module['resource_type'] == 'file') {
+      $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile',$module['resource_name'] . '_resource');
       $allowed_extensions .= ' ' . $field_instance['settings']['file_extensions'];
     }
   }
@@ -263,14 +260,13 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
       $fileext = pathinfo($file->filename, PATHINFO_EXTENSION);
       // Save the file for use in the submit handler.
       $form_state['storage']['file'] = $file;
-      foreach($depend_modules as $module=>$type) {
-        if($type == 'file') {
-          $file_type = str_replace('epe_db', '', $module);
+      foreach($depend_modules as $module) {
+        if($module['resource_type'] == 'file') {
           //determine which type of content we should create base on the file uploaded
-          $field_instance = field_info_instance('node','field_'. $file_type .'srcfile',$file_type . '_resource');
+          $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile',$module['resource_name'] . '_resource');
           $allowed_extensions = explode(' ', $field_instance['settings']['file_extensions']);
           if(in_array(strtolower($fileext), $allowed_extensions)) {
-            $form_state['values']['node_type'] = $file_type;
+            $form_state['values']['node_type'] = $module['resource_name'];
             break;
           }
         }
@@ -390,12 +386,11 @@ function epe_dbfiles_js_settings() {
 
   $image_exts = array();
   $other_exts = array();
-  foreach($depend_modules as $module=>$type) {
-    if($type == 'file') {
-      $file_type = str_replace('epe_db', '', $module);
-      $field_instance = field_info_instance('node','field_'. $file_type .'srcfile', $file_type . '_resource');
+  foreach($depend_modules as $module) {
+    if($module['resource_type'] == 'file') {
+      $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile', $module['resource_name'] . '_resource');
       if($field_instance['settings']['file_extensions']) {
-        if($file_type == 'image') {
+        if($module['resource_name'] == 'image') {
           $image_exts = explode(" ",$field_instance['settings']['file_extensions']);
         } else {
           $other_exts = array_merge($other_exts, explode(" ",$field_instance['settings']['file_extensions']));
