@@ -1,0 +1,26 @@
+<?php
+
+function epe_db_schema() {
+  $schema['resources_assoc'] = array(
+    'description' => t('resources assignments, specifically resoruces used in LLB and CM'),
+    'fields' => array(
+      'parent' => array(
+        'description' => 'parent nid.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'child' => array(
+        'description' => 'child nid',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('parent','child'),
+  );
+
+  return $schema;
+}

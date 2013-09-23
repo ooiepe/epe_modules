@@ -30,7 +30,6 @@ function epe_db_menu_local_tasks_alter(&$data, $router_item, $root_path) {
         if($type == 'file') {
           $file_type = str_replace('epe_db', '', $module);
           if($node->type === "{$file_type}_resource") {
-            print_r($data['tabs'][0]['output'][1]);
             $data['tabs'][0]['output'][1]['#link']['path'] = 'resource/file/%/edit';
             $data['tabs'][0]['output'][1]['#link']['href'] = "resource/file/{$node->nid}/edit";
           }
