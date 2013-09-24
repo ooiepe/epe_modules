@@ -19,6 +19,14 @@ function epe_dbmultimedia_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['api/resource/multimedia/%'] = array(
+    'title' => t('Restful Single Multimedia Resource Query'),
+    'page callback' => 'epe_dbmultimedia_restful_api_node',
+    'page arguments' => array(3),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -47,6 +55,37 @@ function epe_dbmultimedia_restful_api() {
 
   $view->execute();
   echo $view->render();
+}
+
+function epe_dbmultimedia_restful_api_node($nid) {
+  $item = array(
+    'nid' => '',
+    'type' => '',
+    'title' => '',
+    'body' => '',
+    'thumbnail' => ''
+  );
+
+  $node = node_load($nid);
+  if($node) {
+    $wrapper = entity_metadata_wrapper('node',$node);
+    $item['nid'] = $wrapper->getIdentifier();
+    $item['type'] = $wrapper->getBundle();
+    $item['title'] = $wrapper->label();
+    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+
+    if($item['type'] == 'audio_resource') {
+      $image = $wrapper->field_audio_thumb->value();
+      $item['thumbnail'] = image_style_url('thumbnail', $image);
+    } else {
+      $field = field_get_items('node', $node, 'field_videosrcfile');
+      if($field) {
+        $item['thumbnail'] = image_style_url('thumbnail', $field[0]['thumbnailfile']->uri);
+      }
+    }
+  }
+
+  echo json_encode($item);
 }
 
 /**

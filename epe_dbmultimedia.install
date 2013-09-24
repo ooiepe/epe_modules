@@ -1,0 +1,25 @@
+<?php
+/*
+ * Implement hook_enable
+ * this adds epe_multimedia module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbmultimedia_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  /*
+   * resource_name: identifing which file resource type this module is (use in dbfiles)
+   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
+   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
+   */
+  $modules['epe_dbmultimedia'] = array('resource_name' => 'multimedia', 'resource_type' => 'multimedia', 'resource_browser_tab' => array('label'=>'Multimedia','api'=>'multimedia','default'=>FALSE,'order'=>3));
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_multimedia module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbmultimedia_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_dbmultimedia']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
