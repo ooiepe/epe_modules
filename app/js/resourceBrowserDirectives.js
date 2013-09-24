@@ -2,22 +2,64 @@
 
 var resourceBrowserDirective = angular.module('resourceBrowserDirective',[]);
 
-resourceBrowserDirective.directive('tableData', function() {
+resourceBrowserDirective.directive('tableRow', function($compile) {
   return {
-    restrict: 'E',
+    restrict: 'A',
+    replace: true,
     scope: {
-      data: "=data"
+      checkbox: '=',
+      id: '=',
+      type: '=',
+      url: '=',
+      thumbnail: '=',
+      title: '=',
+      author: '=',
+      updated: '='
     },
-    templateUrl: "/resource-browser/partial/search-list-table-tpl.html"
+    link: function (scope, elem, attrs) {
+      var template = '', element_ck = '';
+      if(scope.checkbox) {
+        element_ck = '<input type="checkbox" name="nid" data-type="' + scope.type + '" value="' + scope.id + '">';
+      }
+      template += '<td>' + element_ck + '<a href="' + scope.url + '"><img ng-src="' + scope.thumbnail + '" /></a></td>';
+      template += '<td><a href="' + scope.url + '">' + scope.title + '</a></td>';
+      template += '<td>' + scope.author + '</td>';
+      template += '<td>' + scope.updated + '</td>';
+
+      elem.html(template).show();
+
+      $compile(elem.contents())(scope);
+    }
   }
 });
 
-resourceBrowserDirective.directive('gridData', function() {
+resourceBrowserDirective.directive('listItem', function($compile) {
   return {
-    restrict: 'E',
+    restrict: 'A',
+    replace: true,
     scope: {
-      data: "=data"
+      checkbox: '=',
+      id: '=',
+      type: '=',
+      url: '=',
+      thumbnail: '=',
+      title: '=',
+      author: '=',
+      updated: '='
     },
-    templateUrl: "/resource-browser/partial/search-list-grid-tpl.html"
+    link: function (scope, elem, attrs) {
+      var template = '';
+      if(scope.checkbox) {
+        template += '<input type="checkbox" name="nid" data-type="' + scope.type + '" value="' + scope.id + '">';
+      }
+      template += '<a href="' + scope.url + '"><img ng-src="' + scope.thumbnail + '" /></a><br/>';
+      template += '<a href="' + scope.url + '">' + scope.title + '</a><br/>';
+      template += scope.author + '<br/>';
+      template += scope.updated;
+
+      elem.html(template).show();
+
+      $compile(elem.contents())(scope);
+    }
   }
 });

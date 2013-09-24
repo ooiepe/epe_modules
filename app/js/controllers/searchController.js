@@ -1,6 +1,6 @@
 'use strict';
 
-var SearchController = function($scope, $routeParams, $location, $filter, imageService, documentService, multimediaService) {
+var SearchController = function($scope, $routeParams, $location, $filter, epeService) {
   //model init
   $scope.fn = {};
   $scope.resources = {};
@@ -20,6 +20,9 @@ var SearchController = function($scope, $routeParams, $location, $filter, imageS
   $scope.resource.view_types = [
     {userid:'',label:'All Resources'}
   ];
+  $scope.view_templates = {};
+  $scope.view_templates.list = Drupal.settings.epe_dbresource_browser.base_path + "resource-browser/partial/search-list.html";
+  $scope.view_templates.grid = Drupal.settings.epe_dbresource_browser.base_path + "resource-browser/partial/search-grid.html";
 
   //add my resource option if user is logged in
   if(Drupal.settings.epe_dbresource_browser.userid) { $scope.resource.view_types.push({userid:Drupal.settings.epe_dbresource_browser.userid,label:'My Resources'}); }
@@ -39,27 +42,25 @@ var SearchController = function($scope, $routeParams, $location, $filter, imageS
   $scope.sort = "title";
   $scope.radioModel = "list";
 
-  //tabs data struct
-  $scope.panes.table = [
-    {
-      type:'Image',
-      data: {},
-      active: true
-    },
-    {
-      type:'Document',
-      data: {},
-      active: false
-    },
-    {
-      type:'Multimedia',
-      data: {},
-      active:false
-    }
-  ];
+  $scope.fn.sortPane = function(a,b) {
+    return ((a.order < b.order) ? -1 : ((a.order > b.order) ? 1 : 0));
+  }
+
+  $scope.panes.table = [];
+  angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
+    $scope.panes.table.push({
+      type:pane.label,
+      data:[],
+      active:pane.default,
+      order:pane.order,
+      api:pane.api,
+      show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
+    });
+  });
+  $scope.panes.table.sort($scope.fn.sortPane);
 
   //encapsulate init load into function
-  $scope.fn.loadresource = function() {
+  $scope.fn.loadBrowser = function() {
 
     //set default tab
     if(typeof $location.search()['type'] != 'undefined') {
@@ -78,43 +79,30 @@ var SearchController = function($scope, $routeParams, $location, $filter, imageS
     var searchterm = {};
     if(typeof $routeParams['term'] != "undefined") searchterm = {search:$routeParams['term']};
 
-    //get image resources
-    var imageresult = imageService.get(searchterm,function() {
-      //add result to $scope data
-      angular.forEach(imageresult.nodes, function(node) {
-        $scope.resources.imageResource.data.push(node.node);
+    $scope.fn.serviceParams = {};
+    angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+      $scope.fn.serviceParams['resource_type'] = module.api;
+      if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
+      $scope.resources[module.api] = {};
+      $scope.resources[module.api].data = [];
+      $scope.resources[module.api].data_filtered = {};
+      var tempData =epeService.get($scope.fn.serviceParams, function() {
+        angular.forEach(tempData.nodes, function(node) {
+          $scope.resources[module.api].data.push(node.node);
+        });
+        angular.forEach($scope.panes.table, function(pane, index) {
+          if(pane.type === module.label) pane.data = $scope.resources[module.api].data;
+        });
       });
-      //add data to tab
-      $scope.panes.table[0].data = $scope.resources.imageResource.data;
-    });
-
-    //get document resources
-    var documentresult = documentService.get(searchterm,function() {
-      //add result to $scope data
-      angular.forEach(documentresult.nodes, function(node) {
-        $scope.resources.documentResource.data.push(node.node);
-      });
-      //add data to tab
-      $scope.panes.table[1].data = $scope.resources.documentResource.data;
-    });
-
-    //get multimedia resources
-    var multimediaresult = multimediaService.get(searchterm, function() {
-      //add result to $scope data
-      angular.forEach(multimediaresult.nodes, function(node) {
-        $scope.resources.multimediaResource.data.push(node.node);
-      });
-      //add data to tab
-      $scope.panes.table[2].data = $scope.resources.multimediaResource.data;
     });
   } //loadresource
 
-  $scope.fn.loadresource();
+  $scope.fn.loadBrowser();
 
   //watch type change and filter data
   $scope.$watch("filter.view_type", function(view_type) {
-    $scope.panes.table[0].data = $filter("resourceFilter")($scope.resources.imageResource.data, view_type.userid);
-    $scope.panes.table[1].data = $filter("resourceFilter")($scope.resources.documentResource.data, view_type.userid);
-    $scope.panes.table[2].data = $filter("resourceFilter")($scope.resources.multimediaResource.data, view_type.userid);
+    angular.forEach($scope.panes.table, function(pane, index) {
+      pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.userid);
+    });
   });
 }

@@ -11,14 +11,14 @@ function epe_dbresource_browser_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-/*
+
   $items['dialog/resource-browser'] = array(
     'title' => t('Resource Browser'),
-    'page callback' => 'resource_browser_dialog_index',
+    'page callback' => 'epe_dbresource_browser_dialog_index',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-*/
+
   $items['resource-browser/partial/index.html'] = array(
     'title' => t('Index Page'),
     'page callback' => 'epe_dbresource_browser_view_partial',
@@ -51,22 +51,6 @@ function epe_dbresource_browser_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['resource-browser/partial/search-list-table-tpl.html'] = array(
-    'title' => t('Search List Table Template'),
-    'page callback' => 'epe_dbresource_browser_view_partial',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['resource-browser/partial/search-list-grid-tpl.html'] = array(
-    'title' => t('Search List Grid Template'),
-    'page callback' => 'epe_dbresource_browser_view_partial',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
-
   return $items;
 }
 
@@ -93,24 +77,25 @@ function epe_dbresource_browser_theme() {
       'path' => "$path/partial",
       'template'=> "resource_browser.search-list.html",
     ),
-    'resource_browser.search-list-table-tpl.html' => array(
-      'path' => "$path/partial",
-      'template'=> "resource_browser.search-list-table-tpl.html",
-    ),
-    'resource_browser.search-list-grid-tpl.html' => array(
-      'path' => "$path/partial",
-      'template'=> "resource_browser.search-list-grid-tpl.html",
-    ),
   );
 }
-/*
+
 function epe_dbresource_browser_dialog_index() {
   module_invoke('admin_menu', 'suppress');
-  return resource_browser_index();
+  $resource_browser_settings = array(
+    'checkbox' => TRUE,
+  );
+  drupal_add_js(array('epe_dbresource_browser_modal' => $resource_browser_settings), 'setting');
+  return epe_dbresource_browser_index();
 }
-*/
+
 function epe_dbresource_browser_index() {
   global $user;
+
+/*  $resource_browser_settings = array(
+    'checkbox' => FALSE,
+  );
+  drupal_add_js(array('epe_dbresource_browser_modal' => $resource_browser_settings), 'setting');*/
 
   $app_path = drupal_get_path('module', 'epe_dbresource_browser') . '/app';
 
@@ -126,10 +111,20 @@ function epe_dbresource_browser_index() {
     drupal_set_message(t('Library angular-ui-bootstrap not found under /sites/libraries'),'error');
   endif;
 
+  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+
+  $resource_browser_tabs = array();
+  foreach($depend_modules as $module) {
+    if(isset($module['resource_browser_tab'])) {
+      $resource_browser_tabs[] = $module['resource_browser_tab'];
+    }
+  }
+
   /* angular ui bootstrap */
-  drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.4.0.min.js');
+  drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.3.0.min.js');
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
-  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid)), 'setting');
+  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs
+    ,'base_path'=>base_path())),'setting');
 
   /* restangular, need to figure out how to use it */
   /*drupal_add_js('http://cdn.jsdelivr.net/restangular/0.6.1/restangular.js','external'); */
@@ -155,14 +150,6 @@ function epe_dbresource_browser_view_partial($partial) {
 
     case 'search-list.html':
       echo theme('resource_browser.search-list.html');
-    break;
-
-    case 'search-list-table-tpl.html':
-      echo theme('resource_browser.search-list-table-tpl.html');
-    break;
-
-    case 'search-list-grid-tpl.html':
-      echo theme('resource_browser.search-list-grid-tpl.html');
     break;
   }
 }

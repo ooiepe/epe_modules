@@ -5,15 +5,15 @@ angular.module('resourceBrowserApp', ['ui.bootstrap','resourceBrowserService','r
     $routeProvider
       .when('/', {
         controller:IndexController,
-        templateUrl:'/resource-browser/partial/index.html'
+        templateUrl:Drupal.settings.epe_dbresource_browser.base_path + 'resource-browser/partial/index.html'
       })
       .when('/search', {
         controller:SearchController,
-        templateUrl:'/resource-browser/partial/search.html'
+        templateUrl:Drupal.settings.epe_dbresource_browser.base_path + 'resource-browser/partial/search.html'
       })
       .when('/search/:term', {
         controller:SearchController,
-        templateUrl:'/resource-browser/partial/search.html'
+        templateUrl:Drupal.settings.epe_dbresource_browser.base_path + 'resource-browser/partial/search.html'
       })
       .otherwise({redirecTo:'/'});
 

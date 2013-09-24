@@ -3,9 +3,7 @@
 <input type="text" ng-model="term">
 
 <div class="btn-group">
-  <button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'image'">Images</button>
-  <button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'document'">Documents</button>
-  <button type="button" class="btn btn-primary" ng-model="radioModel" btn-radio="'multimedia'">Multimedia</button>
+  <button type="button" class="btn btn-primary" ng-model="radioModel.id" ng-repeat="module in resource_modules" btn-radio="module.api">{{module.label}}</button>
 </div>
 
 <input type="submit" class="btn btn-primary" value="Submit">

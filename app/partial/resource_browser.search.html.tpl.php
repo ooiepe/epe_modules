@@ -10,6 +10,6 @@
 </div>
 
 <div ng-switch="radioModel">
-  <div ng-switch-when="list" ng-include="'/resource-browser/partial/search-list.html'"></div>
-  <div ng-switch-when="grid" ng-include="'/resource-browser/partial/search-grid.html'"></div>
+  <div ng-switch-when="list" ng-include="view_templates.list"></div>
+  <div ng-switch-when="grid" ng-include="view_templates.grid"></div>
 </div>
