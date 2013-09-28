@@ -9,8 +9,18 @@ var IndexController = function($scope, $location, $routeParams) {
   });
 
   $scope.search = function() {
-    if(typeof $routeParams['dialog'] != "undefined") { $location.search({dialog:true}); }
-    if(typeof $scope.radioModel.id != "undefined") { $location.search({type:$scope.radioModel.id}); }
+    var params = {};
+    if(typeof $routeParams['dialog'] != "undefined") {
+      //$location.search({dialog:true});
+      //params.push({dialog:true});
+      params['dialog'] = true;
+    }
+    if(typeof $scope.radioModel.id != "undefined") {
+      //$location.search({type:$scope.radioModel.id});
+      //params.push({type:$scope.radioModel.id});
+      params['type'] = $scope.radioModel.id;
+    }
+    $location.search(params);
 
     if(typeof $scope.term == "undefined") {
       $location.path('/search');

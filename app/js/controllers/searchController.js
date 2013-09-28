@@ -25,7 +25,9 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.view_templates.grid = Drupal.settings.epe_dbresource_browser.base_path + "resource-browser/partial/search-grid.html";
 
   //add my resource option if user is logged in
-  if(Drupal.settings.epe_dbresource_browser.userid) { $scope.resource.view_types.push({userid:Drupal.settings.epe_dbresource_browser.userid,label:'My Resources'}); }
+  if(Drupal.settings.epe_dbresource_browser.userid) {
+    $scope.resource.view_types.push({userid:Drupal.settings.epe_dbresource_browser.userid,label:'My Resources'});
+  }
   //set default resource type
   $scope.filter.view_type = $scope.resource.view_types[0];
 
@@ -48,14 +50,18 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   $scope.panes.table = [];
   angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
-    $scope.panes.table.push({
+    var tab = {
       type:pane.label,
       data:[],
       active:pane.default,
       order:pane.order,
       api:pane.api,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
-    });
+    };
+
+    if(typeof $location.search()['dialog'] == 'undefined' || ( (typeof $location.search()['dialog'] != 'undefined') && (typeof $location.search()['type'] != 'undefined') && $location.search()['type'] == pane.api)) {
+      $scope.panes.table.push(tab);
+    }
   });
   $scope.panes.table.sort($scope.fn.sortPane);
 
