@@ -1,0 +1,104 @@
+<?php
+
+
+/**
+ * Implements hook_install().
+ */
+function epe_llb_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_llb_resource',0);
+  variable_set('comment_default_mode_llb_resource',1);
+  variable_set('comment_default_per_page_llb_resource','50');
+  variable_set('comment_form_location_llb_resource',1);
+  variable_set('comment_llb_resource','2');
+  variable_set('comment_preview_llb_resource','0');
+  variable_set('comment_subject_field_llb_resource',1);
+  variable_set('field_bundle_settings_node__llb_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_llb_resource',array());
+  variable_set('menu_parent_llb_resource','main-menu:0');
+  variable_set('node_options_llb_resource',array());
+  variable_set('node_preview_llb_resource','0');
+  variable_set('node_submitted_llb_resource',0);
+
+/*
+  variable_set('epe_llb_config',
+    array(
+      'llb_challenge_thumbnail_prefix'=>'Please choose an appropriate image that encapsulates the essence of your activity and problem',
+      'llb_challenge_thumbnail_suffix'=>'Note, this image will be used as the thumbnail for your unit.',
+      'llb_instructional_content'=>'Guidance for instructors on how to effectively integrate this activity into their course. For example, what concepts does it cover, or what is the best way to integrate it into a course?',
+      'llb_preconception_content'=>'What are some common problems or pitfalls students may encounter when working through this activity? What are some good questions to ask before and after the unit to check their understanding?',
+      'llb_resources_content'=>'Are there additional resources, web site, datasets, news articles etc. that other instructors may find useful for background or extension activities when using this activity?'
+  ));
+*/
+}
+
+/*
+ * Implement hook_enable
+ * this adds epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_llb_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  /*
+   * resource_name: identifing which file resource type this module is (use in dbfiles)
+   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
+   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
+   */
+  $modules['epe_llb'] = array('resource_name' => 'llb_resource','resource_type'=>'llb_resource','resource_browser_tab' => array('label'=>'Lab Lesson Builder','api'=>'llb','default'=>FALSE,'order'=>4));
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_llb_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_llb']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of video resource content type
+ */
+function epe_llb_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('llb_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+
+    foreach($nids as $nid) {
+      db_delete('resources_assoc')
+      ->condition('parent',$nid)
+      ->execute();
+    }
+  }
+
+  node_type_delete('llb_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%llb_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+  variable_del('epe_llb_config');
+
+  node_types_rebuild();
+  menu_rebuild();
+}

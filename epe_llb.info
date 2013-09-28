@@ -1,0 +1,19 @@
+name = EPE Lab Lesson Builder
+description = EPE Lab Lesson Builder resource content type package with list view, search index, custom add/edit functionalities
+core = 7.x
+package = EPE
+version = 7.x-0.1-alpha
+project = epe_llb
+
+dependencies[] = epe_db
+dependencies[] = entity
+dependencies[] = context
+dependencies[] = semanticviews
+dependencies[] = static_field
+dependencies[] = better_formats
+dependencies[] = video
+dependencies[] = videojs
+dependencies[] = views_php
+dependencies[] = token
+
+files[] = epe_llb.views_default.inc

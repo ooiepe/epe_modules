@@ -1,0 +1,15 @@
+.group-left { float:left; width: 50%; }
+.group-right { float: left; width: 50%; }
+fieldset { border: none; }
+fieldset.filter-wrapper { border: 1px solid #cccccc; }
+fieldset legend { display: none; }
+form .field-multiple-table th.field-label { display: none; }
+/*
+input.dataset,
+textarea.dataset { border: 0; }
+*/
+.resource-browser-modal { width: 879px; height: 500px; }
+.tabledrag-toggle-weight-wrapper { display: none; }
+
+.table-condensed .item.body { height: 250px; overflow: auto; }
+label { font-weight: bold; }

@@ -1,0 +1,99 @@
+<?php
+/**
+ * @file
+ * llb_resource_feature.views_default.inc
+ */
+
+/**
+ * Implements hook_views_default_views().
+ */
+function epe_llb_views_default_views() {
+  $export = array();
+
+  $view = new view();
+  $view->name = 'llb_resource_index';
+  $view->description = '';
+  $view->tag = 'default';
+  $view->base_table = 'search_api_index_llb_resource_index';
+  $view->human_name = 'llb_resource_index';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'All LLB Resources';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $handler->display->display_options['style_plugin'] = 'views_json';
+  /* Field: Indexed Node: Node ID */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  /* Field: Author: First Name (indexed) */
+  $handler->display->display_options['fields']['author_field_account_fname']['id'] = 'author_field_account_fname';
+  $handler->display->display_options['fields']['author_field_account_fname']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['author_field_account_fname']['field'] = 'author_field_account_fname';
+  $handler->display->display_options['fields']['author_field_account_fname']['label'] = '';
+  $handler->display->display_options['fields']['author_field_account_fname']['element_label_colon'] = FALSE;
+  /* Field: Author: Last Name (indexed) */
+  $handler->display->display_options['fields']['author_field_account_lname']['id'] = 'author_field_account_lname';
+  $handler->display->display_options['fields']['author_field_account_lname']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['author_field_account_lname']['field'] = 'author_field_account_lname';
+  $handler->display->display_options['fields']['author_field_account_lname']['label'] = 'author';
+  $handler->display->display_options['fields']['author_field_account_lname']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['author_field_account_lname']['alter']['text'] = '[author_field_account_fname] [author_field_account_lname]';
+  $handler->display->display_options['fields']['author_field_account_lname']['element_label_colon'] = FALSE;
+  /* Field: Author: User ID (indexed) */
+  $handler->display->display_options['fields']['author_uid']['id'] = 'author_uid';
+  $handler->display->display_options['fields']['author_uid']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['author_uid']['field'] = 'author_uid';
+  $handler->display->display_options['fields']['author_uid']['label'] = 'userid';
+  $handler->display->display_options['fields']['author_uid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['author_uid']['separator'] = '';
+  $handler->display->display_options['fields']['author_uid']['link_to_entity'] = 0;
+  /* Field: Indexed Node: Date changed */
+  $handler->display->display_options['fields']['changed']['id'] = 'changed';
+  $handler->display->display_options['fields']['changed']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['changed']['field'] = 'changed';
+  $handler->display->display_options['fields']['changed']['label'] = 'last_updated';
+  $handler->display->display_options['fields']['changed']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['changed']['date_format'] = 'custom';
+  $handler->display->display_options['fields']['changed']['custom_date_format'] = 'M j, Y';
+  $handler->display->display_options['fields']['changed']['link_to_entity'] = 0;
+  /* Field: Indexed Node: Status */
+  $handler->display->display_options['fields']['status']['id'] = 'status';
+  $handler->display->display_options['fields']['status']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['status']['field'] = 'status';
+  $handler->display->display_options['fields']['status']['label'] = 'status';
+  $handler->display->display_options['fields']['status']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['status']['link_to_entity'] = 0;
+  $handler->display->display_options['fields']['status']['format_name'] = 1;
+  /* Field: Indexed Node: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'title';
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['link_to_entity'] = 0;
+  /* Field: Indexed Node: URL */
+  $handler->display->display_options['fields']['url']['id'] = 'url';
+  $handler->display->display_options['fields']['url']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['url']['field'] = 'url';
+  $handler->display->display_options['fields']['url']['label'] = 'url';
+  $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
+  $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
+
+  /* Display: REST API Block */
+  $handler = $view->new_display('block', 'REST API Block', 'block');
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $export['llb_resource_index'] = $view;
+
+  return $export;
+}
