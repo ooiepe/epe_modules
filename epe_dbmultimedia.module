@@ -76,7 +76,7 @@ function epe_dbmultimedia_restful_api_node($nid) {
 
     if($item['type'] == 'audio_resource') {
       $image = $wrapper->field_audio_thumb->value();
-      $item['thumbnail'] = image_style_url('thumbnail', $image);
+      $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
     } else {
       $field = field_get_items('node', $node, 'field_videosrcfile');
       if($field) {
