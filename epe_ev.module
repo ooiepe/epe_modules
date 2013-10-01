@@ -1,63 +1,29 @@
 <?php
 
 /**
-* @file
-* Module file for the EPE Educational Visualization service
-*
-* Part of the EPE System
-*/
-
-/**
  * Implements hook_views_api().
  */
-function epe_ev_views_api() {
+function epe_ev_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
-
-
-/**
-  * Implement hook_menu
-  */
-function epe_ev_menu() {
-  $items = array();
-
-  $items['api/resource/ev'] = array(
-    'title' => t('Restful EV Resource Query'),
-    'page callback' => 'epe_ev_restful_api',
-    'file' => 'epe_ev.rest.api.inc',
-    'file path' => drupal_get_path('module', 'epe_ev') . '/inc',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/add/visualization'] = array(
-    'title' => t('Create a Visualization'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('epe_ev_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('create ev content'),
-    //'type' => MENU_CALLBACK,
-  );
-
-  $items['ev/tools'] = array(
-    'title' => 'Tool List',
-    'page callback' => 'epe_ev_tools_page',
-    'access arguments' => array('access content'),
-  );
-
-  return $items;
-}
-
 
 /**
  * Implements hook_node_info().
  */
 function epe_ev_node_info() {
   $items = array(
-    'ev_resource' => array(
-      'name' => t('Visualization'),
+    'ev_tool' => array(
+      'name' => t('EV Tool'),
       'base' => 'node_content',
-      'description' => t('Use <em>Visualizations</em> to create visualization instances'),
+      'description' => 'Content type for EV Tools.',
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'ev_tool_instance' => array(
+      'name' => t('EV Tool Instance'),
+      'base' => 'node_content',
+      'description' => t('Content type for EV Tool Instances.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -66,362 +32,898 @@ function epe_ev_node_info() {
   return $items;
 }
 
+//fields
 
-/**
- * Implements hook_node_type_insert().
- */
+// triggered as new content type is created
+
 function epe_ev_node_type_insert($content_type) {
-  if ($content_type->type == 'ev_resource') {
-    // Create all the fields we are adding to our content type.
-    foreach (_ev_resource_installed_fields() as $field) {
-      //in case content type share fields
+  if ($content_type->type == 'ev_tool') { 
+    
+// Create all the fields we are adding to our content type.
+    foreach (_epe_ev_tool_installed_fields() as $field) {
+      
+  //in case content type share fields
       if(!field_info_field($field['field_name'])) {
         field_create_field($field);
       }
     }
 
     // Create all the instances for our fields.
-    foreach (_ev_resource_installed_instances() as $instance) {
+    foreach (_ev_tool_installed_instances() as $instance) {
       field_create_instance($instance);
     }
     
     //assign custom content type permission
-    _assign_epe_ev_permission();
+   // _assign_epe_ev_permission();
   }
-}
 
+  if ($content_type->type == 'ev_tool_instance') {
 
-/**
- * Define the fields for our content type.
- *
- * @return
- *  An associative array specifying the fields we wish to add to our
- *  new node type.
- */
-function _ev_resource_installed_fields() {
-  $fields = array();
+// Create all the fields we are adding to our content type.
+    foreach (_ev_tool_instance_installed_fields() as $field) {
 
-  $fields['node-ev_resource-body'] = array(
-    'field_name' => 'body',
-    'cardinality' => '1',
-    'type' => 'text_long',
-  );
-
-  $fields['node-ev_resource-vis_tool'] = array(
-    'field_name' => 'vis_tool',
-    'cardinality' => '1',
-    'type' => 'text',
-  );
-  
-  $fields['node-ev_resource-vis_config'] = array(
-    'field_name' => 'vis_config',
-    'cardinality' => '1',
-    'type' => 'text_long',
-  );
-
-  $fields['node-ev_resource-questions'] = array(
-    'field_name' => 'questions',
-    'cardinality' => '1',
-    'type' => 'text_long',
-  );
-
-  $fields['node-ev_resource-thumbnail'] = array(
-      'field_name' => 'thumbnail',
-      'cardinality' => '1',
-      'type' => 'image',
-      'entity_types' => array(),
-      'foreign keys' => array(
-        'fid' => array(
-          'columns' => array(
-            'fid' => 'fid',
-          ),
-          'table' => 'file_managed',
-        ),
-      ),
-      'indexes' => array(
-        'fid' => array(
-          0 => 'fid',
-        ),
-      ),
-      'locked' => '0',
-      'module' => 'image',
-      'settings' => array(
-        'default_image' => 0,
-        'uri_scheme' => 'private',
-      ),
-      'translatable' => '0',
-  );
-
-   
-  return $fields;
-}
-
-
-/**
- * Define the field instances for our content type.
- */
-function _ev_resource_installed_instances() {
-  $instances = array();
-
-  $instances['node-ev_resource-body'] = array(
-      'entity_type' => 'node',
-      'bundle' => 'ev_resource',
-      'field_name' => 'body',
-      'label' => 'Description',
-      'required' => 0,
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '20',
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '2',
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 2,
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'module' => 'text',
-          'settings' => array(
-            'trim_length' => 600,
-          ),
-          'type' => 'text_summary_or_trimmed',
-          'weight' => '2',
-        ),
-      ),
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'settings' => array(
-        'display_summary' => 0,
-        'text_processing' => '1',
-        'user_register_form' => FALSE,
-      ),
-  );
-
-  $instances['node-ev_resource-vis_tool'] = array(
-      'entity_type' => 'node',
-      'bundle' => 'ev_resource',
-      'field_name' => 'vis_tool',
-      'label' => 'Visualization Tool',
-      'required' => 0,
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '20',
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '3',
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'evtool',
-          'weight' => 3,
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'type' => 'hidden',
-        ),
-      ),
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'settings' => array(
-        'display_summary' => 0,
-        'text_processing' => '1',
-        'user_register_form' => FALSE,
-      ),
-  );
-  
-  $instances['node-ev_resource-vis_config'] = array(
-      'entity_type' => 'node',
-      'bundle' => 'ev_resource',
-      'field_name' => 'vis_config',
-      'label' => 'Visualization Config',
-      'required' => 0,
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '20',
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '5',
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'hidden',
-          'type' => 'hidden',
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'type' => 'hidden',
-        ),
-      ),
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'settings' => array(
-        'display_summary' => 0,
-        'text_processing' => '1',
-        'user_register_form' => FALSE,
-      ),
-  );
-  
-  $instances['node-ev_resource-questions'] = array(
-      'entity_type' => 'node',
-      'bundle' => 'ev_resource',
-      'field_name' => 'questions',
-      'label' => 'Investigation Questions',
-      'required' => 0,
-      'widget' => array(
-        'active' => 1,
-        'module' => 'text',
-        'settings' => array(
-          'rows' => '20',
-          'summary_rows' => 5,
-        ),
-        'type' => 'text_textarea_with_summary',
-        'weight' => '5',
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'text',
-          'settings' => array(),
-          'type' => 'text_default',
-          'weight' => 5,
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'type' => 'hidden',
-        ),
-      ),
-      'default_value' => NULL,
-      'deleted' => '0',
-      'description' => '',
-      'settings' => array(
-        'display_summary' => 0,
-        'text_processing' => '1',
-        'user_register_form' => FALSE,
-      ),
-  );  
-
-  $instances['node-ev_resource-thumbnail'] = array(
-      'entity_type' => 'node',
-      'bundle' => 'ev_resource',
-      'field_name' => 'thumbnail',
-      'label' => 'Thumbnail',
-      'required' => 0,
-      'widget' => array(
-        'active' => 1,
-        'module' => 'image',
-        'settings' => array(
-          'preview_image_style' => 'thumbnail',
-          'progress_indicator' => 'throbber',
-        ),
-        'type' => 'image_image',
-        'weight' => '1',
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'above',
-          'module' => 'image',
-          'settings' => array(
-            'image_link' => 'content',
-            'image_style' => 'medium',
-          ),
-          'type' => 'image',
-          'weight' => 1,
-        ),
-        'teaser' => array(
-          'label' => 'above',
-          'module' => 'image',
-          'settings' => array(
-            'image_link' => 'content',
-            'image_style' => 'thumbnail',
-          ),
-          'type' => 'image',
-          'weight' => 1,
-        ),
-      ),
-      'deleted' => '0',
-      'description' => '',
-      'settings' => array(
-        'alt_field' => 1,
-        'default_image' => 0,
-        'file_directory' => '',
-        'file_extensions' => 'png gif jpg jpeg',
-        'max_filesize' => '',
-        'max_resolution' => '',
-        'min_resolution' => '',
-        'title_field' => 0,
-        'user_register_form' => FALSE,
-      ),
-  );
-  
-  return $instances;
-}
-
-
-/*
- * assign custom content type permission base on epe supported author roles
- * the epe supported author roles is added from epe_wp module
- */
-function _assign_epe_ev_permission() {
-  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
-    $role = user_role_load_by_name($role_name);
-    $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
-    $author_permissions = array(
-      'create ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
-      'delete any ev_resource content' => array('grant' => FALSE, 'module' => 'node'),
-      'delete own ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
-      'edit any ev_resource content' => array('grant' => FALSE, 'module' => 'node'),
-      'edit own ev_resource content' => array('grant' => TRUE, 'module' => 'node'),
-    );
-    //I am not sure what hook I should use to invoke user_role_grant_permissions function
-    //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
-    foreach($author_permissions as $key=>$assignment) {
-      if($assignment['grant'] && !array_key_exists($key, $role_perm[$role->rid])) {
-        db_insert('role_permission')
-          ->fields(array(
-            'rid' => $role->rid,
-            'permission' => $key,
-            'module' => $assignment['module'],
-          ))
-          ->execute();
+  //in case content type share fields
+      if(!field_info_field($field['field_name'])) {
+        field_create_field($field);
       }
     }
+
+    // Create all the instances for our fields.
+    foreach (_epe_ev_tool_instance_installed_instances() as $instance) {
+      field_create_instance($instance);
+    }
+
+    //assign custom content type permission
+   // _assign_epe_ev_permission();
   }
 
-  // Clear the user access cache.
-  drupal_static_reset('user_access');
-  drupal_static_reset('user_role_permissions');
+}
+
+/**
+ * Implements hook_field_default_field_bases(). // this is a feature specific hook. 
+ */
+function _epe_ev_tool_installed_fields() {
+  $field_bases = array();
+
+  // Exported field_base: 'field_tool_author'
+  $field_bases['field_tool_author'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_tool_author',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  // Exported field_base: 'field_tool_description'
+  $field_bases['field_tool_description'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_tool_description',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'text_with_summary',
+  );
+
+  // Exported field_base: 'field_tool_last_modified'
+  $field_bases['field_tool_last_modified'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_tool_last_modified',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  // Exported field_base: 'field_tool_name'
+  $field_bases['field_tool_name'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_tool_name',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  // Exported field_base: 'field_tool_thumbnail'
+  $field_bases['field_tool_thumbnail'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_tool_thumbnail',
+    'foreign keys' => array(
+      'fid' => array(
+        'columns' => array(
+          'fid' => 'fid',
+        ),
+        'table' => 'file_managed',
+      ),
+    ),
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'image',
+    'settings' => array(
+      'default_image' => 4,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'image',
+  );
+
+  return $field_bases;
+}
+
+/**
+ * Implements hook_field_default_field_instances().
+ */
+function _ev_tool_installed_instances() {
+  $field_instances = array();
+
+  // Exported field_instance: 'node-ev_tool-field_tool_author'
+  $field_instances['node-ev_tool-field_tool_author'] = array(
+    'bundle' => 'ev_tool',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_tool_author',
+    'label' => 'Tool Author',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool-field_tool_description'
+  $field_instances['node-ev_tool-field_tool_description'] = array(
+    'bundle' => 'ev_tool',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_tool_description',
+    'label' => 'Tool Description',
+    'required' => 0,
+    'settings' => array(
+      'display_summary' => 0,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool-field_tool_last_modified'
+  $field_instances['node-ev_tool-field_tool_last_modified'] = array(
+    'bundle' => 'ev_tool',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_tool_last_modified',
+    'label' => 'Last Modified',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool-field_tool_name'
+  $field_instances['node-ev_tool-field_tool_name'] = array(
+    'bundle' => 'ev_tool',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_tool_name',
+    'label' => 'Tool Name',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool-field_tool_thumbnail'
+  $field_instances['node-ev_tool-field_tool_thumbnail'] = array(
+    'bundle' => 'ev_tool',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_tool_thumbnail',
+    'label' => 'Tool Thumbnail',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 4,
+    ),
+  );
+
+  return $field_instances;
+}
+
+
+/**
+ * Implements hook_field_default_field_bases().
+ */
+function _ev_tool_instance_installed_fields() {
+  $field_bases = array();
+
+  // Exported field_base: 'field_instance_configuration'
+  $field_bases['field_instance_configuration'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_instance_configuration',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'text_long',
+  );
+
+  // Exported field_base: 'field_instance_description'
+  $field_bases['field_instance_description'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_instance_description',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'text_with_summary',
+  );
+
+  // Exported field_base: 'field_instance_questions'
+  $field_bases['field_instance_questions'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_instance_questions',
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'text_with_summary',
+  );
+
+  // Exported field_base: 'field_instance_thumbnail'
+  $field_bases['field_instance_thumbnail'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_instance_thumbnail',
+    'foreign keys' => array(
+      'fid' => array(
+        'columns' => array(
+          'fid' => 'fid',
+        ),
+        'table' => 'file_managed',
+      ),
+    ),
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'image',
+    'settings' => array(
+      'default_image' => 5,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'image',
+  );
+
+  // Exported field_base: 'field_parent_tool'
+  $field_bases['field_parent_tool'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_parent_tool',
+    'foreign keys' => array(
+      'node' => array(
+        'columns' => array(
+          'target_id' => 'nid',
+        ),
+        'table' => 'node',
+      ),
+    ),
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(),
+      ),
+      'target_type' => 'node',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
+  );
+
+  return $field_bases;
+}
+
+/**
+ * Implements hook_field_default_field_instances().
+ */
+function _epe_ev_tool_instance_installed_instances() {
+  $field_instances = array();
+
+  // Exported field_instance: 'node-ev_tool_instance-field_instance_configuration'
+  $field_instances['node-ev_tool_instance-field_instance_configuration'] = array(
+    'bundle' => 'ev_tool_instance',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_instance_configuration',
+    'label' => 'Instance Configuration',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool_instance-field_instance_description'
+  $field_instances['node-ev_tool_instance-field_instance_description'] = array(
+    'bundle' => 'ev_tool_instance',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 8,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_instance_description',
+    'label' => 'Instance Description',
+    'required' => 0,
+    'settings' => array(
+      'display_summary' => 0,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool_instance-field_instance_questions'
+  $field_instances['node-ev_tool_instance-field_instance_questions'] = array(
+    'bundle' => 'ev_tool_instance',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 7,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_instance_questions',
+    'label' => 'Investigation Questions',
+    'required' => 0,
+    'settings' => array(
+      'display_summary' => 0,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool_instance-field_instance_thumbnail'
+  $field_instances['node-ev_tool_instance-field_instance_thumbnail'] = array(
+    'bundle' => 'ev_tool_instance',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 9,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_instance_thumbnail',
+    'label' => 'Thumbnail',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-ev_tool_instance-field_parent_tool'
+  $field_instances['node-ev_tool_instance-field_parent_tool'] = array(
+    'bundle' => 'ev_tool_instance',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_parent_tool',
+    'label' => 'Parent Tool',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 1,
+    ),
+  );
+
+  return $field_instances;
+}
+
+
+function epe_ev_theme($existing) {
+  return array(
+    // 'theming_example_content_array' => array(
+    //   // We use 'render element' when the item to be passed is a self-describing
+    //   // render array (it will have #theme_wrappers)
+    //   'render element' => 'element',
+    // ),
+
+    'ev_tool_instance_node_form'  => array(
+      'render element' => 'form',
+      'template' => 'epe_ev_tool_instance_edit_form',
+    ),
+
+  );
+}
+
+/*
+* HOOK MENU
+*/
+
+function epe_ev_menu(){
+
+  $items['ev/api/%'] = array(
+    'title' => t('EV Configuration Data'),
+    'page callback' => 'epe_ev_instance_config',
+    'page arguments' => array(2),
+    'file' => 'epe_ev.api.inc',
+    'file path' => drupal_get_path('module', 'epe_ev') . "/inc",
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['ev/api/tool/%'] = array(
+    'title' => t('EV Tool'),
+    'page callback' => 'epe_ev_api_tool_load',
+    'page arguments' => array(3,4,5),
+    'file' => 'epe_ev.api.inc',
+    'file path' => drupal_get_path('module', 'epe_ev') . "/inc",
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+
+}
+
+/**
+* Implements hook_theme_registry_alter()
+**/
+function epe_ev_theme_registry_alter(&$theme_registry) {
+ $template_path = drupal_get_path('module', 'epe_ev') . '/templates';  //template folder location in your module
+ $theme_registry_copy = $theme_registry;       // munge on a copy
+ _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+ $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+ $hooks = array('node');
+ foreach ($hooks as $h) {
+   _epe_ev_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+ }
+}
+
+/**
+* Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_ev_insert_after_first_element(&$a, $element) {
+ if(is_array($a)) {
+   $first_element = array_shift($a);
+   array_unshift($a, $first_element, $element);
+ }
 }
 
 
 /**
  * Implements hook_default_search_api_index().
+ * Add this function to your .module file, and replace the following placeholder text
+ *
+ * change [your_module_name] to your module name
+ * change [your search index name] to a human readable name of your choice
+ * change [your search index machine name] to a name of your choice must be text_text_text_etc format
+ * change [content type machine name] to the machine name of your content type that this index is for
+ *
  */
 function epe_ev_default_search_api_index() {
   $items = array();
-  $items['ev_resource_index'] = entity_create('search_api_index', array(
-    'name' => 'ev resource index',
-    'machine_name' => 'ev_resource_index',
+  $items['epe_ev_search_api_index'] = entity_create('search_api_index', array(
+    'name' => 'EV Tool Search',
+    'machine_name' => 'epe_ev_search_api_index',
     'description' => null,
     'server' => 'database_service',
     'item_type' => 'node',
@@ -452,7 +954,7 @@ function epe_ev_default_search_api_index() {
           'weight' => '-10',
           'settings' => array(
             'default' => 0,
-            'bundles' => array('ev_resource'=>'ev_resource'),
+            'bundles' => array('ev_tool_instance'=>'ev_tool_instance'),
           ),
           'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
           'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
@@ -484,205 +986,3 @@ function epe_ev_default_search_api_index() {
   ));
   return $items;
 }
-
-
-/**
-  * Implement hook_form
-  */
-function epe_ev_form($node, &$form_state) {
-  $form = array();
-  if(!empty($validate_msgs)) {
-    drupal_set_message(implode('<br/>', $validate_msgs),'error');
-  } else {
-
-    $form['title'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Title'),
-      '#required' => TRUE,
-    );
-
-    $form['description'] = array(
-      '#type' => 'text_format',
-      '#base_type' => 'textarea',
-      '#title' => t('Description'),
-      '#required' => FALSE,
-      '#format' => 'filtered_html',
-    );
-    
-    $form['vis_tool'] = array(
-      '#type' => 'hidden',
-      '#title' => t('Visualization Tool'),
-      '#required' => TRUE,
-      '#value' => 'Tool1',
-    );
-
-    $form['vis_config'] = array(
-      '#type' => 'hidden',
-      '#title' => t('Visualization Configuration'),
-      '#required' => TRUE,
-      '#value' => "{}",
-    );
-
-    $form['questions'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Investigation Questions'),
-      '#required' => FALSE,
-    );
-
-    $form['thumbnail'] = array(
-      '#type' => 'file',
-      '#title' => t('Upload thumbnail'),
-      '#description' => t('Upload a thumbnail, allowed extensions: jpg, jpeg, png, gif'),
-      '#required' => FALSE,
-    );
-
-    $form['submit'] = array(
-      '#type' => 'submit',
-      '#value' => 'Submit',
-    );
-
-  }
-
-  return $form;
-
-}
-
-
-/**
- * Validate handler for file_resource_form().
- */
-function epe_ev_form_validate($form, &$form_state) {
-  $thumb = file_save_upload('thumbnail', array('file_validate_extensions' => array('jpg gif png')));
-  //if file pass validation
-  if($thumb) {
-    if($thumb = file_move($thumb, 'private://')) { $form_state['storage']['thumbnail'] = $thumb; }
-  }
-}
-
-
-/*
- * Submit handler for epe_ev_form()
- */
-function epe_ev_form_submit($form, &$form_state) {
-  global $user;
-
-  //create corresponding node with entity api
-  $node_values = array(
-    'type' => 'ev_resource',
-    'uid' => $user->uid,
-    'status' => 0
-  );
-  $entity = entity_create('node', $node_values);
-
-  $wrapper = entity_metadata_wrapper('node', $entity);
-  $wrapper->title->set($form_state['values']['title']);
-  $wrapper->body->set($form_state['values']['description']);
-  $wrapper->vis_tool->set(array('value'=>$form_state['values']['vis_tool']));
-  $wrapper->vis_config->set(array('value'=>$form_state['values']['vis_config']));
-  $wrapper->questions->set(array('value'=>$form_state['values']['questions']));
-  if(isset($form_state['storage']['thumbnail'])) {
-    $wrapper->thumbnail->file->set($form_state['storage']['thumbnail']);
-  }
-  $wrapper->save(true);
-
-  $form_state['redirect'] = 'node/' . $entity->nid;
-
-  drupal_set_message("You have save a new visualization: " . $wrapper->title->value() );
-}
-
-
-
-
-
-
-
-
-/**
- * Page to list tools
- */
-function epe_ev_tools_page() {
-  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type AND n.status = :status';
-  $result = db_query($sql,
-    array(
-      ':type' => 'ev_resource',
-      ':status' => 0,
-    )
-  );
-  $renderable_array = array();
-  $renderable_array['explanation'] = array(
-    '#markup' => t("This page lists the tools currently available in the system."),
-    );
-  foreach ($result as $row) {
-    $node = node_load($row->nid);
-    $renderable_array['node_list'][]= node_view($node, 'teaser');
-  }
-  return $renderable_array;
-}
-
-/**
- * Implements hook_help().
- */
-function epe_ev_help($path, $arg) {
-  switch ($path) {
-    case 'ev/tools':
-      return "<p>" . t("The EV module allows users to create customized visualization tools.
-        You can create your own customized visualization using one of the <a href='!evadd'>EPE Visualization Tools</a>.",
-        array('!evadd' => url('ev/tools'))) . "</p>";
-  }
-}
-
-
-
-
-
-
-
-
-
-/**
- * Implements hook_field_formatter_info().
- */
-function epe_ev_field_formatter_info() { 
-  return array( 
-    'evtool' => array( 
-      'label' => t('Visualization Tool'), 
-      'field types' => array('text'), 
-      'multiple values' => FIELD_BEHAVIOR_DEFAULT, 
-    ),
-  );
-}
-
-/**
- * Implements hook_field_formatter_view().
- * This code just passes straight through to a theme function.
- */ 
-function epe_ev_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-  $elements = array(); 
-  foreach ($items as $delta => $item) { 
-    $element = array('element' => $item, 'field' => $instance, 'display' => $display); 
-    $elements[$delta] = array( '#markup' => theme('ev_formatter_'. $display['type'], $element), ); 
-  }
-  return $elements; 
-}
-
-/**
- * Implements hook_theme().
- */
-function epe_ev_theme($existing, $type, $theme, $path) {
-  return array(
-    'ev_formatter_evtool' => array('variables' => array('element' => NULL),),
-  );
-}
-    
-    
-/** 
- * Custom theme function 
-*/ 
-function theme_ev_formatter_evtool($element) {
-//  drupal_add_js(drupal_get_path('module', 'epe_ev') .'/EduVis/EduVis_ALL.js');
-//  drupal_add_js('(function(){ EduVis.parameters.local_resource_url = "' . drupal_get_path('module', 'epe_ev') .'/EduVis/"; ' . 'EduVis.tool.load({ "name" : "NDBC_Time_Series" });}());', 'inline');
-  $output = '<p><strong><em>' . $element['element']['value'] . '</em></strong></p>';
-  return $output;
-} 
-
-
