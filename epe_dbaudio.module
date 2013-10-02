@@ -104,12 +104,12 @@ function _audio_resource_installed_fields() {
       'type' => 'text_with_summary',
   );
 
-  $fields['node-audio_resource-field_audiosrcfile'] = array(
+  $fields['node-audio_resource-field_audio_resource_file'] = array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_audiosrcfile',
+      'field_name' => 'field_audio_resource_file',
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -134,12 +134,12 @@ function _audio_resource_installed_fields() {
       'type' => 'file',
   );
 
-  $fields['node-audio_resource-field_audio_thumb'] = array(
+  $fields['node-audio_resource-field_audio_resource_image'] = array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_audio_thumb',
+      'field_name' => 'field_audio_resource_image',
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -228,16 +228,16 @@ function _audio_resource_installed_instances() {
       ),
   );
 
-  $instances['node-audio_resource-field_audiosrcfile'] = array(
+  $instances['node-audio_resource-field_audio_resource_file'] = array(
       'bundle' => 'audio_resource',
       'deleted' => '0',
       'description' => '',
       'display' => array(
         'default' => array(
           'label' => 'above',
-          'module' => 'audiofield',
+          'module' => 'file',
           'settings' => array(),
-          'type' => 'audiofield_embedded',
+          'type' => 'file_default',
           'weight' => 1,
         ),
         'teaser' => array(
@@ -248,7 +248,7 @@ function _audio_resource_installed_instances() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_audiosrcfile',
+      'field_name' => 'field_audio_resource_file',
       'label' => 'Audio resource file',
       'required' => 1,
       'settings' => array(
@@ -269,7 +269,7 @@ function _audio_resource_installed_instances() {
       ),
   );
 
-  $instances['node-audio_resource-field_audio_thumb'] = array(
+  $instances['node-audio_resource-field_audio_resource_image'] = array(
     'bundle' => 'audio_resource',
       'deleted' => '0',
       'description' => '',
@@ -292,7 +292,7 @@ function _audio_resource_installed_instances() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_audio_thumb',
+      'field_name' => 'field_audio_resource_image',
       'label' => 'Audio resource thumbnail',
       'required' => 0,
       'settings' => array(

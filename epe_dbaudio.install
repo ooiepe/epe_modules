@@ -37,12 +37,7 @@ function epe_dbaudio_install() {
  */
 function epe_dbaudio_enable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  /*
-   * resource_name: identifing which file resource type this module is (use in dbfiles)
-   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
-   * not part of resource browser so not declaring resoruce_browser_tab array key
-   */
-  $modules['epe_dbaudio'] = array('resource_name' => 'audio', 'resource_type' => 'file');
+  $modules['epe_dbaudio'] = array('content_type' => 'audio_resource', 'resource_type' => 'file');
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
