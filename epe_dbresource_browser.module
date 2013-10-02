@@ -115,8 +115,23 @@ function epe_dbresource_browser_index() {
 
   $resource_browser_tabs = array();
   foreach($depend_modules as $module) {
-    if(isset($module['resource_browser_tab'])) {
+/*    if(isset($module['resource_browser_tab'])) {
       $resource_browser_tabs[] = $module['resource_browser_tab'];
+    }*/
+    if(isset($module['resource_browser'])) {
+      $tab = array();
+      if(isset($module['resource_browser']['label'])) {
+        $tab['label'] = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $tab['label'] = $node_type->name;
+      }
+
+      $tab['api'] = $module['resource_browser']['api'];
+      if(isset($module['resource_browser']['default'])) {
+        $tab['default'] = $module['resource_browser']['default'];
+      }
+      $resource_browser_tabs[] = $tab;
     }
   }
 
