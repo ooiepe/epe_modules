@@ -53,10 +53,11 @@ function epe_dbfiles_node_form($node, &$form_state) {
     $file_field_modules = array();
     $file_field_extensions = '';
     foreach($depend_modules as $module) {
-      if($module['resource_type'] == 'file') {
-        $file_field_modules[] = ucwords($module['resource_name']);
-        $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile', $module['resource_name'] . '_resource');
-        $file_field_extensions .= ucwords("{$module['resource_name']} resource: ") . $field_instance['settings']['file_extensions'] . '<br/>';
+      if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+        $node_info = node_type_load(str_replace('_','-',$module['content_type']));
+        $file_field_modules[] = ucwords($node_info->name);
+        $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file', $module['content_type']);
+        $file_field_extensions .= "{$node_info->name}: " . $field_instance['settings']['file_extensions'] . '<br/>';
       }
     }
     $file_field_desc = 'Upload a file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions are:<br/>' . $file_field_extensions;
@@ -151,33 +152,33 @@ function epe_dbfile_node_edit($nid) {
 
   switch($node->type) {
     case 'image_resource':
-      $form['field_imagesrcfile']['und'][0]['#title_display'] = 'invisible';
-      $form['file-container'][] = $form['field_imagesrcfile'];
+      $form['field_image_resource_file']['und'][0]['#title_display'] = 'invisible';
+      $form['file-container'][] = $form['field_image_resource_file'];
     break;
 
     case 'document_resource':
-      $form['field_documentsrcfile']['und'][0]['#title_display'] = 'invisible';
-      $form['field_document_thumb']['und'][0]['#title_display'] = 'invisible';
-      $form['file-container'][] = $form['field_documentsrcfile'];
-      $form['thumb-container'][] = $form['field_document_thumb'];
+      $form['field_document_resource_file']['und'][0]['#title_display'] = 'invisible';
+      $form['field_document_resource_image']['und'][0]['#title_display'] = 'invisible';
+      $form['file-container'][] = $form['field_document_resource_file'];
+      $form['thumb-container'][] = $form['field_document_resource_image'];
       $form['thumb-container']['#attributes'] = array('class' => 'field');
     break;
 
     case 'video_resource':
-      $form['field_videosrcfile']['und'][0]['#title_display'] = 'invisible';
+      $form['field_video_resource_file']['und'][0]['#title_display'] = 'invisible';
       //have problem separating thumbnail field from video file field, comment out for now to look for work around
       /*$form['field_videosrcfile']['und'][0]['thumbnail']['#title_display'] = 'invisible';
       $form['thumb-container'][] = $form['field_videosrcfile']['und'][0]['thumbnail'];
       $form['thumb-container']['#attributes'] = array('class' => 'field');
       unset($form['field_videosrcfile']['und'][0]['thumbnail']);*/
-      $form['file-container'][] = $form['field_videosrcfile'];
+      $form['file-container'][] = $form['field_video_resource_file'];
     break;
 
     case 'audio_resource':
-      $form['field_audiosrcfile']['und'][0]['#title_display'] = 'invisible';
-      $form['field_audio_thumb']['und'][0]['#title_display'] = 'invisible';
-      $form['file-container'][] = $form['field_audiosrcfile'];
-      $form['thumb-container'][] = $form['field_audio_thumb'];
+      $form['field_audio_resource_file']['und'][0]['#title_display'] = 'invisible';
+      $form['field_audio_resource_image']['und'][0]['#title_display'] = 'invisible';
+      $form['file-container'][] = $form['field_audio_resource_file'];
+      $form['thumb-container'][] = $form['field_audio_resource_image'];
       $form['thumb-container']['#attributes'] = array('class' => 'field');
     break;
   }
@@ -208,8 +209,8 @@ function epe_dbfiles_ajax_render_alter(&$commands) {
     $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
     $field_found = false;
     foreach($depend_modules as $module) {
-      if($module['resource_type'] == 'file') {
-        if(arg(2) === "field_{$module['resource_name']}srcfile" || arg(2) === "field_{$module['resource_name']}_thumb") {
+      if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+        if(arg(2) === "field_{$module['content_type']}_file" || arg(2) === "field_{$module['content_type']}_image") {
           $field_found = true;
           break;
         }
@@ -245,8 +246,8 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
 
   foreach($depend_modules as $module) {
-    if($module['resource_type'] == 'file') {
-      $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile',$module['resource_name'] . '_resource');
+    if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+      $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file',$module['content_type']);
       $allowed_extensions .= ' ' . $field_instance['settings']['file_extensions'];
     }
   }
@@ -261,12 +262,12 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
       // Save the file for use in the submit handler.
       $form_state['storage']['file'] = $file;
       foreach($depend_modules as $module) {
-        if($module['resource_type'] == 'file') {
+        if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
           //determine which type of content we should create base on the file uploaded
-          $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile',$module['resource_name'] . '_resource');
+          $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file',$module['content_type']);
           $allowed_extensions = explode(' ', $field_instance['settings']['file_extensions']);
           if(in_array(strtolower($fileext), $allowed_extensions)) {
-            $form_state['values']['node_type'] = $module['resource_name'];
+            $form_state['values']['node_type'] = $module['content_type'];
             break;
           }
         }
@@ -295,7 +296,7 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
 
   //create corresponding node with entity api
   $node_values = array(
-    'type' => $form_state['values']['node_type'] . '_resource',
+    'type' => $form_state['values']['node_type'],
     'uid' => $user->uid,
     'status' => 0
   );
@@ -305,12 +306,12 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
   $wrapper->title->set($form_state['values']['title']);
   $wrapper->body->set($form_state['values']['body']);
   //we'll deal with video file upload separately
-  if($form_state['values']['node_type'] != 'video') {
-    $entity_file_field = 'field_' . $form_state['values']['node_type'] . 'srcfile';
+  if($form_state['values']['node_type'] != 'video_resource') {
+    $entity_file_field = 'field_' . $form_state['values']['node_type'] . '_file';
     $wrapper->{$entity_file_field}->file->set($form_state['storage']['file']);
 
     if(isset($form_state['storage']['thumbnail'])) {
-      $entity_thumb_field = 'field_' . $form_state['values']['node_type'] . '_thumb';
+      $entity_thumb_field = 'field_' . $form_state['values']['node_type'] . '_image';
       $wrapper->{$entity_thumb_field}->file->set($form_state['storage']['thumbnail']);
     }
   }
@@ -321,19 +322,19 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
    * field from video module not showing in entity wrapper, not sure why, nothing in issue queue either
    * for now saving video file in the traditional node_save way
    */
-  if($form_state['values']['node_type'] == 'video') {
+  if($form_state['values']['node_type'] == 'video_resource') {
     $node = node_load($wrapper->nid->value());
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['fid'] = $form_state['storage']['file']->fid;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['thumbnail'] = '';
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['uid'] = $form_state['storage']['file']->uid;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['filename'] = $form_state['storage']['file']->filename;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['uri'] = $form_state['storage']['file']->uri;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['filemime'] = $form_state['storage']['file']->filemime;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['filesize'] = $form_state['storage']['file']->filesize;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['status'] = $form_state['storage']['file']->status;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['timestamp'] = $form_state['storage']['file']->timestamp;
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['type'] = 'video';
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['rdf_mapping'] = array();
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['fid'] = $form_state['storage']['file']->fid;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = '';
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['uid'] = $form_state['storage']['file']->uid;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['filename'] = $form_state['storage']['file']->filename;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['uri'] = $form_state['storage']['file']->uri;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['filemime'] = $form_state['storage']['file']->filemime;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['filesize'] = $form_state['storage']['file']->filesize;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['status'] = $form_state['storage']['file']->status;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['timestamp'] = $form_state['storage']['file']->timestamp;
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['type'] = 'video';
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['rdf_mapping'] = array();
     $playablefiles = new stdClass;
     $playablefiles->fid = $form_state['storage']['file']->fid;
     $playablefiles->thumbnail = '';
@@ -346,13 +347,13 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
     $playablefiles->timestamp = $form_state['storage']['file']->timestamp;
     $playablefiles->type = 'video';
     $playablefiles->rdf_mapping = array();
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['playablefiles'] = array( $playablefiles );
-    $node->field_videosrcfile[LANGUAGE_NONE][0]['thumbnailfile'] = '';
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['playablefiles'] = array( $playablefiles );
+    $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnailfile'] = '';
 
     if(isset($form_state['storage']['thumbnail'])) {
       $thumbinfo = image_get_info($form_state['storage']['thumbnail']->uri);
-      $node->field_videosrcfile[LANGUAGE_NONE][0]['thumbnail'] = $form_state['storage']['thumbnail']->fid;
-      $node->field_videosrcfile[LANGUAGE_NONE][0]['playablefiles'][0]->thumbnail = $form_state['storage']['thumbnail']->fid;
+      $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = $form_state['storage']['thumbnail']->fid;
+      $node->field_video_resource_file[LANGUAGE_NONE][0]['playablefiles'][0]->thumbnail = $form_state['storage']['thumbnail']->fid;
       $thumbnailfile = new stdClass;
       $thumbnailfile->fid = $form_state['storage']['thumbnail']->fid;
       $thumbnailfile->uid = $form_state['storage']['thumbnail']->uid;
@@ -367,7 +368,7 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
       $thumbnailfile->field_file_image_title_text = array();
       $thumbnailfile->rdf_mapping = array();
       $thumbnailfile->image_dimensions = array('width'=>$thumbinfo['width'], 'height'=>$thumbinfo['height']);
-      $node->field_videosrcfile[LANGUAGE_NONE][0]['thumbnailfile'] = $thumbnailfile;
+      $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnailfile'] = $thumbnailfile;
     }
 
     node_save($node);
@@ -387,10 +388,10 @@ function epe_dbfiles_js_settings() {
   $image_exts = array();
   $other_exts = array();
   foreach($depend_modules as $module) {
-    if($module['resource_type'] == 'file') {
-      $field_instance = field_info_instance('node','field_'. $module['resource_name'] .'srcfile', $module['resource_name'] . '_resource');
+    if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+      $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file', $module['content_type']);
       if($field_instance['settings']['file_extensions']) {
-        if($module['resource_name'] == 'image') {
+        if($module['content_type'] == 'image_resource') {
           $image_exts = explode(" ",$field_instance['settings']['file_extensions']);
         } else {
           $other_exts = array_merge($other_exts, explode(" ",$field_instance['settings']['file_extensions']));
