@@ -29,7 +29,7 @@
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
   <li class="active"><a href="#intro" data-toggle="tab">Introduction</a></li>
-  <li><a href="#background" data-toggle="tab">Background</a></li>
+  <li><a href="#background" data-toggle="tab">Problem</a></li>
   <!-- <li><a href="#challenge" data-toggle="tab">Challenge</a></li> -->
   <li id="llb2" class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Exploration <b class="caret"></b></a>
@@ -46,6 +46,7 @@
 <div class="tab-content">
 
 <div class="tab-pane active" id="intro">
+  <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
 <div id="this-carousel-id" class="carousel slide pull-right"><!-- class of slide for animation -->
@@ -55,7 +56,7 @@
     <?php if($key == 0): array_push($slideclasses, "active"); endif; ?>
     <div class="<?php echo implode(' ', $slideclasses); ?>">
       <?php
-        $slide_image = array('style_name' => 'medium', 'path' => $slide['uri'], 'alt' => '', 'title' => '');
+        $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide['uri'], 'alt' => '', 'title' => '');
         echo theme('image_style', $slide_image);
       ?>
       <div class="carousel-caption">
@@ -70,7 +71,6 @@
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
 </div><!-- /.carousel -->
 
-  <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
   <?php echo render($content['field_background_content']); ?>
 
   <?php //echo render($content['field_introductory_slideshow']); ?>
@@ -78,6 +78,7 @@
 </div> <!-- /#intro -->
 
 <div class="tab-pane" id="background">
+  <h3>The Problem</h3>
   <div class="pull-right">
     <?php echo render($content['field_background_slideshow']); ?>
   </div>
@@ -98,7 +99,7 @@
     <li class="span4">
       <div class="thumbnail">
         <img src="<?php echo $dataset->thumbnail; ?>" alt="<?php echo $dataset->title; ?>">
-        <?php echo $dataset->title; ?>
+        <a href="#" onclick="$('#llb2 li:eq(<?php echo $key + 2; ?>) a').tab('show');"><?php echo $dataset->title; ?></a>
       </div>
     </li>
     <?php endforeach; ?>

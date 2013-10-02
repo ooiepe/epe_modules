@@ -57,71 +57,72 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#goal -->
 
 <div class="tab-pane" id="intro">
   <?php echo render($form['block_introduction_info']); ?>
-  <div class="group-left">
-  <div class="field-container control-group">
-  <label class="field-label">Enter the text you would like to appear on this page.</label>
-  <?php echo render($form['field_introductory_content']); ?>
-  </div>
-  </div> <!-- /.group-left -->
+  <div class="row-fluid">
+    <div class="span6">
+      <div class="control-group">
+        <label class="control-label" for="inputTitle"><strong>Enter the text you would like to appear on this page.</strong></label>
+        <div class="controls">
+          <?php echo render($form['field_introductory_content']); ?>
+        </div>
+      </div>
+    </div>
 
-  <div class="group-right">
-  <div class="field-container span4">
-  <?php echo render($form['field_introductory_slideshow']); ?>
-  <?php /* echo render($form['introductory_slideshow']); */ ?>
+    <div class="span6">
+      <p><strong>Introductory Slideshow</strong></p>
+      <?php echo render($form['field_introductory_slideshow']); ?>
+    </div>
   </div>
-  </div> <!-- /.group-right -->
 
-  <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#intro -->
 
 <div class="tab-pane" id="background">
   <?php echo render($form['block_background_info']); ?>
-  <div class="group-left">
-    <div class="field-container control-group">
-    <label class="field-label">Enter the text you would like to appear on this page.</label>
-    <?php echo render($form['field_background_content']); ?>
+  <div class="row-fluid">
+    <div class="span6">
+      <div class="control-group">
+        <label class="control-label" for="inputTitle"><strong>Enter the text you would like to appear on this page.</strong></label>
+        <div class="controls">
+          <?php echo render($form['field_background_content']); ?>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputTitle"><strong>Question(s)</strong></label>
+        <?php echo render($form['field_background_question']); ?>
+      </div>
     </div>
 
-    <div class="field-container control-group">
-    <label class="field-label">Question(s)</label>
-    <?php echo render($form['field_background_question']); ?>
+    <div class="span6">
+      <p><strong>Slideshow (or single image?)</strong></p>
+      <?php echo render($form['field_background_slideshow']); ?>
     </div>
-  </div> <!-- /.group-left -->
+  </div>
 
-  <div class="group-right">
-    <div class="field-container span4">
-    <?php echo render($form['field_background_slideshow']); ?>
-    </div>
-  </div> <!-- /.group-right -->
-
-  <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#background -->
 
 <div class="tab-pane" id="challenge">
   <?php echo render($form['block_challenge_info']); ?>
-  <div class="group-left">
-    <div class="field-container control-group">
-    <label class="field-label">In this activity you will investigate the following challenge.</label>
-    <?php echo render($form['field_challenge_content']); ?>
+  <div class="row-fluid">
+    <div class="span6">
+      <p class="text-success">In this activity you will investigate the following challenge:</p>
+      <div class="control-group">
+        <?php echo render($form['field_challenge_content']); ?>
+      </div>
     </div>
-  </div> <!-- /.group-left -->
 
-  <div class="group-right">
-    <div class="field-container span4">
-    <label class="field-label">Image</label>
-    <?php echo render($form['field_challenge_thumbnail']); ?>
+    <div class="span6">
+      <p><strong>Image</strong></p>
+      <?php echo render($form['field_challenge_thumbnail']); ?>
     </div>
-  </div> <!-- /.group-right -->
+  </div>
 
-  <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#challenge -->
 
 <div class="tab-pane" id="exploration">
@@ -229,12 +230,12 @@
     </div>
   </div> -->
   <!--<strong>{{item.title}}</strong> - <span html-content html="item.body"></span>-->
-
+    <p><strong>Add another Dataset:</strong></p>
     <?php echo render($form['resource_browser']); ?>
   </div>
 
-  <div class="field-container control-group">
-  <label class="field-label">Guidance Text</label>
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Guidance Text</strong></label>
   <?php echo render($form['field_guidance_content']); ?>
   </div>
 
@@ -246,8 +247,7 @@
   ?>
   </div>
 
-  <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#exploration -->
 
 <div class="tab-pane" id="explanation">
@@ -290,33 +290,32 @@
   </div>
 
   <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(8) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#explanation -->
 
 <div class="tab-pane" id="notes">
-  <div class="field-container">
-  <label class="field-label">Instructional Tips </label>
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Instructional Tips</strong></label>
   <?php echo render($form['field_instructional_content']); ?>
   </div>
 
-  <div class="field-container">
-  <label class="field-label">Preconceptions</label>
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Preconceptions</strong></label>
   <?php echo render($form['field_preconception_content']); ?>
   </div>
 
-  <div class="field-container">
-  <label class="field-label">Resources</label>
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Resources</strong></label>
   <?php echo render($form['field_resources_content']); ?>
   </div>
 
-  <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#notes -->
 
 <div class="tab-pane" id="setup">
-  <div class="field-container row-fluid">
+  <div class="row-fluid">
   <div class="span8">
-  <label class="field-label">Activity Title</label>
+  <label class="control-label" for="inputTitle"><strong>Activity Title</strong></label>
   <?php echo render($form['title']); ?>
   </div>
   <div class="span4 well">
@@ -328,8 +327,8 @@
   </div>
   </div>
 
-  <div class="field-container row-fluid">
-  <label class="field-label">Activity Description</label>
+  <div class="row-fluid">
+  <label class="control-label" for="inputTitle"><strong>Activity Description</strong></label>
   <?php echo render($form['body']); ?>
   </div>
 </div> <!-- /#setup -->

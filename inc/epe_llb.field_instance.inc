@@ -181,7 +181,10 @@ function _epe_llb_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'image',
-        'settings' => array(),
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => 'llb_detail_view',
+        ),
         'type' => 'image',
         'weight' => 5,
       ),
@@ -290,7 +293,10 @@ function _epe_llb_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'image',
-        'settings' => array(),
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => 'llb_teaser_view',
+        ),
         'type' => 'image',
         'weight' => 8,
       ),
@@ -303,8 +309,6 @@ function _epe_llb_field_default_field_instances() {
         ),
         'type' => 'image',
         'weight' => 1,
-        'type' => 'hidden',
-        'weight' => 0,
       ),
     ),
     'entity_type' => 'node',
@@ -752,9 +756,9 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(
-          'filtered_html' => 'filtered_html',
+          'filtered_html' => 0,
           'full_html' => 0,
-          'plain_text' => 0,
+          'plain_text' => 'plain_text',
         ),
         'allowed_formats_toggle' => 1,
         'default_order_toggle' => 0,
@@ -772,7 +776,7 @@ function _epe_llb_field_default_field_instances() {
           ),
         ),
       ),
-      'text_processing' => 1,
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -797,7 +801,7 @@ function _epe_llb_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'llb_detail_view',
         ),
         'type' => 'image',
         'weight' => 2,

@@ -484,6 +484,18 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
 }
 
 /*
+ * implement hook_node_view_alter
+ */
+function epe_llb_node_view_alter(&$build) {
+  if($build['#view_mode'] == 'full') {
+    $build['field_introductory_content']['#label_display'] = 'hidden';
+    $build['field_background_content']['#label_display'] = 'hidden';
+    $build['field_background_slideshow']['#label_display'] = 'hidden';
+    $build['field_background_question']['#label_display'] = 'hidden';
+  }
+}
+
+/*
 function epe_llb_field_formatter_rebuild($form, &$form_state) {
   //$form['field']['#prefix'] = 'This text will rule them all!';
   //drupal_add_css('hello.css'); //This line works even after validation fails.

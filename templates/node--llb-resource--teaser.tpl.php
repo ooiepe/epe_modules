@@ -1,5 +1,5 @@
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-
+<!--
   <header>
     <?php print render($title_prefix); ?>
     <?php if (!$page && $title): ?>
@@ -14,19 +14,25 @@
       </span>
     <?php endif; ?>
   </header>
-
+-->
   <?php
     // Hide comments, tags, and links now so that we can render them later.
     hide($content['comments']);
     hide($content['links']);
     hide($content['field_tags']);
-    //print render($content);
   ?>
-  <div class="row">
+  <div>
     <div class="span7"><?php echo render($content['body']); ?></div>
     <div class="span5">
-      <div class=""><?php echo render($content['field_challenge_thumbnail']); ?></div>
-      <div class="pull-right"><a href="/node/<?php echo arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a></div>
+      <div class="pull-right">
+        <p>
+          <?php //echo render($content['field_challenge_thumbnail']);
+            $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $content['field_challenge_thumbnail']['#items'][0]['uri'], 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
+            echo theme('image_style', $thumbnail);
+          ?>
+        </p>
+      </div>
+      <p class="pull-right"><a href="/node/<?php echo arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a></p>
     </div>
   </div>
 
