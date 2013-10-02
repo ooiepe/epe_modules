@@ -105,12 +105,12 @@ function _video_resource_installed_fields() {
       'type' => 'text_with_summary',
   );
 
-  $fields['node-video_resource-field_videosrcfile'] = array(
+  $fields['node-video_resource-field_video_resource_file'] = array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_videosrcfile',
+      'field_name' => 'field_video_resource_file',
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -211,7 +211,7 @@ function _video_resource_installed_instances() {
       ),
   );
 
-  $instances['node-video_resource-field_videosrcfile'] = array(
+  $instances['node-video_resource-field_video_resource_file'] = array(
       'bundle' => 'video_resource',
       'deleted' => '0',
       'description' => '',
@@ -234,7 +234,7 @@ function _video_resource_installed_instances() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_videosrcfile',
+      'field_name' => 'field_video_resource_file',
       'label' => 'Video resource file',
       'required' => 1,
       'settings' => array(

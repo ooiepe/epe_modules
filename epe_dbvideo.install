@@ -41,7 +41,7 @@ function epe_dbvideo_enable() {
    * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
    * not part of resource browser so not declaring resoruce_browser_tab array key
    */
-  $modules['epe_dbvideo'] = array('resource_name' => 'video','resource_type' => 'file');
+  $modules['epe_dbvideo'] = array('content_type' => 'video_resource','resource_type' => 'file');
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
