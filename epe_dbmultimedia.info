@@ -2,7 +2,7 @@ name = EPE Multimedia resource
 description = Provide consolidated search index and view for EPE video resource and audio resource
 core = 7.x
 package = EPE
-version = 7.x-0.1-alpha
+version = 7.x-0.2-alpha
 project = epe_dbmultimedia
 
 dependencies[] = epe_dbaudio
