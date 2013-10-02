@@ -36,12 +36,7 @@ function epe_dbimage_install() {
  */
 function epe_dbimage_enable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  /*
-   * resource_name: identifing which file resource type this module is (use in dbfiles)
-   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
-   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
-   */
-  $modules['epe_dbimage'] = array('resource_name' => 'image', 'resource_type' => 'file', 'resource_browser_tab' => array('label'=>'Image','api'=>'image','default'=>TRUE,'order'=>1));
+  $modules['epe_dbimage'] = array('content_type' => 'image_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Image','api'=>'image','default'=>TRUE));
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
