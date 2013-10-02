@@ -115,12 +115,12 @@ function _document_resource_installed_fields() {
       'type' => 'text_with_summary',
   );
 
-  $fields['node-document_resource-field_documentsrcfile'] = array(
+  $fields['node-document_resource-field_document_resource_file'] = array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_documentsrcfile',
+      'field_name' => 'field_document_resource_file',
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -145,12 +145,12 @@ function _document_resource_installed_fields() {
       'type' => 'file',
   );
 
-  $fields['node-document_resource-field_document_thumb'] = array(
+  $fields['node-document_resource-field_document_resource_image'] = array(
       'active' => '1',
       'cardinality' => '1',
       'deleted' => '0',
       'entity_types' => array(),
-      'field_name' => 'field_document_thumb',
+      'field_name' => 'field_document_resource_image',
       'foreign keys' => array(
         'fid' => array(
           'columns' => array(
@@ -239,7 +239,7 @@ function _document_resource_installed_instances() {
       ),
   );
 
-  $instances['node-document_resource-field_documentsrcfile'] = array(
+  $instances['node-document_resource-field_document_resource_file'] = array(
       'bundle' => 'document_resource',
       'deleted' => '0',
       'description' => '',
@@ -259,7 +259,7 @@ function _document_resource_installed_instances() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_documentsrcfile',
+      'field_name' => 'field_document_resource_file',
       'label' => 'Document resource file',
       'required' => 1,
       'settings' => array(
@@ -280,7 +280,7 @@ function _document_resource_installed_instances() {
       ),
   );
 
-  $instances['node-document_resource-field_document_thumb'] = array(
+  $instances['node-document_resource-field_document_resource_image'] = array(
       'bundle' => 'document_resource',
       'deleted' => '0',
       'description' => '',
@@ -303,7 +303,7 @@ function _document_resource_installed_instances() {
         ),
       ),
       'entity_type' => 'node',
-      'field_name' => 'field_document_thumb',
+      'field_name' => 'field_document_resource_image',
       'label' => 'Document resource thumbnail',
       'required' => 0,
       'settings' => array(

@@ -60,8 +60,8 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
       $node = node_load($data->entity);
-      $image = field_get_items(\'node\', $node, \'field_document_thumb\');
-      $output = field_view_value(\'node\', $node, \'field_document_thumb\', $image[0], array(
+      $image = field_get_items(\'node\', $node, \'field_document_resource_image\');
+      $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
         \'type\' => \'image\',
         \'settings\' => array(
            \'image_style\' => \'thumbnail\',

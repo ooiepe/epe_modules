@@ -36,12 +36,7 @@ function epe_dbdocument_install() {
  */
 function epe_dbdocument_enable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  /*
-   * resource_name: identifing which file resource type this module is (use in dbfiles)
-   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
-   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
-   */
-  $modules['epe_dbdocument'] = array('resource_name' => 'document','resource_type' => 'file', 'resource_browser_tab' => array('label'=>'Document','api'=>'document','default'=>FALSE,'order'=>2));
+  $modules['epe_dbdocument'] = array('content_type' => 'document_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Document','api'=>'document'));
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
