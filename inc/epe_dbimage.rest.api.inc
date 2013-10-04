@@ -46,7 +46,7 @@ function epe_dbimage_restful_api_node($nid) {
     $item['title'] = $wrapper->label();
     $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
 
-    $image = $wrapper->field_imagesrcfile->value();
+    $image = $wrapper->field_image_resource_file->value();
     $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
   }
 
