@@ -5,7 +5,7 @@
 function epe_llb_restful_api() {
   global $user;
 
-  $view = views_get_view('image_resource_index');
+  $view = views_get_view('llb_resource_index');
   //set view to the display machine id
   $view->set_display('all');
 
@@ -46,7 +46,7 @@ function epe_llb_restful_api_node($nid) {
     $item['title'] = $wrapper->label();
     $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
 
-    $image = $wrapper->field_imagesrcfile->value();
+    $image = $wrapper->field_challenge_thumbnail->value();
     $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
   }
 

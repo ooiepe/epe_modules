@@ -328,8 +328,16 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
   $resource_browser_btns = array();
   foreach($depend_modules as $module) {
-    if(isset($module['resource_browser_tab'])) {
-      $resource_browser_btns[] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser_tab']['api'] . '">Add ' . $module['resource_browser_tab']['label'] . '</button>';
+    if(isset($module['resource_browser'])) {
+      $btn_label = '';
+      if(isset($module['resource_browser']['label'])) {
+        $btn_label = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $btn_label = $node_type->name;
+      }
+
+      $resource_browser_btns[] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
     }
   }
 
