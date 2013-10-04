@@ -1,0 +1,20 @@
+.content form { border: 1px solid #bdcedc; padding: 20px; background: #c1ced7; }
+.field-container label { float: left; text-align: right; width: 165px; }
+.form-item,
+.text-format-wrapper { margin-left: 180px; }
+.form-item .form-item { margin-left: 0; }
+.form-item .form-item label { float: none; text-align: left; }
+.text-format-wrapper .form-item,
+.form-radios .form-item { margin-left: 0; }
+.filter-help,
+.form-type-select
+{ display: none; }
+.filter-wrapper .fieldset-wrapper { margin-top: 0; }
+.form-radios .form-item-permission { width: 70px; float: left; }
+.form-radios label { float: none; width: 23px; }
+input.form-text, textarea.form-textarea { border: 1px solid #6d8c9f; }
+.text-format-wrapper .filter-wrapper { padding: 0; border: 1px solid #6d8c9f; border-top: 1px solid #c1ced7;}
+.filter-wrapper.form-wrapper { background: #c1ced7; }
+#wrapper_submit { clear: left; text-align: center; }
+.form-actions { text-align: center; }
+.field-type-image img { margin: 0; }

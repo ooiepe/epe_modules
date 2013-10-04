@@ -1,0 +1,9 @@
+name = EPE Concept Mapping Module
+description = EPE Concept Mapping Module
+core = 7.x
+package = EPE
+version = 7.x-0.3-alpha
+project = epe_cm
+
+dependencies[] = epe_wp
+dependencies[] = ctools
