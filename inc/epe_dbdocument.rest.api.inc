@@ -46,7 +46,7 @@ function epe_dbdocument_restful_api_node($nid) {
     $item['title'] = $wrapper->label();
     $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
 
-    $image = $wrapper->field_document_thumb->value();
+    $image = $wrapper->field_document_resource_image->value();
     $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
   }
 
