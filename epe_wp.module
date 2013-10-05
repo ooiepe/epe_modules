@@ -140,6 +140,101 @@ function _account_installed_instances() {
   return $instances;
 }
 
+
+
+
+function epe_wp_menu() {
+
+  $items = array();
+
+
+  $items['home'] = array(
+    'title' => t('EPE Home Page'),
+    'page callback' => 'epe_wp_epe_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+
+  $items['ev'] = array(
+    'title' => t('Visualization Home Page'),
+    'page callback' => 'epe_wp_ev_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['cm'] = array(
+    'title' => t('Concept Maps Home Page'),
+    'page callback' => 'epe_wp_cm_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['llb'] = array(
+    'title' => t('Lessons Home Page'),
+    'page callback' => 'epe_wp_llb_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['db'] = array(
+    'title' => t('Resources Home Page'),
+    'page callback' => 'epe_wp_db_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+
+  return $items;
+
+}
+
+
+
+
+
+
+function epe_wp_block_info() {
+  $blocks['epe_wp_top_menu_links'] = array(
+    'info' => t('EPE WP Top Menu Links'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+
+}
+
+
+
+function epe_wp_block_view($delta = '') {
+  $block = array();
+  $block['title'] = t('<none>');
+  $block['content'] = '';
+
+  switch ($delta) {
+    case 'epe_wp_top_menu_links':
+      $block['content'] = '<ul><li><a href=""><div>About</div>the OOI!</a></li><li><a href=""><div>Learn</div>to Use Our Tools</a></li><li><a href=""><div>Teach</div>with Data</a></li></ul>';
+    break;
+  }
+
+  return $block;
+}
+
+
+
+
+
+
 /*
  * Implement hook_menu_local_tasks_alter()
  * (******NOT USED RIGHT NOW******)
