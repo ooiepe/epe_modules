@@ -405,6 +405,10 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     'data' => array('default_dataset_value'=>$default_dataset_value),
     'type' => 'setting',
   );
+  $form['#attached']['js'][] = array(
+    'data' => array('epe_dbresource_browser'=>array('base_path'=>base_path())),
+    'type' => 'setting',
+  );
   //$form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/test.js';
   /*$form['#attached']['css']['http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css'] = array('type'=>'external');*/
 

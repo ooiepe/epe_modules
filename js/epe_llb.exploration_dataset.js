@@ -3,12 +3,8 @@ Drupal.behaviors.epe_llb_exploration_dataset = {
   attach: function(context, settings) {*/
 jQuery(document).ready(function($) {
     $('.btn.add-resources').on("click", function() {
-/*                  bootbox.alert("Hello world!", function() {
-                console.log("Alert Callback");
-            });*/
-
       bootbox.dialog({
-        message: '<iframe src="/dialog/resource-browser#/search?dialog&type=' + $(this).data('api') + '" seamless width="879" height="500" class="resource-browser-iframe" />',
+        message: '<iframe src="' + Drupal.settings.epe_dbresource_browser.base_path + 'dialog/resource-browser#/search?dialog&type=' + $(this).data('api') + '" seamless width="879" height="500" class="resource-browser-iframe" />',
         className: 'resource-browser-modal',
         buttons: {
           main: {
@@ -20,14 +16,6 @@ jQuery(document).ready(function($) {
         var checkboxes = $('.resource-browser-iframe').contents().find('input[name="nid"]');
         checkboxes.each(function() {
           if($(this).is(':checked')) {
-            /*$.getJSON('/api/resource/image/' + $(this).val(), function(data) {
-              console.log(data);
-              selected.push(data);
-            });*/
- /*           $.getJSON('/api/resource/image/' + $(this).val()).done(function(data) {
-              //selected.push(data);
-              window.addResources(data);
-            });*/
               $.ajax({
                 url: '/api/resource/' + $(this).data('type') + '/' + $(this).val(),
                 dataType: 'json',
@@ -53,7 +41,6 @@ jQuery(document).ready(function($) {
       $.each(items, function( index,value ) {
         window.addItem(value);
       });
-      //window.addItem(Drupal.settings.default_dataset_value);
     }
 })
 /*  }
