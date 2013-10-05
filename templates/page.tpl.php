@@ -12,7 +12,7 @@
                     </div>
                     <div class="topnav">
       <?php 
-      $block = module_invoke('block', 'block_view', '1');
+      $block = module_invoke('epe_wp', 'block_view', 'epe_wp_top_menu_links');
       print $block['content'];
       ?>
                     </div>
