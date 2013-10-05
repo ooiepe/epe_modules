@@ -5,3 +5,5 @@ package = EPE
 version = 7.x-0.2-alpha
 project = epe_wp
 
+dependencies[] = menu_block
+dependencies[] = jquery_update
