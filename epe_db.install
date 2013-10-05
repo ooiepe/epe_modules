@@ -24,3 +24,261 @@ function epe_db_schema() {
 
   return $schema;
 }
+
+
+
+function epe_db_enable() {
+
+
+
+/*
+
+$item = array(
+    'link_path' => 'home',
+    'link_title' => 'Home',
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+    'expanded' => 0,
+    );
+$parentid = menu_link_save($item);
+*/
+/*
+Visualizations  
+About Visualizations  
+Create a visualization  
+My Visualizations 
+Browse Visualizations 
+*/
+
+$item = array(
+    'link_path' => 'ev',
+    'link_title' => 'Visualizations',
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'expanded' => 0,
+    );
+$parentid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'ev',
+    'link_title' => 'About Visualizations',
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'node/add/ev-resource',
+    'link_title' => 'Create a Visualization',
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=ev',
+    'link_title' => 'My Visualizations',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=ev',
+    'link_title' => 'Browse Visualizations',
+    'menu_name' => 'main-menu',
+    'weight' => 4,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+/*
+
+Concept Maps  
+About Concept Maps  
+Create a Concept Map  
+My Concept Maps 
+Browse Concept Maps 
+
+*/
+
+$item = array(
+    'link_path' => 'cm',
+    'link_title' => 'Concept Maps',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    );
+$parentid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'cm',
+    'link_title' => 'About Concept Maps',
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'node/add/cm-resource',
+    'link_title' => 'Create a Concept Map',
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=cm',
+    'link_title' => 'My Concept Maps',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=cm',
+    'link_title' => 'Browse Concept Maps',
+    'menu_name' => 'main-menu',
+    'weight' => 4,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+/*
+
+Lessons 
+About Lessons 
+Create a Lesson 
+My Lessons  
+Browse Lessons  
+
+
+*/
+
+
+$item = array(
+    'link_path' => 'llb',
+    'link_title' => 'Lessons',
+    'menu_name' => 'main-menu',
+    'weight' => 4,
+    'expanded' => 0,
+    );
+$parentid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'llb',
+    'link_title' => 'About Lessons',
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'node/add/llb-resource',
+    'link_title' => 'Create a Lesson',
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=llb',
+    'link_title' => 'My Lessons',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=llb',
+    'link_title' => 'Browse Lessons',
+    'menu_name' => 'main-menu',
+    'weight' => 4,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+/*
+
+Resources 
+About Resources 
+Create a Resource 
+My Resources  
+Browse Resources
+
+*/
+
+
+$item = array(
+    'link_path' => 'db',
+    'link_title' => 'Resources',
+    'menu_name' => 'main-menu',
+    'weight' => 5,
+    'expanded' => 0,
+    );
+$parentid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'db',
+    'link_title' => 'About Resources',
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'node/add/db-resource',
+    'link_title' => 'Create a Resource',
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=db',
+    'link_title' => 'My Resources',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+$item = array(
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=db',
+    'link_title' => 'Browse Resources',
+    'menu_name' => 'main-menu',
+    'weight' => 4,
+    'expanded' => 0,
+    'plid' => $parentid,
+    );
+$lastid = menu_link_save($item);
+
+
+
+}
