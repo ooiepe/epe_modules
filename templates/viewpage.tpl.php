@@ -99,20 +99,21 @@ if (!empty($node->field_public_status['und'][0]['value'])) {
 }
 
 .resource-links ul li a.copy {
-    background-image: url(<?php echo base_path() ?>sites/all/themes/bootstrap/images/icon_copy.jpg);
+    background-image: url(<?php echo base_path() . path_to_theme() ?>/images/icon_copy.jpg);
 }
 .resource-links ul li a.edit {
-    background-image: url(<?php echo base_path() ?>sites/all/themes/bootstrap/images/icon_edit.jpg);
+    background-image: url(<?php echo base_path() . path_to_theme() ?>/images/icon_edit.jpg);
 }
 .resource-links ul li a.delete {
-    background-image: url(<?php echo base_path() ?>sites/all/themes/bootstrap/images/icon_delete.jpg);
+    background-image: url(<?php echo base_path() . path_to_theme() ?>/images/icon_delete.jpg);
 }
 .resource-links ul li a.publish {
-    background-image: url(<?php echo base_path() ?>sites/all/themes/bootstrap/images/icon_publish.jpg);
+    background-image: url(<?php echo base_path() . path_to_theme() ?>/images/icon_publish.jpg);
 }
 .resource-links ul li a.share {
-    background-image: url(<?php echo base_path() ?>sites/all/themes/bootstrap/images/icon_share.jpg);
+    background-image: url(<?php echo base_path() . path_to_theme() ?>/images/icon_share.jpg);
 }
+
 
 .resource-heading {
   padding-bottom: 20px;
