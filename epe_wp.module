@@ -231,7 +231,7 @@ function epe_wp_block_view($delta = '') {
 
   switch ($delta) {
     case 'epe_wp_top_menu_links':
-      $block['content'] = '<ul><li><a href=""><div>About</div>the OOI</a></li><li><a href=""><div>Learn</div>to Use Our Tools</a></li><li><a href=""><div>Teach</div>with Data</a></li></ul>';
+      $block['content'] = '<ul><li><a href="' . base_path() . 'about"><div>About</div>the OOI</a></li><li><a href="' . base_path() . 'learn"><div>Learn</div>to Use Our Tools</a></li><li><a href="' . base_path() . 'teach"><div>Teach</div>with Data</a></li></ul>';
     break;
   }
 
