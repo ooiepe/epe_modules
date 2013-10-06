@@ -28,8 +28,8 @@
 <?php 
   
 
-  drupal_add_js(drupal_get_path('theme', 'bootstrap') . '/cmfiles/swfobject.js');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap') . '/cmfiles/swfaddress/swfaddress.js');
+  drupal_add_js(drupal_get_path('theme',$GLOBALS['theme']) . '/cmfiles/swfobject.js');
+  drupal_add_js(drupal_get_path('theme',$GLOBALS['theme']) . '/cmfiles/swfaddress/swfaddress.js');
 
 
   drupal_add_js('jQuery(document).ready(function () { loadFlash() });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
@@ -63,7 +63,7 @@ function loadFlash() {
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
   
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() ?>sites/all/themes/bootstrap/cmfiles/CMV_13e.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('theme',$GLOBALS['theme']) ?>/cmfiles/CMV_13e.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
   
   return;
 }
