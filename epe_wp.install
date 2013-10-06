@@ -280,7 +280,7 @@ function epe_wp_enable() {
       'kb_cm_print_map' => array(
         'page_title' => 'Print a Map',
               'module' => 'cm',
-              'alias' => 'help',
+              'alias' => 'help/cm/print_map',
               'source_file' => 'content/kb/cm/print_map.html',
             ),
       'kb_cm_export_image' => array(
