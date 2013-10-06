@@ -280,5 +280,14 @@ $item = array(
 $lastid = menu_link_save($item);
 
 
+$item = array(
+    'link_path' => 'help',
+    'link_title' => 'Help',
+    'menu_name' => 'main-menu',
+    'weight' => 6,
+    'expanded' => 0,
+    );
+$parentid = menu_link_save($item);
+
 
 }
