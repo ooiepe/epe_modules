@@ -35,6 +35,30 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = 'id';
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['nid']['separator'] = '';
+  $handler->display->display_options['fields']['nid']['link_to_entity'] = 0;
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['label'] = 'thumbnail';
+  $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_output'] = '<?php
+      $node = node_load($data->entity);
+      $image = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
+      $output = field_view_value(\'node\', $node, \'field_challenge_thumbnail\', $image[0], array(
+        \'type\' => \'image\',
+        \'settings\' => array(
+           \'image_style\' => \'thumbnail\',
+        ),
+      ));
+      echo render($output);
+  ?>';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Author: First Name (indexed) */
   $handler->display->display_options['fields']['author_field_account_fname']['id'] = 'author_field_account_fname';
   $handler->display->display_options['fields']['author_field_account_fname']['table'] = 'search_api_index_llb_resource_index';
@@ -89,10 +113,63 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
+  $handler->display->display_options['filter_groups']['groups'] = array(
+    1 => 'OR',
+    2 => 'AND',
+  );
+  /* Filter criterion: Author: User ID (indexed) */
+  $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
+  $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['filters']['author_uid']['field'] = 'author_uid';
+  $handler->display->display_options['filters']['author_uid']['group'] = 1;
+  $handler->display->display_options['filters']['author_uid']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['author_uid']['expose']['operator_id'] = 'author_uid_op';
+  $handler->display->display_options['filters']['author_uid']['expose']['label'] = 'User ID (indexed)';
+  $handler->display->display_options['filters']['author_uid']['expose']['operator'] = 'author_uid_op';
+  $handler->display->display_options['filters']['author_uid']['expose']['identifier'] = 'author';
+  $handler->display->display_options['filters']['author_uid']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  /* Filter criterion: Indexed Node: Status */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = array(
+    1 => '1',
+  );
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator_id'] = 'status_op';
+  $handler->display->display_options['filters']['status']['expose']['label'] = 'Status';
+  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
+  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
+  /* Filter criterion: Search: Fulltext search */
+  $handler->display->display_options['filters']['search_api_views_fulltext']['id'] = 'search_api_views_fulltext';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['field'] = 'search_api_views_fulltext';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_views_fulltext']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['search_api_views_fulltext']['expose']['operator_id'] = 'search_api_views_fulltext_op';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['expose']['label'] = 'Fulltext search';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['expose']['operator'] = 'search_api_views_fulltext_op';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['expose']['identifier'] = 'search';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
+    'title' => 'title',
+    'body:value' => 'body:value',
+  );
 
   /* Display: REST API Block */
-  $handler = $view->new_display('block', 'REST API Block', 'block');
+  $handler = $view->new_display('block', 'REST API Block', 'all');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+
   $export['llb_resource_index'] = $view;
 
   return $export;
