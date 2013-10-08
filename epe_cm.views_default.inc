@@ -30,7 +30,7 @@ function epe_cm_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = '[your view name]';
+  $handler->display->display_options['title'] = 'EPE CM Search View';
   $handler->display->display_options['css_class'] = 'block-list';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'none';
@@ -184,7 +184,7 @@ function epe_cm_views_default_views() {
   /* Display: Rest API Block */
   $handler = $view->new_display('block', 'Rest API Block', 'all');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = '[your view display title]';
+  $handler->display->display_options['title'] = 'EPE CM Search View';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
 
