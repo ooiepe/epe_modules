@@ -190,9 +190,12 @@ if (!empty($node->field_public_status['und'][0]['value'])) {
 <div class="resource-heading">
   <div class="resource-title"><?php print $node -> title ?></div>
   <div class="resource-author"><strong>Created by:</strong> <?php print $node -> name ?></div>
-  <div class="resource-description"><?php print $node -> body['und'][0]['value'] ?> </div>
-</div>
+  
+  <?php if( !empty($node -> body) ): ?>
+      <div class="resource-description"><?php print $node -> body['und'][0]['value'] ?> </div>
+  <?php endif; ?>
 
+</div>
 
 <script type="text/javascript">
 
@@ -254,4 +257,6 @@ function closePublishConfirm() {
 
 
 </script>
+
+<?php drupal_add_js('jQuery(document).ready(function () { loadMenu(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)); ?>
 

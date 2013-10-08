@@ -19,7 +19,7 @@
   drupal_add_js(drupal_get_path('theme', 'bootstrap') . '/cmfiles/swfaddress/swfaddress.js');
 
 
-  drupal_add_js('jQuery(document).ready(function () { loadFlash(); loadMenu(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+  drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
 
 $field_cm_data_items = field_get_items('node', $node, 'field_cm_data');
