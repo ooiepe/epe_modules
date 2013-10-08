@@ -77,28 +77,45 @@ drupal_add_js( $EduVis_path . "EduVis.js" );
 
 ?>
 
+
+<style>
+.node-tabs {
+  display: none;
+}
+</style>
+
+<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
+	<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<!-- content -->
+
+
 <div id="vistool"></div>
 
 <div>
 
 	<div class="field-container">
-	<label for="edit-title" class="field-label">* Title:</label>
+	<!-- <label for="edit-title" class="field-label">* Title:</label> -->
 	<?php echo render($form['title']); ?>
 	</div>
 
-	<div class="field-container">
-	<label for="edit-parent-tool" class="field-label">* Parent Tool:</label>
+	<div class="field-container" style="display:none;">
+	<!-- <label for="edit-parent-tool" class="field-label">* Parent Tool:</label> -->
 	<?php echo render($form['field_parent_tool']); ?>
 	</div>
 
 	<div class="field-container">
-	<label for="edit-description-value" class="field-label">Description:</label>
+	<!-- <label for="edit-description-value" class="field-label">Description:</label> -->
 	<?php echo render($form['field_tool_description']); ?>
 	</div>
 
 	<div class="field-container">
-	<label for="edit-configuration-value" class="field-label">Configuration:</label>
+	<!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
 	<?php echo render($form['field_instance_configuration']); ?>
+	</div>
+
+	<div class="field-container">
+	<!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
+	<?php echo render($form['field_instance_description']); ?>
 	</div>
 
 </div>
@@ -162,3 +179,8 @@ drupal_add_js( $EduVis_path . "EduVis.js" );
   	}());
 
   </script>
+
+<!-- end content -->
+
+	</div>
+</div>

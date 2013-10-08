@@ -1,4 +1,5 @@
 <?php 
+
 /**
  * Implements hook_install().
  */
@@ -28,9 +29,6 @@ function epe_ev_install() {
   variable_set('node_options_ev_tool',array());
   variable_set('node_preview_ev_tool','0');
   variable_set('node_submitted_ev_tool',0);
-
-  
-
 
   variable_set('comment_anonymous_ev_tool_instance',0);
   variable_set('comment_default_mode_ev_tool_instance',1);
@@ -70,21 +68,25 @@ function epe_ev_install() {
         'display' => array(),
       ),
     ));
+
+  // todo: review variables
   variable_set('menu_options_ev_tool_instance', array(
       0 => 'main-menu',
     ));
+
   variable_set('menu_parent_ev_tool_instance','main-menu:0');
+
   variable_set('node_options_ev_tool_instance', array(
       0 => 'status',
       1 => 'promote',
     ));
-  variable_set('node_preview_ev_tool_instance','1');
-  variable_set('node_submitted_ev_tool_instance',1);
 
+  variable_set('node_preview_ev_tool_instance','1');
+
+  variable_set('node_submitted_ev_tool_instance',1);
 
   // adjust the weight for template overrides.. must be greater than views weight of 10
   db_query("UPDATE {system} SET weight = 11 WHERE name = 'epe_ev'");
-
 
 }
 
@@ -119,46 +121,12 @@ function epe_ev_uninstall() {
   menu_rebuild();
 }
 
-
-/*
-
-// 9/30/13.. label & api are only necessary items
-// need to implement hook menu (review from dbfile for how-to)
-
-
-details from allan
-
-resource_name & resource_type are variable i use for dbfiles.  you can put in anything there, probably just content type machine name
-
-the resource_browser_tab is more important, it has to do w/ how i am going to load ev in my resource browser.  the label is just the text showing in the tab label, the api is important, i am expecting certain convention when it comes to api entry point.  which you can see it in my comment, so if you set the value of the api key to ev, then i am going to hit api/resource/ev and api/resource/ev/% in my resource browser.  you'll need to implement these 2 rest urls with hook_menu in your module.  we'll need to discuss how this api works later with Joe and Sage.  I am already seeing issue with Joe's cm module.  but for now, you should at least implement api/resource/[api name], you can see my epe_dbimage or epe_dbdocument on how i did that.
-
-lastly the order key is just the order of tab in resource browser, so you can just give it a arbitrary number.
-
-i think we'll eventually sit down and restructure the all these code, but for now, this is what i am expecting in all the custom resource modules
-
-*/
-
-function epe_ev_enable() {
-
-  $modules = variable_get('EPE_CONTENT_MODULES',array());
-  /*
-   * resource_name: identifing which file resource type this module is (use in dbfiles) (if not use in dbfiles, this can just be content type name)
-
-   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles) (expected value: file or anything else)
-
-   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes (resource browser module is expacting the api to be api/resource/[api name] for the list of resources and api/resource/[api name]/% for individual resource information)
-
-   */
-  $modules['epe_ev'] = 
-    array(
-      'resource_name' => 'epe_ev_db', //?
-      'resource_type' => 'epe_ev_db', //?
-      'resource_browser_tab' => array(
-          'label' => '[tab label in resource browser]', //?
-          'api' => '[simple api name, such as document, image, llb, etc]', //?
-          'default'=>FALSE, 'order'=>[order of tab in resource browser]
-        )
-      );
+function epe_ev_enable() { 
+  
+  $modules['epe_ev'] = array(
+      'content_type' => 'ev_tool_instance', 
+      'resource_browser' => array('api'=>'ev')
+    );
 
   variable_set('EPE_CONTENT_MODULES', $modules);
 }

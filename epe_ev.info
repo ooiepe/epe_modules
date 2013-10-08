@@ -16,5 +16,4 @@ dependencies[] = token
 dependencies[] = entityreference
 dependencies[] = jquery_update
 
-
 files[] = epe_ev.views_default.inc
