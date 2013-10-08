@@ -1,0 +1,290 @@
+<?php
+
+/*
+ * Implement hook_theme
+ * This hook is to style edit form, the theme key needs to be the same as the form function name
+ */
+function epe_cm_theme() {
+  return array(
+    'cm_resource_node_form' => array(
+      'template' => 'epe_cm_node_edit_form',
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+  * Implement hook_permission
+  */
+function epe_cm_permission() {
+  return array(
+    'epe dbpublic approve' => array(
+      'title' => 'EPE DB Public Approval',
+      'description' => 'Allow user to approve items for inclusion in the public db.',
+    ),
+  );
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function epe_cm_node_info() {
+  $items = array(
+    'cm_resource' => array(
+      'name' => t('Concept Map'),
+      'base' => 'node_content',
+      'description' => t('Use <em>Concept Maps</em> to create concept maps'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_node_type_insert().
+ */
+function epe_cm_node_type_insert($content_type) {
+  if ($content_type->type == 'cm_resource') {
+    module_load_include('inc','epe_cm','inc/epe_cm.field_base');
+    module_load_include('inc','epe_cm','inc/epe_cm.field_instance');
+
+    // Create all the fields we are adding to our content type.
+    foreach (_epe_cm_field_default_field_bases() as $field) {
+      //in case content type share fields
+      if(!field_info_field($field['field_name'])) {
+        field_create_field($field);
+      }
+    }
+
+    // Create all the instances for our fields.
+    foreach (_epe_cm_field_default_field_instances() as $instance) {
+      field_create_instance($instance);
+    }
+
+    //assign custom content type permission
+    _assign_epe_cm_permission();
+  }
+}
+
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
+function _assign_epe_cm_permission() {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
+    $role = user_role_load_by_name($role_name);
+    $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
+    $author_permissions = array(
+      'create cm_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'delete any cm_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'delete own cm_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'edit any cm_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'edit own cm_resource content' => array('grant' => TRUE, 'module' => 'node'),
+    );
+    //I am not sure what hook I should use to invoke user_role_grant_permissions function
+    //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
+    foreach($author_permissions as $key=>$assignment) {
+      if($assignment['grant'] && !array_key_exists($key, $role_perm[$role->rid])) {
+        db_insert('role_permission')
+          ->fields(array(
+            'rid' => $role->rid,
+            'permission' => $key,
+            'module' => $assignment['module'],
+          ))
+          ->execute();
+      }
+    }
+  }
+
+  // Clear the user access cache.
+  drupal_static_reset('user_access');
+  drupal_static_reset('user_role_permissions');
+}
+
+/**
+  * Implements hook_menu
+  */
+function epe_cm_menu() {
+  $items = array();
+
+
+  $items['api/resource/cm'] = array(
+    'title' => t('Restful CM Resource Query'),
+    'page callback' => 'epe_cm_restful_api',
+    'file' => 'epe_cm.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_cm') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['api/resource/cm/%'] = array(
+    'title' => t('Restful CM Resource Data'),
+    'page callback' => 'epe_cm_data_restful_api',
+    'page arguments' => array(3),
+    'file' => 'epe_cm.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_cm') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/deleteresource'] = array(
+    'title' => t('Delete a resource'),
+    'page callback' => 'epe_cm_node_delete_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/submitpublic'] = array(
+    'title' => t('Submit a resource to public db'),
+    'page callback' => 'epe_cm_node_submit_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/unsubmitpublic'] = array(
+    'title' => t('Unsubmit a resource to public db'),
+    'page callback' => 'epe_cm_node_unsubmit_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/approvepublic'] = array(
+    'title' => t('Approve a resource to public db'),
+    'page callback' => 'epe_cm_node_approve_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic approve'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/rejectpublic'] = array(
+    'title' => t('Reject a resource to public db'),
+    'page callback' => 'epe_cm_node_reject_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic approve'),
+    'type' => MENU_CALLBACK,
+  );
+
+
+
+
+
+  $items['node/%node/share'] = array(
+    'title' => t('Share a resource'),
+    'page callback' => 'epe_cm_node_share_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/unshare'] = array(
+    'title' => t('Unshare a resource'),
+    'page callback' => 'epe_cm_node_unshare_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_views_api().
+ * If your module hadn't implement this hook function, please add it to your .module file, and replace the placeholder text
+ */
+function epe_cm_views_api() {
+  return array("api" => "3.0");
+}
+
+/**
+ * Implements hook_default_search_api_index().
+ * Add this function to your .module file, and replace the following placeholder text
+ *
+ * change [your_module_name] to your module name
+ * change [your search index name] to a human readable name of your choice
+ * change [your search index machine name] to a name of your choice must be text_text_text_etc format
+ * change [content type machine name] to the machine name of your content type that this index is for
+ *
+ */
+function epe_cm_default_search_api_index() {
+  $items = array();
+  $items['epe_cm_search_index'] = entity_create('search_api_index', array(
+    'name' => 'EPE CM Search Index',
+    'machine_name' => 'epe_cm_search_index',
+    'description' => null,
+    'server' => 'database_service',
+    'item_type' => 'node',
+    'options' => array(
+      'index_directly' => 1,
+      'cron_limit' => '50',
+      'fields' => array(
+        'nid' => array('type'=>'integer'),
+        'type' => array('type'=>'string'),
+        'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
+        'status' => array('type'=>'integer'),
+        'promote' => array('type'=>'boolean'),
+        'created' => array('type'=>'date'),
+        'changed' => array('type'=>'date'),
+        'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
+        'author:name' => array('type'=>'string'),
+        'author:mail' => array('type'=>'string'),
+        'author:field_account_fname' => array('type'=>'text'),
+        'author:field_account_lname' => array('type'=>'text'),
+        'body:value' => array('type'=>'text'),
+      ),
+      'data_alter_callbacks' => array(
+        'search_api_alter_bundle_filter' => array(
+          'status' => 1,
+          'weight' => '-10',
+          'settings' => array(
+            'default' => 0,
+            'bundles' => array('cm_resource'=>'cm_resource'),
+          ),
+          'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
+          'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
+          'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+        ),
+        'processors' => array(
+          'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),
+          'search_api_html_filter' => array('status'=>0, 'weight'=>'10',
+            'settings'=>array(
+              'fields'=>array('title'=>true, 'body:value'=>true),
+              'title'=>0, 'alt'=>1, 'tags'=>array('h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5'),
+            ),
+          ),
+          'search_api_tokenizer' => array('status'=>0, 'weight'=>'20',
+            'fields'=>array('title'=>true, 'body:value'=>true),
+            'spaces'=>'[^[:alnum:]]','ignorable'=>'[\\u0027]',
+          ),
+          'search_api_stopwords' => array('status'=>0, 'weight'=>'30', 'fields'=>array('title'=>true, 'body:value'=>true),'file'=>'','stopwords'=>'but\\r\\ndid\\r\\nthe this that those\\r\\netc',
+          )
+        ),
+      ),
+    ),
+    'enabled' => '1',
+    'read_only' => '0',
+    'rdf_mapping' => array(),
+  ));
+  return $items;
+}
+
+
