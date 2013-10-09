@@ -5,7 +5,6 @@ package = EPE
 version = 7.x-0.3-alpha
 project = epe_dbaudio
 
-dependencies[] = audiofield
 dependencies[] = epe_db
 dependencies[] = epe_dbfiles
 dependencies[] = entity

@@ -59,16 +59,16 @@ function epe_dbaudio_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-      $node = node_load($data->entity);
-      $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
-      $output = field_view_value(\'node\', $node, \'field_audio_resource_image\', $image[0], array(
-        \'type\' => \'image\',
-        \'settings\' => array(
-           \'image_style\' => \'thumbnail\',
-        ),
-      ));
-      echo render($output);
-      ?>';
+        $node = node_load($data->entity);
+        $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
+        $output = field_view_value(\'node\', $node, \'field_audio_resource_image\', $image[0], array(
+          \'type\' => \'image\',
+          \'settings\' => array(
+             \'image_style\' => \'thumbnail\',
+          ),
+        ));
+        echo render($output);
+        ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -131,23 +131,10 @@ function epe_dbaudio_views_default_views() {
   $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
   $handler->display->display_options['arguments']['author']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['author']['break_phrase'] = 0;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
   $handler->display->display_options['filter_groups']['groups'] = array(
-    1 => 'AND',
+    1 => 'OR',
     2 => 'AND',
   );
-  /* Filter criterion: Indexed Node: Status */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_audio_resource_index';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = array(
-    1 => '1',
-  );
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator_id'] = 'status_op';
-  $handler->display->display_options['filters']['status']['expose']['label'] = 'Status';
-  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
-  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_audio_resource_index';
@@ -182,11 +169,18 @@ function epe_dbaudio_views_default_views() {
     'title' => 'title',
     'body:value' => 'body:value',
   );
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_audio_resource_public']['id'] = 'field_audio_resource_public';
+  $handler->display->display_options['filters']['field_audio_resource_public']['table'] = 'search_api_index_audio_resource_index';
+  $handler->display->display_options['filters']['field_audio_resource_public']['field'] = 'field_audio_resource_public';
+  $handler->display->display_options['filters']['field_audio_resource_public']['value'] = array(
+    'Public' => 'Public',
+  );
+  $handler->display->display_options['filters']['field_audio_resource_public']['group'] = 1;
 
   /* Display: Restful API Block */
   $handler = $view->new_display('block', 'Restful API Block', 'all');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-
 
   $export['audio_resource_index'] = $view;
 
