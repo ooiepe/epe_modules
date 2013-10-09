@@ -59,10 +59,10 @@ function epe_dbvideo_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-      $node = node_load($data->entity);
-      $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
-      if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
-  ?>';
+        $node = node_load($data->entity);
+        $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
+        if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
+    ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -127,19 +127,10 @@ function epe_dbvideo_views_default_views() {
   $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
   $handler->display->display_options['arguments']['author']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['author']['break_phrase'] = 0;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
   $handler->display->display_options['filter_groups']['groups'] = array(
-    1 => 'AND',
+    1 => 'OR',
     2 => 'AND',
   );
-  /* Filter criterion: Indexed Node: Status */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_video_resource_index';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = array(
-    1 => '1',
-  );
-  $handler->display->display_options['filters']['status']['group'] = 1;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_video_resource_index';
@@ -173,6 +164,13 @@ function epe_dbvideo_views_default_views() {
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
     'body:value' => 'body:value',
+  );
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_video_resource_public']['id'] = 'field_video_resource_public';
+  $handler->display->display_options['filters']['field_video_resource_public']['table'] = 'search_api_index_video_resource_index';
+  $handler->display->display_options['filters']['field_video_resource_public']['field'] = 'field_video_resource_public';
+  $handler->display->display_options['filters']['field_video_resource_public']['value'] = array(
+    'Public' => 'Public',
   );
 
   /* Display: Restful API Block */
