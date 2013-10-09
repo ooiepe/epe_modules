@@ -140,14 +140,14 @@ function epe_dbimage_views_default_views() {
     1 => 'OR',
     2 => 'AND',
   );
-  /* Filter criterion: Indexed Node: Status */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_image_resource_index';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = array(
-    1 => '1',
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_image_resource_public']['id'] = 'field_image_resource_public';
+  $handler->display->display_options['filters']['field_image_resource_public']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['filters']['field_image_resource_public']['field'] = 'field_image_resource_public';
+  $handler->display->display_options['filters']['field_image_resource_public']['value'] = array(
+    'Public' => 'Public',
   );
-  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['field_image_resource_public']['group'] = 1;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_image_resource_index';
@@ -187,7 +187,6 @@ function epe_dbimage_views_default_views() {
   $handler = $view->new_display('block', 'Restful API Block', 'all');
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-
 
   $export['image_resource_index'] = $view;
 
