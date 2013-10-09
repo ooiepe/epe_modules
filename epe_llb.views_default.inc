@@ -47,16 +47,16 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-      $node = node_load($data->entity);
-      $image = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
-      $output = field_view_value(\'node\', $node, \'field_challenge_thumbnail\', $image[0], array(
-        \'type\' => \'image\',
-        \'settings\' => array(
-           \'image_style\' => \'thumbnail\',
-        ),
-      ));
-      echo render($output);
-  ?>';
+        $node = node_load($data->entity);
+        $image = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
+        $output = field_view_value(\'node\', $node, \'field_challenge_thumbnail\', $image[0], array(
+          \'type\' => \'image\',
+          \'settings\' => array(
+             \'image_style\' => \'thumbnail\',
+          ),
+        ));
+        echo render($output);
+    ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Author: First Name (indexed) */
@@ -133,18 +133,6 @@ function epe_llb_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Indexed Node: Status */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_llb_resource_index';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = array(
-    1 => '1',
-  );
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator_id'] = 'status_op';
-  $handler->display->display_options['filters']['status']['expose']['label'] = 'Status';
-  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
-  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
   /* Filter criterion: Search: Fulltext search */
   $handler->display->display_options['filters']['search_api_views_fulltext']['id'] = 'search_api_views_fulltext';
   $handler->display->display_options['filters']['search_api_views_fulltext']['table'] = 'search_api_index_llb_resource_index';
@@ -164,6 +152,13 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
     'body:value' => 'body:value',
+  );
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_llb_resource_public']['id'] = 'field_llb_resource_public';
+  $handler->display->display_options['filters']['field_llb_resource_public']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['filters']['field_llb_resource_public']['field'] = 'field_llb_resource_public';
+  $handler->display->display_options['filters']['field_llb_resource_public']['value'] = array(
+    'Public' => 'Public',
   );
 
   /* Display: REST API Block */

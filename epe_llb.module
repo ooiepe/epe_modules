@@ -740,6 +740,8 @@ function epe_llb_default_search_api_index() {
         'created' => array('type'=>'date'),
         'changed' => array('type'=>'date'),
         'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'field_llb_resource_featured' => array('type'=>'string'),
+        'field_llb_resource_public' => array('type'=>'string'),
         'search_api_language' => array('type'=>'string'),
         'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),

@@ -1026,5 +1026,85 @@ function _epe_llb_field_default_field_instances() {
     ),
   );
 
+  $field_instances['node-llb_resource-field_llb_resource_featured'] = array(
+    'bundle' => 'llb_resource',
+    'default_value' => array(
+      0 => array(
+        'value' => 'Not-Featured',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_llb_resource_featured',
+    'label' => 'Featured Status',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '-1',
+    ),
+  );
+
+  $field_instances['node-llb_resource-field_llb_resource_public'] = array(
+    'bundle' => 'llb_resource',
+    'default_value' => array(
+      0 => array(
+        'value' => 'Private',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_llb_resource_public',
+    'label' => 'Public Status',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '-1',
+    ),
+  );
+
   return $field_instances;
 }
