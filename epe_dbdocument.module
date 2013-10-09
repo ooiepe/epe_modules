@@ -174,6 +174,57 @@ function _document_resource_installed_fields() {
       'type' => 'image',
   );
 
+  $fields['node-document_resource-field_document_resource_featured'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_document_resource_featured',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'Not-Featured' => 'Not-Featured',
+        'Featured' => 'Featured',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
+  );
+
+  $fields['node-document_resource-field_document_resource_public'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_document_resource_public',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'Private' => 'Private',
+        'Public' => 'Public',
+        'Pending' => 'Pending',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
+  );
+
   return $fields;
 }
 
@@ -307,7 +358,7 @@ function _document_resource_installed_instances() {
       'label' => 'Document resource thumbnail',
       'required' => 0,
       'settings' => array(
-        'alt_field' => 1,
+        'alt_field' => 0,
         'default_image' => 0,
         'file_directory' => '',
         'file_extensions' => 'png gif jpg jpeg',
@@ -327,6 +378,86 @@ function _document_resource_installed_instances() {
         'type' => 'image_image',
         'weight' => '-2',
       ),
+  );
+
+  $instances['node-document_resource-field_document_resource_featured'] = array(
+    'bundle' => 'document_resource',
+    'default_value' => array(
+      0 => array(
+        'value' => 'Not-Featured',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_document_resource_featured',
+    'label' => 'Featured Status',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '-1',
+    ),
+  );
+
+  $instances['node-document_resource-field_document_resource_public'] = array(
+    'bundle' => 'document_resource',
+    'default_value' => array(
+      0 => array(
+        'value' => 'Private',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_document_resource_public',
+    'label' => 'Public Status',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => '-1',
+    ),
   );
 
   return $instances;
@@ -407,6 +538,8 @@ function epe_dbdocument_default_search_api_index() {
         'created' => array('type'=>'date'),
         'changed' => array('type'=>'date'),
         'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'field_document_resource_featured' => array('type'=>'string'),
+        'field_document_resource_public' => array('type'=>'string'),
         'search_api_language' => array('type'=>'string'),
         'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),

@@ -59,16 +59,16 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-      $node = node_load($data->entity);
-      $image = field_get_items(\'node\', $node, \'field_document_resource_image\');
-      $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
-        \'type\' => \'image\',
-        \'settings\' => array(
-           \'image_style\' => \'thumbnail\',
-        ),
-      ));
-      echo render($output);
-      ?>';
+        $node = node_load($data->entity);
+        $image = field_get_items(\'node\', $node, \'field_document_resource_image\');
+        $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
+          \'type\' => \'image\',
+          \'settings\' => array(
+             \'image_style\' => \'thumbnail\',
+          ),
+        ));
+        echo render($output);
+        ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -136,14 +136,6 @@ function epe_dbdocument_views_default_views() {
     1 => 'OR',
     2 => 'AND',
   );
-  /* Filter criterion: Indexed Node: Status */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_document_resource_index';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = array(
-    1 => '1',
-  );
-  $handler->display->display_options['filters']['status']['group'] = 1;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_document_resource_index';
@@ -178,6 +170,13 @@ function epe_dbdocument_views_default_views() {
   );
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
+  );
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_document_resource_public']['id'] = 'field_document_resource_public';
+  $handler->display->display_options['filters']['field_document_resource_public']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_document_resource_public']['field'] = 'field_document_resource_public';
+  $handler->display->display_options['filters']['field_document_resource_public']['value'] = array(
+    'Public' => 'Public',
   );
 
   /* Display: Rest API Block */
