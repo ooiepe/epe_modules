@@ -18,7 +18,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.resource = {};
   $scope.filter = {};
   $scope.resource.view_types = [
-    {userid:'',label:'All Resources'}
+    {filter:'',label:'All Resources'}
   ];
   $scope.view_templates = {};
   $scope.view_templates.list = Drupal.settings.epe_dbresource_browser.base_path + "resource-browser/partial/search-list.html";
@@ -26,17 +26,49 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   //add my resource option if user is logged in
   if(Drupal.settings.epe_dbresource_browser.userid) {
-    $scope.resource.view_types.push({userid:Drupal.settings.epe_dbresource_browser.userid,label:'My Resources'});
+    //$scope.resource.view_types.push({userid:Drupal.settings.epe_dbresource_browser.userid,label:'My Resources'});
+    $scope.resource.view_types.push({filter:'author',label:'My Resources'});
   }
   //set default resource type
-  $scope.filter.view_type = $scope.resource.view_types[0];
+  var applyFilter = false;
+  //set default filter
+  if(typeof $location.search()['filter'] != 'undefined') {
+    angular.forEach($scope.resource.view_types, function(view_type, index) {
+      if(view_type.filter == $location.search()['filter'] && !applyFilter) {
+        applyFilter = true;
+        $scope.filter.view_type = $scope.resource.view_types[index];
+      }
+    });
+    if(!applyFilter) $scope.filter.view_type = $scope.resource.view_types[0];
+  } else { $scope.filter.view_type = $scope.resource.view_types[0]; }
+  //console.log($location.search()['filter']);
+  //$scope.filter.view_type = $scope.resource.view_types[0];
 
   $scope.term = $routeParams['term'];
   $scope.search = function() {
+    var params = {};
+    if(typeof $routeParams['dialog'] != "undefined") {
+      //$location.search({dialog:true});
+      //params.push({dialog:true});
+      params['dialog'] = true;
+    }
+    if(typeof $routeParams['filter'] != "undefined") {
+      //$location.search({dialog:true});
+      //params.push({dialog:true});
+      params['filter'] = $routeParams['filter'];
+    }
+    if(typeof $routeParams['type'] != "undefined") {
+      //$location.search({type:$scope.radioModel.id});
+      //params.push({type:$scope.radioModel.id});
+      params['type'] = $routeParams['type'];
+    }
+    //console.log(params)
+    $location.search(params);
+
     if(typeof $scope.term == "undefined") {
-      $location.url('/search');
+      $location.path('/search');
     } else {
-      $location.url('/search/' + $scope.term);
+      $location.path('/search/' + $scope.term);
     }
   }
 
@@ -67,13 +99,12 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   //encapsulate init load into function
   $scope.fn.loadBrowser = function() {
-
     //set default tab
     if(typeof $location.search()['type'] != 'undefined') {
       var found = false;
       angular.forEach($scope.panes.table, function(pane, index) {
           if(pane.type.toLowerCase() == $location.search()['type'].toLowerCase()) {
-            found == true;
+            found = true;
             $scope.panes.table[index].active = true;
           } else {
             $scope.panes.table[index].active = false;
@@ -97,7 +128,13 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
           $scope.resources[module.api].data.push(node.node);
         });
         angular.forEach($scope.panes.table, function(pane, index) {
-          if(pane.type === module.label) pane.data = $scope.resources[module.api].data;
+          if(pane.type === module.label) {
+            if(applyFilter) {
+              pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, $scope.filter.view_type.filter);
+            } else { pane.data = $scope.resources[module.api].data; }
+            //if(typeof $location.search()['filter'] != 'undefined' && $location.search()['filter'] != '')
+
+          }
         });
       });
     });
@@ -108,7 +145,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   //watch type change and filter data
   $scope.$watch("filter.view_type", function(view_type) {
     angular.forEach($scope.panes.table, function(pane, index) {
-      pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.userid);
+      pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.filter);
     });
   });
 }

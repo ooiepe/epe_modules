@@ -15,11 +15,17 @@ var IndexController = function($scope, $location, $routeParams) {
       //params.push({dialog:true});
       params['dialog'] = true;
     }
+    if(typeof $routeParams['filter'] != "undefined") {
+      //$location.search({dialog:true});
+      //params.push({dialog:true});
+      params['filter'] = $routeParams['filter'];
+    }
     if(typeof $scope.radioModel.id != "undefined") {
       //$location.search({type:$scope.radioModel.id});
       //params.push({type:$scope.radioModel.id});
       params['type'] = $scope.radioModel.id;
     }
+
     $location.search(params);
 
     if(typeof $scope.term == "undefined") {
