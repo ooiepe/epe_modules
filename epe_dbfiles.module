@@ -17,13 +17,17 @@ function epe_dbfiles_permission() {
 function epe_dbfiles_menu() {
   $items = array();
 
+  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','db','=')->execute()->fetchAssoc();
+
   $items['resource/add/file'] = array(
     'title' => t('Create EPE File Resrouce'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_dbfiles_node_form'),
     'access callback' => 'user_access',
     'access arguments' => array('epe dbfiles interface,create image_resource content,create document_resource content,create audio_resource content,create video_resource content'),
-    'type' => MENU_CALLBACK,
+    'menu_name' => 'main-menu',
+    'type' => MENU_NORMAL_ITEM,
+    'plid' => $parent['mlid'],
   );
 
   $items['resource/file/%/edit'] = array(
@@ -102,10 +106,6 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#default_value' => 0,
       '#options' => $permission,
       '#field_prefix' => t('I hereby certify that this file is either my own work or I have been given permission to use it within an educational context'),
-      '#ajax' => array(
-        'callback' => 'epe_dbfiles_permission_check',
-        'wrapper' => 'wrapper_submit'
-      ),
     );
 
     $form['form-container']['node_type'] = array(
@@ -226,18 +226,6 @@ function epe_dbfiles_ajax_render_alter(&$commands) {
   }
 }
 
-/*
- * ajax call back from $form['permission'] field, returns drupal ajax css command
- */
-function epe_dbfiles_permission_check($form, $form_state) {
-  if($form_state['values']['permission'] == 1) {
-    unset($form['submit']['#attributes']['disabled']);
-  } else {
-    $form['submit']['#attributes']['disabled'] = 'disabled';
-  }
-  return $form['submit'];
-}
-
 /**
  * Validate handler for file_resource_form().
  */
@@ -286,6 +274,10 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
   if($thumb) {
     if($thumb = file_move($thumb, 'private://')) { $form_state['storage']['thumbnail'] = $thumb; }
   }
+
+  //reset permission form value
+  $form_state['complete form']['permission'][0]['#value'] = 0;
+  $form_state['complete form']['permission'][0]['#input'] = 0;
 }
 
 /*
