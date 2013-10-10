@@ -1026,7 +1026,7 @@ function _epe_llb_field_default_field_instances() {
     ),
   );
 
-  $field_instances['node-llb_resource-field_llb_resource_featured'] = array(
+  $field_instances['node-llb_resource-field_featured_status'] = array(
     'bundle' => 'llb_resource',
     'default_value' => array(
       0 => array(
@@ -1051,7 +1051,7 @@ function _epe_llb_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_llb_resource_featured',
+    'field_name' => 'field_featured_status',
     'label' => 'Featured Status',
     'required' => 0,
     'settings' => array(
@@ -1066,7 +1066,7 @@ function _epe_llb_field_default_field_instances() {
     ),
   );
 
-  $field_instances['node-llb_resource-field_llb_resource_public'] = array(
+  $field_instances['node-llb_resource-field_public_status'] = array(
     'bundle' => 'llb_resource',
     'default_value' => array(
       0 => array(
@@ -1091,7 +1091,7 @@ function _epe_llb_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_llb_resource_public',
+    'field_name' => 'field_public_status',
     'label' => 'Public Status',
     'required' => 0,
     'settings' => array(

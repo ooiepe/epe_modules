@@ -539,12 +539,12 @@ function _epe_llb_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  $field_bases['field_llb_resource_featured'] = array(
+  $field_bases['field_featured_status'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_llb_resource_featured',
+    'field_name' => 'field_featured_status',
     'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
@@ -564,12 +564,12 @@ function _epe_llb_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  $field_bases['field_llb_resource_public'] = array(
+  $field_bases['field_public_status'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_llb_resource_public',
+    'field_name' => 'field_public_status',
     'foreign keys' => array(),
     'indexes' => array(
       'value' => array(

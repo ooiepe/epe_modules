@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
         checkboxes.each(function() {
           if($(this).is(':checked')) {
               $.ajax({
-                url: '/api/resource/' + $(this).data('type') + '/' + $(this).val(),
+                url: Drupal.settings.epe_dbresource_browser.base_path + 'api/resource/' + $(this).data('type') + '/' + $(this).val(),
                 dataType: 'json',
                 async: true,
                 success: function(data) {
