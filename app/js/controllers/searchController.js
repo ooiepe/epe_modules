@@ -15,6 +15,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.resources.multimediaResource.data_filtered = [];
   $scope.panes = {};
   $scope.panes.table = [];
+  $scope.panes.active = '';
   $scope.resource = {};
   $scope.filter = {};
   $scope.resource.view_types = [
@@ -52,15 +53,24 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       //params.push({dialog:true});
       params['dialog'] = true;
     }
-    if(typeof $routeParams['filter'] != "undefined") {
+
+/*    if(typeof $routeParams['filter'] != "undefined" || typeof $scope.filter.view_type.filter == "undefined") {
       //$location.search({dialog:true});
       //params.push({dialog:true});
       params['filter'] = $routeParams['filter'];
+    } else if ( $scope.filter.view_type.filter != '' ) {
+      params['filter'] = $scope.filter.view_type.filter;
+    }*/
+    if($scope.filter.view_type.filter != '') {
+      params['filter'] = $scope.filter.view_type.filter;
     }
-    if(typeof $routeParams['type'] != "undefined") {
+
+    if(typeof $routeParams['type'] != "undefined" && $scope.panes.active == '') {
       //$location.search({type:$scope.radioModel.id});
       //params.push({type:$scope.radioModel.id});
       params['type'] = $routeParams['type'];
+    } else if ($scope.panes.active != '') {
+      params['type'] = $scope.panes.active;
     }
     //console.log(params)
     $location.search(params);
@@ -78,6 +88,10 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   $scope.fn.sortPane = function(a,b) {
     return ((a.order < b.order) ? -1 : ((a.order > b.order) ? 1 : 0));
+  }
+
+  $scope.fn.activeTab = function(tab) {
+    $scope.panes.active = tab.api;
   }
 
   $scope.panes.table = [];
