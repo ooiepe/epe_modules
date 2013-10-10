@@ -99,18 +99,18 @@ function epe_ev_views_default_views() {
  */
 
   $view = new view();
-  $view->name = 'epe_ev_view_search_api';
+  $view->name = 'epe_ev_search_view';
   $view->description = '';
   $view->tag = 'default';
-  $view->base_table = 'search_api_index_epe_ev_search_api_index';
-  $view->human_name = 'EPE EV Search API';
+  $view->base_table = 'search_api_index_epe_ev_search_index';
+  $view->human_name = 'epe_ev_search_view'; //EPE EV Search API
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'EPE EV Search API';
+  $handler->display->display_options['title'] = 'EPE EV Search View';
   $handler->display->display_options['css_class'] = 'block-list';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'none';
@@ -131,9 +131,10 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['style_options']['unescaped_slashes'] = 0;
   $handler->display->display_options['style_options']['unescaped_unicode'] = 0;
   $handler->display->display_options['style_options']['char_encoding'] = array();
+
   /* Field: Indexed Node: Node ID */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = 'id';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
@@ -162,14 +163,14 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['title']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = 'title';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_entity'] = 0;
   /* Field: Indexed Node: Date changed */
   $handler->display->display_options['fields']['changed']['id'] = 'changed';
-  $handler->display->display_options['fields']['changed']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['changed']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['changed']['field'] = 'changed';
   $handler->display->display_options['fields']['changed']['label'] = 'last_updated';
   $handler->display->display_options['fields']['changed']['element_label_colon'] = FALSE;
@@ -178,14 +179,14 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['changed']['link_to_entity'] = 0;
   /* Field: Author: First Name (indexed) */
   $handler->display->display_options['fields']['author_field_account_fname']['id'] = 'author_field_account_fname';
-  $handler->display->display_options['fields']['author_field_account_fname']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['author_field_account_fname']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['author_field_account_fname']['field'] = 'author_field_account_fname';
   $handler->display->display_options['fields']['author_field_account_fname']['label'] = '';
   $handler->display->display_options['fields']['author_field_account_fname']['exclude'] = TRUE;
   $handler->display->display_options['fields']['author_field_account_fname']['element_label_colon'] = FALSE;
   /* Field: Author: Last Name (indexed) */
   $handler->display->display_options['fields']['author_field_account_lname']['id'] = 'author_field_account_lname';
-  $handler->display->display_options['fields']['author_field_account_lname']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['author_field_account_lname']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['author_field_account_lname']['field'] = 'author_field_account_lname';
   $handler->display->display_options['fields']['author_field_account_lname']['label'] = 'author';
   $handler->display->display_options['fields']['author_field_account_lname']['alter']['alter_text'] = TRUE;
@@ -193,21 +194,21 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['author_field_account_lname']['element_label_colon'] = FALSE;
   /* Field: Author: User ID (indexed) */
   $handler->display->display_options['fields']['author_uid']['id'] = 'author_uid';
-  $handler->display->display_options['fields']['author_uid']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['author_uid']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['author_uid']['field'] = 'author_uid';
   $handler->display->display_options['fields']['author_uid']['label'] = 'userid';
   $handler->display->display_options['fields']['author_uid']['separator'] = '';
   $handler->display->display_options['fields']['author_uid']['link_to_entity'] = 0;
   /* Field: Indexed Node: Status */
   $handler->display->display_options['fields']['status']['id'] = 'status';
-  $handler->display->display_options['fields']['status']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['status']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['status']['field'] = 'status';
   $handler->display->display_options['fields']['status']['label'] = 'status';
   $handler->display->display_options['fields']['status']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['status']['format_name'] = 1;
   /* Field: Indexed Node: URL */
   $handler->display->display_options['fields']['url']['id'] = 'url';
-  $handler->display->display_options['fields']['url']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['fields']['url']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['fields']['url']['field'] = 'url';
   $handler->display->display_options['fields']['url']['label'] = 'url';
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
@@ -215,7 +216,7 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
   /* Contextual filter: Indexed Node: Author */
   $handler->display->display_options['arguments']['author']['id'] = 'author';
-  $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['arguments']['author']['field'] = 'author';
   $handler->display->display_options['arguments']['author']['default_action'] = 'default';
   $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
@@ -227,7 +228,7 @@ function epe_ev_views_default_views() {
   );
   /* Filter criterion: Indexed Node: Status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = array(
     1 => '1',
@@ -235,7 +236,7 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['filters']['status']['group'] = 1;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
-  $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['filters']['author_uid']['field'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['group'] = 1;
   $handler->display->display_options['filters']['author_uid']['exposed'] = TRUE;
@@ -251,7 +252,7 @@ function epe_ev_views_default_views() {
   );
   /* Filter criterion: Search: Fulltext search */
   $handler->display->display_options['filters']['search_api_views_fulltext']['id'] = 'search_api_views_fulltext';
-  $handler->display->display_options['filters']['search_api_views_fulltext']['table'] = 'search_api_index_epe_ev_search_api_index';
+  $handler->display->display_options['filters']['search_api_views_fulltext']['table'] = 'search_api_index_epe_ev_search_index';
   $handler->display->display_options['filters']['search_api_views_fulltext']['field'] = 'search_api_views_fulltext';
   $handler->display->display_options['filters']['search_api_views_fulltext']['group'] = 2;
   $handler->display->display_options['filters']['search_api_views_fulltext']['exposed'] = TRUE;
@@ -272,11 +273,11 @@ function epe_ev_views_default_views() {
   /* Display: Rest API Block */
   $handler = $view->new_display('block', 'Rest API Block', 'all');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = '[your view display title]';
+  $handler->display->display_options['title'] = 'EPE EV Search View';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
 
-  $export['[epe_ev_view_search_api]'] = $view;
+  $export['epe_ev_search_view'] = $view;
 
 //
 // end from allan
