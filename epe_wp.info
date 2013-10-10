@@ -2,7 +2,7 @@ name = EPE Web Portal
 description = Provide EPE Web Portal default settings and fields configurations
 core = 7.x
 package = EPE
-version = 7.x-0.2-alpha
+version = 7.x-0.3-alpha
 project = epe_wp
 
 dependencies[] = menu_block

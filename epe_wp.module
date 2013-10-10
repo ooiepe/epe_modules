@@ -1,10 +1,10 @@
 <?php
 
-function epe_wp_default_roles() {
+/*function epe_wp_default_roles() {
   $role = new stdClass();
   $role->name = 'author';
   user_role_save($role);
-}
+}*/
 
 function _account_installed_fields() {
   $fields = array();
@@ -199,6 +199,7 @@ function epe_wp_menu() {
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
+    'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
   );
 

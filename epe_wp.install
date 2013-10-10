@@ -17,11 +17,19 @@ function epe_wp_install() {
     field_create_instance($instance);
   }
 
-  //add author role
-  epe_wp_default_roles();
-
-  variable_set('EPE_SUPPORTED_AUTHOR_ROLES',array('administrator','author'));
+  variable_set('EPE_SUPPORTED_AUTHOR_ROLES',array('administrator','author','moderator'));
   variable_set('EPE_CONTENT_MODULES',array());
+
+  //add author role
+  //epe_wp_default_roles();
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
+    if($role_name != 'administrator') {
+      $role = new stdClass();
+      $role->name = $role_name;
+      user_role_save($role);
+    }
+  }
+
 }
 
 
