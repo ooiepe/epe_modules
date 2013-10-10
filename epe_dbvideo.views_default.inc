@@ -119,14 +119,6 @@ function epe_dbvideo_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Contextual filter: Indexed Node: Author */
-  $handler->display->display_options['arguments']['author']['id'] = 'author';
-  $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_video_resource_index';
-  $handler->display->display_options['arguments']['author']['field'] = 'author';
-  $handler->display->display_options['arguments']['author']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
-  $handler->display->display_options['arguments']['author']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['author']['break_phrase'] = 0;
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',
@@ -166,16 +158,15 @@ function epe_dbvideo_views_default_views() {
     'body:value' => 'body:value',
   );
   /* Filter criterion: Indexed Node: Public Status */
-  $handler->display->display_options['filters']['field_video_resource_public']['id'] = 'field_video_resource_public';
-  $handler->display->display_options['filters']['field_video_resource_public']['table'] = 'search_api_index_video_resource_index';
-  $handler->display->display_options['filters']['field_video_resource_public']['field'] = 'field_video_resource_public';
-  $handler->display->display_options['filters']['field_video_resource_public']['value'] = array(
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_video_resource_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
     'Public' => 'Public',
   );
 
   /* Display: Restful API Block */
   $handler = $view->new_display('block', 'Restful API Block', 'all');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
 
   $export['video_resource_index'] = $view;
 
