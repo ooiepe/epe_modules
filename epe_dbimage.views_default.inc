@@ -60,17 +60,17 @@ function epe_dbimage_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-    $node = node_load($data->entity);
-    $image = field_get_items(\'node\', $node, \'field_image_resource_file\');
-    $output = field_view_value(\'node\', $node, \'field_image_resource_file\', $image[0], array(
-      \'type\' => \'image\',
-      \'settings\' => array(
-        \'image_style\' => \'thumbnail\', //place your image style here
-        \'image_link\' => \'content\',
-      ),
-    ));
-    echo render($output);
-    ?>';
+      $node = node_load($data->entity);
+      $image = field_get_items(\'node\', $node, \'field_image_resource_file\');
+      $output = field_view_value(\'node\', $node, \'field_image_resource_file\', $image[0], array(
+        \'type\' => \'image\',
+        \'settings\' => array(
+          \'image_style\' => \'thumbnail\', //place your image style here
+          \'image_link\' => \'content\',
+        ),
+      ));
+      echo render($output);
+      ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -128,26 +128,10 @@ function epe_dbimage_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Contextual filter: Indexed Node: Author */
-  $handler->display->display_options['arguments']['author']['id'] = 'author';
-  $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_image_resource_index';
-  $handler->display->display_options['arguments']['author']['field'] = 'author';
-  $handler->display->display_options['arguments']['author']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
-  $handler->display->display_options['arguments']['author']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['author']['break_phrase'] = 0;
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',
   );
-  /* Filter criterion: Indexed Node: Public Status */
-  $handler->display->display_options['filters']['field_image_resource_public']['id'] = 'field_image_resource_public';
-  $handler->display->display_options['filters']['field_image_resource_public']['table'] = 'search_api_index_image_resource_index';
-  $handler->display->display_options['filters']['field_image_resource_public']['field'] = 'field_image_resource_public';
-  $handler->display->display_options['filters']['field_image_resource_public']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_image_resource_public']['group'] = 1;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_image_resource_index';
@@ -182,11 +166,16 @@ function epe_dbimage_views_default_views() {
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
   );
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
+    'Public' => 'Public',
+  );
 
   /* Display: Restful API Block */
   $handler = $view->new_display('block', 'Restful API Block', 'all');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['defaults']['arguments'] = FALSE;
 
   $export['image_resource_index'] = $view;
 
