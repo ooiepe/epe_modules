@@ -124,14 +124,6 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Contextual filter: Indexed Node: Author */
-  $handler->display->display_options['arguments']['author']['id'] = 'author';
-  $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_document_resource_index';
-  $handler->display->display_options['arguments']['author']['field'] = 'author';
-  $handler->display->display_options['arguments']['author']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
-  $handler->display->display_options['arguments']['author']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['author']['break_phrase'] = 0;
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',
@@ -172,10 +164,10 @@ function epe_dbdocument_views_default_views() {
     'title' => 'title',
   );
   /* Filter criterion: Indexed Node: Public Status */
-  $handler->display->display_options['filters']['field_document_resource_public']['id'] = 'field_document_resource_public';
-  $handler->display->display_options['filters']['field_document_resource_public']['table'] = 'search_api_index_document_resource_index';
-  $handler->display->display_options['filters']['field_document_resource_public']['field'] = 'field_document_resource_public';
-  $handler->display->display_options['filters']['field_document_resource_public']['value'] = array(
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
     'Public' => 'Public',
   );
 
@@ -184,7 +176,6 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'All Document Resources';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
-  $handler->display->display_options['defaults']['arguments'] = FALSE;
 
   $export['document_resource_index'] = $view;
 
