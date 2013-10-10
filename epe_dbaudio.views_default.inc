@@ -170,13 +170,12 @@ function epe_dbaudio_views_default_views() {
     'body:value' => 'body:value',
   );
   /* Filter criterion: Indexed Node: Public Status */
-  $handler->display->display_options['filters']['field_audio_resource_public']['id'] = 'field_audio_resource_public';
-  $handler->display->display_options['filters']['field_audio_resource_public']['table'] = 'search_api_index_audio_resource_index';
-  $handler->display->display_options['filters']['field_audio_resource_public']['field'] = 'field_audio_resource_public';
-  $handler->display->display_options['filters']['field_audio_resource_public']['value'] = array(
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_audio_resource_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
     'Public' => 'Public',
   );
-  $handler->display->display_options['filters']['field_audio_resource_public']['group'] = 1;
 
   /* Display: Restful API Block */
   $handler = $view->new_display('block', 'Restful API Block', 'all');
