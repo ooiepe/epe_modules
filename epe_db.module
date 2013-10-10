@@ -21,7 +21,7 @@ function epe_db_default_search_api_server() {
 /*
  * Implement hook_menu_local_tasks_alter()
  */
-function epe_db_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+/*function epe_db_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   if(arg(0) == 'node' && !arg(2)) {
     $node = node_load(arg(1));
     if($node && node_is_page($node)) {
@@ -37,4 +37,4 @@ function epe_db_menu_local_tasks_alter(&$data, $router_item, $root_path) {
       }
     }
   }
-}
+}*/

@@ -229,7 +229,7 @@ Browse Resources
 
 */
 
-
+/*
 $item = array(
     'link_path' => 'db',
     'link_title' => 'Resources',
@@ -258,7 +258,7 @@ $item = array(
     'plid' => $parentid,
     );
 $lastid = menu_link_save($item);
-
+*/
 $item = array(
     'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=db',
     'link_title' => 'My Resources',
