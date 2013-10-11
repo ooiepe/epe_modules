@@ -57,8 +57,8 @@ function epe_dbdocument_node_info() {
 function epe_dbdocument_node_type_insert($content_type) {
   if ($content_type->type == 'document_resource') {
     module_load_include('inc','epe_dbdocument','inc/epe_dbdocument.field_base');
-    module_load_include('inc','epe_dbdocument','inc/epe_dbdocument.field_instance');  
-    
+    module_load_include('inc','epe_dbdocument','inc/epe_dbdocument.field_instance');
+
     // Create all the fields we are adding to our content type.
     foreach (_document_resource_installed_fields() as $field) {
       //in case content type share fields
@@ -159,8 +159,8 @@ function epe_dbdocument_default_search_api_index() {
         'author:field_account_fname' => array('type'=>'text'),
         'author:field_account_lname' => array('type'=>'text'),
         'body:value' => array('type'=>'text'),
-        'field_public_status' => array('type'=>'string'),
-        'field_featured_status' => array('type'=>'string'),
+        /*'field_public_status' => array('type'=>'string'),
+        'field_featured_status' => array('type'=>'string'),*/
       ),
       'data_alter_callbacks' => array(
         'search_api_alter_bundle_filter' => array(
