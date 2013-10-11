@@ -70,7 +70,7 @@ $item = array(
 $lastid = menu_link_save($item);
 
 $item = array(
-    'link_path' => 'node/add/ev-resource',
+    'link_path' => 'ev/tools',
     'link_title' => 'Create a Visualization',
     'menu_name' => 'main-menu',
     'weight' => 2,
