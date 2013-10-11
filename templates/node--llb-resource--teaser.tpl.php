@@ -20,7 +20,7 @@
 
 
 <?php
-include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLOBALS['theme']) . '/templates/viewpage.tpl.php';
+  include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
 <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">

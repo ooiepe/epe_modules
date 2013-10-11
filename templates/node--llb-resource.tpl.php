@@ -3,8 +3,8 @@
 
 
 <?php
-$hideActionButtons = 1;
-include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLOBALS['theme']) . '/templates/viewpage.tpl.php';
+  $hideActionButtons = 1;
+  include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
   <!-- <header>
@@ -163,7 +163,7 @@ include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLO
     </footer>
   <?php endif; ?>
 
-  <?php print render($content['comments']); ?>
+  <?php //print render($content['comments']); ?>
 
 </div>
 </div>

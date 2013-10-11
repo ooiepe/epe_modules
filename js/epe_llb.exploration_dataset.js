@@ -11,21 +11,21 @@ jQuery(document).ready(function($) {
             label: "Add Selected",
             className: "btn btn-primary pull-left",
             callback: function(event) {
-        var selected = [];
-        event.preventDefault();
-        var checkboxes = $('.resource-browser-iframe').contents().find('input[name="nid"]');
-        checkboxes.each(function() {
-          if($(this).is(':checked')) {
-              $.ajax({
-                url: Drupal.settings.epe_dbresource_browser.base_path + 'api/resource/' + $(this).data('type') + '/' + $(this).val(),
-                dataType: 'json',
-                async: true,
-                success: function(data) {
-                  window.addItem(data);
-                }
-              });
-          }
-        });
+            var selected = [];
+            event.preventDefault();
+            var checkboxes = $('.resource-browser-iframe').contents().find('input[name="nid"]');
+            checkboxes.each(function() {
+              if($(this).is(':checked')) {
+                  $.ajax({
+                    url: Drupal.settings.epe_dbresource_browser.base_path + 'api/resource/' + $(this).data('type') + '/' + $(this).val(),
+                    dataType: 'json',
+                    async: true,
+                    success: function(data) {
+                      window.addItem(data);
+                    }
+                  });
+              }
+            });
             }
           },
           cancel: {
