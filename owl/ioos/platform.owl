@@ -1,0 +1,306 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://mmisw.org/ont/ioos/platform/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:omv="http://omv.ontoware.org/2005/05/ontology#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:omvmmi="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xml:base="http://mmisw.org/ont/ioos/platform">
+    <owl:Ontology rdf:about="">
+        <omv:uri>http://mmisw.org/ont/ioos/platform</omv:uri>
+        <dc:date>2013-04-03T14:29:41+0000</dc:date>
+        <omv:creationDate>2013-09-30T16:16:27+0000</omv:creationDate>
+        <omvmmi:hasResourceType>platform</omvmmi:hasResourceType>
+        <omvmmi:temporaryMmiRole>content manager</omvmmi:temporaryMmiRole>
+        <omv:keywords>platform, station, sensor, system</omv:keywords>
+        <omvmmi:hasContentCreator>Sara Haines</omvmmi:hasContentCreator>
+        <omvmmi:origMaintainerCode>ioos</omvmmi:origMaintainerCode>
+        <omvmmi:creditRequired>not specified</omvmmi:creditRequired>
+        <omv:acronym>platform</omv:acronym>
+        <dc:description>The IOOS Platform Vocabulary is a list of platform types and their definitions, references and links to example images.  Lists of possible platform types were extracted from the 2011 IOOS Asset Inventory and IOOS Regional Build-Out Plans and SECOORA Asset Inventory.  A platform in this context is a structure or vehicle designed to hold one or more sensors such that the intended oceanographic or atmospheric variable(s) can be monitored or measured in a manner designed for the ocean observing system or scientific hypotheses.  Herein, we attempt to describe the nature of the different types and provide a hierarchy through SKOS mappings (see map_platform) to assist data managers to find the type need to insert into IOOS SOS templates.</dc:description>
+        <omvmmi:contact>IOOS</omvmmi:contact>
+        <omv:usedOntologyEngineeringTool rdf:resource="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/voc2rdf"/>
+        <omv:version>20130403T142941</omv:version>
+        <omv:hasCreator>Sara Haines</omv:hasCreator>
+        <omvmmi:shortNameUri>http://mmisw.org/ont/mmi/resourcetype/platform</omvmmi:shortNameUri>
+        <dc:contributor>Rob Ragsdale, John Ten Hoeve, Sara Haines, Hassan Moustahfid</dc:contributor>
+        <omv:description>The IOOS Platform Vocabulary is a list of platform types and their definitions, references and links to example images.  Lists of possible platform types were extracted from the 2011 IOOS Asset Inventory and IOOS Regional Build-Out Plans and SECOORA Asset Inventory.  A platform in this context is a structure or vehicle designed to hold one or more sensors such that the intended oceanographic or atmospheric variable(s) can be monitored or measured in a manner designed for the ocean observing system or scientific hypotheses.  Herein, we attempt to describe the nature of the different types and provide a hierarchy through SKOS mappings (see map_platform) to assist data managers to find the type need to insert into IOOS SOS templates.</omv:description>
+        <omv:hasContributor>Rob Ragsdale, John Ten Hoeve, Sara Haines, Hassan Moustahfid</omv:hasContributor>
+        <dc:creator>Sara Haines</dc:creator>
+        <omvmmi:origVocManager>IOOS</omvmmi:origVocManager>
+        <omvmmi:contactRole>content manager</omvmmi:contactRole>
+        <omv:name>IOOS Platform Vocabulary</omv:name>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://mmisw.org/ont/ioos/platform/Platform">
+        <rdfs:label>Platform</rdfs:label>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/platform/Term">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/platform/Platform"/>
+        <rdfs:label>Term</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/platform/Reference">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/platform/Platform"/>
+        <rdfs:label>Reference</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/platform/Group_Mapping">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/platform/Platform"/>
+        <rdfs:label>Group_Mapping</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/platform/Images">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/platform/Platform"/>
+        <rdfs:label>Images</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/platform/Definition">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/platform/Platform"/>
+        <rdfs:label>Definition</rdfs:label>
+    </owl:DatatypeProperty>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/submersible">
+        <Reference>http://en.wikipedia.org/wiki/Submersible</Reference>
+        <Group_Mapping>submersible</Group_Mapping>
+        <Definition>A submersible is a small vehicle designed to operate underwater.  There are many types of submersibles, including both manned and unmanned craft, otherwise known as remotely operated vehicles or ROVs. Submersibles have many uses worldwide, such as oceanography, underwater archaeology, ocean exploration, adventure, equipment maintenance/recovery or underwater videography.</Definition>
+        <Term>submersible</Term>
+        <rdfs:label>submersible</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/subsurface_float">
+        <Reference>Argos Floats, http://celebrating200years.noaa.gov/magazine/argo/welcome.html#float</Reference>
+        <Group_Mapping>profiler, drifter</Group_Mapping>
+        <Images>http://earthobservatory.nasa.gov/Features/OceanCooling/images/argo_float.jpg, http://www.aoml.noaa.gov/phod/argo/doc/images/float_mission_shematic.gif, http://filemaker2-server.cbl.umces.edu/sensorimages/7813-Apex.gif</Images>
+        <Definition>Argo floats are deployed at the sea surface. The floats sink  to a prescribed depth (usually 1,000 meters), collecting data on the descent. They  rest at depth for a prescribed period and rise back to the surface, collecting  data on the rise.  Some floats are  designed to sink to 2,000 meters before ascending to the surface. At the surface, the  floats transmit to satellites positioning and oceanographic  data collected since their last transmission.  The floats then sink again to repeat the cycle that  typically lasts 10 days. Over the course of an average lifetime, an Argo float  completes about 150 cycles. Temperature, salinity and depth are measured, but new sensor technologies will allow additional sensors to be mounted on each float, such as dissolved oxygen, chlorophyll indicators, and optical plankton counters.  [This is directly from the Argo site -- need to boil down to succint type or make specific argo-subsurface-float??]</Definition>
+        <Term>subsurface_float</Term>
+        <rdfs:label>subsurface_float</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/boat">
+        <Reference>http://en.wikipedia.org/wiki/Boat</Reference>
+        <Group_Mapping>boat</Group_Mapping>
+        <Definition>A boat is a watercraft of any size designed to float or plane, to provide passage across water.</Definition>
+        <Term>boat</Term>
+        <rdfs:label>boat</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/pier">
+        <Reference>Coastal and Hydraulics Laboratory, US Army Corps of Engineers, http://chl.erdc.usace.army.mil/glossary</Reference>
+        <Group_Mapping>fixed</Group_Mapping>
+        <Images>http://meteora.ucsd.edu/wx_pages/photos/scripps_pier_page.gif</Images>
+        <Definition>A structure, usually of open construction, extending out into the water from the shore, to serve as a landing place, recreational facility, etc., rather than to afford coastal protection or affect the movement of water. In the Great Lakes, a term sometimes improperly applied to jetties.</Definition>
+        <Term>pier</Term>
+        <rdfs:label>pier</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/towed_underwater_vehicle">
+        <Reference>Alliance for Coastal Technologies (2007). Towed Vehicles: Undulating Platforms as Tools for Mapping Coastal Processes and Water Quality. Seaside, California, Feb 5-7, 2007.</Reference>
+        <Group_Mapping>submersible, towed</Group_Mapping>
+        <Images>https://www.whoi.edu/cms/images/seasoar_x_41428_41469.jpg, https://www.whoi.edu/cms/images/dsl120a_x_49776.jpg, http://filemaker2-server.cbl.umces.edu/sensorimages/10281-Acrobat.gif</Images>
+        <Definition>A Towed Underwater Vehicle (TUV) are stable platforms or sleds towed behind a moving ship.  Some are designed to move up and down to provide sampling throughout the water column, while others remain a fixed depths for hydroacoustic surveys.  TUVs also provide isolation of sensors away from noise of the ship. TUVs routinely are used in rapid response applications in coastal monitoring programs and have broad utility because they can be configured easily with a wide array of multiple sensors.</Definition>
+        <Term>towed_underwater_vehicle</Term>
+        <rdfs:label>towed_underwater_vehicle</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/remotely_operated_vehicle">
+        <Reference>http://en.wikipedia.org/wiki/Remotely_operated_underwater_vehicle</Reference>
+        <Group_Mapping>submersible</Group_Mapping>
+        <Images>http://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/ROV_Hercules_2005.JPG/320px-ROV_Hercules_2005.JPG, http://www.oceaneering.com/wp-content/uploads/2011/05/rov-technologies-640x358.jpg</Images>
+        <Definition>A Remotely Operated Vehicle (ROV) are unoccupied, highly maneuverable platform and operated by a person aboard a host vessel, linked by a tether.  The tether can be lengthened or shortened to manage drag in strong currents.  The tether also holds the cables that provide electrical power, video and data signals back and forth between the operator and the ROV.  In commercial high power applications, electrical power drive motors which in turn drive a hydraulic pump used for torque tools and manipulator arms.  ROVs are most commonly used in deepwater industries such as offshore oil and coal. Most ROVs are equipped with at least a video camera and lights. Additional equipment may include sonars, magnetometers, a still camera, a manipulator or cutting arm, water samplers, and instruments that measure water clarity, light penetration and temperature.</Definition>
+        <Term>remotely_operated_vehicle</Term>
+        <rdfs:label>remotely_operated_vehicle</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/buoy">
+        <Group_Mapping>buoy</Group_Mapping>
+        <Definition>A floating device that can have many purposes.  Many buoys are installed or deployed as a marker for navigation to direct boat traffic such as a channel buoy or indicate a hazard. However, data buoys are deployed to gather data and often transmit the data back to shore for immediate use.  Data buoys can either be moored or drifting and may or may not be combined with a profiling capability.  Some are designed with a specific task in mind, such as a wave buoy, but many can hold a suite of sensors or different payloads that provide data for many uses.</Definition>
+        <Term>buoy</Term>
+        <rdfs:label>buoy</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/vehicle">
+        <Reference>http://en.wikipedia.org/wiki/Vehicle</Reference>
+        <Group_Mapping>vehicle</Group_Mapping>
+        <Definition>A vehicle (from Latin: vehiculum[) is a mobile machine that transports passengers or cargo. Most often, vehicles are manufactured, such as bicycles, cars, trucks, buses, motorcycles, trains, ships, boats and aircraft. Vehicles that do not travel on land often are called craft, such as watercraft, sailcraft, aircraft, hovercraft, and spacecraft.</Definition>
+        <Term>vehicle</Term>
+        <rdfs:label>vehicle</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/drifter">
+        <Group_Mapping>drifter</Group_Mapping>
+        <Images>http://oceanexplorer.noaa.gov/technology/tools/drifters/drifters.html</Images>
+        <Definition>A platform designed to move along with ocean currents, and payload sensors provide information about water properties as the water moves. Most drifters follow surface currents.  However, there are subsurface drifters or floats specially designed to sink to a specific depth, drift at a pre-programmed depth or pressure and ascend to the surface, such as the Argo float.  Drifters are battery powered and typically last for one to two years. Measurements are normally made hourly and the data are transmitted to satellite.</Definition>
+        <Term>drifter</Term>
+        <rdfs:label>drifter</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/airplane">
+        <Reference>http://www.unols.org/committees/scoar/oceanography_mag_2004_vol17_4.pdf</Reference>
+        <Group_Mapping>aircraft</Group_Mapping>
+        <Images>http://www.unols.org/committees/scoar/images/twin_otter2.jpg, http://www.aoc.noaa.gov/images/lockheed1.jpg</Images>
+        <Definition>Piloted aircraft capable of flying hundreds of miles in just a few hours, capable of great range and spatial coverage in short period of time. Airplanes as oceanic research platforms can compliment ocean observing programs providing speed, range, and targetability.  They can operate in a wide range of environmental conditions. These versatile platform can be equipped with a variety of scientific instrumentation, radars and recording systems for both, in-situ and remote sensing measurements of the atmosphere and ocean.</Definition>
+        <Term>airplane</Term>
+        <rdfs:label>airplane</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/profiling_buoy">
+        <Group_Mapping>fixed, profiler, buoy</Group_Mapping>
+        <Images>http://www.ysisystems.com/media/products/thumb/Profiler-buoy.jpg, http://argus-rs.no/media/Automatic_Profiling_Buoy.jpg</Images>
+        <Definition>A specialized moored buoy with a winch used to mechanically raise and lower sensors through the water column from near-surface to the bottom or depth limit of the winding on the winch.  These specialized types of buoys are typically used in shallow marine environments, such as estuaries and coastal waters and fresh-water lakes in water quality monitoring and some carry meteorological sensors on the surface buoy.</Definition>
+        <Term>profiling_buoy</Term>
+        <rdfs:label>profiling_buoy</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/ship">
+        <Reference>http://en.wikipedia.org/wiki/Ship</Reference>
+        <Group_Mapping>boat</Group_Mapping>
+        <Definition>A ship refers to any large buoyant watercraft. Ships are generally distinguished from boats based on size and cargo or passenger capacity. Research vessels mostly fall under in this platform category and term.</Definition>
+        <Term>ship</Term>
+        <rdfs:label>ship</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/aircraft">
+        <Reference>http://en.wikipedia.org/wiki/Aircraft</Reference>
+        <Group_Mapping>aircraft</Group_Mapping>
+        <Definition>An aircraft is a machine that is able to fly by gaining support from the air, or, in general, the atmosphere of a planet. It counters the force of gravity by using either static lift or by using the dynamic lift of an airfoil, or in a few cases the downward thrust from jet engines. The human activity that surrounds aircraft is called aviation. Crewed aircraft are flown by an onboard pilot, but unmanned aerial vehicles may be remotely controlled or self-controlled by onboard computers.</Definition>
+        <Term>aircraft</Term>
+        <rdfs:label>aircraft</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/radar">
+        <Group_Mapping>fixed, tower</Group_Mapping>
+        <Images>http://en.wikipedia.org/wiki/File:SPS-10_radar_antenna_on_a_Knox_class_frigate.jpg, http://en.wikipedia.org/wiki/File:OUPRIME1.png,</Images>
+        <Definition>Technically radars are active sensors but the antenna itself is sometimes thought of as a type of platform because the antenna itself is a can be large or require standalone structure to be strategically located to optimize coverage and minimize interference.  Examples of large antenna structures for radar are long-range, weather radars. A smaller standalone antenna examples surface current radar, wave and surviellance radar.   If a radar antenna is fixed in one location to the ground or a structure, use radar platform term.  If it is afixed to a tower with other sensors as part of a larger system of sensors, then chosing a tower type might be the more appropriate platform type.</Definition>
+        <Term>radar</Term>
+        <rdfs:label>radar</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/unmanned_surface_vehicle">
+        <Group_Mapping>boat</Group_Mapping>
+        <Images>http://uas.noaa.gov/img/EMILY-frontpage.jpg, http://filemaker2-server.cbl.umces.edu/sensorimages/12302-12302.gif, http://filemaker2-server.cbl.umces.edu/sensorimages/9818-Riverboat.gif</Images>
+        <Definition>An Unmanned Surface Vehicle (USV) is a vessel with a propulsion system that maneuvers the hull and is remotely controlled by a pilot or programmed to navigate a predefined course or mission.  This type of platform can be deployed in waters that are too shallow for manned vehicles or in areas with hazardous operating conditions.</Definition>
+        <Term>unmanned_surface_vehicle</Term>
+        <rdfs:label>unmanned_surface_vehicle</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/river_level_station">
+        <Reference>http://water.usgs.gov/nsip/pubs/nsip-2page.pdf, http://pubs.usgs.gov/fs/2007/3043/FS2007-3043.pdf</Reference>
+        <Group_Mapping>fixed</Group_Mapping>
+        <Images>http://nj.usgs.gov/hazards/flood/flood0407/images/img_fig4.jpg</Images>
+        <Definition>A structure located on the side of a river with a sensor to measure the water level in the river. Site specific flow measurements are correlated with specific water-levels at each station used to convert realtime water level data to stream flow. The stations are designed to continue operating in extreme weather and flooding and to be highly reliable. In addition to measuring river flow and potential flood alerts these stations some stations record water quality and meteorological parameters. Common water quality parameters measured are conductivity, pH, and dissolved oxygen.  Important atmospheric parameters include rain fall amount, wind speed and direction, and air temperature.  In coastal areas, river level stations can double as tide guage stations or vice versa.</Definition>
+        <Term>river_level_station</Term>
+        <rdfs:label>river_level_station</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/surface_current_radar">
+        <Group_Mapping>fixed, tower, radar</Group_Mapping>
+        <Images>http://www.cimes.hawaii.edu/sites/www.cimes.hawaii.edu/files/codar_rx_antenna.JPG, http://marine.rutgers.edu/cool/latte/images/codar_antenna.jpg, http://www.skio.usg.edu/research/phy/sabsoon/wera/images/antennae.jpg</Images>
+        <Definition>Technically surface current radars (CODAR and WERA) are active sensors but the antennae itself are thought of as a type of platform because the antennae itself is a can be large or require standalone structure to be strategically located to optimize coverage and minimize frequency interference.  Surface current radars use two antenna, one to transmit a polarized electromagnetic signal, and a second receive antenna (or an array of receive antennas).  The transmit and receive antenna are seperated alongshore by at least one wavelength of the frequency of their emitted signal, but the location of the receive antenna defines the location of the system.</Definition>
+        <Term>surface_current_radar</Term>
+        <rdfs:label>surface_current_radar</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/personal_watercraft">
+        <Group_Mapping>boat</Group_Mapping>
+        <Definition>A small motorized watercraft that can carry only one or two passengers and has limited endurance or range. They are generally distinguished from boats based on how they drive and are handled analogous to land based motorcycles.  The power for propulsion is usually from a small bore two (or four) stroke engine which is less efficient and louder.  However, they have become useful for coastal surveys in shallow water and close to shore.  The term jet ski is a popular term synonymous with personal watercraft. Jet Ski is a registered trademark of Kawaski.</Definition>
+        <Term>personal_watercraft</Term>
+        <rdfs:label>personal_watercraft</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/fixed">
+        <Group_Mapping>fixed</Group_Mapping>
+        <Definition>A general term for a structure or a sampling platform fixed or stationary at one position and used to measure environmental parameters over a period of time. The platform can be landbased, shore-based or located offshore. Most fixed platforms will be associated with a structure such as a tower, dock, pier, or moored buoy.  Picking a fixed platform may depend on the overarching feature that describes the platform structure or based on the information that is designed to monitor, such as tides, river water level or flow, or water quality.</Definition>
+        <Term>fixed</Term>
+        <rdfs:label>fixed</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/unmanned_aerial_vehicle">
+        <Group_Mapping>aircraft</Group_Mapping>
+        <Images>http://www.papahanaumokuakea.gov/images/news_imgs/uas_boat2.jpg</Images>
+        <Definition>An Unmanned Aerial Vehicle (UAV) is an aircraft that is remotely controlled by a pilot or programmed to navigate a predefined flight path or mission. With imaging and video capability, these types of platforms are used to track endangered marine wildlife and locate and identify marine debris.</Definition>
+        <Term>unmanned_aerial_vehicle</Term>
+        <rdfs:label>unmanned_aerial_vehicle</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/offshore_tower">
+        <Group_Mapping>fixed, tower</Group_Mapping>
+        <Images>http://upload.wikimedia.org/wikipedia/commons/d/d8/Offshore_navy_tower_SABSOON.jpg, http://subseaworldnews.com/wp-content/uploads/2012/01/Norway-Keppel-Acquires-Stake-in-Offshore-Wind-Turbine-Foundation-Designer-OWEC-Tower.jpg</Images>
+        <Definition>A bottom-mounted structure that is fixed to the seabead by three or more legs supporting a horizontal platform or decks well above the historical maximum wave height.   Sensors can be mounted above the sea-surface or located below the surface attached to the structure.  Offshore towers have been constructed for some purpose for example to house a lighthouse, extend communication, station oil drilling operations, and more recently for offshore wind turbines.</Definition>
+        <Term>offshore_tower</Term>
+        <rdfs:label>offshore_tower</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/tower">
+        <Reference>http://en.wikipedia.org/wiki/Radio_masts_and_towers</Reference>
+        <Group_Mapping>fixed</Group_Mapping>
+        <Images>http://www.coastalguide.com/aa_SiteObjects/aa_coastalIMAGES/geo-SPECIFIC/Outer-Banks-Region-Pix/Duck-Pix/duckpier1.jpg, http://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Hillmorton_radio_masts.jpg/220px-Hillmorton_radio_masts.jpg</Images>
+        <Definition>A tower is a self-supporting lattice or cantilevered structure.  A mast or pole is held up by stays or guys.  A tower can be attached to the ground or mounted on some other structure (which itself may be a tower, a building or a pier). Towers provide elevation for radio transmitters and receivers, and other sensors such as cameras or webcams or radar.</Definition>
+        <Term>tower</Term>
+        <rdfs:label>tower</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/lander">
+        <Group_Mapping>fixed</Group_Mapping>
+        <Images>http://noc.ac.uk/f/content/science-technology/research-groups/ocean-technology-engineering/stable_img4_0.png, http://seabedhabitats.files.wordpress.com/2012/11/snapshot-1-01-11-2012-21-291.png, http://www.mooringsystems.com/images/mounts02t.jpg, http://www.flotec.com/files/u1/trbm_dd100.jpg</Images>
+        <Definition>A benthic lander (aka seabed lander) or bottom mount (aka bottom frame) is a type of frame used to carry one or more instruments to the seabed where it remains until it is recovered.  Different payloads are used to measure a host of different variables. Cameras, acoustic doppler current profilers (ADCPs), and temperature and salinity measurements being the most common but many types of instruments can be mounted.</Definition>
+        <Term>lander</Term>
+        <rdfs:label>lander</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/balloon">
+        <Reference>http://en.wikipedia.org/wiki/Weather_balloon</Reference>
+        <Group_Mapping>aircraft</Group_Mapping>
+        <Definition>A weather or sounding balloon is a balloon (specifically a type of high altitude balloon) which carries instruments aloft to send back information on atmospheric pressure, temperature, humidity and wind speed by means of a small, expendable measuring device called a radiosonde. To obtain wind data, they can be tracked by radar, radio direction finding, or navigation systems (such as the satellite-based Global Positioning System, GPS). Balloons meant to stay at a constant altitude for long periods of time are known as transosondes.</Definition>
+        <Term>balloon</Term>
+        <rdfs:label>balloon</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/automated_underwater_vehicle">
+        <Reference>Alliance for Coastal Technologies (2004). Mobile Sensor Platforms : Management Applications for AUVs and Gliders in the Nearshore Environment, Cape Elizabeth, Maine. April 28-30, 2004.</Reference>
+        <Group_Mapping>submersible</Group_Mapping>
+        <Images>http://news.seadiscovery.com/image.axd?picture=2012%2f5%2f3-auv.jpg,</Images>
+        <Definition>Automated Underwater Vehicles (AUVs) are self-propelled autonomous vehicles that can carry larger payload than a glider because they are externally powered.  However, power limits often limit endurance to 1-2 days.  AUVs can facilitate the detection and enumeration of fish and zooplankton in boundary areas, and measure the physical and biological characteristics of their habitats or map geological features at locations that are hard to survey by ship.</Definition>
+        <Term>automated_underwater_vehicle</Term>
+        <rdfs:label>automated_underwater_vehicle</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/moored_buoy">
+        <Reference>Joint WMO-IOC Technical Commission for Oceanography and Marine Meteorology (JCOMM), Data Buoy Cooperation Panel (DBCP), Data Buoy Types, http://www.jcommops.org/dbcp/platforms/types.html</Reference>
+        <Group_Mapping>fixed, buoy</Group_Mapping>
+        <Images>http://www.jcommops.org/dbcp/graph_ref/mooring_MF_small.png, http://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/NOAA-NDBC-discus-buoy.jpg/250px-NOAA-NDBC-discus-buoy.jpg</Images>
+        <Definition>A buoy that is anchored at fixed location and regularly collect observations from many different atmospheric and oceanographic sensors. Moored buoys are usually deployed to serve national forecasting needs, maritime  safety needs or to observe regional climate patterns. Measurements from the buoy include surface variables (wind, air and sea surface temperature, salinity, air pressure), as well as subsurface temperatures down to a depth of 500 plus meters.</Definition>
+        <Term>moored_buoy</Term>
+        <rdfs:label>moored_buoy</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/wave_buoy">
+        <Group_Mapping>fixed, buoy</Group_Mapping>
+        <Images>http://cdip.ucsd.edu/documents/index/gauge_docs/dir_buoy.jpg</Images>
+        <Definition>A buoy developed to specifically measure dynamics of the ocean surface.  While it is a moored buoy, it uses accelerometers and a magnetic compass to sense the motion of the buoy at a given location. These types of buoys measure the frequency, and size of the wave energy that help determine the significant wave height, peak wave period, and directions from which these values are the highest.   Other sensors such as water temperature</Definition>
+        <Term>wave_buoy</Term>
+        <rdfs:label>wave_buoy</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/profiler">
+        <Group_Mapping>profile</Group_Mapping>
+        <Definition>This type of platform is designed to operate so that measurements can be made along one dimension, typically with depth in the ocean or altitude above the ocean surface.  A profiler can also be fixed to sample the same location or can be free drifting. [what a about ship-mounted CTD carousel]</Definition>
+        <Term>profiler</Term>
+        <rdfs:label>profiler</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/glider">
+        <Reference>Alliance for Coastal Technologies (2004). Mobile Sensor Platforms : Management Applications for AUVs and Gliders in the Nearshore Environment, Cape Elizabeth, Maine. April 28-30, 2004.</Reference>
+        <Group_Mapping>submersible</Group_Mapping>
+        <Images>http://www.webbresearch.com/images/slocum.jpg, http://filemaker2-server.cbl.umces.edu/sensorimages/11261-seaglider.jpg</Images>
+        <Definition>An autonomous vehicle that moves vertically by controlling buoyancy but with wings it gains forward horizontal propulsion and has a rudder for steering.  Gliders move slowly (~20km/day) and are not as maneuverable as a propelled vehicle.  Gliders can cross large horizontal areas while vertically undulating the water column or can undulate at a near-fixed position acting as a virtual mooring.  Programmed to follow a set of mission parameters gliders can navigate autonomously and can be reprogrammed to meet the needs of any given mission.  Detailed data are stored locally on the glider, while a subset of flight and sensor data are transmitted when the glider surfaces via two-way (radio modems, cell phone or satellite) communication.  Typical payload sensors measure salinity, water temperature, and water quality parameters.</Definition>
+        <Term>glider</Term>
+        <rdfs:label>glider</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/drifting_buoy">
+        <Reference>UK Met Office, Observations from drifting buoys, http://www.metoffice.gov.uk/weather/marine/observations/gathering_data/buoys.html</Reference>
+        <Group_Mapping>drifter, buoy</Group_Mapping>
+        <Images>http://www.metoffice.gov.uk/weather/marine/observations/gathering_data/images/drifting_buoy.jpg, http://www.aoml.noaa.gov/phod/dac/drifterpic1.jpg, http://filemaker2-server.cbl.umces.edu/sensorimages/7265-SLDMB.gif</Images>
+        <Definition>Drifting buoys are free drifting platforms with a float or buoys that keep the drifter at the surface and underwater sails or sock that catch the current. They have sensors to make meteorological and oceanographic measurements, such as air pressure and water temperature, and by tracking their positions the surface currents can be determined. Some drifters also have sensors to measure wind and salinity.</Definition>
+        <Term>drifting_buoy</Term>
+        <rdfs:label>drifting_buoy</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/sampling_location">
+        <Group_Mapping>fixed</Group_Mapping>
+        <Definition>Not really a platform or structure but a term to catch situation where sensor(s) are brought to a site location and oceanographic or meteorological properties are observed, measurements are made, or samples are taken.</Definition>
+        <Term>sampling_location</Term>
+        <rdfs:label>sampling_location</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/tide_station">
+        <Reference>NOAA National Ocean Service (NOS) Tides and Water Levels</Reference>
+        <Group_Mapping>fixed</Group_Mapping>
+        <Images>http://oceanservice.noaa.gov/education/kits/tides/media/tide11a_480.jpg, http://oceanservice.noaa.gov/education/kits/tides/media/tide11b_480.jpg</Images>
+        <Definition>A specially designed station that is located on the shoreline and that is precisely surveyed to know the station's gauge placement relative to standard vertical datum. This provides measured tidal heights to a high degree of accuracy.  A protective acoustic sounding tube and the tidal staff with a pressure sensor are mounted to a leg or pylon of a pier or stationary (non-floationg) dock that has been surveyed.  The stations are designed to continue operating in extreme storms and to be highly reliable. In addition to measuring tidal heights these stations can record many different oceanographic and meteorological parameters. Some include wind speed and direction, water current speed and direction, air and water temperature, and barometric pressure. In coastal areas, river level stations can double as tide guage stations or vice versa.</Definition>
+        <Term>tide_station</Term>
+        <rdfs:label>tide_station</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/dock">
+        <Reference>Coastal and Hydraulics Laboratory, US Army Corps of Engineers, http://chl.erdc.usace.army.mil/glossary</Reference>
+        <Group_Mapping>fixed</Group_Mapping>
+        <Definition>The slip or waterway between two piers, or cut into the land, for the reception of ships.</Definition>
+        <Term>dock</Term>
+        <rdfs:label>dock</rdfs:label>
+    </Platform>
+    <Platform rdf:about="http://mmisw.org/ont/ioos/platform/mooring">
+        <Reference>CeNCOOS (build out plan?)</Reference>
+        <Group_Mapping>fixed</Group_Mapping>
+        <Images>https://www.google.com/search?q=mooring&amp;hl=en&amp;client=firefox-a&amp;hs=zM4&amp;tbo=u&amp;rls=org.mozilla:en-US:official&amp;tbm=isch&amp;source=univ&amp;sa=X&amp;ei=-AwAUZP_H5Di8gSos4HQAw&amp;ved=0CHwQsAQ&amp;biw=1353&amp;bih=950</Images>
+        <Definition>A station composed of a float, attached by a cable to an anchor on the seafloor.  If the station is configured with a buoy located at the surface, it is referred to as a moored buoy.  Another configuration might be a subsurface float used to hold a the cable taunt. Sensors may be located at the surface, on the buoy, on the float or anywhere in the water column attached to the cable.</Definition>
+        <Term>mooring</Term>
+        <rdfs:label>mooring</rdfs:label>
+    </Platform>
+</rdf:RDF>
