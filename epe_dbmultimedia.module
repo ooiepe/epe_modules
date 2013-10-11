@@ -113,8 +113,8 @@ function epe_dbmultimedia_default_search_api_index() {
         'created' => array('type'=>'date'),
         'changed' => array('type'=>'date'),
         'author' => array('type'=>'integer', 'entity_type'=>'user'),
-        'field_public_status' => array('type'=>'string'),
-        'field_featured_status' => array('type'=>'string'),
+        /*'field_public_status' => array('type'=>'string'),
+        'field_featured_status' => array('type'=>'string'),*/
         'search_api_language' => array('type'=>'string'),
         'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),
