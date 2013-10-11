@@ -1,5 +1,11 @@
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
+
+
+<?php
+include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLOBALS['theme']) . '/templates/viewpage.tpl.php';
+?>
+
   <header>
     <?php print render($title_prefix); ?>
     <?php if (!$page && $title): ?>
