@@ -15,6 +15,17 @@
     <?php endif; ?>
   </header>
 -->
+
+
+
+
+<?php
+include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLOBALS['theme']) . '/templates/viewpage.tpl.php';
+?>
+
+<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
+<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+
   <?php
     // Hide comments, tags, and links now so that we can render them later.
     hide($content['comments']);
@@ -44,5 +55,8 @@
   <?php endif; ?>
 
   <?php print render($content['comments']); ?>
+
+</div>
+</div>
 
 </article> <!-- /.node -->

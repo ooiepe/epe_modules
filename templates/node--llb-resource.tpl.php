@@ -3,10 +3,11 @@
 
 
 <?php
+$hideActionButtons = 1;
 include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLOBALS['theme']) . '/templates/viewpage.tpl.php';
 ?>
 
-  <header>
+  <!-- <header>
     <?php print render($title_prefix); ?>
     <?php if (!$page && $title): ?>
       <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
@@ -19,7 +20,12 @@ include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLO
         <?php print $submitted; ?>
       </span>
     <?php endif; ?>
-  </header>
+  </header> -->
+
+
+<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
+<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+
 
   <?php
     // Hide comments, tags, and links now so that we can render them later.
@@ -158,5 +164,8 @@ include dirname(__FILE__) . '/../../../../../../' . drupal_get_path('theme',$GLO
   <?php endif; ?>
 
   <?php print render($content['comments']); ?>
+
+</div>
+</div>
 
 </article> <!-- /.node -->
