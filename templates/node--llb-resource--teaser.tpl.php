@@ -32,7 +32,7 @@
           ?>
         </p>
       </div>
-      <p class="pull-right"><a href="/node/<?php echo arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a></p>
+      <p class="pull-right"><a href="<?php echo base_path() . 'node/' . arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a></p>
     </div>
   </div>
 
