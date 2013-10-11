@@ -2,13 +2,28 @@
 
 
 function epe_cm_node_delete_function($node) {
+  
   // Taken from node modules node_delete_confirm submit handler
   node_delete($node->nid);
   watchdog('content', '@type: deleted %title.', array('@type' => $node->type, '%title' => $node->title));
   drupal_set_message(t('@type %title has been deleted.', array('@type' => node_type_get_name($node), '%title' => $node->title)));
 
   // Do a drupal goto here to preserver the 'destination' parameter
-  drupal_goto();
+	if ($node->type == "audio_resource" || $node->type == "video_resource")
+		drupal_goto( 'resource-browser', array( 'fragment' =>  'search/?filter=author&type=multimedia', 'alias' => TRUE ) );
+	elseif ($node->type == "image_resource")
+		drupal_goto( 'resource-browser', array( 'fragment' =>  'search/?filter=author&type=image', 'alias' => TRUE ) );
+	elseif ($node->type == "document_resource")
+		drupal_goto( 'resource-browser', array( 'fragment' =>  'search/?filter=author&type=document', 'alias' => TRUE ) );
+	elseif ($node->type == "llb_resource")
+		drupal_goto( 'resource-browser', array( 'fragment' =>  'search/?filter=author&type=llb', 'alias' => TRUE ) );
+	elseif ($node->type == "cm_resource")
+		drupal_goto( 'resource-browser', array( 'fragment' =>  'search/?filter=author&type=cm', 'alias' => TRUE ) );
+	elseif ($node->type == "ev_tool_instance")
+		drupal_goto( 'resource-browser', array( 'fragment' =>  'search/?filter=author&type=ev', 'alias' => TRUE ) );
+	else
+		drupal_goto();
+	
 }
 
 
