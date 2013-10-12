@@ -29,17 +29,6 @@ function epe_llb_install() {
   variable_set('node_options_llb_resource',array());
   variable_set('node_preview_llb_resource','0');
   variable_set('node_submitted_llb_resource',0);
-
-/*
-  variable_set('epe_llb_config',
-    array(
-      'llb_challenge_thumbnail_prefix'=>'Please choose an appropriate image that encapsulates the essence of your activity and problem',
-      'llb_challenge_thumbnail_suffix'=>'Note, this image will be used as the thumbnail for your unit.',
-      'llb_instructional_content'=>'Guidance for instructors on how to effectively integrate this activity into their course. For example, what concepts does it cover, or what is the best way to integrate it into a course?',
-      'llb_preconception_content'=>'What are some common problems or pitfalls students may encounter when working through this activity? What are some good questions to ask before and after the unit to check their understanding?',
-      'llb_resources_content'=>'Are there additional resources, web site, datasets, news articles etc. that other instructors may find useful for background or extension activities when using this activity?'
-  ));
-*/
 }
 
 /*
@@ -47,15 +36,59 @@ function epe_llb_install() {
  * this adds epe_image module to epe_content_modules variable which is used in epe_files module
  */
 function epe_llb_enable() {
+  db_update('system')
+    ->fields(array('weight' => 10))
+    ->condition('type', 'module')
+    ->condition('name', 'epe_llb')
+    ->execute();
+
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  /*
-   * resource_name: identifing which file resource type this module is (use in dbfiles)
-   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
-   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
-   */
-  //$modules['epe_llb'] = array('resource_name' => 'llb_resource','resource_type'=>'llb_resource','resource_browser_tab' => array('label'=>'Lab Lesson Builder','api'=>'llb','default'=>FALSE,'order'=>4));
   $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lab Lesson Unit','api'=>'llb'));
   variable_set('EPE_CONTENT_MODULES', $modules);
+
+  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','llb','=')->execute()->fetchAssoc();
+  $parentid = $parent['mlid'];
+
+  $item = array(
+      'link_path' => 'llb',
+      'link_title' => 'About Lessons',
+      'menu_name' => 'main-menu',
+      'weight' => 1,
+      'expanded' => 0,
+      'plid' => $parentid,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'node/add/llb-resource',
+      'link_title' => 'Create a Lesson',
+      'menu_name' => 'main-menu',
+      'weight' => 2,
+      'expanded' => 0,
+      'plid' => $parentid,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=' . $modules['epe_llb']['resource_browser']['api'],
+      'link_title' => 'My Lessons',
+      'menu_name' => 'main-menu',
+      'weight' => 3,
+      'expanded' => 0,
+      'plid' => $parentid,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=' . $modules['epe_llb']['resource_browser']['api'],
+      'link_title' => 'Browse Lessons',
+      'menu_name' => 'main-menu',
+      'weight' => 4,
+      'expanded' => 0,
+      'plid' => $parentid,
+      );
+  menu_link_save($item);
+
 }
 
 /*
