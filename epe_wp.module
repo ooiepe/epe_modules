@@ -5,6 +5,25 @@
   $role->name = 'author';
   user_role_save($role);
 }*/
+/**
+ * Implements hook_views_api().
+ */
+function epe_wp_views_api() {
+  return array("api" => "3.0");
+}
+
+/**
+  * Implement hook_permission
+  */
+function epe_wp_permission() {
+  return array(
+    'epe wp view pending resource list' => array(
+      'title' => 'EPE WP view pending resource list',
+      'description' => 'Allow user to view list of pending resources.',
+    ),
+  );
+}
+
 
 function _account_installed_fields() {
   $fields = array();
@@ -162,39 +181,43 @@ function epe_wp_menu() {
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
+    'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
   );
 
 
   $items['ev'] = array(
-    'title' => t('Visualization Home Page'),
+    'title' => t('Visualization'),
     'page callback' => 'epe_wp_ev_home',
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
+    'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
   );
 
   $items['cm'] = array(
-    'title' => t('Concept Maps Home Page'),
+    'title' => t('Concept Maps'),
     'page callback' => 'epe_wp_cm_home',
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
+    'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
   );
 
   $items['llb'] = array(
-    'title' => t('Lessons Home Page'),
+    'title' => t('Lessons'),
     'page callback' => 'epe_wp_llb_home',
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
+    'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
   );
 
   $items['db'] = array(
-    'title' => t('Resources Home Page'),
+    'title' => t('Resources'),
     'page callback' => 'epe_wp_db_home',
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
@@ -203,14 +226,8 @@ function epe_wp_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-
   return $items;
-
 }
-
-
-
-
 
 
 function epe_wp_block_info() {

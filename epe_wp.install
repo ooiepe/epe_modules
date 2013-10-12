@@ -35,8 +35,22 @@ function epe_wp_install() {
 
 
 function epe_wp_enable() {
+  db_update('system')
+    ->fields(array('weight' => -10))
+    ->condition('type', 'module')
+    ->condition('name', 'epe_wp')
+    ->execute();
 
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
+    if($role_name != 'author') {
+      $role = user_role_load_by_name($role_name);
+      user_role_grant_permissions($role->rid, array('epe wp view pending resource list'));
+    }
+  }
 
+  // Clear the user access cache.
+  drupal_static_reset('user_access');
+  drupal_static_reset('user_role_permissions');
 
   $node = new stdClass(); 
   $node->type = "page"; 
