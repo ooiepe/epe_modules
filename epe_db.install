@@ -50,7 +50,7 @@ My Visualizations
 Browse Visualizations 
 */
 
-$item = array(
+/*$item = array(
     'link_path' => 'ev',
     'link_title' => 'Visualizations',
     'menu_name' => 'main-menu',
@@ -58,6 +58,10 @@ $item = array(
     'expanded' => 0,
     );
 $parentid = menu_link_save($item);
+
+*/
+$parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','ev','=')->execute()->fetchAssoc();
+$parentid = $parent['mlid'];
 
 $item = array(
     'link_path' => 'ev',
@@ -80,7 +84,7 @@ $item = array(
 $lastid = menu_link_save($item);
 
 $item = array(
-    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=ev',
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=ev',
     'link_title' => 'My Visualizations',
     'menu_name' => 'main-menu',
     'weight' => 3,
@@ -109,7 +113,10 @@ Browse Concept Maps
 
 */
 
-$item = array(
+$parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','cm','=')->execute()->fetchAssoc();
+$parentid = $parent['mlid'];
+
+/*$item = array(
     'link_path' => 'cm',
     'link_title' => 'Concept Maps',
     'menu_name' => 'main-menu',
@@ -117,7 +124,7 @@ $item = array(
     'expanded' => 0,
     );
 $parentid = menu_link_save($item);
-
+*/
 $item = array(
     'link_path' => 'cm',
     'link_title' => 'About Concept Maps',
@@ -139,7 +146,7 @@ $item = array(
 $lastid = menu_link_save($item);
 
 $item = array(
-    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=cm',
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=cm',
     'link_title' => 'My Concept Maps',
     'menu_name' => 'main-menu',
     'weight' => 3,
@@ -168,9 +175,12 @@ Browse Lessons
 
 
 */
+/*
+$parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','cm','=')->execute()->fetchAssoc();
 
-
-$item = array(
+$parentid = $parent['mlid'];
+*/
+/*$item = array(
     'link_path' => 'llb',
     'link_title' => 'Lessons',
     'menu_name' => 'main-menu',
@@ -200,7 +210,7 @@ $item = array(
 $lastid = menu_link_save($item);
 
 $item = array(
-    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=llb',
+    'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=llb',
     'link_title' => 'My Lessons',
     'menu_name' => 'main-menu',
     'weight' => 3,
@@ -218,7 +228,7 @@ $item = array(
     'plid' => $parentid,
     );
 $lastid = menu_link_save($item);
-
+*/
 /*
 
 Resources 
