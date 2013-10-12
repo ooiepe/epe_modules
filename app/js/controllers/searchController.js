@@ -117,7 +117,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     if(typeof $location.search()['type'] != 'undefined') {
       var found = false;
       angular.forEach($scope.panes.table, function(pane, index) {
-          if(pane.type.toLowerCase() == $location.search()['type'].toLowerCase()) {
+          if(pane.api == $location.search()['type']) {
             found = true;
             $scope.panes.table[index].active = true;
           } else {
