@@ -3,12 +3,25 @@
  * declare restful api menu callback
  */
 function epe_cm_data_restful_api($nid) {
+  $item = array(
+    'nid' => '',
+    'type' => '',
+    'title' => '',
+    'body' => '',
+    'thumbnail' => ''
+  );
 
   $node = node_load($nid);
 
-  $wrapper = entity_metadata_wrapper('node', $node);
+  if($node) {
+    $wrapper = entity_metadata_wrapper('node',$node);
+    $item['nid'] = $wrapper->getIdentifier();
+    $item['type'] = $wrapper->getBundle();
+    $item['title'] = $wrapper->label();
+    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+  }
 
-  echo $wrapper->field_cm_data->value();
+  echo json_encode($item);
 }
 
 /*
