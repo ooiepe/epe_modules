@@ -109,6 +109,15 @@ function giveXMLtoJS(value) {
 </script>
 
 
+
+<?php if (empty($form['nid']['#value'])): ?>
+  <input type="hidden" name="destination" value="cm/">
+<?php else: ?>
+  <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
+<?php endif; ?>
+
+
+
 <div id="flashcontent"><p>Please update your Flash Player</p></div>
 
 
