@@ -187,12 +187,13 @@ function epe_wp_menu() {
 */
 
   $items['ev'] = array(
-    'title' => t('Visualization'),
+    'title' => t('Visualizations'),
     'page callback' => 'epe_wp_ev_home',
     'file' => 'epe_wp.pages.inc',
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
     'menu_name' => 'main-menu',
+    'weight' => 1,
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -203,6 +204,7 @@ function epe_wp_menu() {
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
     'menu_name' => 'main-menu',
+    'weight' => 2,
     'type' => MENU_NORMAL_ITEM,
   );
 
@@ -213,6 +215,7 @@ function epe_wp_menu() {
     'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
     'access callback' => TRUE,
     'menu_name' => 'main-menu',
+    'weight' => 3,
     'type' => MENU_NORMAL_ITEM,
   );
 
