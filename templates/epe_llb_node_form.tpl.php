@@ -175,61 +175,9 @@
           <button type="button" class="btn btn-small btn-primary" ng-click="fn.addQuestion(item.nid);">Add Question</button>
           </div>
         </td>
-
-<!--         <td>
-          <p>
-            <input name="title" class="dataset" ng-model="item.title">
-          </p>
-          <span><i class="icon-refresh" ng-click="fn.reloadDataSet($index);"></i><i class="icon-trash" ng-click="removeDataSet($index);"></i></span>
-        </td>
-        <td>
-          <textarea name="body" class="dataset" ng-model="item.body"></textarea>
-        </td>
-        <td>
-          <ul>
-            <li ng-repeat="question in item.questions">
-              <input name="question" class="dataset" ng-model="question.text">
-              <span><i class="icon-trash" ng-click="fn.removeQuestion($parent.$index,$index);"></i></span>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-small btn-primary" ng-click="fn.addQuestion($index);">Add Question</button>
-        </td> -->
       </tr>
     </table>
 
-    <!-- <div class="item" ng-repeat="item in items"> -->
-<!--     <ul ui-sortable ng-model="items">
-      <li ng-repeat="item in items"> -->
-      <!-- <img ng-src="{{item.thumbnail}}"> -->
-<!--       <div ng-hide="editable != true">
-        <strong>{{item.title}}</strong>
-        <div>{{item.body}}</div>
-        <a ng-click="editable = true">Edit</a>
-      </div> -->
-      <!-- <div ng-show="editable">
-      <input name="title" class="dataset" ng-model="item.title">
-      <textarea name="body" class="dataset" ng-model="item.body"></textarea>
-      <a ng-click="editable = false">Save</a>
-      </div> -->
-      <!-- <input name="title" class="dataset" ng-model="item.title">
-      <textarea name="body" class="dataset" ng-model="item.body"></textarea> -->
-      <!-- <div inline-edit item="item"></div> -->
-<!--       <input name="title" class="dataset" ng-model="item.title">
-      <textarea class="dataset" ck-editor ng-model="item.body"></textarea> -->
-      <!-- <a ng-click="removeDataSet($index);">Delete</a> -->
-<!--       </li>
-    </ul> -->
-    <!-- </div> -->
-
-  <!-- <div class="app-main" ng-controller="main">
-    <textarea name="exploration_dataset">{{items}}</textarea>
-    <div class="item" ng-repeat="item in items">
-        <img src="{{item.thumbnail}}">
-        <input name="title" ng-model="item.title" disabled>
-        <textarea name="body" ng-model="item.body" disabled></textarea>
-    </div>
-  </div> -->
-  <!--<strong>{{item.title}}</strong> - <span html-content html="item.body"></span>-->
     <p><strong>Add another Dataset:</strong></p>
     <?php echo render($form['resource_browser']); ?>
   </div>

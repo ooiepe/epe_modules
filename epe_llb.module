@@ -109,6 +109,16 @@ function epe_llb_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
+
+  $items['api/resource/llb/%'] = array(
+    'title' => t('Restful Single Lab Lesson Builder Resource Query'),
+    'page callback' => 'epe_llb_restful_api_node',
+    'page arguments' => array(3),
+    'file' => 'epe_llb.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
 /*
   $items['resource/add/llb'] = array(
     'title' => t('Create Lab Lesson Builder Resrouce'),
@@ -188,11 +198,11 @@ function _assign_epe_llb_permission() {
     $role = user_role_load_by_name($role_name);
     $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
     $author_permissions = array(
-      'create llb content' => array('grant' => TRUE, 'module' => 'node'),
-      'delete any llb content' => array('grant' => FALSE, 'module' => 'node'),
-      'delete own llb content' => array('grant' => TRUE, 'module' => 'node'),
-      'edit any llb content' => array('grant' => FALSE, 'module' => 'node'),
-      'edit own llb content' => array('grant' => TRUE, 'module' => 'node'),
+      'create llb_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'delete any llb_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'delete own llb_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'edit any llb_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'edit own llb_resource content' => array('grant' => TRUE, 'module' => 'node'),
     );
     //I am not sure what hook I should use to invoke user_role_grant_permissions function
     //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
@@ -382,12 +392,12 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
 
   $form['#attached']['css'] = array(
-    'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'=>array('type'=>'external'),
+    //'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'=>array('type'=>'external'),
     drupal_get_path('module','epe_llb') . '/css/epe_llb.css'=>array('type'=>'file','group'=>CSS_THEME),
   );
-  $form['#attached']['js'] = array(
+  /*$form['#attached']['js'] = array(
     'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'=>array('type'=>'external'),
-  );
+  );*/
 
   $form['#attached']['js'][] = libraries_get_path('bootbox') . '/bootbox.min.js';
 

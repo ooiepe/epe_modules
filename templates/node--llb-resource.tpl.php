@@ -71,9 +71,11 @@
         $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide['uri'], 'alt' => '', 'title' => '');
         echo theme('image_style', $slide_image);
       ?>
+      <?php if($slide['title'] != ''): ?>
       <div class="carousel-caption">
-        <p>Caption text here</p>
+        <p><?php echo $slide['title']; ?></p>
       </div>
+      <?php endif; ?>
     </div>
     <?php endforeach; ?>
   </div><!-- /.carousel-inner -->
@@ -125,7 +127,7 @@
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
-  <?php echo $dataset->thumbnail; ?>
+  <img src='<?php echo $dataset->thumbnail; ?>' alt="<?php echo $dataset->title; ?>" />
   <?php echo $dataset->body; ?>
   <?php if(!empty($dataset->questions)): ?>
   <div class="row">
