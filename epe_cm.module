@@ -1,5 +1,32 @@
 <?php
 
+
+
+
+
+function callback_for_cancel_button($form, &$form_state) {
+  $url = $_POST['destination'] ? $_POST['destination'] : '';
+  drupal_goto($url);
+}
+
+function epe_cm_form_alter (&$form, &$form_state, $form_id) {
+
+if ($form['#id'] == 'cm-resource-node-form' || $form['#id'] == 'image-resource-node-form' || $form['#id'] == 'audio-resource-node-form' || $form['#id'] == 'video-resource-node-form' || $form['#id'] == 'document-resource-node-form' || $form['#id'] == 'llb-resource-node-form' || $form['#id'] == 'ev-tool-instance-node-form') {
+$form['actions']['cancel'] = array(
+    '#type'   => 'submit',
+    '#value'  => t('Cancel'),
+    '#submit' => array('callback_for_cancel_button'),
+    '#limit_validation_errors' => array(),
+    '#weight'  => 99,
+  );
+  $form['actions']['delete']['#access'] = FALSE;
+  $form['actions']['preview']['#access'] = FALSE;
+
+}
+
+
+}
+
 /*
  * Implement hook_theme
  * This hook is to style edit form, the theme key needs to be the same as the form function name
