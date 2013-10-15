@@ -175,7 +175,7 @@ function epe_wp_menu() {
   $items = array();
 
 
-  $items['home'] = array(
+/*  $items['home'] = array(
     'title' => t('EPE Home Page'),
     'page callback' => 'epe_wp_epe_home',
     'file' => 'epe_wp.pages.inc',
@@ -184,7 +184,7 @@ function epe_wp_menu() {
     'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
   );
-
+*/
 
   $items['ev'] = array(
     'title' => t('Visualization'),
@@ -216,7 +216,7 @@ function epe_wp_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['db'] = array(
+/*  $items['db'] = array(
     'title' => t('Resources'),
     'page callback' => 'epe_wp_db_home',
     'file' => 'epe_wp.pages.inc',
@@ -224,7 +224,7 @@ function epe_wp_menu() {
     'access callback' => TRUE,
     'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
-  );
+  );*/
 
   return $items;
 }

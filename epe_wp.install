@@ -19,6 +19,7 @@ function epe_wp_install() {
 
   variable_set('EPE_SUPPORTED_AUTHOR_ROLES',array('administrator','author','moderator'));
   variable_set('EPE_CONTENT_MODULES',array());
+  variable_set('epe_menu',array());
 
   //add author role
   //epe_wp_default_roles();
