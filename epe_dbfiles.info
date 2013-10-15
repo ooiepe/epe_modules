@@ -2,7 +2,7 @@ name = EPE File Resource Common Interface
 description = EPE File resources common interface
 core = 7.x
 package = EPE
-version = 7.x-0.6-alpha
+version = 7.x-0.7-alpha
 project = epe_dbfiles
 
 dependencies[] = epe_wp

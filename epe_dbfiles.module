@@ -17,17 +17,19 @@ function epe_dbfiles_permission() {
 function epe_dbfiles_menu() {
   $items = array();
 
-  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','db','=')->execute()->fetchAssoc();
+  //$parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','db','=')->execute()->fetchAssoc();
+  $epe_menu = variable_get('epe_menu',array());
 
   $items['resource/add/file'] = array(
     'title' => t('Create EPE File Resource'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_dbfiles_node_form'),
     'access callback' => 'user_access',
-    'access arguments' => array('epe dbfiles interface,create image_resource content,create document_resource content,create audio_resource content,create video_resource content'),
+    'access arguments' => array('epe dbfiles interface'),
     'menu_name' => 'main-menu',
     'type' => MENU_NORMAL_ITEM,
-    'plid' => $parent['mlid'],
+    'weight' => 2,
+    'plid' => $epe_menu['db']['mlid'],
   );
 
   $items['resource/file/%/edit'] = array(
@@ -35,7 +37,7 @@ function epe_dbfiles_menu() {
     'page callback' => 'epe_dbfile_node_edit',
     'page arguments' => array(2),
     'access callback' => 'user_access',
-    'access arguments' => array('epe dbfiles interface,edit own image_resource content,edit own document_resource content,edit own audio_resource content,edit own video_resource content'),
+    'access arguments' => array('epe dbfiles interface'),
     'type' => MENU_CALLBACK,
   );
 
@@ -197,6 +199,7 @@ function epe_dbfile_node_edit($nid) {
 function epe_dbfiles_menu_alter(&$items) {
   $items['file/ajax']['file'] = 'node.pages.inc';
   $items['file/ajax']['file path'] = drupal_get_path('module', 'node');
+
 }
 
 /*
@@ -414,31 +417,52 @@ function epe_dbfiles_requirements_validation() {
   return $messages;
 }
 
+function epe_dbfiles_node_view_alter(&$build) {
+  $epe_menu = variable_get('epe_menu',array());
+  if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page' && $build['#node']->nid == $epe_menu['db']['nid']) {
+    $build['#post_render'][] = 'epe_dbfiles_homepage_render';
+  }
+}
+
 /*
  * Implement hook_theme
  * This hook is to style edit form, the theme key needs to be the same as the form function name
  */
 function epe_dbfiles_theme() {
+  $tpl_path = drupal_get_path('module','epe_dbfiles') . '/templates';
   return array(
     'epe_dbfiles_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_dbfiles_node_form',
       'render element' => 'form',
     ),
     'image_resource_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_dbfiles_node_edit_form',
       'render element' => 'form',
     ),
     'document_resource_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_dbfiles_node_edit_form',
       'render element' => 'form',
     ),
     'video_resource_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_dbfiles_node_edit_form',
       'render element' => 'form',
     ),
     'audio_resource_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_dbfiles_node_edit_form',
       'render element' => 'form',
     ),
+    'epe_db_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_db_homepage',
+    )
   );
+}
+
+function epe_dbfiles_homepage_render() {
+  return theme('epe_db_homepage');
 }

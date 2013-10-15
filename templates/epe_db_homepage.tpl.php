@@ -1,0 +1,1 @@
+Resource homepage content placeholder
