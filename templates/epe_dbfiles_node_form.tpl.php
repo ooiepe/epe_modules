@@ -9,7 +9,7 @@
 </div>
 
 <div class="field-container">
-<label for="edit-description-value" class="field-label">Description:</label>
+<label for="edit-description-value" class="field-label">* Description:</label>
 <?php echo render($form['body']); ?>
 </div>
 
