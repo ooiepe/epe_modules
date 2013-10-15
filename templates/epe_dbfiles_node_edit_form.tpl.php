@@ -3,6 +3,14 @@
 <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
 
 
+
+<?php if (empty($form['nid']['#value'])): ?>
+  <input type="hidden" name="destination" value="db/">
+<?php else: ?>
+  <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
+<?php endif; ?>
+
+
 <div class="field-container">
 <label for="edit-file" class="field-label">* Upload file resource:</label>
 <?php echo render($form['file-container']); ?>
