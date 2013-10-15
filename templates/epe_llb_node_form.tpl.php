@@ -284,6 +284,16 @@
 </div> <!-- /.tab-content -->
 </div> <!-- /.tabbable -->
 
+<!-- joe: adding hidden field for cancel -->
+<?php if (empty($form['nid']['#value'])): ?>
+  <input type="hidden" name="destination" value="llb/">
+<?php else: ?>
+  <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
+<?php endif; ?>
+
+
+
+
 <?php echo render($form['actions']); ?>
 
 <?php
