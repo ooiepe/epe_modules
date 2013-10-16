@@ -169,6 +169,17 @@ function epe_dbresource_browser_view_partial($partial) {
   }
 }
 
+function epe_dbresource_browser_page_alter(&$page) {
+  if (isset($page['content']['system_main']['#block']->theme)) {
+    if ($page['content']['system_main']['#block']->theme == 'blank') {
+      if (isset($page['page_top']['toolbar']['#access'])) {
+        $page['page_top']['toolbar']['#access'] = 0;
+      }
+    }
+  }
+}
+
+
 /*
  * Following are not working, why?? they are better then adding drupal_add_js, need to figure out why
  */
