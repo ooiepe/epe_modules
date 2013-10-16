@@ -7,3 +7,4 @@ project = epe_wp
 
 dependencies[] = menu_block
 dependencies[] = jquery_update
+dependencies[] = contact
