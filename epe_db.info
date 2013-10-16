@@ -11,4 +11,3 @@ dependencies[] = search_api_db
 dependencies[] = search_api_views
 dependencies[] = views
 dependencies[] = views_ui
-dependencies[] = clone
