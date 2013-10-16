@@ -203,6 +203,26 @@ function epe_cm_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['node/%node/feature'] = array(
+    'title' => t('Feature a resource'),
+    'page callback' => 'epe_cm_node_feature_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic feature'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/unfeature'] = array(
+    'title' => t('Unfeature a resource'),
+    'page callback' => 'epe_cm_node_unfeature_function',
+    'page arguments' => array(1),
+    'file' => 'epe_cm.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic unfeature'),
+    'type' => MENU_CALLBACK,
+  );
+
 
 
 

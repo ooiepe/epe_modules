@@ -93,3 +93,30 @@ function epe_cm_node_unshare_function($node) {
 	// return to the view page
   	drupal_goto($path = "node/" . $node -> nid);
 }
+
+
+function epe_cm_node_feature_function($node) {
+	// update the status to pending
+	$node->field_featured_status[$node->language][0]['value'] = 'Featured';
+	// save the node
+	node_save($node);
+	// set the message
+	drupal_set_message(t('@type %title has been flagged as featured.', array('@type' => node_type_get_name($node), '%title' => $node->title)));
+	// return to the view page
+  	drupal_goto($path = "node/" . $node -> nid);
+}
+
+function epe_cm_node_unfeature_function($node) {
+	// update the status to pending
+	$node->field_featured_status[$node->language][0]['value'] = 'Not-Featured';
+	// save the node
+	node_save($node);
+	// set the message
+	drupal_set_message(t('@type %title has been unfeatured.', array('@type' => node_type_get_name($node), '%title' => $node->title)));
+	// return to the view page
+  	drupal_goto($path = "node/" . $node -> nid);
+}
+
+
+
+
