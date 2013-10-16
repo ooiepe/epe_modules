@@ -56,6 +56,11 @@ function epe_wp_enable() {
     }
   }
 
+  // set some system variables allowing visitors to login and not require email verification
+  variable_set('user_register', 1);
+  variable_set('user_email_verification', 0);
+
+
   // Clear the user access cache.
   drupal_static_reset('user_access');
   drupal_static_reset('user_role_permissions');
