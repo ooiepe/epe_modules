@@ -17,9 +17,16 @@ function epe_wp_install() {
     field_create_instance($instance);
   }
 
+  module_load_include('inc','epe_wp','inc/epe_wp.page.field_instance');
+  // Create all the instances for our fields.
+  foreach (_epe_wp_page_field_default_field_instances() as $instance) {
+    field_create_instance($instance);
+  }
+
   variable_set('EPE_SUPPORTED_AUTHOR_ROLES',array('administrator','author','moderator'));
   variable_set('EPE_CONTENT_MODULES',array());
   variable_set('epe_menu',array());
+  variable_set('epe_help',array('path'=>array()));
 
   //add author role
   //epe_wp_default_roles();
@@ -52,7 +59,7 @@ function epe_wp_enable() {
   // Clear the user access cache.
   drupal_static_reset('user_access');
   drupal_static_reset('user_role_permissions');
-
+/*
   $node = new stdClass(); 
   $node->type = "page"; 
   $node->title = "About the OOI";
@@ -450,10 +457,14 @@ function epe_wp_enable() {
     $node = node_submit($node); 
     node_save($node); 
 
-
+*/
   }
 
 
 
-
+function epe_wp_uninstall() {
+  variable_del('EPE_SUPPORTED_AUTHOR_ROLES');
+  variable_del('EPE_CONTENT_MODULES');
+  variable_del('epe_menu');
+  variable_del('epe_help');
 }
