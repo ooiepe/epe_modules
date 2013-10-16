@@ -484,6 +484,16 @@ function epe_db_enable() {
 
 
 
+  // adding some additional author permissions
+  $author_role = user_role_load_by_name('author');
+  user_role_change_permissions($author_role->rid, array(
+    'view own unpublished content' => TRUE,
+    'clone node' => TRUE,
+    'clone own nodes' => TRUE,
+  ));
+
+
+
 /*
 
 $item = array(
