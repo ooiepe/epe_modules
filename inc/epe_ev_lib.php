@@ -63,17 +63,19 @@ function epe_getParentFieldValues( $str_parent_field_name, $ary_field_item_list,
 function epe_EduVis_Paths(){
 
   $module_path = drupal_get_path('module', 'epe_ev');
-  $EduVis_root = $module_path . '/EduVis/';
-  $EduVis_tools = "";
-
+  
   $EduVis_Drupal_Paths["Drupal"]["base_url"] = $GLOBALS['base_url'];
   $EduVis_Drupal_Paths["Drupal"]["module"] = $module_path;
   $EduVis_Drupal_Paths["Drupal"]["theme"] = drupal_get_path('theme', 'bootstrap');
-  $EduVis_Drupal_Paths["EduVis"]["root"] = $EduVis_root;
-  $EduVis_Drupal_Paths["EduVis"]["javascript"] = $EduVis_root . 'EduVis.js';
+  $EduVis_Drupal_Paths["EduVis"]["root"] = $module_path;// $EduVis_root;
+  $EduVis_Drupal_Paths["EduVis"]["javascript"] = $module_path . '/EduVis.js';
   
-  $EduVis_Drupal_Paths["EduVis"]["tools"] = $GLOBALS['base_url'] . '/' . $module_path . '/tools/';
-  $EduVis_Drupal_Paths["EduVis"]["resources"] = $GLOBALS['base_url'] . '/' .$module_path . '/EduVis/resources/';
+  // removed relative tools path to files upload folder
+  //$EduVis_Drupal_Paths["EduVis"]["tools"] = $GLOBALS['base_url'] . '/' . $module_path . '/tools/';
+
+  $EduVis_Drupal_Paths["EduVis"]["tools"] = $GLOBALS['base_url'] . "/" . variable_get('file_public_path', conf_path()) . '/evtools/';
+
+  $EduVis_Drupal_Paths["EduVis"]["resources"] = $GLOBALS['base_url'] . '/' .$module_path . '/resources/';
 
   return $EduVis_Drupal_Paths;  
 }
