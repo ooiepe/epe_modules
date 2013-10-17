@@ -39,12 +39,14 @@ function epe_dbimage_restful_api_node($nid) {
   );
 
   $node = node_load($nid);
-  if($node) {
+  if($node && $node->type == 'image_resource') {
     $wrapper = entity_metadata_wrapper('node',$node);
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
     $item['title'] = $wrapper->label();
-    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    if($wrapper->body->value()) {
+      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
 
     $image = $wrapper->field_image_resource_file->value();
     $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
