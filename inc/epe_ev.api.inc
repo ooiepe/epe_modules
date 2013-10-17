@@ -85,6 +85,29 @@ function epe_ev_restful_api(){
   echo $view->render();
 }
 
+function epe_ev_restful_api_node($nid) {
+  $item = array(
+    'nid' => '',
+    'type' => '',
+    'title' => '',
+    'body' => '',
+    'thumbnail' => ''
+  );
+
+  $node = node_load($nid);
+  if($node && $node->type == 'ev_tool_instance') {
+    $wrapper = entity_metadata_wrapper('node',$node);
+    $item['nid'] = $wrapper->getIdentifier();
+    $item['type'] = $wrapper->getBundle();
+    $item['title'] = $wrapper->label();
+    if($wrapper->body->value()) {
+      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
+  }
+
+  echo json_encode($item);
+}
+
 // tool id -> type_ name/id
 function epe_ev_api_tool_load($tool_id_type, $tool_id, $tool_configuration){
 

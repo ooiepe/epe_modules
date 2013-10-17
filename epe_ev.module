@@ -135,7 +135,8 @@ function epe_ev_menu(){
 
   $items['api/resource/ev/%'] = array(
     'title' => t('EV Configuration Data'),
-    'page callback' => 'epe_ev_instance_config',
+    //'page callback' => 'epe_ev_instance_config',
+    'page callback' => 'epe_ev_restful_api_node',
     'page arguments' => array(3),
     'file' => 'epe_ev.api.inc',
     'file path' => drupal_get_path('module', 'epe_ev') . "/inc",
