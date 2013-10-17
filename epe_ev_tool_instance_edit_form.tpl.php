@@ -4,8 +4,6 @@ require_once("inc/epe_ev_lib.php");
 
 $ev_tool = array();
 
-// better reference to api menu hook link
-
 $tool_list_path = "ev/tools";
 
 // build the tool info
@@ -47,24 +45,6 @@ else{
 }
 
 $EduVis_Paths = epe_EduVis_Paths();
-
-// (
-//     [Drupal] => Array
-//         (
-//             [base_url] => http://ooi.dev/epe/deploy/deploy
-//             [module] => sites/all/modules/custom/epe_ev
-//             [theme] => sites/all/themes/epe_theme
-//         )
-
-//     [EduVis] => Array
-//         (
-//             [root] => sites/all/modules/custom/epe_ev/EduVis/
-//             [javascript] => sites/all/modules/custom/epe_ev/EduVis/EduVis.js
-//             [tools] => http://ooi.dev/epe/deploy/deploy/sites/all/modules/custom/epe_ev/tools/
-//             [resources] => http://ooi.dev/epe/deploy/deploy/sites/all/modules/custom/epe_ev/EduVis/resources/
-//         )
-
-// )
 
 // add EduVis framework to page
 drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
@@ -132,6 +112,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 		?>
 
 <!-- end content -->
+
 	</div>
 </div>
 
@@ -141,10 +122,15 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
 		// pull the configuration from the default tool instance
 		var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration,
+			
+			//this takes all field values and applys them to the object to be saved
 			config_updates = EduVis.controls.load_tool_config_values(config);
 
 		// update the configuration value of the form element
-		$("#edit-field-instance-configuration-und-0-value").val(JSON.stringify(config_updates));
+		$("#edit-field-instance-configuration-und-0-value")
+			.val(
+				JSON.stringify(config_updates)
+			);
 	
 		return true;
 	}
@@ -201,7 +187,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
 		                // add the tool to the controls area
 		                divToolControls.append(
-		                    EduVis.controls.create( evTool, "config-"+control_id, control)
+		                    EduVis.controls.create( evTool, "config-" + control_id, control)
 		                );
 
 		            });
