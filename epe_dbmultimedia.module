@@ -72,11 +72,15 @@ function epe_dbmultimedia_restful_api_node($nid) {
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
     $item['title'] = $wrapper->label();
-    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    if($wrapper->body->value()) {
+      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
 
     if($item['type'] == 'audio_resource') {
       $image = $wrapper->field_audio_resource_image->value();
-      $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+      if($image) {
+        $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+      }
     } else {
       $field = field_get_items('node', $node, 'field_video_resource_file');
       if($field) {
