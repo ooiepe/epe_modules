@@ -39,15 +39,19 @@ function epe_llb_restful_api_node($nid) {
   );
 
   $node = node_load($nid);
-  if($node) {
+  if($node && $node->type == 'llb_resource') {
     $wrapper = entity_metadata_wrapper('node',$node);
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
     $item['title'] = $wrapper->label();
-    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    if($wrapper->body->value()) {
+      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
 
     $image = $wrapper->field_challenge_thumbnail->value();
-    $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+    if($image) {
+      $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+    }
   }
 
   echo json_encode($item);
