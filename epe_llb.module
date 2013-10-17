@@ -251,8 +251,18 @@ function epe_llb_theme() {
         'pedagogy' => '',
       ),
     ),
+    'epe_llb_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_homepage',
+    )
   );
 }
+
+function epe_llb_homepage_render() {
+  drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.homepage.js');
+  return theme('epe_llb_homepage');
+}
+
 
 /*
  * implement node form alter
@@ -514,6 +524,11 @@ function epe_llb_node_view_alter(&$build) {
     $build['field_background_content']['#label_display'] = 'hidden';
     $build['field_background_slideshow']['#label_display'] = 'hidden';
     $build['field_background_question']['#label_display'] = 'hidden';
+  }
+
+  $epe_menu = variable_get('epe_menu',array());
+  if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page' && $build['#node']->nid == $epe_menu['llb']['nid']) {
+    $build['#post_render'][] = 'epe_llb_homepage_render';
   }
 }
 

@@ -46,16 +46,37 @@ function epe_llb_enable() {
   $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lab Lesson Unit','api'=>'llb'));
   variable_set('EPE_CONTENT_MODULES', $modules);
 
-  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','llb','=')->execute()->fetchAssoc();
-  $parentid = $parent['mlid'];
+  $epe_menu = variable_get('epe_menu',array());
+
+  $node = new stdClass();
+  $node->type = "page";
+  $node->title = "Lessons";
+  $node->language = LANGUAGE_NONE;
+  $node->path = array('alias' => 'llb');
+  node_object_prepare($node);
+  $node->uid = 1;
+  $node = node_submit($node);
+  node_save($node);
+  $epe_menu['llb']['nid'] = $node->nid;
 
   $item = array(
-      'link_path' => 'llb',
+    'link_path' => 'node/' . $node->nid,
+    'link_title' => 'Lessons',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    );
+  $epe_menu['llb']['mlid'] = menu_link_save($item);
+
+  variable_set('epe_menu',$epe_menu);
+
+  $item = array(
+      'link_path' => 'node/' . $node->nid,
       'link_title' => 'About Lessons',
       'menu_name' => 'main-menu',
       'weight' => 1,
       'expanded' => 0,
-      'plid' => $parentid,
+      'plid' => $epe_menu['llb']['mlid'],
       );
   menu_link_save($item);
 
@@ -65,7 +86,7 @@ function epe_llb_enable() {
       'menu_name' => 'main-menu',
       'weight' => 2,
       'expanded' => 0,
-      'plid' => $parentid,
+      'plid' => $epe_menu['llb']['mlid'],
       );
   menu_link_save($item);
 
@@ -75,7 +96,7 @@ function epe_llb_enable() {
       'menu_name' => 'main-menu',
       'weight' => 3,
       'expanded' => 0,
-      'plid' => $parentid,
+      'plid' => $epe_menu['llb']['mlid'],
       );
   menu_link_save($item);
 
@@ -85,7 +106,7 @@ function epe_llb_enable() {
       'menu_name' => 'main-menu',
       'weight' => 4,
       'expanded' => 0,
-      'plid' => $parentid,
+      'plid' => $epe_menu['llb']['mlid'],
       );
   menu_link_save($item);
 
