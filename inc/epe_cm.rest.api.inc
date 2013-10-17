@@ -13,12 +13,14 @@ function epe_cm_data_restful_api($nid) {
 
   $node = node_load($nid);
 
-  if($node) {
+  if($node && $node->type == 'cm_resource') {
     $wrapper = entity_metadata_wrapper('node',$node);
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
     $item['title'] = $wrapper->label();
-    $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    if($wrapper->body->value()) {
+      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
   }
 
   echo json_encode($item);
