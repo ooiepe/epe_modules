@@ -159,8 +159,6 @@ function _account_installed_instances() {
   return $instances;
 }
 
-
-
 function epe_wp_block_info_alter(&$blocks, $theme, $code_blocks) {
   $blocks['system']['navigation']['status'] = 0;
   $blocks['system']['powered-by']['status'] = 0;
@@ -168,12 +166,8 @@ function epe_wp_block_info_alter(&$blocks, $theme, $code_blocks) {
   $blocks['search']['form']['status'] = 0;
 }
 
-
-
 function epe_wp_menu() {
-
   $items = array();
-
 
 /*  $items['home'] = array(
     'title' => t('EPE Home Page'),
@@ -208,7 +202,7 @@ function epe_wp_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['llb'] = array(
+/*  $items['llb'] = array(
     'title' => t('Lessons'),
     'page callback' => 'epe_wp_llb_home',
     'file' => 'epe_wp.pages.inc',
@@ -217,7 +211,7 @@ function epe_wp_menu() {
     'menu_name' => 'main-menu',
     'weight' => 3,
     'type' => MENU_NORMAL_ITEM,
-  );
+  );*/
 
 /*  $items['db'] = array(
     'title' => t('Resources'),
@@ -232,7 +226,6 @@ function epe_wp_menu() {
   return $items;
 }
 
-
 function epe_wp_block_info() {
   $blocks['epe_wp_top_menu_links'] = array(
     'info' => t('EPE WP Top Menu Links'),
@@ -242,8 +235,6 @@ function epe_wp_block_info() {
   return $blocks;
 
 }
-
-
 
 function epe_wp_block_view($delta = '') {
   $block = array();
@@ -259,8 +250,19 @@ function epe_wp_block_view($delta = '') {
   return $block;
 }
 
-
-
+function epe_wp_theme() {
+  $tpl_path = drupal_get_path('module','epe_wp') . '/templates/';
+  return array(
+    'epe_ev_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_ev_homepage',
+    ),
+    'epe_cm_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_cm_homepage',
+    )
+  );
+}
 
 
 
