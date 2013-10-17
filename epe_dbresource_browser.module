@@ -138,8 +138,8 @@ function epe_dbresource_browser_index() {
   /* angular ui bootstrap */
   drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js');
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
-  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs
-    ,'base_path'=>base_path())),'setting');
+  //drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs,'base_path'=>base_path())),'setting');
+  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs)),'setting');
 
   /* restangular, need to figure out how to use it */
   /*drupal_add_js('http://cdn.jsdelivr.net/restangular/0.6.1/restangular.js','external'); */
@@ -178,7 +178,6 @@ function epe_dbresource_browser_page_alter(&$page) {
     }
   }
 }
-
 
 /*
  * Following are not working, why?? they are better then adding drupal_add_js, need to figure out why

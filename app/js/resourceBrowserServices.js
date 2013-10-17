@@ -3,6 +3,6 @@
 var resourceBrowserService = angular.module('resourceBrowserService',['ngResource']);
 
 resourceBrowserService.factory('epeService', function($resource) {
-  var factory = $resource(Drupal.settings.epe_dbresource_browser.base_path + 'api/resource/:resource_type', {resource_type: '@resource_type'}, {});
+  var factory = $resource(Drupal.settings.epe.base_path + 'api/resource/:resource_type', {resource_type: '@resource_type'}, {});
   return factory;
 });

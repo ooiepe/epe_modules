@@ -22,8 +22,8 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     {filter:'',label:'All Resources'}
   ];
   $scope.view_templates = {};
-  $scope.view_templates.list = Drupal.settings.epe_dbresource_browser.base_path + "resource-browser/partial/search-list.html";
-  $scope.view_templates.grid = Drupal.settings.epe_dbresource_browser.base_path + "resource-browser/partial/search-grid.html";
+  $scope.view_templates.list = Drupal.settings.epe.base_path + "resource-browser/partial/search-list.html";
+  $scope.view_templates.grid = Drupal.settings.epe.base_path + "resource-browser/partial/search-grid.html";
 
   //add my resource option if user is logged in
   if(Drupal.settings.epe_dbresource_browser.userid) {
