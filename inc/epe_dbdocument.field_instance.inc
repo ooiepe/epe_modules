@@ -87,7 +87,7 @@ function _document_resource_installed_instances() {
       'required' => 1,
       'settings' => array(
         'description_field' => 1,
-        'file_directory' => '',
+        'file_directory' => '[current-user:uid]/document_resource',
         'file_extensions' => 'txt pdf doc docx ppt pptx xls xlsx',
         'max_filesize' => '',
         'user_register_form' => FALSE,
@@ -132,7 +132,7 @@ function _document_resource_installed_instances() {
       'settings' => array(
         'alt_field' => 0,
         'default_image' => 0,
-        'file_directory' => '',
+        'file_directory' => '[current-user:uid]/document_resource/image',
         'file_extensions' => 'png gif jpg jpeg',
         'max_filesize' => '',
         'max_resolution' => '',
