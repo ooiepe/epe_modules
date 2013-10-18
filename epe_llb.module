@@ -624,7 +624,7 @@ function epe_llb_block_view($delta = '') {
 
     case 'epe_llb_featured':
       $block['title'] = t('Featured Lesson Resources');
-      $block['content'] = theme('epe_featured_block', array('type'=>'llb_resource'));
+      $block['content'] = theme('epe_featured_block', array('type'=>array('llb_resource')));
     break;
   }
 

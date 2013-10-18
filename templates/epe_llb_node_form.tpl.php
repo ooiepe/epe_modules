@@ -147,7 +147,7 @@
           </div>
           <div ng-show="!fn.inItemEditArray(item.nid)">
             <p>{{item.title}}</p>
-            <div><a><i class="icon-edit" ng-click="fn.editItem($index);"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);"></i></div>
+            <div><a ng-click="fn.editItem($index);"><i class="icon-edit"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);"></i></div>
           </div>
         </td>
         <td>
