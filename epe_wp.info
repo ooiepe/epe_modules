@@ -9,3 +9,5 @@ dependencies[] = menu_block
 dependencies[] = jquery_update
 dependencies[] = contact
 dependencies[] = clone
+dependencies[] = captcha
+dependencies[] = image_captcha
