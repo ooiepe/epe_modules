@@ -995,6 +995,11 @@ function epe_wp_block_info() {
     'cache' => DRUPAL_NO_CACHE,
   );
 
+  $blocks['epe_db_featured'] = array(
+    'info' => t('EPE Featured Resources'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
   return $blocks;
 
 }
@@ -1011,12 +1016,17 @@ function epe_wp_block_view($delta = '') {
 
     case 'epe_cm_featured':
       $block['title'] = t('Featured CM Resources');
-      $block['content'] = theme('epe_featured_block', array('type'=>'cm_resource'));
+      $block['content'] = theme('epe_featured_block', array('type'=>array('cm_resource')));
     break;
 
     case 'epe_ev_featured':
       $block['title'] = t('Featured Visualization Resources');
-      $block['content'] = theme('epe_featured_block', array('type'=>'ev_tool_instance'));
+      $block['content'] = theme('epe_featured_block', array('type'=>array('ev_tool_instance')));
+    break;
+
+    case 'epe_db_featured':
+      $block['title'] = t('Featured Resources');
+      $block['content'] = theme('epe_featured_block');
     break;
   }
 
@@ -1038,7 +1048,7 @@ function epe_wp_theme() {
       'path' => $tpl_path,
       'template' => 'epe_featured_block',
       'variables' => array(
-        'type' => '',
+        'type' => array(),
       ),
     ),
   );

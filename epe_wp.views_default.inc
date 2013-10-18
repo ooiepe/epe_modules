@@ -106,6 +106,7 @@ function epe_wp_views_default_views() {
 
   $export['list_pending_resources'] = $view;
 
+  /* Featured Resources View */
   $view = new view();
   $view->name = 'featured_resources';
   $view->description = '';
@@ -125,7 +126,7 @@ function epe_wp_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '4';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_json';
   $handler->display->display_options['style_options']['plaintext_output'] = 1;
@@ -185,6 +186,7 @@ function epe_wp_views_default_views() {
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Type';
   $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
+  $handler->display->display_options['filters']['type']['expose']['multiple'] = TRUE;
   $handler->display->display_options['filters']['type']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,

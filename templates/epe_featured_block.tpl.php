@@ -2,9 +2,8 @@
   $view = views_get_view('featured_resources');
   $view->set_display('all');
 
-  if($type != '') {
+  if(!empty($type)) {
     $filter = $view->get_item('all', 'filter', 'type');
-    print_r($filter);
     $filter['value'] = $type;
     $view->set_item('all', 'filter', 'type', $filter);
   }
