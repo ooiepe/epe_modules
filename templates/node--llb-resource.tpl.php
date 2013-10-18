@@ -3,7 +3,7 @@
 
 
 <?php
-  $hideActionButtons = 1;
+  $hideActionButtons = 0;
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
