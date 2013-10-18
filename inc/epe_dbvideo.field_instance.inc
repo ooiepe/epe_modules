@@ -90,7 +90,7 @@ function _video_resource_installed_instances() {
       'required' => 1,
       'settings' => array(
         'default_dimensions' => '640x360',
-        'file_directory' => 'videos/original',
+        'file_directory' => '[current-user:uid]/video_resource',
         'file_extensions' => 'mp4 ogg avi mov wmv flv ogv webm',
         'max_filesize' => '',
         'user_register_form' => FALSE,
