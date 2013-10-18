@@ -6,6 +6,21 @@ function epe_db_views_api() {
   return array("api" => "3.0");
 }
 
+function epe_db_menu() {
+  $items = array();
+
+  $items['api/resource/lookup'] = array(
+    'title' => t('Resource Lookup'),
+    'page callback' => 'epe_db_node_lookup',
+    'file' => 'epe_db.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_db') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
 function epe_db_node_view_alter(&$build) {
   $epe_help = variable_get('epe_help',array('path'=>array()));
   if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page') {
