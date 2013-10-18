@@ -484,12 +484,32 @@ function epe_db_enable() {
 
 
 
-  // adding some additional author permissions
+  // adding some additional author and moderator permissions
   $author_role = user_role_load_by_name('author');
   user_role_change_permissions($author_role->rid, array(
     'view own unpublished content' => TRUE,
     'clone node' => TRUE,
     'clone own nodes' => TRUE,
+  ));
+  $mod_role = user_role_load_by_name('mod');
+  user_role_change_permissions($mod_role->rid, array(
+    'view own unpublished content' => TRUE,
+    'clone node' => TRUE,
+    'clone own nodes' => TRUE,
+  ));
+
+  /* 
+   * grant permissions to the anon and auth users to the:
+   *  contact form
+   *  user profiles
+   */
+  user_role_change_permissions(1, array(
+    'access site-wide contact form' => TRUE,
+    'access user profiles' => TRUE,
+  ));
+  user_role_change_permissions(2, array(
+    'access site-wide contact form' => TRUE,
+    'access user profiles' => TRUE,
   ));
 
 
