@@ -67,7 +67,7 @@ function epe_dbmultimedia_restful_api_node($nid) {
   );
 
   $node = node_load($nid);
-  if($node) {
+  if($node && in_array($node->type, array('audio_resource','video_resource'))) {
     $wrapper = entity_metadata_wrapper('node',$node);
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
