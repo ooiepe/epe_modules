@@ -1,5 +1,5 @@
-<?php echo drupal_render($content); ?>
-<div class="row">
+<?php echo render($content); ?>
+<div>
   <div class="span4">
     <div class="control-group">
       <label>Knowledge Base</label>
