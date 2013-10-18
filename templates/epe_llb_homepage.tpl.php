@@ -25,6 +25,12 @@
   </div>
 </div>
 
-<div>
-
+<div class="control-group">
+  <div class="span12">
+  <?php
+    $block = module_invoke('epe_llb','block_view','epe_llb_featured');
+    echo render($block['title']);
+    echo render($block['content']);
+  ?>
+  </div>
 </div>
