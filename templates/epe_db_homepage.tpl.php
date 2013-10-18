@@ -1,4 +1,4 @@
-<div>
+<div class="control-group">
   <div class="span7">
     <div class="control-group">
       <?php echo file_get_contents(drupal_get_path('module','epe_dbfiles') . '/content/homepage/homepage.html'); ?>
@@ -25,6 +25,12 @@
   </div>
 </div>
 
-<div>
-
+<div class="control-group">
+  <div class="span12">
+  <?php
+    $block = module_invoke('epe_dbfiles','block_view','epe_db_featured');
+    echo render($block['title']);
+    echo render($block['content']);
+  ?>
+  </div>
 </div>

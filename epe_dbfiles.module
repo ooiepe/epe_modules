@@ -459,11 +459,35 @@ function epe_dbfiles_theme() {
     'epe_db_homepage' => array(
       'path' => $tpl_path,
       'template' => 'epe_db_homepage',
-    )
+    ),
   );
 }
 
 function epe_dbfiles_homepage_render() {
   drupal_add_js(drupal_get_path('module','epe_dbfiles') . '/js/epe_dbfiles.homepage.js');
   return theme('epe_db_homepage');
+}
+
+function epe_dbfiles_block_info() {
+  $blocks = array();
+
+  $blocks['epe_db_featured'] = array(
+    'info' => t('EPE Featured DB Resources'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+function epe_dbfiles_block_view($delta='') {
+  $block = array();
+
+  switch($delta) {
+    case 'epe_db_featured':
+      $block['title'] = t('Featured DB Resources');
+      $block['content'] = theme('epe_featured_block');
+    break;
+  }
+
+  return $block;
 }

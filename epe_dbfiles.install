@@ -64,6 +64,15 @@ function epe_dbfiles_enable() {
       );
   menu_link_save($item);
 
+  $item = array(
+      'link_path' => 'db/resources/pending',
+      'link_title' => 'View Pending Resources',
+      'menu_name' => 'main-menu',
+      'weight' => 5,
+      'plid' => $epe_menu['db']['mlid'],
+    );
+  menu_link_save($item);
+
   menu_cache_clear_all();
 }
 
