@@ -456,23 +456,23 @@ function epe_dbfiles_theme() {
       'template' => 'epe_dbfiles_node_edit_form',
       'render element' => 'form',
     ),
-    'epe_db_homepage' => array(
+    'epe_resource_homepage' => array(
       'path' => $tpl_path,
-      'template' => 'epe_db_homepage',
+      'template' => 'epe_resource_homepage',
     ),
   );
 }
 
 function epe_dbfiles_homepage_render() {
   drupal_add_js(drupal_get_path('module','epe_dbfiles') . '/js/epe_dbfiles.homepage.js');
-  return theme('epe_db_homepage');
+  return theme('epe_resource_homepage');
 }
 
 function epe_dbfiles_block_info() {
   $blocks = array();
 
-  $blocks['epe_db_featured'] = array(
-    'info' => t('EPE Featured DB Resources'),
+  $blocks['epe_resource_featured'] = array(
+    'info' => t('EPE Featured File Resources'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
@@ -483,9 +483,9 @@ function epe_dbfiles_block_view($delta='') {
   $block = array();
 
   switch($delta) {
-    case 'epe_db_featured':
-      $block['title'] = t('Featured DB Resources');
-      $block['content'] = theme('epe_featured_block');
+    case 'epe_resource_featured':
+      $block['title'] = t('Featured Resources');
+      $block['content'] = theme('epe_featured_block',array('type'=>array('image_resource','document_resource','audio_resource','video_resource')));
     break;
   }
 

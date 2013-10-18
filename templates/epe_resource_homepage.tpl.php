@@ -28,7 +28,7 @@
 <div class="control-group">
   <div class="span12">
   <?php
-    $block = module_invoke('epe_dbfiles','block_view','epe_db_featured');
+    $block = module_invoke('epe_dbfiles','block_view','epe_resource_featured');
     echo render($block['title']);
     echo render($block['content']);
   ?>
