@@ -607,6 +607,7 @@ var EduVis = (function () {
 *
 * EduVis.Environment
 *
+*   TODO: document this module
 */
 
 (function (eduVis) {
@@ -614,43 +615,44 @@ var EduVis = (function () {
     "use strict";
 
     /** 
+    * TODO: document this module
     * This is where the function actions are defined
     * 
     * @param {Object} define the function paramenter(s) here ( in this case an object ).. be specific as to its usage 
     * @return {Object} define the returned value here, in this case an Object.. be specific
     */
 
-    var _environment_path_root,
-    	_environment_path_server,
-    	_environment_path_service_instance,
-    	//_environment_path = "",
-    	//_environment_path_tools = "tools/",
-    	//_environment_path_resources = "resources/",
-        _environment_path,
+    var _environment_path_root = "",
+    	_environment_path_server = "",
+    	_environment_path_service_instance = "",
+
+        _environment_path_eduvis = "",
         _environment_path_tools = "tools/",
         _environment_path_resources = "resources/",
 
     _environment_set_path = function( _path ) {
 
     	_environment_path = (_path || "");
-    	_environment_path_tools = (_path || "") + "tools/";
-    	_environment_path_resources = (_path || "") + "resources/";
 
     	console.log(".... P A T H .....", _path);
     },
     
     _environment_get_path = function() {
-        return _environment_path;
+        return _environment_path_root;
     },
 
-    _environment_set_paths = function( _path, _tools, _resources ) {
+    _environment_set_paths = function( _root, _tools, _resources ) {
 
         // initialize with defaults.
-        _environment_path_root = (_path || "");
+        _environment_path_root = (_root || "");
         _environment_path_tools = (_tools || "");// + "tools/";
         _environment_path_resources = (_resources || "");// + "resources/";
 
-        console.log("....  P A T H S .....", _path);
+        console.log("....  P A T H S .....", _root);
+        console.log("root path", _environment_path_root);
+        console.log("tools path", _environment_path_tools);
+        console.log("resources path", _environment_path_resources);
+
     },
 
     _environment_set_path_tools = function( _path_tools ) {
@@ -659,6 +661,15 @@ var EduVis = (function () {
 	
     _environment_get_path_tools = function() {
 		return _environment_path_tools;
+
+    },
+
+    _environment_set_path_root = function( _path_root ) {
+        _environment_path_root = _path_root;
+    },
+    
+    _environment_get_path_root = function() {
+        return _environment_path_root;
 
     },
 
@@ -732,6 +743,7 @@ var EduVis = (function () {
         setPath: _environment_set_path,
         setPaths: _environment_set_paths,
         getPath: _environment_get_path,
+        getPathRoot: _environment_get_path_root,
 
         setPathTools : _environment_set_path_tools,
         
@@ -915,8 +927,9 @@ Provides the base resource queue, loading, and updating functionality.
         var d = _obj_resources,
             scr_local = d.scripts_local,
             scr_external =  d.scripts_external,
-            sty_local = d.stylesheets_local,
-            sty_ext = d.stylesheets_external,
+            //sty_local = d.stylesheets_local,
+            //sty_ext = d.stylesheets_external,
+            stylesheets = d.stylesheets,
             queued = _resources_queued,
             q = queued[_tool_name];
  
@@ -929,6 +942,10 @@ Provides the base resource queue, loading, and updating functionality.
             q["applies_to_tool"] = _tool_name;
 
             console.log("..internal queued..", i, q);
+
+            // load resource
+            _resource_load_local( v );
+
         });
 
         $.each(scr_external, function(i,v){
@@ -938,43 +955,63 @@ Provides the base resource queue, loading, and updating functionality.
             q[v.name] = i;
             q["applies_to_tool"] = _tool_name;
 
+            _resource_load_external( v );
+
         });
 
-        $.each(sty_local, function(i,v){
+        // $.each(sty_local, function(i,v){
             
-            q[v.name] = i;
-            q["applies_to_tool"] = _tool_name;
+        //     q[v.name] = i;
+        //     q["applies_to_tool"] = _tool_name;
 
-            console.log("..local style queued..", i, q);
-        });
+        //     console.log("..local style queued..", i, q);
+        // });
 
-        $.each(sty_ext, function(i,v){
+        // $.each(sty_ext, function(i,v){
             
-            q[v.name] = i;
-            q["applies_to_tool"] = _tool_name;
+        //     q[v.name] = i;
+        //     q["applies_to_tool"] = _tool_name;
 
-            console.log("..external style queued..", i, q);
+        //     console.log("..external style queued..", i, q);
+        // });
+
+        $.each(stylesheets, function(i,v){
+            
+            //q[v.name] = i;
+            //q["applies_to_tool"] = _tool_name;
+
+            console.log(".. style queued..", i, q);
+
+            _resource_load_stylesheet( v, _tool_name );
+
         });
+
 
         // load queued resources
 
-        $.each(scr_local,function(i,v){
-            console.log(".. scr_local  resource .. " + i + " - " , v);
-            _resource_load_local( v );
-        });
+        // $.each(scr_local,function(i,v){
+        //     console.log(".. scr_local  resource .. " + i + " - " , v);
+        //     _resource_load_local( v );
+        // });
 
-        $.each(scr_external,function(i,v){
-            console.log(".. scr_external resource .. " + i + " - " , v);
-            _resource_load_external( v );
-        });
+        // $.each(scr_external,function(i,v){
+        //     console.log(".. scr_external resource .. " + i + " - " , v);
+        //     _resource_load_external( v );
+        // });
 
-        $.each(sty_local,function(i,v){
-            _resource_load_stylesheet( v );
-        });
+        // $.each(sty_local,function(i,v){
+        //     _resource_load_stylesheet( v );
+        // });
 
-        $.each(sty_ext,function(i,v){
-            _resource_load_stylesheet( v );
-        });   
+        // $.each(sty_ext,function(i,v){
+        //     _resource_load_stylesheet( v );
+        // });
+
+        // $.each(stylesheets,function(i,stylesheet){
+        //     _resource_load_stylesheet( stylesheet, _tool_name );
+        // });
+
+        
 
     },
 
@@ -1045,13 +1082,21 @@ Provides the base resource queue, loading, and updating functionality.
 * @return {} 
 */
 
-    _resource_load_stylesheet = function( _obj_stylesheet ){
+    _resource_load_stylesheet = function( _obj_stylesheet, _tool){
 
         var sheet = document.createElement("link");
 
-        console.log( "get path resources" + EduVis.Environment.getPath());
+        //console.log( "get path resources" , EduVis.Environment.getPathRoot() );
 
-        var sheet_href = _obj_stylesheet.src.indexOf("http")==0 ? _obj_stylesheet.src : EduVis.Environment.getPath() +_obj_stylesheet.src;
+        var objsty = _obj_stylesheet;
+        console.log(objsty, _tool);
+        // local or external
+
+        // if http, we assume external.. set stylesheet src
+        // if not http, build the resource path and append the src.. append the tool name for folder
+
+        var sheet_href = _obj_stylesheet.src.indexOf("http")==0 ? _obj_stylesheet.src : EduVis.Environment.getPathTools() + "/" + _tool + "/" + _obj_stylesheet.src; 
+        //EduVis.Environment.getPath() +_obj_stylesheet.src;
 
         sheet.setAttribute('type', 'text/css');
         sheet.setAttribute('href',  sheet_href);
@@ -1063,30 +1108,34 @@ Provides the base resource queue, loading, and updating functionality.
                     
                     sheet.onreadystatechange = null;
 
-                    setTimeout( 
-                        (function(){
-                            
-                            // remove resource from resource queue
-                            console.log("remove STYLESHEET from queue....")
-                            _resource_queue_remove(_obj_stylesheet);
+                    //_resource_queue_remove(_obj_stylesheet);
 
-                        })()
-                    );
+                    // remove resource from resource queue
+                   // setTimeout("_resource_queue_remove(_obj_stylesheet)");
+                    //     (function(){                            
+                    //         console.log("remove STYLESHEET from queue....")
+                    //         ;
+
+                    //     })()
+                    // );
                         
                 }
             };
         } else {  // other browsers
             sheet.onload = function(){
 
-                 setTimeout( 
-                    (function(){
-                        
-                        // remove resource from resource queue
-                        console.log("remove STYLESHEET from queue....")
-                        _resource_queue_remove(_obj_stylesheet);
+                console.log(".....sheet onload......")
+                //_resource_queue_remove(_obj_stylesheet);
 
-                    })()
-                );
+                // setTimeout( "_resource_queue_remove(_obj_stylesheet)");
+                    // (function(){
+                        
+                    //     // remove resource from resource queue
+                    //     console.log("remove STYLESHEET from queue....")
+                    //     _resource_queue_remove(_obj_stylesheet);
+
+                    // })()
+                //);
             }
         }
 
@@ -1110,11 +1159,11 @@ Provides the base resource queue, loading, and updating functionality.
 */
     _resource_inject = function(_obj_resource){
 
-        console.log("......injecting resource.....");
+        console.log("......injecting resource.....", _obj_resource);
 
         $.getScript( _obj_resource.url, function(){
 
-            console.log("......now remove resource from queue....." , _obj_resource.name );
+             console.log("......now remove the script resource from queue....." , _obj_resource.name );
 
              _resource_queue_remove( _obj_resource );
 
@@ -1129,6 +1178,8 @@ Provides the base resource queue, loading, and updating functionality.
 * @return {} 
 */
     _resource_queue_remove = function(_obj_resource){
+
+        console.log("resource remove...", _obj_resource.name );
 
         // remove from queue object
         delete _resources_queued[ _obj_resource.name ];
@@ -1180,13 +1231,13 @@ Provides the base resource queue, loading, and updating functionality.
         load : _resource_load_local,
         load_external : _resource_load_external,
         load_stylesheet : _resource_load_stylesheet,
-        loaded : (function(){return _resources_loaded;})(),
+        //loaded : (function(){return _resources_loaded;})(),
 
-        //loaded : _resources_loaded,
+        loaded : _resources_loaded,
 
         queue : _resource_queue,
-        queued : (function(){return _resources_queued;})(),
-        //queued : _resources_queued,
+        //queued : (function(){return _resources_queued;})(),
+        queued : _resources_queued,
         
         // identify : _resource_identify,
         notify : _resource_notify,
@@ -1415,21 +1466,24 @@ Provides the base resource queue, loading, and updating functionality.
             scr_local = resources.scripts_local,
             scr_local_length = scr_local.length,
 
-            sty_ext = resources.stylesheets_external,
-            sty_ext_length = sty_ext.length,
+            //sty_ext = resources.stylesheets_external,
+            //sty_ext_length = sty_ext.length,
 
-            sty_local = resources.stylesheets_local,
-            sty_local_length = sty_local.length,
+            //sty_local = resources.stylesheets_local,
+            //sty_local_length = sty_local.length,
+
+            stylesheets = resources.stylesheets,
+            stylesheets_length = stylesheets.length,
 
             scripts = [],
-            stylesheets = [],
+            styles = [],
             i = 0, j=0, k=0, l=0,
             _tool_resources = {
                 "scripts" : [],
                 "stylesheets" : []
             },
             scripts = _tool_resources.scripts,
-            stylesheets = _tool_resources.stylesheets,
+            //styles = _tool_resources.stylesheets,
 
             script_count = 0,
             style_count = 0;
@@ -1445,16 +1499,25 @@ Provides the base resource queue, loading, and updating functionality.
             script_count+=1;
         }
 
-        for(; k<sty_ext_length; k++){
+        // for(; k<sty_ext_length; k++){
 
-            stylesheets[style_count] = sty_ext[k].name;
+        //     stylesheets[style_count] = sty_ext[k].name;
+        //     style_count+=1;
+        // }
+
+        // for(; l<sty_local_length; l++){
+        //     stylesheets[style_count] = sty_local[l].name;
+        //     style_count+=1;
+        // }
+        
+        console.log("stylesheets", stylesheets);
+        
+        for(; k<stylesheets_length; k++){
+
+            styles[style_count] = stylesheets[k].name;
             style_count+=1;
         }
 
-        for(; l<sty_local_length; l++){
-            stylesheets[style_count] = sty_local[l].name;
-            style_count+=1;
-        }
 
         return _tool_resources;
     },
@@ -1523,8 +1586,8 @@ Provides the base resource queue, loading, and updating functionality.
                 setTimeout((function(){
 
                     // rescursive delayed call.. 1 seconds.. to tool initiation
-                    if(EduVis.utility.hault){
-                        console.log("..EduVis Haulted..");
+                    if(EduVis.utility.halt){
+                        console.log("..EduVis Halted..");
                     }else{
 
                         _tool_init(obj_tool);
