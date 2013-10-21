@@ -2,7 +2,7 @@ name = EPE Web Portal
 description = Provide EPE Web Portal default settings and fields configurations
 core = 7.x
 package = EPE
-version = 7.x-0.7-alpha
+version = 7.x-0.8-alpha
 project = epe_wp
 
 dependencies[] = menu_block
@@ -11,3 +11,7 @@ dependencies[] = contact
 dependencies[] = clone
 dependencies[] = captcha
 dependencies[] = image_captcha
+dependencies[] = better_formats
+dependencies[] = wysiwyg
+dependencies[] = imce
+dependencies[] = imce_wysiwyg
