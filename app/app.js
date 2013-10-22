@@ -7,7 +7,14 @@ app.factory('data', function($window, $rootScope) {
 
     $window.addItem = function(item) {
       item.questions = [];
-      items.push(item);
+      var exists = false;
+      angular.forEach(items, function(value) {
+        if(!exists) {
+          if(value['nid'] == item['nid']) { exists = true; }
+        }
+      });
+      if(!exists) { items.push(item); }
+
       $rootScope.$digest();
     };
 

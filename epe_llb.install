@@ -43,7 +43,7 @@ function epe_llb_enable() {
     ->execute();
 
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lab Lesson Unit','api'=>'llb'));
+  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lessons','api'=>'llb','weight'=>3));
   variable_set('EPE_CONTENT_MODULES', $modules);
 
   $epe_menu = variable_get('epe_menu',array());
