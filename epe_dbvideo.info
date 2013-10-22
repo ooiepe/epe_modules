@@ -11,7 +11,6 @@ dependencies[] = entity
 dependencies[] = context
 dependencies[] = semanticviews
 dependencies[] = video
-dependencies[] = videojs
 dependencies[] = views_php
 dependencies[] = token
 
