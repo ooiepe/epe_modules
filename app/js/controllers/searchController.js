@@ -87,7 +87,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.radioModel = "list";
 
   $scope.fn.sortPane = function(a,b) {
-    return ((a.order < b.order) ? -1 : ((a.order > b.order) ? 1 : 0));
+    return ((a.weight < b.weight) ? -1 : ((a.weight > b.weight) ? 1 : 0));
   }
 
   $scope.fn.activeTab = function(tab) {
@@ -100,7 +100,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       type:pane.label,
       data:[],
       active:pane.default,
-      order:pane.order,
+      weight:pane.weight,
       api:pane.api,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
     };

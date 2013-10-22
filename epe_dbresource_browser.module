@@ -131,6 +131,9 @@ function epe_dbresource_browser_index() {
       if(isset($module['resource_browser']['default'])) {
         $tab['default'] = $module['resource_browser']['default'];
       }
+      if(isset($module['resource_browser']['weight'])) {
+        $tab['weight'] = $module['resource_browser']['weight'];
+      }
       $resource_browser_tabs[] = $tab;
     }
   }
