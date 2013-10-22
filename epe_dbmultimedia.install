@@ -10,7 +10,7 @@ function epe_dbmultimedia_enable() {
    * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
    * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes
    */
-  $modules['epe_dbmultimedia'] = array('resource_browser' => array('label'=>'Multimedia','api'=>'multimedia'));
+  $modules['epe_dbmultimedia'] = array('resource_browser' => array('label'=>'Multimedia','api'=>'multimedia','weight'=>6));
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
