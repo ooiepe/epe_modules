@@ -553,6 +553,36 @@ var EduVis = (function () {
 
                 break;
 
+            case "dataBrowser":
+
+                var dataBrowserContainer = $("<div/>")
+                    .attr({
+                        "id" : "data-browser-container"
+                    }),
+
+                dataBrowserButton = $("<a/>")
+                    .attr({
+                        "class": "btn",
+                        //"value" : "btn-data-browser"
+                    })
+                    .html("Load Data Browser")
+                    .on("click", function(){
+                        
+                        EduVis.tool.load({
+                            "name" : "Data_Browser",
+                            "target_div" : "data-browser-container",
+                            "tool_container_div": "data-browser-container",
+                            "parent_tool" : control.parent_tool,
+                            "data_cart" : control.data_cart
+                        });
+                    });
+
+                ctrl = $("<div/>")
+                    .append(dataBrowserButton)
+                    .append(dataBrowserContainer)
+
+                break;
+
             default:
                 // empty div if nothing is passed
                 ctrl = $("<div></div>");
@@ -1088,10 +1118,6 @@ Provides the base resource queue, loading, and updating functionality.
 
         //console.log( "get path resources" , EduVis.Environment.getPathRoot() );
 
-        var objsty = _obj_stylesheet;
-        console.log(objsty, _tool);
-        // local or external
-
         // if http, we assume external.. set stylesheet src
         // if not http, build the resource path and append the src.. append the tool name for folder
 
@@ -1542,8 +1568,7 @@ Provides the base resource queue, loading, and updating functionality.
         
         if(typeof Tool === "object"){
 
-            if( _tool_is_ready(Tool) ){
-
+            if( _tool_is_ready( Tool ) ){
 
                 var instance_id = obj_tool.instance_id;
 
@@ -1560,7 +1585,9 @@ Provides the base resource queue, loading, and updating functionality.
 
                     }
                     else{
+
                         EduVis.tool.instances[name][instance_id] = Tool;
+                        
                     }
                 }
                 else{
