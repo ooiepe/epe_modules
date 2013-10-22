@@ -121,15 +121,16 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 	function EduVis_extract(){
 
 		// pull the configuration from the default tool instance
-		var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration,
+		var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration;
 			
 			//this takes all field values and applys them to the object to be saved
-			config_updates = EduVis.controls.load_tool_config_values(config);
+			//config_updates = EduVis.controls.load_tool_config_values(config);
 
 		// update the configuration value of the form element
 		$("#edit-field-instance-configuration-und-0-value")
 			.val(
-				JSON.stringify(config_updates)
+				JSON.stringify(config)
+				//JSON.stringify(config_updates)
 			);
 	
 		return true;
