@@ -136,14 +136,6 @@ function epe_cm_views_default_views() {
     1 => 'OR',
     2 => 'AND',
   );
-  /* Filter criterion: Indexed Node: Status */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'search_api_index_epe_cm_search_index';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = array(
-    1 => '1',
-  );
-  $handler->display->display_options['filters']['status']['group'] = 1;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['filters']['author_uid']['table'] = 'search_api_index_epe_cm_search_index';
@@ -178,6 +170,13 @@ function epe_cm_views_default_views() {
   );
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
+  );
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_epe_cm_search_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
+    'Public' => 'Public',
   );
 
   /* Display: Rest API Block */
