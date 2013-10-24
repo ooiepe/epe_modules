@@ -287,6 +287,10 @@ function epe_wp_enable() {
   $role = user_role_load_by_name('administrator');
   user_role_grant_permissions($role->rid, array('use text format basic_page_filter'));
 
+  $clone_omitted = variable_get('clone_omitted',array());
+  $clone_omitted['page'] = 'page';
+  variable_set('clone_omitted', $clone_omitted);
+
 /*
   $node = new stdClass(); 
   $node->type = "page"; 
