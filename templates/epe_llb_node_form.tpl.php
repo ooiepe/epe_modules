@@ -132,7 +132,7 @@
 
     <div ng-show="currentCopies.keys.length > 0" class="control-group text-warning">
       <table class="table">
-        <tr class="warning"><td>All changes are temporary, please click individual item "Save".</td></tr>
+        <tr class="warning"><td>All changes are temporary.</td></tr>
       </table>
     </div>
 
@@ -150,7 +150,6 @@
             <br/>
             <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.nid);">Cancel</button>
             <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.nid);">Save</button>
-            <div class="control-group warning"><p class="text-warning">All changes are temporary, please click "Save" after editing is completed.</p></div>
           </div>
           <div ng-show="!fn.inItemEditArray(item.nid)">
             <p>{{item.title}}</p>
