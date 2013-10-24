@@ -19,6 +19,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 0,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'hidden',
         'module' => 'text',
@@ -84,6 +90,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 4,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -146,6 +158,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 6,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -187,6 +205,12 @@ function _epe_llb_field_default_field_instances() {
         ),
         'type' => 'image',
         'weight' => 5,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -235,6 +259,12 @@ function _epe_llb_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 7,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -300,6 +330,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'image',
         'weight' => 8,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'hidden',
         'module' => 'image',
@@ -351,6 +387,12 @@ function _epe_llb_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 18,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -414,6 +456,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 20,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -475,6 +523,12 @@ function _epe_llb_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 17,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -538,6 +592,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 11,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -577,6 +637,12 @@ function _epe_llb_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 9,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -640,6 +706,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 10,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -674,6 +746,13 @@ function _epe_llb_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 15,
+      ),
+      'llb_instructor' => array(
         'label' => 'above',
         'module' => 'text',
         'settings' => array(),
@@ -742,6 +821,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 3,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -806,6 +891,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'image',
         'weight' => 2,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -848,6 +939,13 @@ function _epe_llb_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 16,
+      ),
+      'llb_instructor' => array(
         'label' => 'above',
         'module' => 'text',
         'settings' => array(),
@@ -916,6 +1014,13 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 14,
       ),
+      'llb_instructor' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 14,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -977,6 +1082,12 @@ function _epe_llb_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 19,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1043,6 +1154,12 @@ function _epe_llb_field_default_field_instances() {
         'type' => 'list_default',
         'weight' => 3,
       ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
@@ -1082,6 +1199,12 @@ function _epe_llb_field_default_field_instances() {
         'settings' => array(),
         'type' => 'list_default',
         'weight' => 2,
+      ),
+      'llb_instructor' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',

@@ -8,6 +8,33 @@ function epe_llb_views_api() {
 }
 
 /**
+ * Implements hook_ctools_plugin_api().
+ */
+function epe_llb_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "ds" && $api == "ds") {
+    return array("version" => "1");
+  }
+}
+
+/**
+ * Implements hook_ds_view_modes_info().
+ */
+function epe_llb_ds_view_modes_info() {
+  $export = array();
+
+  $ds_view_mode = new stdClass();
+  $ds_view_mode->api_version = 1;
+  $ds_view_mode->view_mode = 'llb_instructor';
+  $ds_view_mode->label = 'LLB Instructor';
+  $ds_view_mode->entities = array(
+    'node' => 'node',
+  );
+  $export['llb_instructor'] = $ds_view_mode;
+
+  return $export;
+}
+
+/**
  * Implements hook_image_default_styles().
  */
 /*
@@ -518,10 +545,16 @@ function _epe_llb_insert_after_first_element(&$a, $element) {
  * implement hook_entity_view_mode_alter
  */
 function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
-  if($view_mode == 'full' && $context['entity_type'] == 'node' && $context['entity']->type == 'llb_resource' && arg(2) != 'detail') {
-    $view_mode = 'teaser';
-    drupal_add_js(libraries_get_path('bootbox') . '/bootbox.min.js');
-    drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.teaser.instructor.js');
+  if($view_mode == 'full' && $context['entity_type'] == 'node' && $context['entity']->type == 'llb_resource') {
+    if(!arg(2)) {
+      $view_mode = 'teaser';
+    } elseif ( arg(2) && arg(2) == 'detail') {
+      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
+      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
+      drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+    } elseif ( arg(2) && arg(2) == 'instructor' ) {
+      $view_mode = 'llb_instructor';
+    }
   }
 }
 

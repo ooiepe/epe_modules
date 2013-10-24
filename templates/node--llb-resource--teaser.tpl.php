@@ -35,12 +35,6 @@
   <div>
     <div class="span7">
       <?php echo render($content['body']); ?>
-      <div class="hide instructor-notes">
-        <?php echo render($content['field_instructional_content']); ?>
-        <?php echo render($content['field_preconception_content']); ?>
-        <?php echo render($content['field_resources_content']); ?>
-      </div>
-      <button type="button" class="btn btn-success show-instructor-notes">Instructor Notes</button>
     </div>
     <div class="span5">
       <div class="pull-right">
@@ -51,7 +45,11 @@
           ?>
         </p>
       </div>
-      <p class="pull-right"><a href="<?php echo base_path() . 'node/' . arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a></p>
+      <p class="pull-right">
+        <a href="<?php echo base_path() . 'node/' . arg(1); ?>/instructor" class="btn btn-primary">Instructor Notes <i class="icon-chevron-right icon-white"></i></a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="<?php echo base_path() . 'node/' . arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a>
+      </p>
     </div>
   </div>
 

@@ -130,6 +130,51 @@
     }
   }
 ?>
+<!-- cm specific js -->
+<script type="text/javascript">
+function loadFlash() {
+  // from the microwave science website
+  var flashvars = {};
+  flashvars.USERNAME = 'sgraham';
+  flashvars.USERID = '4';
+  flashvars.USERSTATUS = '1';
+  flashvars.OOI = 'true';
+  flashvars.BUILDER = 'false';
+  flashvars.RESOURCEDETAILSURL = '<?php echo base_path() ?>?nodelookup=';
+  flashvars.PHPPROXY = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/php/RetrieveOWL.php' ?>';
+  flashvars.OWLPATH = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/owl/ioos/' ?>';
+  var params = {};
+  var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
+  // this line is unchanged from the mwsci website
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20131015_1748.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  return;
+}
+
+function getXMLfromJS() {
+  // get the contents of the text area
+  var xml = document.getElementById('conceptMapContents').value;
+  // get a reference to the flash object
+  var swf = document.getElementById('conceptMapBuilderViewer');
+  // call the load concept map function
+  swf.jsToFlashImportMapData(xml);
+  //swf.jsToFlashImportMapData('hello');
+  return;
+}
+
+function doSave() {
+  // get a reference to the flash object
+  var swf = document.getElementById('conceptMapBuilderViewer');
+  // get the contents of the map
+  swf.getMapContents();
+  return;
+}
+
+function giveXMLtoJS(value) {
+  // put those contents into the text field
+  document.getElementById('conceptMapContents').value = value;
+  return;
+}
+</script>
 
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
@@ -141,8 +186,19 @@
 
   <?php
     if(in_array($dataset->type, $filetypes)) { echo epe_llb_theme_file_dataset($dataset); }
-    else { echo '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" alt="' . $dataset->title . '" />'; }
+    elseif($dataset->type == 'cm_resource') {
+      $cm_resource = node_load($dataset->nid);
+      $field_cm_data_items = field_get_items('node', $cm_resource, 'field_cm_data');
+      $field_cm_data = field_view_value('node',$cm_resource,'field_cm_data', $field_cm_data_items[0]);
+      $field_out = render($field_cm_data);
   ?>
+<div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
+  <div id="flashcontent"><p>Please update your Flash Player</p></div>
+</div>
+
+<textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
+
+  <?php } //end elseif type == cm ?>
 
   <?php echo $dataset->body; ?>
   <?php if(!empty($dataset->questions)): ?>
@@ -176,8 +232,8 @@
 
   <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
     <footer>
-      <?php print render($content['field_tags']); ?>
-      <?php print render($content['links']); ?>
+      <?php //print render($content['field_tags']); ?>
+      <?php //print render($content['links']); ?>
     </footer>
   <?php endif; ?>
 
