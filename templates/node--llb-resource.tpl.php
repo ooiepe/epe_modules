@@ -61,6 +61,7 @@
   <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
+  <?php if(!empty($content['field_introductory_slideshow'])): ?>
 <div id="this-carousel-id" class="carousel slide pull-right"><!-- class of slide for animation -->
   <div class="carousel-inner">
     <?php foreach($content['field_introductory_slideshow']['#items'] as $key=>$slide): ?>
@@ -84,7 +85,7 @@
     <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
 </div><!-- /.carousel -->
-
+  <?php endif; //end checking $content['field_introductory_slideshow'] ?>
   <?php echo render($content['field_background_content']); ?>
 
   <?php //echo render($content['field_introductory_slideshow']); ?>
