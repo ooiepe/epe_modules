@@ -35,7 +35,9 @@ function epe_dbdocument_restful_api_node($nid) {
     'type' => '',
     'title' => '',
     'body' => '',
-    'thumbnail' => ''
+    'thumbnail' => '',
+    'uri' => '',
+    'file' => '',
   );
 
   $node = node_load($nid);
@@ -51,6 +53,11 @@ function epe_dbdocument_restful_api_node($nid) {
     $image = $wrapper->field_document_resource_image->value();
     if($image) {
       $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+      $item['uri'] = $image['uri'];
+    }
+    $file = $wrapper->field_document_resource_file->value();
+    if($file) {
+      $item['file'] = $file['uri'];
     }
   }
 
