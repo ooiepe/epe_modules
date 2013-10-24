@@ -5,8 +5,8 @@ var app = angular.module('app', ['ui.sortable','ngSanitize','epe_llb_directive']
 app.factory('data', function($window, $rootScope) {
     var items = [];
 
-    $window.addItem = function(item) {
-      item.questions = [];
+    $window.addItem = function(item,isnew) {
+      if(isnew) item.questions = [];
       var exists = false;
       angular.forEach(items, function(value) {
         if(!exists) {
@@ -23,7 +23,7 @@ app.factory('data', function($window, $rootScope) {
     };
 });
 
-app.controller('main', function($scope, data) {
+app.controller('main', function($window, $scope, data) {
   //init
   $scope.fn = {};
   $scope.currentCopy = {};
@@ -77,5 +77,12 @@ app.controller('main', function($scope, data) {
 
     $scope.fn.removeItemQuestion = function(nid, index) {
       $scope.currentCopies.items[nid].questions.splice(index, 1);
+    }
+
+    $window.saveDatasets = function() {
+      angular.forEach($scope.currentCopies.keys, function(key, index) {
+        $scope.fn.saveEditItem(key);
+      });
+      $scope.$digest();
     }
 });

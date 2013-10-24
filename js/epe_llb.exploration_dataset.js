@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
                     dataType: 'json',
                     async: true,
                     success: function(data) {
-                      window.addItem(data);
+                      window.addItem(data, true);
                     }
                   });
               }
@@ -39,9 +39,15 @@ jQuery(document).ready(function($) {
     if(Drupal.settings.default_dataset_value != null) {
       var items = JSON.parse( Drupal.settings.default_dataset_value );
       $.each(items, function( index,value ) {
-        window.addItem(value);
+        window.addItem(value, false);
       });
     }
+
+    $('#edit-submit').click(function(event) {
+      event.preventDefault();
+      window.saveDatasets();
+      $('#llb-resource-node-form').submit();
+    });
 })
 /*  }
 };

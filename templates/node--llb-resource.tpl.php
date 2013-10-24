@@ -120,6 +120,16 @@
   </ul>
 </div>
 
+<?php
+  $filetypes = array();
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  foreach($modules as $module) {
+    if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+      $filetypes[] = $module['content_type'];
+    }
+  }
+?>
+
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
@@ -127,10 +137,15 @@
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
-  <img src='<?php echo $dataset->thumbnail; ?>' alt="<?php echo $dataset->title; ?>" />
+
+  <?php
+    if(in_array($dataset->type, $filetypes)) { echo epe_llb_theme_file_dataset($dataset); }
+    else { echo '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" alt="' . $dataset->title . '" />'; }
+  ?>
+
   <?php echo $dataset->body; ?>
   <?php if(!empty($dataset->questions)): ?>
-  <div class="row">
+  <div>
     <div>
       <h4>Interpretation Questions</h4>
       <ul>

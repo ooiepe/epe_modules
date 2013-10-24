@@ -683,7 +683,7 @@ function _epe_llb_field_default_field_instances() {
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
-        'type' => 'hidden',
+        'type' => 'text_default',
         'weight' => 0,
       ),
     ),
@@ -857,7 +857,7 @@ function _epe_llb_field_default_field_instances() {
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
-        'type' => 'hidden',
+        'type' => 'text_default',
         'weight' => 0,
       ),
     ),
@@ -919,7 +919,7 @@ function _epe_llb_field_default_field_instances() {
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
-        'type' => 'hidden',
+        'type' => 'text_default',
         'weight' => 0,
       ),
     ),

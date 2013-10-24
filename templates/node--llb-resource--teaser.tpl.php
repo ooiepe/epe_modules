@@ -33,7 +33,15 @@
     hide($content['field_tags']);
   ?>
   <div>
-    <div class="span7"><?php echo render($content['body']); ?></div>
+    <div class="span7">
+      <?php echo render($content['body']); ?>
+      <div class="hide instructor-notes">
+        <?php echo render($content['field_instructional_content']); ?>
+        <?php echo render($content['field_preconception_content']); ?>
+        <?php echo render($content['field_resources_content']); ?>
+      </div>
+      <button type="button" class="btn btn-success show-instructor-notes">Instructor Notes</button>
+    </div>
     <div class="span5">
       <div class="pull-right">
         <p>

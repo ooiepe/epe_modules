@@ -130,6 +130,12 @@
   <div class="field-container control-group">
     <?php echo render($form['field_exploration_dataset']); ?>
 
+    <div ng-show="currentCopies.keys.length > 0" class="control-group text-warning">
+      <table class="table">
+        <tr class="warning"><td>All changes are temporary, please click individual item "Save".</td></tr>
+      </table>
+    </div>
+
     <table class="table table-condensed">
       <tr>
         <th width="20%">Dataset</th>
@@ -144,6 +150,7 @@
             <br/>
             <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.nid);">Cancel</button>
             <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.nid);">Save</button>
+            <div class="control-group warning"><p class="text-warning">All changes are temporary, please click "Save" after editing is completed.</p></div>
           </div>
           <div ng-show="!fn.inItemEditArray(item.nid)">
             <p>{{item.title}}</p>
@@ -167,7 +174,7 @@
             </div>
             <div ng-show="fn.inItemEditArray(item.nid)">
               <li ng-repeat="question in currentCopies.items[item.nid].questions">
-                <textarea name="question" rows="2" cols="40" ng-model="question.text"></textarea><span><i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
+                <textarea name="question" rows="2" cols="35" ng-model="question.text"></textarea><span><i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
               </li>
             </div>
           </ul>

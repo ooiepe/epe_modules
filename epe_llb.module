@@ -517,6 +517,8 @@ function _epe_llb_insert_after_first_element(&$a, $element) {
 function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
   if($view_mode == 'full' && $context['entity_type'] == 'node' && $context['entity']->type == 'llb_resource' && arg(2) != 'detail') {
     $view_mode = 'teaser';
+    drupal_add_js(libraries_get_path('bootbox') . '/bootbox.min.js');
+    drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.teaser.instructor.js');
   }
 }
 
@@ -634,6 +636,15 @@ function epe_llb_block_view($delta = '') {
   }
 
   return $block;
+}
+
+function epe_llb_theme_file_dataset($dataset) {
+  $output = '';
+  $output = '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" alt="' . $dataset->title . '" />';
+  if(isset($dataset->file)) {
+    $output = '<a href="' . file_create_url($dataset->file) .'">' . $output . '</a>';
+  }
+  return $output;
 }
 
 /**
