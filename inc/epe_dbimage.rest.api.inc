@@ -35,7 +35,8 @@ function epe_dbimage_restful_api_node($nid) {
     'type' => '',
     'title' => '',
     'body' => '',
-    'thumbnail' => ''
+    'thumbnail' => '',
+    'uri' => '',
   );
 
   $node = node_load($nid);
@@ -50,6 +51,7 @@ function epe_dbimage_restful_api_node($nid) {
 
     $image = $wrapper->field_image_resource_file->value();
     $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+    $item['uri'] = $image['uri'];
   }
 
   echo json_encode($item);
