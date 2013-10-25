@@ -52,7 +52,7 @@ function epe_dbdocument_restful_api_node($nid) {
 
     $image = $wrapper->field_document_resource_image->value();
     if($image) {
-      $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+      $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
       $item['uri'] = $image['uri'];
     }
     $file = $wrapper->field_document_resource_file->value();
