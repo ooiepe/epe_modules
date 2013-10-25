@@ -136,6 +136,9 @@ function epe_dbresource_browser_index() {
       if(isset($module['resource_browser']['weight'])) {
         $tab['weight'] = $module['resource_browser']['weight'];
       }
+      if(isset($module['resource_browser']['adurl'])) {
+        $tab['adurl'] = $module['resource_browser']['adurl'];
+      }
       $resource_browser_tabs[] = $tab;
     }
   }
@@ -143,6 +146,7 @@ function epe_dbresource_browser_index() {
   /* angular ui bootstrap */
   drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js');
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
+  drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
   //drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs,'base_path'=>base_path())),'setting');
   drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs)),'setting');
 
@@ -182,6 +186,53 @@ function epe_dbresource_browser_page_alter(&$page) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function epe_dbresource_browser_image_default_styles() {
+  $styles = array();
+
+  $styles['resource_browser_thumbnail'] = array(
+    'name' => 'resource_browser_thumbnail',
+    'effects' => array(
+      4 => array(
+        'label' => 'Scale',
+        'help' => 'Scaling will maintain the aspect-ratio of the original image. If only a single dimension is specified, the other dimension will be calculated.',
+        'effect callback' => 'image_scale_effect',
+        'dimensions callback' => 'image_scale_dimensions',
+        'form callback' => 'image_scale_form',
+        'summary theme' => 'image_scale_summary',
+        'module' => 'image',
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 133,
+          'height' => '',
+          'upscale' => 0,
+        ),
+        'weight' => 1,
+      ),
+      5 => array(
+        'label' => 'Crop',
+        'help' => 'Cropping will remove portions of an image to make it the specified dimensions.',
+        'effect callback' => 'image_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_crop_form',
+        'summary theme' => 'image_crop_summary',
+        'module' => 'image',
+        'name' => 'image_crop',
+        'data' => array(
+          'width' => 133,
+          'height' => 99,
+          'anchor' => 'center-top',
+        ),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  return $styles;
 }
 
 /*

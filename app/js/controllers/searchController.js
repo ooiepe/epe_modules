@@ -91,6 +91,17 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   }
 
   $scope.fn.activeTab = function(tab) {
+    angular.forEach($scope.panes.table, function(pane, index) {
+      if(pane.api != tab.api) {
+        pane.activeClass = '';
+        $scope.panes.table[index].showad = false;
+      } else {
+        pane.activeClass = 'active';
+        $scope.panes.table[index].active = true;
+        $scope.panes.table[index].showad = true;
+      }
+    });
+    //set active pane indicator for search function
     $scope.panes.active = tab.api;
   }
 
@@ -102,6 +113,9 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       active:pane.default,
       weight:pane.weight,
       api:pane.api,
+      activeClass: '',
+      showad: false,
+      adurl: pane.adurl,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
     };
 

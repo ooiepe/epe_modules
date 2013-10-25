@@ -2,7 +2,7 @@ name = EPE Resource Browser
 description = EPE Resource Browser
 core = 7.x
 package = EPE
-version = 7.x-0.4-alpha
+version = 7.x-0.5-alpha
 project = epe_dbresource_browser
 
 dependencies[] = angularjs
