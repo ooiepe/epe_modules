@@ -1,11 +1,10 @@
-<tabset>
+<tabset id="rb-tabs">
   <tab ng-repeat="pane in panes.table" heading="{{pane.type}} ({{pane.data.length}})" active="pane.active" select="fn.activeTab(pane);">
-  <table>
+  <table id="rb-tab-pane-{{pane.api}}">
     <thead>
-      <th></th>
-      <th><a ng-click="sort='title'; reverse=!reverse">Title</a></th>
-      <th><a ng-click="sort='author'; reverse=!reverse">Author</a></th>
-      <th><a ng-click="sort='last_updated'; reverse=!reverse">Mod date</a></th>
+      <th><a ng-click="sort='title'; reverse=!reverse">Title/Info</a></th>
+      <th width="185"><a ng-click="sort='author'; reverse=!reverse">Author</a></th>
+      <th width="134"><a ng-click="sort='last_updated'; reverse=!reverse">Modify date</a></th>
     </thead>
     <tbody>
       <tr ng-repeat="row in pane.data | resourceFilter:query.filter | orderBy:sort:reverse"
