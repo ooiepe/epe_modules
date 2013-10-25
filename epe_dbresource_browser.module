@@ -106,6 +106,8 @@ function epe_dbresource_browser_index() {
   drupal_add_js($app_path . '/js/resourceBrowserDirectives.js');
   drupal_add_js($app_path . '/js/resourceBrowserFilters.js');
 
+  drupal_add_js(array('theme_path' => base_path() . drupal_get_path('theme','bootstrap')), 'setting');
+
   //maybe this should be under .install with hook_requirement?  but can't get hook_requirement to work correctly
   if(!libraries_get_path('angular-ui-bootstrap')):
     drupal_set_message(t('Library angular-ui-bootstrap not found under /sites/libraries'),'error');
