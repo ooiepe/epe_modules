@@ -50,7 +50,7 @@ function epe_llb_restful_api_node($nid) {
 
     $image = $wrapper->field_challenge_thumbnail->value();
     if($image) {
-      $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+      $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
     }
   }
 
