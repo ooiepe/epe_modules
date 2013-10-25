@@ -36,7 +36,7 @@ function epe_dbdocument_install() {
  */
 function epe_dbdocument_enable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  $modules['epe_dbdocument'] = array('content_type' => 'document_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Documents','api'=>'document','weight'=>5));
+  $modules['epe_dbdocument'] = array('content_type' => 'document_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Documents','api'=>'document','adurl'=>'resource/add/file','weight'=>6));
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
