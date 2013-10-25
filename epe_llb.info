@@ -9,6 +9,7 @@ dependencies[] = epe_db
 dependencies[] = entity
 dependencies[] = context
 dependencies[] = semanticviews
+dependencies[] = epe_dbresource_browser
 dependencies[] = jquery_update
 dependencies[] = static_field
 dependencies[] = better_formats

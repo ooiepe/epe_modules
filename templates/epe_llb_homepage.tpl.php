@@ -77,11 +77,13 @@
 
 <div class="control-group">
   <div class="span12">
+    <div id="tool-featured">
   <?php
     $block = module_invoke('epe_llb','block_view','epe_llb_featured');
-    echo render($block['title']);
+    echo '<h2>' . render($block['title']) . '</h2>';
     echo render($block['content']);
   ?>
+    </div>
   </div>
 </div>
 <br clear="all">
