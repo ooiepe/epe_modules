@@ -8,7 +8,7 @@ form .field-multiple-table th.field-label { display: none; }
 input.dataset,
 textarea.dataset { border: 0; }
 */
-.resource-browser-modal { width: 879px; height: 500px; }
+.resource-browser-modal { width: 829px; height: 500px; }
 .tabledrag-toggle-weight-wrapper { display: none; }
 
 .table-condensed .item.body { height: 250px; overflow: auto; }
