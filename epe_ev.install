@@ -127,7 +127,7 @@ function epe_ev_enable() {
 
   $modules['epe_ev'] = array(
       'content_type' => 'ev_tool_instance',
-      'resource_browser' => array('api'=>'ev','weight'=>1)
+      'resource_browser' => array('api'=>'ev','adurl'=>'ev/tools','weight'=>2)
     );
 
   variable_set('EPE_CONTENT_MODULES', $modules);
