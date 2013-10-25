@@ -21,9 +21,14 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       if(scope.checkbox) {
         element_ck = '<input type="checkbox" name="nid" data-type="' + scope.type + '" value="' + scope.id + '">';
       }
-      template += '<td>' + element_ck + '<a href="' + scope.url + '"><img ng-src="' + scope.thumbnail + '" /></a></td>';
-      template += '<td><a href="' + scope.url + '">' + scope.title + '</a></td>';
-      template += '<td>' + scope.author + '</td>';
+
+
+      if (scope.thumbnail == '')
+        scope.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+
+
+      template += '<td>' + element_ck + '<a href="' + scope.url + '"><img width="133" height="99" class="thumb" ng-src="' + scope.thumbnail + '" /></a><div class="author"><a href="' + scope.url + '">' + scope.title + '</a></div></td>';
+      template += '<td><div class="author">' + scope.author + '</div></td>';
       template += '<td>' + scope.updated + '</td>';
 
       elem.html(template).show();
