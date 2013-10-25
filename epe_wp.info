@@ -15,3 +15,4 @@ dependencies[] = better_formats
 dependencies[] = wysiwyg
 dependencies[] = imce
 dependencies[] = imce_wysiwyg
+dependencies[] = views

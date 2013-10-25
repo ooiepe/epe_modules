@@ -1,3 +1,4 @@
+<ul>
 <?php
   $view = views_get_view('featured_resources');
   $view->set_display('all');
@@ -14,10 +15,48 @@
 ?>
 <?php $node = node_load($result->nid); ?>
 <?php if($node): ?>
-<?php $wrapper = entity_metadata_wrapper('node',$node); ?>
-<div class="item">
-  <div><strong><?php echo l($wrapper->label(),"node/{$wrapper->getIdentifier()}"); ?></strong></div>
-  <div><?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
-</div>
+<?php
+  $wrapper = entity_metadata_wrapper('node',$node);
+  $thumbnail = '';
+  if(in_array($wrapper->getBundle(),array('cm_resource','ev_tool_instance'))) {
+
+  } else {
+    switch($wrapper->getBundle()) {
+      case 'image_resource':
+      $image = $wrapper->field_image_resource_file->value();
+      if($image) {
+        $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $image['uri']) . '">';
+      }
+      break;
+      case 'document_resource':
+      $image = $wrapper->field_document_resource_image->value();
+      if($image) {
+        $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $image['uri']) . '">';
+      }
+      break;
+      case 'audio_resource':
+      $image = $wrapper->field_audio_resource_image->value();
+      if($image) {
+        $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $image['uri']) . '">';
+      }
+      break;
+      case 'video_resource':
+      $field = field_get_items('node', $node, 'field_video_resource_file');
+      if($field) {
+        $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $field[0]['thumbnailfile']->uri) . '">';
+      }
+      break;
+    }
+  }
+?>
+<li>
+  <?php if($thumbnail): echo l($thumbnail,"node/{$wrapper->getIdentifier()}",array('html'=>TURE)); endif; ?>
+  <div class="title"><?php echo $wrapper->label(); ?></div>
+  <div class="author"><?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
+  <?php if($wrapper->body->value()): ?>
+  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => TRUE)),0,200); ?></div>
+  <?php endif; ?>
+</li>
 <?php endif; ?>
 <?php endforeach; ?>
+</ul>
