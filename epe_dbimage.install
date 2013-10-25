@@ -36,7 +36,7 @@ function epe_dbimage_install() {
  */
 function epe_dbimage_enable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  $modules['epe_dbimage'] = array('content_type' => 'image_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Images','api'=>'image','weight'=>4));
+  $modules['epe_dbimage'] = array('content_type' => 'image_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Images','api'=>'image','adurl'=>'resource/add/file','weight'=>4));
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
