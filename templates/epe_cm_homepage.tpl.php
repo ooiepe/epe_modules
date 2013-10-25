@@ -69,11 +69,13 @@
 
 <div class="control-group">
   <div class="span12">
+    <div id="tool-featured">
     <?php
       $block = module_invoke('epe_wp','block_view','epe_cm_featured');
-      echo render($block['title']);
+      echo '<h2>' . render($block['title']) . '</h2>';
       echo render($block['content']);
     ?>
+    </div>
   </div>
 </div>
 <br clear="all">
