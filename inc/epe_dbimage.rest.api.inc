@@ -50,7 +50,7 @@ function epe_dbimage_restful_api_node($nid) {
     }
 
     $image = $wrapper->field_image_resource_file->value();
-    $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+    $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
     $item['uri'] = $image['uri'];
   }
 
