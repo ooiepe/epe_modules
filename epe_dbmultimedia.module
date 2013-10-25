@@ -81,7 +81,7 @@ function epe_dbmultimedia_restful_api_node($nid) {
     if($item['type'] == 'audio_resource') {
       $image = $wrapper->field_audio_resource_image->value();
       if($image) {
-        $item['thumbnail'] = image_style_url('thumbnail', $image['uri']);
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
         $item['uri'] = $image['uri'];
       }
       $file = $wrapper->field_audio_resource_file->value();
@@ -91,7 +91,7 @@ function epe_dbmultimedia_restful_api_node($nid) {
     } else {
       $field = field_get_items('node', $node, 'field_video_resource_file');
       if($field) {
-        $item['thumbnail'] = image_style_url('thumbnail', $field[0]['thumbnailfile']->uri);
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
         $item['uri'] = $field[0]['thumbnailfile']->uri;
         $item['file'] = $field[0]['uri'];
       }
