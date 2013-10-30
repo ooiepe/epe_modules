@@ -3,7 +3,7 @@
 
 <form ng-submit="search()">
 <div class="form-horizontal">
-<input type="text" ng-model="term" value=""> <input type="submit" class="btn" value="Search">
+<input type="text" ng-model="term" value="" placeholder="Search by Keyword"> <input type="submit" class="btn" value="Search">
 </div>
 </form>
 </div>

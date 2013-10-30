@@ -159,3 +159,22 @@ table.ng-scope td .thumb {
 #rb-tabs .nav-tabs {
   display: none;
 }
+
+.rb-search-filter select {
+  width: 272px;
+}
+
+.rb-search-filter input[type=text] {
+  width: 200px;
+
+}
+
+.rb-search-filter input.btn {
+  background-color: #0995ca;
+  background-image: none;
+  color: #fff;
+  border-radius: 6px;
+  text-shadow: none;
+  border-color: #52839c;
+}
+
