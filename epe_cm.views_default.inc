@@ -170,6 +170,7 @@ function epe_cm_views_default_views() {
   );
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
+    'body:value' => 'body:value',
   );
   /* Filter criterion: Indexed Node: Public Status */
   $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
