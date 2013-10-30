@@ -28,8 +28,8 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'semanticviews_default';
   $handler->display->display_options['style_options']['list']['element_type'] = 'ul';
   $handler->display->display_options['style_options']['list']['class'] = 'thumbnails';
@@ -259,6 +259,7 @@ function epe_ev_views_default_views() {
   );
   $handler->display->display_options['filters']['search_api_views_fulltext']['fields'] = array(
     'title' => 'title',
+    'body:value' => 'body:value',
   );
   /* Filter criterion: Indexed Node: Public Status */
   $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
