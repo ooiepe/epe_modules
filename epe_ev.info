@@ -13,7 +13,6 @@ dependencies[] = views
 dependencies[] = views_php
 dependencies[] = views_json
 dependencies[] = token
-dependencies[] = entityreference
 dependencies[] = jquery_update
 
 files[] = epe_ev.views_default.inc

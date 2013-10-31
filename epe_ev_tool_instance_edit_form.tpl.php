@@ -4,8 +4,6 @@ require_once("inc/epe_ev_lib.php");
 
 $ev_tool = array();
 
-$tool_list_path = "ev/tools";
-
 // build the tool info
 
 // do we have a node?
@@ -14,14 +12,13 @@ if(isset($form["#node"]->field_parent_tool)){
 	// get instance configuration
 	$ev_tool["instance_configuration"] = epe_getFieldValue("field_instance_configuration", $form["#node"]);
 
-	// get parent tool id for lookup
-	$ev_tool["parent_tool_id"] = $form["#node"]->field_parent_tool["und"][0]["target_id"];
+	$ev_tool["parent_tool_id"] = $form["#node"]->field_parent_tool["und"][0]["value"];
 
 	// load the parent node item
-	$node = node_load($ev_tool["parent_tool_id"]);
+	$parentNode = node_load($ev_tool["parent_tool_id"]);
 
-	// grab the name, path_css, and path_js
-	$ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $node);
+	//  the name
+	$ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
 }
 //do we have a query string?
@@ -30,17 +27,29 @@ elseif(isset($_GET["ev_toolid"])){
 	$ev_tool["parent_tool_id"] = $_GET["ev_toolid"];
 
 	// load the parent node item
-	$node = node_load($ev_tool["parent_tool_id"]);
+	$parentNode = node_load($ev_tool["parent_tool_id"]);
 
-	// grab the name, path_css, and path_js
-	$ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $node);	
+	if($parentNode->type != "ev_tool"){
+
+		drupal_goto( $tool_list_path, array('query'=>array(
+			'toolname'=>'ev_tool',
+			'notify' => "An invalid resource id was provided."
+		)));
+
+	}
+	else{
+
+		// grab the name, path_css, and path_js
+		$ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
+
+	}
+
 }
 // we have nothing, send user to the tools list
 else{
 	
 	drupal_goto( $tool_list_path, array('query'=>array(
-		'toolname'=>'ev_tool',
-		'configuration'=>'var2'
+		'toolname'=>'ev_tool'
 	)));
 }
 
@@ -79,20 +88,16 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 				<?php echo render($form['field_parent_tool']); ?>
 			</div>
 
-			<div class="field-container">
-				<!-- <label for="edit-description-value" class="field-label">Description:</label> -->
-				<?php echo render($form['field_tool_description']); ?>
-			</div>
-
 			<div class="field-container" style="display:none;">
 				<!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
 				<?php echo render($form['field_instance_configuration']); ?>
 			</div>
 
 			<div class="field-container">
-				<!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
-				<?php echo render($form['field_instance_description']); ?>
+				<label for="edit-description-value" class="field-label">Description:</label>
+				<?php echo render($form['body']); ?>
 			</div>
+			
 		</div>
 
 		<?php if (empty($form['nid']['#value'])): ?>
@@ -100,7 +105,6 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 		<?php else: ?>
 		  <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
 		<?php endif; ?>
-
 
 		<?php echo render($form['actions']); ?>
 
@@ -138,8 +142,12 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
   
   	(function(){
 
-		// update the parent tool ID form element
-  		$("#edit-field-parent-tool-und").val("<?php print $ev_tool["parent_tool_id"];?>");
+			// update the parent tool ID form element
+  		// // changed from a select box to an autocomplete? field now has id of 'edit-field-parent-tool'
+  		//$("#edit-field-parent-tool-und").val("<?php print $ev_tool["parent_tool_id"];?>");
+
+  		//edit-field-parent-tool-und-0-value
+  		$("#edit-field-parent-tool-und-0-value").val("<?php print $ev_tool["parent_tool_id"];?>");
 
 	  	// add an event to the submit button
 	  	$('#edit-submit').click(function(){
@@ -169,13 +177,13 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 	       		var divToolControls = $("#vistool-controls"),
 	       			evTool = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"];
 
-				if(typeof evTool.controls !== "object"){
+						if(typeof evTool.controls !== "object"){
 		            
 		            // if there are no controls, tell the user
 		            divToolControls.append(
 		            	
 		            	$("<p/>",{"class":"notify"})
-		            		.html("This tool does not have an configurable properties.")
+		            		.html("This tool does not have any configurable properties.")
 	            	);
 		        }
 		        else{
