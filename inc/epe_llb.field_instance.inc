@@ -226,7 +226,7 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '[current-user:name]/llb_resource/background_slideshow',
+      'file_directory' => '[current-user:uid]/llb_resource/background_slideshow',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
@@ -354,7 +354,7 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '[current-user:name]/llb_resource/challenge_thumbnail',
+      'file_directory' => '[current-user:uid]/llb_resource/challenge_thumbnail',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
@@ -911,7 +911,7 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '[current-user:name]/llb_resource/intro_slideshow',
+      'file_directory' => '[current-user:uid]/llb_resource/intro_slideshow',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
