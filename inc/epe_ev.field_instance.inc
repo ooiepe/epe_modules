@@ -46,30 +46,32 @@ function _ev_tool_installed_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-ev_tool-field_tool_description'
-  $field_instances['node-ev_tool-field_tool_description'] = array(
+  $field_instances['node-ev_tool-body'] = array(
     'bundle' => 'ev_tool',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 0,
       ),
       'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(
+          'trim_length' => 600,
+        ),
+        'type' => 'text_summary_or_trimmed',
         'weight' => 0,
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_tool_description',
-    'label' => 'Tool Description',
+    'field_name' => 'body',
+    'label' => 'Description',
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
@@ -84,9 +86,51 @@ function _ev_tool_installed_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 6,
+      'weight' => -4,
     ),
   );
+
+  // // Exported field_instance: 'node-ev_tool-field_tool_description'
+  // $field_instances['node-ev_tool-field_tool_description'] = array(
+  //   'bundle' => 'ev_tool',
+  //   'default_value' => NULL,
+  //   'deleted' => 0,
+  //   'description' => '',
+  //   'display' => array(
+  //     'default' => array(
+  //       'label' => 'above',
+  //       'module' => 'text',
+  //       'settings' => array(),
+  //       'type' => 'text_default',
+  //       'weight' => 6,
+  //     ),
+  //     'teaser' => array(
+  //       'label' => 'above',
+  //       'settings' => array(),
+  //       'type' => 'hidden',
+  //       'weight' => 0,
+  //     ),
+  //   ),
+  //   'entity_type' => 'node',
+  //   'field_name' => 'field_tool_description',
+  //   'label' => 'Tool Description',
+  //   'required' => 0,
+  //   'settings' => array(
+  //     'display_summary' => 0,
+  //     'text_processing' => 1,
+  //     'user_register_form' => FALSE,
+  //   ),
+  //   'widget' => array(
+  //     'active' => 1,
+  //     'module' => 'text',
+  //     'settings' => array(
+  //       'rows' => 20,
+  //       'summary_rows' => 5,
+  //     ),
+  //     'type' => 'text_textarea_with_summary',
+  //     'weight' => 6,
+  //   ),
+  // );
 
   // Exported field_instance: 'node-ev_tool-field_tool_last_modified'
   $field_instances['node-ev_tool-field_tool_last_modified'] = array(
@@ -269,30 +313,32 @@ function _epe_ev_tool_instance_installed_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-ev_tool_instance-field_instance_description'
-  $field_instances['node-ev_tool_instance-field_instance_description'] = array(
+  $field_instances['node-ev_tool_instance-body'] = array(
     'bundle' => 'ev_tool_instance',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 8,
+        'weight' => 0,
       ),
       'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(
+          'trim_length' => 600,
+        ),
+        'type' => 'text_summary_or_trimmed',
         'weight' => 0,
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_instance_description',
-    'label' => 'Instance Description',
+    'field_name' => 'body',
+    'label' => 'Description',
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
@@ -307,9 +353,51 @@ function _epe_ev_tool_instance_installed_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 3,
+      'weight' => -4,
     ),
-  );
+  );  
+
+  // // Exported field_instance: 'node-ev_tool_instance-field_instance_description'
+  // $field_instances['node-ev_tool_instance-field_instance_description'] = array(
+  //   'bundle' => 'ev_tool_instance',
+  //   'default_value' => NULL,
+  //   'deleted' => 0,
+  //   'description' => '',
+  //   'display' => array(
+  //     'default' => array(
+  //       'label' => 'above',
+  //       'module' => 'text',
+  //       'settings' => array(),
+  //       'type' => 'text_default',
+  //       'weight' => 8,
+  //     ),
+  //     'teaser' => array(
+  //       'label' => 'above',
+  //       'settings' => array(),
+  //       'type' => 'hidden',
+  //       'weight' => 0,
+  //     ),
+  //   ),
+  //   'entity_type' => 'node',
+  //   'field_name' => 'field_instance_description',
+  //   'label' => 'Instance Description',
+  //   'required' => 0,
+  //   'settings' => array(
+  //     'display_summary' => 0,
+  //     'text_processing' => 1,
+  //     'user_register_form' => FALSE,
+  //   ),
+  //   'widget' => array(
+  //     'active' => 1,
+  //     'module' => 'text',
+  //     'settings' => array(
+  //       'rows' => 20,
+  //       'summary_rows' => 5,
+  //     ),
+  //     'type' => 'text_textarea_with_summary',
+  //     'weight' => 3,
+  //   ),
+  // );
 
   // Exported field_instance: 'node-ev_tool_instance-field_instance_questions'
   $field_instances['node-ev_tool_instance-field_instance_questions'] = array(
@@ -403,7 +491,8 @@ function _epe_ev_tool_instance_installed_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-ev_tool_instance-field_parent_tool'
+// NEW
+// Exported field_instance: 'node-ev_tool_instance-field_parent_tool'
   $field_instances['node-ev_tool_instance-field_parent_tool'] = array(
     'bundle' => 'ev_tool_instance',
     'default_value' => NULL,
@@ -412,11 +501,9 @@ function _epe_ev_tool_instance_installed_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
         'weight' => 10,
       ),
       'teaser' => array(
@@ -428,27 +515,63 @@ function _epe_ev_tool_instance_installed_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_parent_tool',
-    'label' => 'Parent Tool',
+    'label' => 'Parent Tool ID',
     'required' => 1,
     'settings' => array(
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
       'weight' => 1,
     ),
   );
 
+  // ORIGINAL 'node-ev_tool_instance-field_parent_tool'
 
-
-
-
-
-
-
+  // // Exported field_instance: 'node-ev_tool_instance-field_parent_tool'
+  // $field_instances['node-ev_tool_instance-field_parent_tool'] = array(
+  //   'bundle' => 'ev_tool_instance',
+  //   'default_value' => NULL,
+  //   'deleted' => 0,
+  //   'description' => '',
+  //   'display' => array(
+  //     'default' => array(
+  //       'label' => 'above',
+  //       'module' => 'entityreference',
+  //       'settings' => array(
+  //         'link' => FALSE,
+  //       ),
+  //       'type' => 'entityreference_label',
+  //       'weight' => 10,
+  //     ),
+  //     'teaser' => array(
+  //       'label' => 'above',
+  //       'settings' => array(),
+  //       'type' => 'hidden',
+  //       'weight' => 0,
+  //     ),
+  //   ),
+  //   'entity_type' => 'node',
+  //   'field_name' => 'field_parent_tool',
+  //   'label' => 'Parent Tool',
+  //   'required' => 1,
+  //   'settings' => array(
+  //     'user_register_form' => FALSE,
+  //   ),
+  //   'widget' => array(
+  //     'active' => 1,
+  //     'module' => 'options',
+  //     'settings' => array(),
+  //     'type' => 'options_select',
+  //     'weight' => 1,
+  //   ),
+  // );
 
 // Exported field_instance: 'node-ev_tool_instance-field_featured_status'
   $field_instances['node-ev_tool_instance-field_featured_status'] = array(
@@ -531,12 +654,6 @@ function _epe_ev_tool_instance_installed_instances() {
       'weight' => -2,
     ),
   );
-
-
-
-
-
-
 
 
 

@@ -124,6 +124,10 @@ function epe_ev_theme() {
       'render element' => 'form',
       'template' => 'epe_ev_tool_instance_edit_form',
     ),
+    'ev_tool_node_form'  => array(
+      'render element' => 'form',
+      'template' => 'epe_ev_tool_edit_form'
+    )
   );
 }
 

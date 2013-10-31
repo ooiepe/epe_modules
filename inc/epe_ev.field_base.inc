@@ -33,13 +33,42 @@ function _ev_tool_instance_installed_fields() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_instance_description'
-  $field_bases['field_instance_description'] = array(
+  // // Exported field_base: 'field_instance_description'
+  // $field_bases['field_instance_description'] = array(
+  //   'active' => 1,
+  //   'cardinality' => 1,
+  //   'deleted' => 0,
+  //   'entity_types' => array(),
+  //   'field_name' => 'field_instance_description',
+  //   'foreign keys' => array(
+  //     'format' => array(
+  //       'columns' => array(
+  //         'format' => 'format',
+  //       ),
+  //       'table' => 'filter_format',
+  //     ),
+  //   ),
+  //   'indexes' => array(
+  //     'format' => array(
+  //       0 => 'format',
+  //     ),
+  //   ),
+  //   'locked' => 0,
+  //   'module' => 'text',
+  //   'settings' => array(),
+  //   'translatable' => 0,
+  //   'type' => 'text_with_summary',
+  // );
+
+  // Exported field_base: 'body'
+  $field_bases['body'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_instance_description',
+    'entity_types' => array(
+      0 => 'node',
+    ),
+    'field_name' => 'body',
     'foreign keys' => array(
       'format' => array(
         'columns' => array(
@@ -117,6 +146,9 @@ function _ev_tool_instance_installed_fields() {
     'type' => 'image',
   );
 
+
+
+// NEW
   // Exported field_base: 'field_parent_tool'
   $field_bases['field_parent_tool'] = array(
     'active' => 1,
@@ -133,36 +165,54 @@ function _ev_tool_instance_installed_fields() {
       ),
     ),
     'indexes' => array(
-      'target_id' => array(
-        0 => 'target_id',
+      'format' => array(
+        0 => 'format',
       ),
     ),
     'locked' => 0,
-    'module' => 'entityreference',
+    'module' => 'text',
     'settings' => array(
-      'handler' => 'base',
-      'handler_settings' => array(
-        'behaviors' => array(
-          'views-select-list' => array(
-            'status' => 0,
-          ),
-        ),
-        'sort' => array(
-          'type' => 'none',
-        ),
-        'target_bundles' => array(),
-      ),
-      'target_type' => 'node',
+      'max_length' => 255,
     ),
     'translatable' => 0,
-    'type' => 'entityreference',
+    'type' => 'text'
   );
+
+
+// ORIGINAL
+//   // Exported field_base: 'field_parent_tool'
+//   $field_bases['field_parent_tool'] = array(
+//     'active' => 1,
+//     'cardinality' => 1,
+//     'deleted' => 0,
+//     'entity_types' => array(),
+//     'field_name' => 'field_parent_tool',
+//     'foreign keys' => array(
+//       'node' => array(
+//         'columns' => array(
+//           'target_id' => 'nid',
+//         ),
+//         'table' => 'node',
+//       ),
+//     ),
+//     'indexes' => array(
+//       'target_id' => array(
+//         0 => 'target_id',
+//       ),
+//     ),
+//     'locked' => 0,
+//     'module' => 'text',
+//     'settings' => array(
+//       'max_length' => 255,
+//     ),
+//     'translatable' => 0,
+//     'type' => 'entityreference',
+//   );
+
+
 
   return $field_bases;
 }
-
-
-
 
 
 /**
@@ -200,13 +250,16 @@ function _epe_ev_tool_installed_fields() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_tool_description'
-  $field_bases['field_tool_description'] = array(
+
+  // Exported field_base: 'body'
+  $field_bases['body'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_tool_description',
+    'entity_types' => array(
+      0 => 'node',
+    ),
+    'field_name' => 'body',
     'foreign keys' => array(
       'format' => array(
         'columns' => array(
@@ -226,6 +279,33 @@ function _epe_ev_tool_installed_fields() {
     'translatable' => 0,
     'type' => 'text_with_summary',
   );
+
+  // // Exported field_base: 'field_tool_description'
+  // $field_bases['field_tool_description'] = array(
+  //   'active' => 1,
+  //   'cardinality' => 1,
+  //   'deleted' => 0,
+  //   'entity_types' => array(),
+  //   'field_name' => 'field_tool_description',
+  //   'foreign keys' => array(
+  //     'format' => array(
+  //       'columns' => array(
+  //         'format' => 'format',
+  //       ),
+  //       'table' => 'filter_format',
+  //     ),
+  //   ),
+  //   'indexes' => array(
+  //     'format' => array(
+  //       0 => 'format',
+  //     ),
+  //   ),
+  //   'locked' => 0,
+  //   'module' => 'text',
+  //   'settings' => array(),
+  //   'translatable' => 0,
+  //   'type' => 'text_with_summary',
+  // );
 
   // Exported field_base: 'field_tool_last_modified'
   $field_bases['field_tool_last_modified'] = array(
