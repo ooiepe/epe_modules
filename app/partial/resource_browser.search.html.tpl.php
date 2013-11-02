@@ -8,7 +8,7 @@
 </form>
 </div>
 
-
+<div ng-show="panes.rb_type_selector==true">
 <div class="rb-type-selector">
 	<ul>
     <li ng-repeat="pane in panes.table" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
@@ -18,7 +18,7 @@
 <div class="rb-ads">
   <div ng-repeat="pane in panes.table" ng-show="pane.showad"><a href="<?php echo base_path(); ?>{{pane.adurl}}"><img ng-src="<?php echo base_path() . drupal_get_path('module','epe_dbresource_browser') ?>/images/rb-ads-{{pane.api}}.png" width="247" height="65"></a></div>
 </div>
-
+</div>
 
 
 <!--<div id="rb-list-toggle" class="btn-group">
