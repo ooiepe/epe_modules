@@ -8,11 +8,11 @@ Drupal.behaviors.epe_files = {
       if(imgexts.length > 0 && $.inArray(ext, imgexts) >= 0) { $('.thumbnail').hide(); }
     });
 
-    $('.form-radio').click(function() {
-      console.log($(this).val());
-      if($(this).val() == 1) {
+    $('input[name=permission]').click(function() {
+      if($(this).prop('checked') == true) {
         $('button.form-submit').removeAttr('disabled');
       } else {
+        $(this).prop('checked', false);
         $('button.form-submit').attr('disabled','disabled');
       }
     });

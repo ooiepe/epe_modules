@@ -32,8 +32,13 @@
 </div>
 
 <div class="field-container">
-<label for="edit-permission-1" class="field-label">Permission:</label>
-<?php echo render($form['permission']); ?>
+<!-- <label for="edit-permission-1" class="field-label">Permission:</label> -->
+<?php //echo render($form['permission']); ?>
+<div class="control-group form-item">
+<div class="controls">
+<input type="checkbox" name="permission" style="float: left;"> <div style="margin-left: 20px;">I hereby certify that this file is either my own work or I have been given permission to use it within an educational context</div>
+</div>
+</div>
 </div>
 
 <?php echo render($form['node_type']); ?>
