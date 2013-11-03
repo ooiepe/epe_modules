@@ -432,6 +432,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['#attached']['js'][] = libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.3.0.min.js';
   $form['#attached']['js'][] = libraries_get_path('ui-sortable') . '/src/sortable.js';
   $form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/epe_llb.exploration_dataset.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/epe_llb.edit.intro_slideshow.js';
 
   $form['#attached']['js'][] = libraries_get_path('formSavior') . '/jquery.formSavior.min.js';
 

@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <div class="span6">
+    <div class="span6 intro-slideshow">
       <p><strong>Introductory Slideshow</strong></p>
       <?php echo render($form['field_introductory_slideshow']); ?>
     </div>
