@@ -20,6 +20,8 @@
     <?php echo render($content['field_resources_content']); ?>
   </div>
 
+  <a href="<?php echo base_path() . 'node/' . arg(1); ?>" class="btn btn-primary">Back <i class="icon-chevron-right icon-white"></i></a>
+
 </div>
 </div>
 

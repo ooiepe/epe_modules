@@ -230,6 +230,8 @@ function giveXMLtoJS(value) {
 </div> <!-- /.tab-content -->
 </div> <!-- /.tabbable -->
 
+<a href="<?php echo base_path() . 'node/' . arg(1); ?>" class="btn btn-primary">Back <i class="icon-chevron-right icon-white"></i></a>
+
   <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
     <footer>
       <?php //print render($content['field_tags']); ?>

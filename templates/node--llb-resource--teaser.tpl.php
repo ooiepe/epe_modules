@@ -40,8 +40,10 @@
       <div class="pull-right">
         <p>
           <?php //echo render($content['field_challenge_thumbnail']);
-            $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $content['field_challenge_thumbnail']['#items'][0]['uri'], 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
-            echo theme('image_style', $thumbnail);
+            if($content['field_challenge_thumbnail']) {
+              $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $content['field_challenge_thumbnail']['#items'][0]['uri'], 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
+              echo theme('image_style', $thumbnail);
+            }
           ?>
         </p>
       </div>
