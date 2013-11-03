@@ -296,27 +296,7 @@ function epe_llb_homepage_render() {
  */
 function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_id) {
   $form['title']['#title_display'] = 'invisible';
-  /*
-  $form['field_background_question']['und']['#title_display'] = 'invisible';
 
-  foreach($form as &$field) {
-    if(is_array($field) && isset($field['#title_display'])): $field['#title_display'] = 'invisible'; endif;
-    if(is_array($field) && isset($field['#type']) && $field['#type'] == 'container') {
-      foreach($field['und'] as &$field_element) {
-        if(is_array($field_element) && isset($field_element['format'])): unset($field_element['format']); endif;
-      }
-      $field['und'][0]['#title_display'] = 'invisible';
-    }
-  }
-*/
-/*  $form_values = variable_get('epe_llb_config',
-    array(
-      'llb_challenge_thumbnail_prefix'=>'',
-      'llb_challenge_thumbnail_suffix',
-      'llb_instructional_content'=>'',
-      'llb_preconception_content'=>'',
-      'llb_resources_content'=>''
-  ));*/
   if( file_exists(drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-prefix.html') ) {
     $form['field_challenge_thumbnail']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-prefix.html');
   }
@@ -684,117 +664,25 @@ function epe_llb_theme_file_dataset($dataset) {
 }
 
 /**
- * Implements hook_block_configure().
+ * Implements hook_default_rules_configuration().
  */
-/*
-function epe_llb_block_configure($delta='') {
-  $form = array();
-  $blocks_content = variable_get(
-    'epe_llb_info_blocks_content',
-    array(
-      'epe_llb_introduction_info' => '',
-      'epe_llb_background_info' => '',
-      'epe_llb_challenge_info' => '',
-      'epe_llb_exploration_info' => '',
-      'epe_llb_explanation_info' => '',
-    )
-  );
-
-  switch($delta) {
-    case 'epe_llb_introduction_info':
-      // Text field form element
-      $form['text_body'] = array(
-        '#type' => 'text_format',
-        '#title' => t('Enter your text here in WYSIWYG format'),
-        '#default_value' => $blocks_content['epe_llb_introduction_info'],
-        '#format'=>'filtered_html',
-      );
-      break;
-
-    case 'epe_llb_background_info':
-      // Text field form element
-      $form['text_body'] = array(
-        '#type' => 'text_format',
-        '#title' => t('Enter your text here in WYSIWYG format'),
-        '#default_value' => $blocks_content['epe_llb_background_info'],
-        '#format'=>'filtered_html',
-      );
-      break;
-
-    case 'epe_llb_challenge_info':
-      // Text field form element
-      $form['text_body'] = array(
-        '#type' => 'text_format',
-        '#title' => t('Enter your text here in WYSIWYG format'),
-        '#default_value' => $blocks_content['epe_llb_challenge_info'],
-        '#format'=>'filtered_html',
-      );
-      break;
-
-    case 'epe_llb_exploration_info':
-      // Text field form element
-      $form['text_body'] = array(
-        '#type' => 'text_format',
-        '#title' => t('Enter your text here in WYSIWYG format'),
-        '#default_value' => $blocks_content['epe_llb_exploration_info'],
-        '#format'=>'filtered_html',
-      );
-      break;
-
-    case 'epe_llb_explanation_info':
-      // Text field form element
-      $form['text_body'] = array(
-        '#type' => 'text_format',
-        '#title' => t('Enter your text here in WYSIWYG format'),
-        '#default_value' => $blocks_content['epe_llb_explanation_info'],
-        '#format'=>'filtered_html',
-      );
-      break;
-  }
-  return $form;
+function epe_llb_default_rules_configuration() {
+  $items = array();
+  $items['rules_llb_resource_redirect_on_save'] = entity_import('rules_config', '{ "rules_llb_resource_redirect_on_save" : {
+      "LABEL" : "LLB resource redirect on save",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "node" ],
+      "REQUIRES" : [ "rules" ],
+      "ON" : {
+        "node_insert--llb_resource" : { "bundle" : "llb_resource" },
+        "node_update--llb_resource" : { "bundle" : "llb_resource" }
+      },
+      "DO" : [ { "redirect" : { "url" : "node\\/[node:nid]\\/detail" } } ]
+    }
+  }');
+  return $items;
 }
-*/
-/**
- * Implements hook_block_save().
- */
-/*
-function epe_llb_block_save($delta = '', $edit = array()) {
-  $blocks_content = variable_get(
-    'epe_llb_info_blocks_content',
-    array(
-      'epe_llb_introduction_info' => '',
-      'epe_llb_background_info' => '',
-      'epe_llb_challenge_info' => '',
-      'epe_llb_exploration_info' => '',
-      'epe_llb_explanation_info' => '',
-    )
-  );
-
-  switch($delta) {
-    case 'epe_llb_introduction_info' :
-      $blocks_content['epe_llb_introduction_info'] = $edit['text_body']['value'];
-      break;
-
-    case 'epe_llb_background_info' :
-      $blocks_content['epe_llb_background_info'] = $edit['text_body']['value'];
-      break;
-
-    case 'epe_llb_challenge_info' :
-      $blocks_content['epe_llb_challenge_info'] = $edit['text_body']['value'];
-      break;
-
-    case 'epe_llb_exploration_info' :
-      $blocks_content['epe_llb_exploration_info'] = $edit['text_body']['value'];
-      break;
-
-    case 'epe_llb_explanation_info' :
-      $blocks_content['epe_llb_explanation_info'] = $edit['text_body']['value'];
-      break;
-  }
-
-  variable_set('epe_llb_info_blocks', $blocks_content);
-}
-*/
 
 /**
  * Implements hook_default_search_api_index().

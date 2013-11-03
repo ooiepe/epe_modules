@@ -20,5 +20,7 @@ dependencies[] = views_php
 dependencies[] = token
 dependencies[] = ds
 dependencies[] = ds_ui
+dependencies[] = rules
+dependencies[] = rules_admin
 
 files[] = epe_llb.views_default.inc
