@@ -66,3 +66,18 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
   </div>
 </div>
+
+<script>
+
+  $.ready(function(){
+
+    // disable enter key press form submission on inputs textboxes.. restrict to type textbox only?
+    $("input").bind('keypress keydown keyup', function(e){
+       if(e.keyCode == 13) { 
+          e.preventDefault(); 
+       }
+    });
+
+  });
+
+</script>
