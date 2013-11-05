@@ -48,7 +48,7 @@ function epe_dbaudio_node_type_insert($content_type) {
   if ($content_type->type == 'audio_resource') {
     module_load_include('inc','epe_dbaudio','inc/epe_dbaudio.field_base');
     module_load_include('inc','epe_dbaudio','inc/epe_dbaudio.field_instance');
-    
+
     // Create all the fields we are adding to our content type.
     foreach (_audio_resource_installed_fields() as $field) {
       //in case content type share fields
@@ -148,9 +148,9 @@ function epe_dbaudio_default_search_api_index() {
         'author:mail' => array('type'=>'string'),
         'author:field_account_fname' => array('type'=>'text'),
         'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_organization' => array('type'=>'text'),
         'body:value' => array('type'=>'text'),
-        /*'field_public_status' => array('type'=>'string'),
-        'field_featured_status' => array('type'=>'string'),*/
+        'body:summary' => array('type'=>'text'),
       ),
       'data_alter_callbacks' => array(
         'search_api_alter_bundle_filter' => array(
