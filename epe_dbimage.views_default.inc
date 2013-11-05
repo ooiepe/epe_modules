@@ -65,7 +65,7 @@ function epe_dbimage_views_default_views() {
       $output = field_view_value(\'node\', $node, \'field_image_resource_file\', $image[0], array(
         \'type\' => \'image\',
         \'settings\' => array(
-          \'image_style\' => \'thumbnail\', //place your image style here
+          \'image_style\' => \'resource_browser_thumbnail\', //place your image style here
           \'image_link\' => \'content\',
         ),
       ));
