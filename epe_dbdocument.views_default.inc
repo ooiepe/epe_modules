@@ -64,7 +64,7 @@ function epe_dbdocument_views_default_views() {
         $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
           \'type\' => \'image\',
           \'settings\' => array(
-             \'image_style\' => \'thumbnail\',
+             \'image_style\' => \'resource_browser_thumbnail\',
           ),
         ));
         echo render($output);
