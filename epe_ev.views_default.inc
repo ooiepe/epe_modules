@@ -221,6 +221,11 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['arguments']['author']['default_argument_type'] = 'current_user';
   $handler->display->display_options['arguments']['author']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['author']['break_phrase'] = 0;
+  /* Field: Author: Institution / School (indexed) */
+  $handler->display->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
+  $handler->display->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
+  $handler->display->display_options['fields']['author_field_account_organization']['label'] = 'org';
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',

@@ -37,15 +37,15 @@ function epe_ev_node_info() {
 // triggered as new content type is created
 
 function epe_ev_node_type_insert($content_type) {
-  
+
   module_load_include("inc","epe_ev","inc/epe_ev.field_base");
   module_load_include("inc","epe_ev","inc/epe_ev.field_instance");
 
-  if ($content_type->type == 'ev_tool') { 
+  if ($content_type->type == 'ev_tool') {
 
     // Create all the fields we are adding to our content type.
     foreach (_epe_ev_tool_installed_fields() as $field) {
-      
+
       //in case content type share fields
       if(!field_info_field($field['field_name'])) {
         field_create_field($field);
@@ -56,7 +56,7 @@ function epe_ev_node_type_insert($content_type) {
     foreach (_ev_tool_installed_instances() as $instance) {
       field_create_instance($instance);
     }
-    
+
     //assign custom content type permission
     _assign_epe_ev_permission();
   }
@@ -217,7 +217,9 @@ function epe_ev_default_search_api_index() {
         'author:mail' => array('type'=>'string'),
         'author:field_account_fname' => array('type'=>'text'),
         'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_organization' => array('type'=>'text'),
         'body:value' => array('type'=>'text'),
+        'body:summary' => array('type'=>'text'),
       ),
       'data_alter_callbacks' => array(
         'search_api_alter_bundle_filter' => array(
