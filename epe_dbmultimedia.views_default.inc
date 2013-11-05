@@ -58,21 +58,21 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-        $node = node_load($data->entity);
-        if($node->type == \'video_resource\') {
-          $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
-          if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
-        } else {
-          $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
-          $output = field_view_value(\'node\', $node, \'field_audio_resource_image\', $image[0], array(
-            \'type\' => \'image\',
-            \'settings\' => array(
-               \'image_style\' => \'thumbnail\',
-            ),
-          ));
-          echo render($output);
-        }
-      ?>';
+          $node = node_load($data->entity);
+          if($node->type == \'video_resource\') {
+            $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
+            if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
+          } else {
+            $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
+            $output = field_view_value(\'node\', $node, \'field_audio_resource_image\', $image[0], array(
+              \'type\' => \'image\',
+              \'settings\' => array(
+                 \'image_style\' => \'resource_browser_thumbnail\',
+              ),
+            ));
+            echo render($output);
+          }
+        ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -127,6 +127,20 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
+  /* Field: Author: Institution / School (indexed) */
+  $handler->display->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
+  $handler->display->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
+  $handler->display->display_options['fields']['author_field_account_organization']['label'] = 'org';
+  /* Field: Indexed Node: The main body text */
+  $handler->display->display_options['fields']['body']['id'] = 'body';
+  $handler->display->display_options['fields']['body']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['fields']['body']['field'] = 'body';
+  $handler->display->display_options['fields']['body']['label'] = 'summary';
+  $handler->display->display_options['fields']['body']['type'] = 'text_summary_or_trimmed';
+  $handler->display->display_options['fields']['body']['settings'] = array(
+    'trim_length' => '200',
+  );
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',
