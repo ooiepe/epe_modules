@@ -1,0 +1,177 @@
+<?php
+/**
+ * Implements hook_views_api().
+ */
+function epe_dbmultimedia_views_api() {
+  return array("api" => "3.0");
+}
+
+/*
+ * Implements hook_menu
+ */
+function epe_dbmultimedia_menu() {
+  $items = array();
+
+  $items['api/resource/multimedia'] = array(
+    'title' => t('Restful Multimedia Resource Query'),
+    'page callback' => 'epe_dbmultimedia_restful_api',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['api/resource/multimedia/%'] = array(
+    'title' => t('Restful Single Multimedia Resource Query'),
+    'page callback' => 'epe_dbmultimedia_restful_api_node',
+    'page arguments' => array(3),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function epe_dbmultimedia_restful_api() {
+  global $user;
+
+  $view = views_get_view('multimedia_resource_index');
+  //set view to the display machine id
+  $view->set_display('all');
+
+  //if log in user, pass in userid to exposed filter
+  if(user_is_logged_in()) {
+    $filter = $view->get_item('all', 'filter', 'author_uid');
+    $filter['value'] = $user->uid;
+    $view->set_item('all', 'filter', 'author_uid', $filter);
+  }
+
+  //if there is search term, pass it in to exposed filter
+  $value = '';
+  if(isset($_GET['search'])): $value = $_GET['search']; endif;
+  if($value) {
+    $filter = $view->get_item('all', 'filter', 'search_api_views_fulltext');
+    $filter['value'] = $value;
+    $view->set_item('all', 'filter', 'search_api_views_fulltext', $filter);
+  }
+
+  $view->execute();
+  echo $view->render();
+}
+
+function epe_dbmultimedia_restful_api_node($nid) {
+  $item = array(
+    'nid' => '',
+    'type' => '',
+    'title' => '',
+    'body' => '',
+    'thumbnail' => '',
+    'uri' => '',
+    'file' => '',
+  );
+
+  $node = node_load($nid);
+  if($node && in_array($node->type, array('audio_resource','video_resource'))) {
+    $wrapper = entity_metadata_wrapper('node',$node);
+    $item['nid'] = $wrapper->getIdentifier();
+    $item['type'] = $wrapper->getBundle();
+    $item['title'] = $wrapper->label();
+    if($wrapper->body->value()) {
+      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
+
+    if($item['type'] == 'audio_resource') {
+      $image = $wrapper->field_audio_resource_image->value();
+      if($image) {
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+        $item['uri'] = $image['uri'];
+      }
+      $file = $wrapper->field_audio_resource_file->value();
+      if($file) {
+        $item['file'] = $file['uri'];
+      }
+    } else {
+      $field = field_get_items('node', $node, 'field_video_resource_file');
+      if($field) {
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
+        $item['uri'] = $field[0]['thumbnailfile']->uri;
+        $item['file'] = $field[0]['uri'];
+      }
+    }
+  }
+
+  echo json_encode($item);
+}
+
+/**
+ * Implements hook_default_search_api_index().
+ */
+function epe_dbmultimedia_default_search_api_index() {
+  $items = array();
+  $items['multimedia_resource_index'] = entity_create('search_api_index', array(
+    'name' => 'multimedia_resource_index',
+    'machine_name' => 'multimedia_resource_index',
+    'description' => null,
+    'server' => 'database_service',
+    'item_type' => 'node',
+    'options' => array(
+      'index_directly' => 1,
+      'cron_limit' => '50',
+      'fields' => array(
+        'nid' => array('type'=>'integer'),
+        'type' => array('type'=>'string'),
+        'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
+        'edit_url' => array('type'=>'uri'),
+        'status' => array('type'=>'integer'),
+        'promote' => array('type'=>'boolean'),
+        'created' => array('type'=>'date'),
+        'changed' => array('type'=>'date'),
+        'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
+        'author:name' => array('type'=>'string'),
+        'author:mail' => array('type'=>'string'),
+        'author:field_account_fname' => array('type'=>'text'),
+        'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_organization' => array('type'=>'text'),
+        'body:value' => array('type'=>'text'),
+        'body:summary' => array('type'=>'text'),
+      ),
+      'data_alter_callbacks' => array(
+        'search_api_alter_bundle_filter' => array(
+          'status' => 1,
+          'weight' => '-10',
+          'settings' => array(
+            'default' => 0,
+            'bundles' => array('audio_resource'=>'audio_resource', 'video_resource'=>'video_resource'),
+          ),
+          'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
+          'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
+          'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+        ),
+        'processors' => array(
+          'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true, 'author:field_account_fname'=>true,
+              'author:field_account_lname' => true))),
+          'search_api_html_filter' => array('status'=>0, 'weight'=>'10',
+            'settings'=>array(
+              'fields'=>array('title'=>true, 'body:value'=>true),
+              'title'=>0, 'alt'=>1, 'tags'=>array('h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5'),
+            ),
+          ),
+          'search_api_tokenizer' => array('status'=>0, 'weight'=>'20',
+            'fields'=>array('title'=>true, 'body:value'=>true),
+            'spaces'=>'[^[:alnum:]]','ignorable'=>'[\\u0027]',
+          ),
+          'search_api_stopwords' => array('status'=>0, 'weight'=>'30', 'fields'=>array('title'=>true, 'body:value'=>true),'file'=>'','stopwords'=>'but\\r\\ndid\\r\\nthe this that those\\r\\netc',
+          )
+        ),
+      ),
+    ),
+    'enabled' => '1',
+    'read_only' => '0',
+    'rdf_mapping' => array(),
+  ));
+  return $items;
+}
