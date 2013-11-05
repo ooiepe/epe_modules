@@ -16,7 +16,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.panes = {};
   $scope.panes.table = [];
   $scope.panes.active = '';
-  $scope.panes.type_selector = true;
+  $scope.panes.rb_type_selector = true;
   $scope.resource = {};
   $scope.filter = {};
   $scope.resource.view_types = [
@@ -47,7 +47,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   //$scope.filter.view_type = $scope.resource.view_types[0];
 
   if(typeof $routeParams['dialog'] != "undefined") {
-    $scope.panes.type_selector = false;
+    $scope.panes.rb_type_selector = false;
   }
 
   $scope.term = $routeParams['term'];
