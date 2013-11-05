@@ -293,7 +293,9 @@ function epe_cm_default_search_api_index() {
         'author:mail' => array('type'=>'string'),
         'author:field_account_fname' => array('type'=>'text'),
         'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_organization' => array('type'=>'text'),
         'body:value' => array('type'=>'text'),
+        'body:summary' => array('type'=>'text'),
       ),
       'data_alter_callbacks' => array(
         'search_api_alter_bundle_filter' => array(
