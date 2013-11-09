@@ -59,16 +59,16 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-        $node = node_load($data->entity);
-        $image = field_get_items(\'node\', $node, \'field_document_resource_image\');
-        $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
-          \'type\' => \'image\',
-          \'settings\' => array(
-             \'image_style\' => \'resource_browser_thumbnail\',
-          ),
-        ));
-        echo render($output);
-        ?>';
+          $node = node_load($data->entity);
+          $image = field_get_items(\'node\', $node, \'field_document_resource_image\');
+          $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
+            \'type\' => \'image\',
+            \'settings\' => array(
+               \'image_style\' => \'resource_browser_thumbnail\',
+            ),
+          ));
+          echo render($output);
+          ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -124,11 +124,6 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Field: Author: Institution / School (indexed) */
-  $handler->display->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
-  $handler->display->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_image_resource_index';
-  $handler->display->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
-  $handler->display->display_options['fields']['author_field_account_organization']['label'] = 'org';
   /* Field: Indexed Node: The main body text */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'search_api_index_document_resource_index';
@@ -191,6 +186,35 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'All Document Resources';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+
+  /* Display: Public Resource API */
+  $handler = $view->new_display('block', 'Public Resource API', 'public');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'All Document Resources';
+  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Author: User ID (indexed) */
+  $handler->display->display_options['arguments']['author_uid']['id'] = 'author_uid';
+  $handler->display->display_options['arguments']['author_uid']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['arguments']['author_uid']['field'] = 'author_uid';
+  $handler->display->display_options['arguments']['author_uid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['author_uid']['default_argument_type'] = 'current_user';
+  $handler->display->display_options['arguments']['author_uid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['author_uid']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['author_uid']['not'] = 0;
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['filter_groups']['groups'] = array(
+    1 => 'OR',
+    2 => 'AND',
+  );
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
+    'Public' => 'Public',
+  );
 
   $export['document_resource_index'] = $view;
 
