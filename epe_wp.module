@@ -133,6 +133,11 @@ function epe_wp_block_info() {
     'cache' => DRUPAL_NO_CACHE,
   );
 
+  $blocks['epe_user_public_resources'] = array(
+    'info' => t('EPE User Public Resource List'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
   return $blocks;
 
 }
@@ -161,6 +166,11 @@ function epe_wp_block_view($delta = '') {
       $block['title'] = t('Featured Resources');
       $block['content'] = theme('epe_featured_block');
     break;
+
+    case 'epe_user_public_resources':
+      $block['title'] = t('Public Resources');
+      $block['content'] = theme('epe_user_public_resources');
+    break;
   }
 
   return $block;
@@ -183,6 +193,10 @@ function epe_wp_theme() {
       'variables' => array(
         'type' => array(),
       ),
+    ),
+    'epe_user_public_resources' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_user_public_resources',
     ),
   );
 }
