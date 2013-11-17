@@ -57,8 +57,8 @@ function epe_llb_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => 300,
-          'height' => 150,
+          'width' => 270,
+          'height' => 116,
         ),
         'weight' => 1,
       ),
@@ -530,6 +530,7 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
     if(!arg(2)) {
       $view_mode = 'teaser';
     } elseif ( arg(2) && arg(2) == 'detail') {
+      drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css');
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
       drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));

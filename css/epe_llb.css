@@ -13,3 +13,9 @@ textarea.dataset { border: 0; }
 
 .table-condensed .item.body { height: 250px; overflow: auto; }
 label { font-weight: bold; }
+
+.dataset { margin-left: 20px !important; }
+.dataset.first { margin-left: 0 !important; }
+.dataset .thumbnail { width: 270px; height: 200px; text-align: center; }
+.dataset .thumbnail .image { width: 270px; height: 150px; }
+.thumbnail img { margin:auto; display: block; }

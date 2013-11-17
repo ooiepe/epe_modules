@@ -111,9 +111,22 @@
 <div class="tab-pane" id="exploration">
   <ul class="thumbnails">
     <?php foreach($datasets as $key => $dataset): ?>
-    <li class="span4">
+    <?php
+      $li_classes = array('dataset');
+      if(($key + 1) % 3 == 1): $li_classes[] = 'first'; endif;
+    ?>
+    <li class="<?php echo implode(' ', $li_classes); ?>">
       <div class="thumbnail">
-        <img src="<?php echo $dataset->thumbnail; ?>" alt="<?php echo $dataset->title; ?>">
+        <div class="image">
+        <?php
+          if(isset($dataset->uri) && !empty($dataset->uri)) {
+            $thumbnail_image = array('style_name' => 'llb_dataset_teaser', 'path' => $dataset->uri, 'alt' => $dataset->title, 'title' => $dataset->title);
+            echo theme('image_style', $thumbnail_image);
+          } else {
+            echo '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
+          }
+        ?>
+        </div>
         <a href="#" onclick="$('#llb2 li:eq(<?php echo $key + 2; ?>) a').tab('show');"><?php echo $dataset->title; ?></a>
       </div>
     </li>
@@ -230,8 +243,6 @@ function giveXMLtoJS(value) {
 </div> <!-- /.tab-content -->
 </div> <!-- /.tabbable -->
 
-<a href="<?php echo base_path() . 'node/' . arg(1); ?>" class="btn btn-primary">Back <i class="icon-chevron-right icon-white"></i></a>
-
   <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
     <footer>
       <?php //print render($content['field_tags']); ?>
@@ -243,5 +254,7 @@ function giveXMLtoJS(value) {
 
 </div>
 </div>
+
+<?php echo l('View Lesson Information', "node/" . arg(1)); ?>
 
 </article> <!-- /.node -->
