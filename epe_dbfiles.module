@@ -21,7 +21,7 @@ function epe_dbfiles_menu() {
   $epe_menu = variable_get('epe_menu',array());
 
   $items['resource/add/file'] = array(
-    'title' => t('Create EPE File Resource'),
+    'title' => t('Upload a Resource'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_dbfiles_node_form'),
     'access callback' => 'user_access',
@@ -33,7 +33,7 @@ function epe_dbfiles_menu() {
   );
 
   $items['resource/file/%/edit'] = array(
-    'title' => t('Edit EPE File Resource'),
+    'title' => t('Edit a Resource'),
     'page callback' => 'epe_dbfile_node_edit',
     'page arguments' => array(2),
     'access callback' => 'user_access',
