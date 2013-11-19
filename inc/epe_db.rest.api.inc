@@ -71,7 +71,7 @@ function epe_db_node_lookup() {
         $output .= '<node id="' . $item['id'] . '" datemodified="' . $item['modified'] . '" datemodifiedepoch="' . $item['changed'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
-        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author>';
+        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
       }
       $output .= '</conceptmaps>';
     } else { $output .= '<conceptmaps />'; }
@@ -82,7 +82,7 @@ function epe_db_node_lookup() {
         $output .= '<node id="' . $item['id'] . '" img="' . $item['img'] . '" url="' . $item['url'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
-        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author>';
+        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
       }
       $output .= '</images>';
     } else { $output .= '<images />'; }
@@ -93,7 +93,7 @@ function epe_db_node_lookup() {
         $output .= '<node id="' . $item['id'] . '" url="' . $item['url'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
-        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author>';
+        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
       }
       $output .= '</docs>';
     } else { $output .= '<docs />'; }
@@ -104,7 +104,7 @@ function epe_db_node_lookup() {
         $output .= '<node id="' . $item['id'] . '" img="' . $item['img'] . '" source="' . $item['file'] . '" url="' . $item['url'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
-        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author>';
+        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
       }
       $output .= '</videos>';
     } else { $output .= '<videos />'; }
@@ -115,7 +115,7 @@ function epe_db_node_lookup() {
         $output .= '<node id="' . $item['id'] . '" url="' . $item['url'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
-        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author>';
+        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
       }
       $output .= '</visualizations>';
     } else { $output .= '<visualizations />'; }
@@ -126,7 +126,7 @@ function epe_db_node_lookup() {
         $output .= '<node id="' . $item['id'] . '" url="' . $item['url'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
-        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author>';
+        $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
       }
       $output .= '</lessons>';
     } else { $output .= '<lessons />'; }
