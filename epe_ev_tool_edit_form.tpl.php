@@ -1,13 +1,13 @@
 <?php
 
-require_once("inc/epe_ev_lib.php");
+  require_once("inc/epe_ev_lib.php");
 
-$ev_tool = array();
+  $ev_tool = array();
 
-$EduVis_Paths = epe_EduVis_Paths();
+  $EduVis_Paths = epe_EduVis_Paths();
 
-// add EduVis framework to page
-drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
+  // add EduVis framework to page
+  drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
 ?>
 
@@ -35,13 +35,33 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
       </div>
 
       <div class="field-container">
-        <label for="edit-tool-name" class="field-label">* Tool Name:</label>
         <?php echo render($form['field_tool_name']); ?>
       </div>
 
+      <div class="field-container">
+        <div>Published Status</div>
+        <?php echo render($form['status']); ?>
+      </div>
 
       <div class="field-container">
-        <label for="edit-description-value" class="field-label">Description:</label>
+        
+        <label class="option checkbox control-label" for="edit-status">
+        <input type="checkbox" id="edit-status" name="status" value="<?php echo $form["#node"]->status; ?>" 
+        <?php 
+
+          // checked published status.. if published (0), show checked
+          echo ($form["#node"]->status == 1 ? 'checked="checked"' : "");
+
+        ?> class="form-checkbox">Published</label>
+
+      </div>
+
+      <div class="field-container thumbnail">
+        <label for="edit-thumbnail" class="field-label">Thumbnail:</label>
+        <?php echo render($form['field_tool_thumbnail']); ?>
+      </div>
+
+      <div class="field-container">
         <?php echo render($form['body']); ?>
       </div>
       
