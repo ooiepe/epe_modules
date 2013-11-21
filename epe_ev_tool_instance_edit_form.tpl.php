@@ -84,17 +84,14 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 			</div>
 
 			<div class="field-container" style="display:none;">
-				<!-- <label for="edit-parent-tool" class="field-label">* Parent Tool:</label> -->
 				<?php echo render($form['field_parent_tool']); ?>
 			</div>
 
 			<div class="field-container" style="display:none;">
-				<!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
 				<?php echo render($form['field_instance_configuration']); ?>
 			</div>
 
 			<div class="field-container">
-				<label for="edit-description-value" class="field-label">Description:</label>
 				<?php echo render($form['body']); ?>
 			</div>
 			
@@ -127,93 +124,59 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 		// pull the configuration from the default tool instance
 		var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration;
 			
-			//this takes all field values and applys them to the object to be saved
-			//config_updates = EduVis.controls.load_tool_config_values(config);
-
 		// update the configuration value of the form element
 		$("#edit-field-instance-configuration-und-0-value")
-			.val(
-				JSON.stringify(config)
-				//JSON.stringify(config_updates)
-			);
+			.val(JSON.stringify(config));
 	
 		return true;
 	}
   
-  	(function(){
+	(function(){
 
-			// update the parent tool ID form element
-  		// // changed from a select box to an autocomplete? field now has id of 'edit-field-parent-tool'
-  		//$("#edit-field-parent-tool-und").val("<?php print $ev_tool["parent_tool_id"];?>");
+		// update the parent tool ID form element
+		$("#edit-field-parent-tool-und-0-value").val("<?php print $ev_tool["parent_tool_id"];?>");
 
-  		//edit-field-parent-tool-und-0-value
-  		$("#edit-field-parent-tool-und-0-value").val("<?php print $ev_tool["parent_tool_id"];?>");
-
-	  	// add an event to the submit button
-	  	$('#edit-submit').click(function(){
-	  		return EduVis_extract();
+  	// add an event to the submit button
+  	$('#edit-submit').click(function(){
+  		return EduVis_extract();
 		});
 	 	
-	 	// set the EduVis, tools, and resources paths
-	    EduVis.Environment.setPaths( 
-	    	'<?php echo $EduVis_Paths["EduVis"]["root"];?>', // eduvis
-	    	'<?php echo $EduVis_Paths["EduVis"]["tools"];?>', // tools
-	    	'<?php echo $EduVis_Paths["EduVis"]["resources"];?>' // resources
-    	);
+ 		// set the EduVis, tools, and resources paths
+    EduVis.Environment.setPaths( 
+    	'<?php echo $EduVis_Paths["EduVis"]["root"];?>', // eduvis
+    	'<?php echo $EduVis_Paths["EduVis"]["tools"];?>', // tools
+    	'<?php echo $EduVis_Paths["EduVis"]["resources"];?>' // resources
+  	);
 
-	    EduVis.tool.load(
-	      { 
-	        "name" : "<?php print $ev_tool['tool']['field_tool_name'];?>", 
-	        "tool_container_div": "vistool",
-	        "instance_config": <?php 
-	        	if(isset($ev_tool["instance_configuration"]))
-	        		print $ev_tool["instance_configuration"] . "\n";
-	        	else
-	        		print "{}";
-        	?>,
-        	"onLoadComplete": function(){
+    EduVis.tool.load(
+      { 
+        "name" : "<?php print $ev_tool['tool']['field_tool_name'];?>", 
+        "tool_container_div": "vistool",
+        "instance_config": <?php 
+        	if(isset($ev_tool["instance_configuration"]))
+        		print $ev_tool["instance_configuration"] . "\n";
+        	else
+        		print "{}";
+      	?>,
+      	"onLoadComplete": function(){
 
-        		// todo: move to function in framework.. pass target_id, instance reference, 
-	       		var divToolControls = $("#vistool-controls"),
-	       			evTool = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"];
+      		// todo: move to function in framework.. pass target_id, instance reference, 
+       		var divToolControls = $("#vistool-controls"),
+       			evTool = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"];
 
-						if(typeof evTool.controls !== "object"){
-		            
-		            // if there are no controls, tell the user
-		            divToolControls.append(
-		            	
-		            	$("<p/>",{"class":"notify"})
-		            		.html("This tool does not have any configurable properties.")
-	            	);
-		        }
-		        else{
+       		EduVis.controls.drupal_edit_controls(divToolControls, evTool);
+	        
+        	// disable enter key press form submission on inputs textboxes.. restrict to type textbox only?
+					$("input").bind('keypress keydown keyup', function(e){
+			       if(e.keyCode == 13) { 
+			       		e.preventDefault(); 
+			       }
+			    });
 
-		            // Add each control to the specified div
-		            $.each(evTool.controls, function (control_id, control) {
-		                
-		                // override default value with form based value
-		                control.default_value = evTool.configuration[control_id];
+      	}
+      }
+    );
 
-		                // add the tool to the controls area
-		                divToolControls.append(
-		                    EduVis.controls.create( evTool, "config-" + control_id, control)
-		                );
-
-		            });
-		        }
-		        
-	        	// disable enter key press form submission on inputs textboxes.. restrict to type textbox only?
-						$("input").bind('keypress keydown keyup', function(e){
-				       if(e.keyCode == 13) { 
-				       		e.preventDefault(); 
-				       }
-				    });
-
-        	}
-	      }
-	    );
-
-  	}());
-
+	}());
 
 </script>
