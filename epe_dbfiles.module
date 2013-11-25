@@ -1,5 +1,5 @@
 <?php
-/**
+ /**
   * Implement hook_permission
   */
 function epe_dbfiles_permission() {
@@ -30,6 +30,26 @@ function epe_dbfiles_menu() {
     'type' => MENU_NORMAL_ITEM,
     'weight' => 2,
     'plid' => $epe_menu['db']['mlid'],
+  );
+
+  $items['dialog/resource/add/file'] = array(
+    'title' => t('Create EPE File Resource'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('epe_dbfiles_node_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbfiles interface'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['dialog/resource/file/%/success'] = array(
+    'title' => t('File Resource Added'),
+    'page callback' => 'epe_dbfiles_adhoc_response',
+    'page arguments' => array(3),
+    'file' => 'epe_dbfiles.form.inc',
+    'file path' => drupal_get_path('module', 'epe_dbfiles') . '/inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbfiles interface'),
+    'type' => MENU_CALLBACK,
   );
 
   $items['resource/file/%/edit'] = array(
@@ -200,7 +220,6 @@ function epe_dbfile_node_edit($nid) {
 function epe_dbfiles_menu_alter(&$items) {
   $items['file/ajax']['file'] = 'node.pages.inc';
   $items['file/ajax']['file path'] = drupal_get_path('module', 'node');
-
 }
 
 /*
@@ -375,9 +394,13 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
     node_save($node);
   } //end video field save
 
-  $form_state['redirect'] = 'node/' . $entity->nid;
-
   drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
+
+  if(arg(0) == 'dialog') {
+    drupal_goto("dialog/resource/file/{$entity->nid}/success");
+  } else {
+    $form_state['redirect'] = 'node/' . $entity->nid;
+  }
 }
 
 /*

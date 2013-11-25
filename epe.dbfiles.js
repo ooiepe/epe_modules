@@ -10,10 +10,16 @@ Drupal.behaviors.epe_files = {
 
     $('input[name=permission]').click(function() {
       if($(this).prop('checked') == true) {
-        $('button.form-submit').removeAttr('disabled');
+        $('.form-submit').removeAttr('disabled');
       } else {
         $(this).prop('checked', false);
-        $('button.form-submit').attr('disabled','disabled');
+        $('.form-submit').attr('disabled','disabled');
+      }
+    });
+
+    $(".form-text").keypress(function (event) {
+      if (event.keyCode == 10 || event.keyCode == 13) {
+        event.preventDefault();
       }
     });
   }
