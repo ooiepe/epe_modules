@@ -185,7 +185,9 @@
     </table>
 
     <p><strong>Add another Dataset:</strong></p>
-    <?php echo render($form['resource_browser']); ?>
+    <?php //echo render($form['resource_browser']); ?>
+
+    <?php echo render($form['resource_browser_modal']); ?>
   </div>
 
   <div class="control-group">

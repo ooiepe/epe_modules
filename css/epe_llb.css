@@ -19,3 +19,6 @@ label { font-weight: bold; }
 .dataset .thumbnail { width: 270px; height: 200px; text-align: center; }
 .dataset .thumbnail .image { width: 270px; height: 150px; }
 .thumbnail img { margin:auto; display: block; }
+.modal { width: 805px; }
+.modal-body { max-height: 700px; }
+#adhocmodal .modal-body { max-height: 740px; }
