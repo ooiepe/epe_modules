@@ -468,7 +468,9 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'=>array('type'=>'external'),
   );*/
 
-  $form['#attached']['js'][] = libraries_get_path('bootbox') . '/bootbox.min.js';
+  //$form['#attached']['js'][] = libraries_get_path('bootbox') . '/bootbox.min.js';
+
+  drupal_add_library('system','ui.sortable');
 
   $app_path = drupal_get_path('module', 'epe_llb') . '/app';
 
@@ -476,7 +478,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   //$form['#attached']['js'][] = $app_path . '/explorationController.js';
   //$form['#attached']['js'][] = $app_path . '/explorationFactory.js';
   $form['#attached']['js'][] = $app_path . '/explorationDirective.js';
-  $form['#attached']['js'][] = libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.3.0.min.js';
+  $form['#attached']['js'][] = libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js';
   $form['#attached']['js'][] = libraries_get_path('ui-sortable') . '/src/sortable.js';
   $form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/epe_llb.exploration_dataset.js';
   $form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/epe_llb.edit.intro_slideshow.js';

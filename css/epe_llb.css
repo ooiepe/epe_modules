@@ -22,3 +22,4 @@ label { font-weight: bold; }
 .modal { width: 805px; }
 .modal-body { max-height: 700px; }
 #adhocmodal .modal-body { max-height: 740px; }
+ul.table { list-style: none; margin: 0; }
