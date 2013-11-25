@@ -281,7 +281,19 @@ function epe_llb_theme() {
     'epe_llb_homepage' => array(
       'path' => $tpl_path,
       'template' => 'epe_llb_homepage',
-    )
+    ),
+    'epe_llb_add_resource_modal_template' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_add_resource_modal_template',
+      'variables' => array(
+        'templateid' => '',
+        'label' => '',
+      ),
+    ),
+    'epe_llb_adhoc_modal_template' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_adhoc_modal_template',
+    ),
   );
 }
 
@@ -376,6 +388,41 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['resource_browser'] = array(
     '#markup' => implode('&nbsp;', $resource_browser_btns), //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
     '#suffix' => '</div>' //end div.app-main
+  );
+
+  $resource_browser_add_btns = array();
+  $resource_browser_modals = array();
+  foreach($depend_modules as $module) {
+    if(isset($module['resource_browser'])) {
+      $btn_label = '';
+      if(isset($module['resource_browser']['label'])) {
+        $btn_label = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $btn_label = $node_type->name;
+      }
+
+      if(isset($module['resource_browser']['weight'])) {
+    /*    $resource_browser_add_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
+        /*$resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#modal' . $module['resource_browser']['api'] . '" class="btn btn-success" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';*/
+        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+      } else {
+/*        $resource_browser_add_btns[] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
+        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+      }
+      //$resource_browser_modals[] = theme('epe_llb_add_resource_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
+    }
+  }
+  ksort($resource_browser_add_btns);
+
+  //$resource_browser_modals[] = '<div id="rbmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body"><iframe src="" seamless width="779" height="500" class="rb-modal-iframe" /></div><div class="modal-footer"><button type="button" class="btn btn-primary pull-left add-selected" data-dismiss="modal" aria-hidden="true">Add Selected</button><a href="#adhocmodal" class="btn btn-success" data-dismiss="modal" aria-hidden="true" data-toggle="modal">Add New Resource</a><button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div></div>';
+
+  $resource_browser_modals[] = theme('epe_llb_add_resource_modal_template');
+
+  $resource_browser_modals[] = theme('epe_llb_adhoc_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
+
+  $form['resource_browser_modal'] = array(
+    '#markup' => implode('', $resource_browser_modals) . '<div>' . implode('&nbsp;', $resource_browser_add_btns) . '</div>', //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
   );
 
   // Create our own javascript that will be used to theme a modal.
