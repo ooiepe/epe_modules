@@ -581,6 +581,12 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
       drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+
+      if(libraries_get_path('video-js')) {
+        drupal_add_css(libraries_get_path('video-js') . '/video-js.css');
+        drupal_add_js(libraries_get_path('video-js') . '/video.js');
+        drupal_add_js('videojs.options.flash.swf = "' . base_path() . libraries_get_path('video-js') . '/video-js.swf"',array('type'=>'inline'));
+      }
     } elseif ( arg(2) && arg(2) == 'instructor' ) {
       $view_mode = 'llb_instructor';
     }
@@ -707,9 +713,18 @@ function epe_llb_theme_file_dataset($dataset) {
   $output = '';
   $output = '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" alt="' . $dataset->title . '" />';
   if(isset($dataset->file)) {
-    $output = '<a href="' . file_create_url($dataset->file) .'">' . $output . '</a>';
+    switch($dataset->type) {
+      case 'video_resource':
+        $output = '<video id="video_' . $dataset->nid . '" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="' . image_style_url("llb_detail_view",$dataset->uri) . '"><source src="' . file_create_url($dataset->file) . '" /></video>';
+      break;
+
+      default:
+        $output = '<a href="' . file_create_url($dataset->file) .'">' . $output . '</a>';
+      break;
+    }
   }
-  return $output;
+
+  return '<center>' . $output . '</center>';
 }
 
 /**
