@@ -59,5 +59,10 @@ app.directive('tableRow', function($compile) {
 });
 
 app.controller('main', function($scope, data) {
+  $scope.panes = {};
+
   $scope.panes = data.resources;
+
+  $scope.panes.active = '';
+  $scope.panes.rb_type_selector = true;
 });

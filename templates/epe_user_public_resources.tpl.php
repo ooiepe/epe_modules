@@ -2,6 +2,7 @@
   $app_path = drupal_get_path('module', 'epe_wp') . '/js/user_profile';
   drupal_add_js($app_path . '/app.js');
   drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js');
+  drupal_add_css(drupal_get_path('module','epe_wp') . '/css/epe_user_public_resources.css');
 
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
   $resource_browser_tabs = array();
@@ -35,6 +36,14 @@
 ?>
 
 <div class="app-main" ng-controller="main">
+
+<div ng-show="panes.rb_type_selector==true">
+<div class="rb-type-selector">
+  <ul>
+    <li ng-repeat="pane in panes.table" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
+  </ul>
+</div>
+
 <tabset id="rb-tabs">
   <tab ng-repeat="pane in panes" heading="{{pane.type}} ({{pane.data.length}})" active="pane.active" select="fn.activeTab(pane);">
   <table id="rb-tab-pane-{{pane.api}}">
