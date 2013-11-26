@@ -11,7 +11,7 @@
 
   $view->execute();
 
-  foreach($view->result as $result):
+  foreach($view->result as $key => $result):
 ?>
 <?php $node = node_load($result->nid); ?>
 <?php if($node): ?>
@@ -49,12 +49,12 @@
     }
   }
 ?>
-<li>
-  <?php if($thumbnail): echo l($thumbnail,"node/{$wrapper->getIdentifier()}",array('html'=>TURE)); endif; ?>
+<li <?php if($key == 0): echo 'class="first"'; endif; ?>>
+  <?php if($thumbnail): echo l($thumbnail,"node/{$wrapper->getIdentifier()}",array('html'=>'TRUE')); endif; ?>
   <div class="title"><?php echo $wrapper->label(); ?></div>
-  <div class="author"><?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
+  <div class="author">by <?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
   <?php if($wrapper->body->value()): ?>
-  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => TRUE)),0,200); ?></div>
+  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => 'TRUE')),0,200); ?></div>
   <?php endif; ?>
 </li>
 <?php endif; ?>
