@@ -136,24 +136,26 @@
       </table>
     </div>
 
+
     <table class="table table-condensed">
       <tr>
-        <th width="20%">Dataset</th>
+        <th width="25%">Dataset</th>
         <th width="40%">Dataset Description</th>
-        <th width="40%">Investigation Questions</th>
+        <th width="35%">Investigation Questions</th>
       </tr>
+      <tbody ui-sortable ng-model="items">
       <tr ng-repeat="item in items">
         <td>
-          <img ng-src="{{item.thumbnail}}">
+          <img ng-src="{{item.thumbnail}}" style="cursor: move;">
           <div ng-show="fn.inItemEditArray(item.nid)">
-            <input type="text" name="title" ng-model="currentCopies.items[item.nid].title" size="30">
+            <textarea name="title" ng-model="currentCopies.items[item.nid].title" cols="35" rows="2"></textarea>
             <br/>
             <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.nid);">Cancel</button>
             <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.nid);">Save</button>
           </div>
           <div ng-show="!fn.inItemEditArray(item.nid)">
             <p>{{item.title}}</p>
-            <div><a ng-click="fn.editItem($index);"><i class="icon-edit"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);"></i></div>
+            <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);" style="cursor:pointer;"></i></div>
           </div>
         </td>
         <td>
@@ -165,7 +167,7 @@
           </div>
         </td>
         <td>
-          <ul>
+          <ul class="list">
             <div ng-show="!fn.inItemEditArray(item.nid)">
             <li ng-repeat="question in item.questions">
               {{question.text}}
@@ -173,7 +175,7 @@
             </div>
             <div ng-show="fn.inItemEditArray(item.nid)">
               <li ng-repeat="question in currentCopies.items[item.nid].questions">
-                <textarea name="question" rows="2" cols="35" ng-model="question.text"></textarea><span><i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
+                <textarea name="question" rows="3" cols="35" ng-model="question.text"></textarea><span>&nbsp;<i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
               </li>
             </div>
           </ul>
@@ -182,6 +184,7 @@
           </div>
         </td>
       </tr>
+      </tbody>
     </table>
 
     <p><strong>Add another Dataset:</strong></p>

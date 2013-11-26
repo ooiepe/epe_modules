@@ -64,6 +64,7 @@ jQuery(document).ready(function($) {
               dataType: 'json',
               async: true,
               success: function(data) {
+                if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
                 window.parent.addItem(data, true);
               }
             });
