@@ -470,7 +470,9 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   //$form['#attached']['js'][] = libraries_get_path('bootbox') . '/bootbox.min.js';
 
-  drupal_add_library('system','ui.sortable');
+  /*drupal_add_library('system','ui.sortable');*/
+  drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
+  drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
 
   $app_path = drupal_get_path('module', 'epe_llb') . '/app';
 
@@ -486,11 +488,12 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['#attached']['js'][] = libraries_get_path('formSavior') . '/jquery.formSavior.min.js';
 
   $form['#attached']['js'][] = array(
-    'data' => array('default_dataset_value'=>$default_dataset_value),
-    'type' => 'setting',
-  );
-  $form['#attached']['js'][] = array(
-    'data' => array('epe_dbresource_browser'=>array('base_path'=>base_path())),
+    'data' => array(
+      'default_dataset_value'=>$default_dataset_value,
+      'llb'=> array(
+        'thumbnail_placeholder'=>drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg'
+      ),
+    ),
     'type' => 'setting',
   );
   $form['#attached']['js']['jQuery(document).ready(function($) { $("form#llb-resource-node-form").formSavior(); });'] = array( 'type' => 'inline');

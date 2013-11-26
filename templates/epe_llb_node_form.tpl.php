@@ -139,71 +139,23 @@
 
     <table class="table table-condensed">
       <tr>
-        <th width="30%">Dataset</th>
+        <th width="25%">Dataset</th>
         <th width="40%">Dataset Description</th>
-        <th width="30%">Investigation Questions</th>
+        <th width="35%">Investigation Questions</th>
       </tr>
-    </table>
-    <ul ui-sortable ng-model="items" class="table">
-      <li ng-repeat="item in items">
-      <table>
-      <tr>
-        <td width="30%">
-          <img ng-src="{{item.thumbnail}}">
-          <div ng-show="fn.inItemEditArray(item.nid)">
-            <!-- <input type="text" name="title" ng-model="currentCopies.items[item.nid].title" size="30"> -->
-            <textarea name="title" ng-model="currentCopies.items[item.nid].title" cols="40" rows="3"></textarea>
-            <br/>
-            <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.nid);">Cancel</button>
-            <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.nid);">Save</button>
-          </div>
-          <div ng-show="!fn.inItemEditArray(item.nid)">
-            <p>{{item.title}}</p>
-            <div><a ng-click="fn.editItem($index);"><i class="icon-edit"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);"></i></div>
-          </div>
-        </td>
-        <td width="40%">
-          <div ng-show="fn.inItemEditArray(item.nid)">
-            <textarea name="body" cols="58" rows="10" ng-model="currentCopies.items[item.nid].body"></textarea>
-          </div>
-          <div ng-show="!fn.inItemEditArray(item.nid)">
-            <div ng-bind-html="item.body" class="item body"></div>
-          </div>
-        </td>
-        <td width="30%">
-          <ul>
-            <div ng-show="!fn.inItemEditArray(item.nid)">
-            <li ng-repeat="question in item.questions">
-              {{question.text}}
-            </li>
-            </div>
-            <div ng-show="fn.inItemEditArray(item.nid)">
-              <li ng-repeat="question in currentCopies.items[item.nid].questions">
-                <textarea name="question" rows="2" cols="33" ng-model="question.text"></textarea><span><i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
-              </li>
-            </div>
-          </ul>
-          <div ng-show="fn.inItemEditArray(item.nid)">
-          <button type="button" class="btn btn-small btn-primary" ng-click="fn.addQuestion(item.nid);">Add Question</button>
-          </div>
-        </td>
-      </tr>
-      </table>
-      </li>
-    </ul>
-    <!--
+      <tbody ui-sortable ng-model="items">
       <tr ng-repeat="item in items">
         <td>
-          <img ng-src="{{item.thumbnail}}">
+          <img ng-src="{{item.thumbnail}}" style="cursor: move;">
           <div ng-show="fn.inItemEditArray(item.nid)">
-            <input type="text" name="title" ng-model="currentCopies.items[item.nid].title" size="30">
+            <textarea name="title" ng-model="currentCopies.items[item.nid].title" cols="35" rows="2"></textarea>
             <br/>
             <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.nid);">Cancel</button>
             <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.nid);">Save</button>
           </div>
           <div ng-show="!fn.inItemEditArray(item.nid)">
             <p>{{item.title}}</p>
-            <div><a ng-click="fn.editItem($index);"><i class="icon-edit"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);"></i></div>
+            <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a><i class="icon-trash" ng-click="removeDataSet($index);" style="cursor:pointer;"></i></div>
           </div>
         </td>
         <td>
@@ -215,7 +167,7 @@
           </div>
         </td>
         <td>
-          <ul>
+          <ul class="list">
             <div ng-show="!fn.inItemEditArray(item.nid)">
             <li ng-repeat="question in item.questions">
               {{question.text}}
@@ -223,7 +175,7 @@
             </div>
             <div ng-show="fn.inItemEditArray(item.nid)">
               <li ng-repeat="question in currentCopies.items[item.nid].questions">
-                <textarea name="question" rows="2" cols="35" ng-model="question.text"></textarea><span><i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
+                <textarea name="question" rows="3" cols="35" ng-model="question.text"></textarea><span>&nbsp;<i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
               </li>
             </div>
           </ul>
@@ -232,8 +184,9 @@
           </div>
         </td>
       </tr>
+      </tbody>
     </table>
-    -->
+
     <p><strong>Add another Dataset:</strong></p>
     <?php //echo render($form['resource_browser']); ?>
 
