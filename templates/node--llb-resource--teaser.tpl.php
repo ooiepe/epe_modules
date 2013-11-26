@@ -40,7 +40,7 @@
       <div class="pull-right">
         <p>
           <?php //echo render($content['field_challenge_thumbnail']);
-            if($content['field_challenge_thumbnail']) {
+            if(isset($content['field_challenge_thumbnail']) && $content['field_challenge_thumbnail']) {
               $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $content['field_challenge_thumbnail']['#items'][0]['uri'], 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
               echo theme('image_style', $thumbnail);
             }
@@ -58,7 +58,7 @@
   <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
     <footer>
       <?php print render($content['field_tags']); ?>
-      <?php print render($content['links']); ?>
+      <?php //print render($content['links']); ?>
     </footer>
   <?php endif; ?>
 

@@ -574,6 +574,12 @@ function _epe_llb_insert_after_first_element(&$a, $element) {
  */
 function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
   if($view_mode == 'full' && $context['entity_type'] == 'node' && $context['entity']->type == 'llb_resource') {
+
+    $node = node_load($context['entity']->nid);
+    if($view_mode == 'full') {
+      comment_node_view($node,'full');
+    }
+
     if(!arg(2)) {
       $view_mode = 'teaser';
     } elseif ( arg(2) && arg(2) == 'detail') {
