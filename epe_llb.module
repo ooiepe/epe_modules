@@ -402,13 +402,18 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
         $btn_label = $node_type->name;
       }
 
+      $adhoc = false;
+      if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+        $adhoc = true;
+      }
+
       if(isset($module['resource_browser']['weight'])) {
     /*    $resource_browser_add_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
         /*$resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#modal' . $module['resource_browser']['api'] . '" class="btn btn-success" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';*/
-        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
       } else {
 /*        $resource_browser_add_btns[] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
-        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
       }
       //$resource_browser_modals[] = theme('epe_llb_add_resource_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
     }
@@ -423,6 +428,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   $form['resource_browser_modal'] = array(
     '#markup' => implode('', $resource_browser_modals) . '<div>' . implode('&nbsp;', $resource_browser_add_btns) . '</div>', //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
+    '#suffix' => '</div>' //end div.app-main
   );
 
   // Create our own javascript that will be used to theme a modal.
@@ -468,9 +474,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'=>array('type'=>'external'),
   );*/
 
-  //$form['#attached']['js'][] = libraries_get_path('bootbox') . '/bootbox.min.js';
-
-  /*drupal_add_library('system','ui.sortable');*/
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
 
@@ -579,7 +582,6 @@ function _epe_llb_insert_after_first_element(&$a, $element) {
  */
 function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
   if($view_mode == 'full' && $context['entity_type'] == 'node' && $context['entity']->type == 'llb_resource') {
-
     $node = node_load($context['entity']->nid);
     if($view_mode == 'full') {
       comment_node_view($node,'full');
@@ -591,6 +593,7 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
       drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css',array('group'=>CSS_THEME));
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
+
       drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
       if(libraries_get_path('video-js')) {
@@ -736,7 +739,6 @@ function epe_llb_theme_file_dataset($dataset) {
       break;
     }
   }
-
   return '<center>' . $output . '</center>';
 }
 
