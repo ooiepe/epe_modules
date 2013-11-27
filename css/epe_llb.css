@@ -22,3 +22,7 @@ label { font-weight: bold; }
 .modal { width: 805px; }
 .modal-body { max-height: 700px; }
 #adhocmodal .modal-body { max-height: 740px; }
+blockquote p { font-size: 14px; }
+.nav .dropdown-toggle .caret { border-top-color: #0088cc; border-bottom-color: #0088cc;}
+.nav-tabs .active .dropdown-toggle .caret { border-top-color: #555; border-bottom-color: #555; }
+.pull-right { margin-left: 10px; }

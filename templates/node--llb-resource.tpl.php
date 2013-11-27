@@ -41,8 +41,8 @@
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
   <li class="active"><a href="#intro" data-toggle="tab">Introduction</a></li>
-  <li><a href="#background" data-toggle="tab">Problem</a></li>
-  <!-- <li><a href="#challenge" data-toggle="tab">Challenge</a></li> -->
+  <li><a href="#background" data-toggle="tab">Background</a></li>
+  <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li id="llb2" class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Exploration <b class="caret"></b></a>
     <ul class="dropdown-menu">
@@ -58,7 +58,7 @@
 <div class="tab-content">
 
 <div class="tab-pane active" id="intro">
-  <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
+  <h3>Activity Introduction</h3>
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
   <?php if(!empty($content['field_introductory_slideshow'])): ?>
@@ -86,29 +86,47 @@
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
 </div><!-- /.carousel -->
   <?php endif; //end checking $content['field_introductory_slideshow'] ?>
-  <?php echo render($content['field_background_content']); ?>
+  <?php echo render($content['field_introductory_content']); ?>
 
   <?php //echo render($content['field_introductory_slideshow']); ?>
+
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 
 </div> <!-- /#intro -->
 
 <div class="tab-pane" id="background">
-  <h3>The Problem</h3>
+  <h3>Background</h3>
   <div class="pull-right">
     <?php echo render($content['field_background_slideshow']); ?>
   </div>
 
-  <p>In this activity you will research the following problem:</p>
-  <blockquote><em>Research question</em><?php echo render($content['field_background_question']); ?></blockquote>
+  <?php echo render($content['field_background_content']); ?>
+  <?php
+  foreach($content['field_background_question'] as $key => $question) {
+    if(is_numeric($key)) {
+      echo '<blockquote>';
+      echo 'Question ' . ($key+1) .': ' . $question['#markup'];
+      echo '</blockquote>';
+    }
+  }
+  ?>
+
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 
 </div> <!-- /#background -->
 
-<!-- <div class="tab-pane" id="challenge">
-  <p><?php echo render($content['field_challenge_content']); ?></p>
-  <p><?php echo render($content['field_challenge_thumbnail']); ?></p>
-</div> --> <!-- /#challenge -->
+<div class="tab-pane" id="challenge">
+  <h3>Challenge</h3>
+  <div class="pull-right"><?php echo render($content['field_challenge_thumbnail']); ?></div>
+  <p>In this activity you will investigate the following challenge:</p>
+  <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
+
+  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+</div> <!-- /#challenge -->
 
 <div class="tab-pane" id="exploration">
+  <h3>Explore the Data</h3>
+  <p>Investigate each piece of evidence below and answer the investigation questions on each page.  After viewing all of the data, come up with a list of possible impacts the ocean and hurricanes have on each other, and justify each based on the evidence you reviewed.</p>
   <ul class="thumbnails">
     <?php foreach($datasets as $key => $dataset): ?>
     <?php
@@ -127,11 +145,13 @@
           }
         ?>
         </div>
-        <a href="#" onclick="$('#llb2 li:eq(<?php echo $key + 2; ?>) a').tab('show');"><?php echo $dataset->title; ?></a>
+        <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a>
       </div>
     </li>
     <?php endforeach; ?>
   </ul>
+  <p>When you're done investigating the datasets, continue to the last section.</p>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llb li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div>
 
 <?php
@@ -192,7 +212,7 @@ function giveXMLtoJS(value) {
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
-    <li><a href="#" onclick="$('#llb2 li:eq(0) a').tab('show');">Exploration</a> <span class="divider">/</span></li>
+    <li><a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Exploration</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
@@ -226,18 +246,36 @@ function giveXMLtoJS(value) {
     </div>
   </div>
   <?php endif; ?>
-  <button type="button" class="btn btn-success" onclick="$('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button>
 </div>
 <?php endforeach; ?>
 
 <div class="tab-pane" id="explanation">
+  <h3>Develop an Explanation</h3>
   <p>Recall that the research question you are trying to address is:</p>
   <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
   <p>As you take into account the data you just viewed, consider the following <strong>Inference Questions</strong>.</p>
-  <p><?php echo render($content['field_inference_question']); ?></p>
+  <?php
+  foreach($content['field_inference_question'] as $key => $question) {
+    if(is_numeric($key)) {
+      echo '<div>';
+      echo ($key + 1) . '. ' . $question['#markup'];
+      echo '</div>';
+    }
+  }
+  ?>
+  <p></p>
   <p>Thinking deeper, consider the following <strong>Extrapolation Questions</strong>.</p>
-  <p><?php echo render($content['field_extrapolation_question']); ?></p>
-
+  <?php
+  foreach($content['field_extrapolation_question'] as $key => $question) {
+    if(is_numeric($key)) {
+      echo '<div>';
+      echo ($key + 1) . '. ' . $question['#markup'];
+      echo '</div>';
+    }
+  }
+  ?>
+  <p></p>
 </div> <!-- /#explanation -->
 
 </div> <!-- /.tab-content -->
@@ -255,6 +293,6 @@ function giveXMLtoJS(value) {
 </div>
 </div>
 
-<?php echo l('View Lesson Information', "node/" . arg(1)); ?>
+<p><?php echo l('View Lesson Information', "node/" . arg(1)); ?></p>
 
 </article> <!-- /.node -->

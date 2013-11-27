@@ -583,7 +583,7 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
     if(!arg(2)) {
       $view_mode = 'teaser';
     } elseif ( arg(2) && arg(2) == 'detail') {
-      drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css');
+      drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css',array('group'=>CSS_THEME));
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
       drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
       drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
@@ -608,6 +608,8 @@ function epe_llb_node_view_alter(&$build) {
     $build['field_background_content']['#label_display'] = 'hidden';
     $build['field_background_slideshow']['#label_display'] = 'hidden';
     $build['field_background_question']['#label_display'] = 'hidden';
+    $build['field_challenge_content']['#label_display'] = 'hidden';
+    $build['field_challenge_thumbnail']['#label_display'] = 'hidden';
   }
 
   $epe_menu = variable_get('epe_menu',array());
