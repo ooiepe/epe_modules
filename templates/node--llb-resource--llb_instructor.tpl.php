@@ -23,6 +23,6 @@
 </div>
 </div>
 
-<?php echo l('View Lesson Information', "node/" . arg(1)); ?>
+<p><?php echo l('View Lesson Information', "node/" . arg(1)); ?></p>
 
 </article> <!-- /.node -->
