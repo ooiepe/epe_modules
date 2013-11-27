@@ -402,13 +402,18 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
         $btn_label = $node_type->name;
       }
 
+      $adhoc = false;
+      if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+        $adhoc = true;
+      }
+
       if(isset($module['resource_browser']['weight'])) {
     /*    $resource_browser_add_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
         /*$resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#modal' . $module['resource_browser']['api'] . '" class="btn btn-success" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';*/
-        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
       } else {
 /*        $resource_browser_add_btns[] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
-        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
       }
       //$resource_browser_modals[] = theme('epe_llb_add_resource_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
     }
@@ -423,6 +428,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   $form['resource_browser_modal'] = array(
     '#markup' => implode('', $resource_browser_modals) . '<div>' . implode('&nbsp;', $resource_browser_add_btns) . '</div>', //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
+    '#suffix' => '</div>' //end div.app-main
   );
 
   // Create our own javascript that will be used to theme a modal.
