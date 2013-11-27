@@ -16,3 +16,4 @@ dependencies[] = wysiwyg
 dependencies[] = imce
 dependencies[] = imce_wysiwyg
 dependencies[] = views
+dependencies[] = views_ui

@@ -189,7 +189,7 @@ function epe_wp_enable() {
   foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
     if($role_name != 'author') {
       $role = user_role_load_by_name($role_name);
-      user_role_grant_permissions($role->rid, array('epe wp view pending resource list'));
+      user_role_grant_permissions($role->rid, array('epe wp moderate menu'));
     }
   }
 

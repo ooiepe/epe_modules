@@ -17,9 +17,9 @@ function epe_wp_views_api() {
   */
 function epe_wp_permission() {
   return array(
-    'epe wp view pending resource list' => array(
-      'title' => 'EPE WP view pending resource list',
-      'description' => 'Allow user to view list of pending resources.',
+    'epe wp moderate menu' => array(
+      'title' => 'EPE WP access moderate menu',
+      'description' => 'Allow user to access moderate menu.',
     ),
   );
 }
@@ -30,7 +30,6 @@ function epe_wp_block_info_alter(&$blocks, $theme, $code_blocks) {
   $blocks['user']['login']['status'] = 0;
   $blocks['search']['form']['status'] = 0;
 }
-
 
 function epe_wp_menu_alter(&$items) {
     // Change the title of user profile pages to the user's name.  Gak.
@@ -109,7 +108,43 @@ function epe_wp_menu() {
     'type' => MENU_NORMAL_ITEM,
   );*/
 
+  $items['moderate'] = array(
+    'title' => t('Moderate'),
+    'page callback' => 'epe_wp_moderate_view',
+    'page arguments' => array('pending'),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe wp moderate menu'),
+    'menu_name' => 'main-menu',
+    'weight' => 10,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','moderate','=')->execute()->fetchAssoc();
+
+  $items['moderate/resources/pending'] = array(
+    'title' => 'View Pending Resources',
+    'page callback' => 'epe_wp_moderate_view',
+    'page arguments' => array('pending'),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe wp moderate menu'),
+    'menu_name' => 'main-menu',
+    'plid' => $parent['mlid'],
+    'type' => MENU_NORMAL_ITEM,
+  );
+
   return $items;
+}
+
+function epe_wp_moderate_view($delta) {
+  switch ($delta) {
+    case 'pending':
+      return views_embed_view('moderator_resource_list', $display_id = 'pending_block');
+      break;
+
+    default:
+      drupal_access_denied();
+      break;
+  }
 }
 
 function epe_wp_block_info() {
