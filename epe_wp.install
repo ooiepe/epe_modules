@@ -189,7 +189,7 @@ function epe_wp_enable() {
   foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
     if($role_name != 'author') {
       $role = user_role_load_by_name($role_name);
-      user_role_grant_permissions($role->rid, array('epe wp view pending resource list'));
+      user_role_grant_permissions($role->rid, array('epe wp moderate menu'));
     }
   }
 
@@ -292,44 +292,44 @@ function epe_wp_enable() {
   variable_set('clone_omitted', $clone_omitted);
 
 /*
-  $node = new stdClass(); 
-  $node->type = "page"; 
+  $node = new stdClass();
+  $node->type = "page";
   $node->title = "About the OOI";
-  $node->language = LANGUAGE_NONE; 
-  $node->path = array('alias' => 'about'); 
-  node_object_prepare($node); 
-  $node->uid = 1; 
+  $node->language = LANGUAGE_NONE;
+  $node->path = array('alias' => 'about');
+  node_object_prepare($node);
+  $node->uid = 1;
   $node->body[$node->language][0]['value'] = file_get_contents( drupal_get_path('module','epe_wp') . '/content/about.html');
   $node->body[$node->language][0]['summary'] = '';
-  $node->body[$node->language][0]['format'] = 'filtered_html'; 
-  $node = node_submit($node); 
-  node_save($node); 
+  $node->body[$node->language][0]['format'] = 'filtered_html';
+  $node = node_submit($node);
+  node_save($node);
 
-  $node = new stdClass(); 
-  $node->type = "page"; 
+  $node = new stdClass();
+  $node->type = "page";
   $node->title = "Learn to Use Our Tools";
-  $node->language = LANGUAGE_NONE; 
-  $node->path = array('alias' => 'learn'); 
-  node_object_prepare($node); 
-  $node->uid = 1; 
+  $node->language = LANGUAGE_NONE;
+  $node->path = array('alias' => 'learn');
+  node_object_prepare($node);
+  $node->uid = 1;
   $node->body[$node->language][0]['value'] = file_get_contents( drupal_get_path('module','epe_wp') . '/content/learn.html');
   $node->body[$node->language][0]['summary'] = '';
-  $node->body[$node->language][0]['format'] = 'filtered_html'; 
-  $node = node_submit($node); 
-  node_save($node); 
+  $node->body[$node->language][0]['format'] = 'filtered_html';
+  $node = node_submit($node);
+  node_save($node);
 
-  $node = new stdClass(); 
-  $node->type = "page"; 
+  $node = new stdClass();
+  $node->type = "page";
   $node->title = "Teach with Data";
-  $node->language = LANGUAGE_NONE; 
-  $node->path = array('alias' => 'teach'); 
-  node_object_prepare($node); 
-  $node->uid = 1; 
+  $node->language = LANGUAGE_NONE;
+  $node->path = array('alias' => 'teach');
+  node_object_prepare($node);
+  $node->uid = 1;
   $node->body[$node->language][0]['value'] = file_get_contents( drupal_get_path('module','epe_wp') . '/content/teach.html');
   $node->body[$node->language][0]['summary'] = '';
-  $node->body[$node->language][0]['format'] = 'filtered_html'; 
-  $node = node_submit($node); 
-  node_save($node); 
+  $node->body[$node->language][0]['format'] = 'filtered_html';
+  $node = node_submit($node);
+  node_save($node);
 
 
 
@@ -669,13 +669,13 @@ function epe_wp_enable() {
 
   foreach ($kb as $item) {
 
-    $node = new stdClass(); 
-    $node->type = "page"; 
+    $node = new stdClass();
+    $node->type = "page";
     $node->title = $item['page_title'];
-    $node->language = LANGUAGE_NONE; 
-    $node->path = array('alias' => $item['alias']); 
-    node_object_prepare($node); 
-    $node->uid = 1; 
+    $node->language = LANGUAGE_NONE;
+    $node->path = array('alias' => $item['alias']);
+    node_object_prepare($node);
+    $node->uid = 1;
     $node->body[$node->language][0]['value'] = '';
     $node->body[$node->language][0]['summary'] = '';
     if( file_exists(drupal_get_path('module','epe_wp') . '/' . $item['source_file']) ) {
@@ -685,9 +685,9 @@ function epe_wp_enable() {
       file_put_contents(drupal_get_path('module','epe_wp') . '/' . $item['source_file'] , 'Placeholder content for the ' . $item['page_title'] . ' page');
       $node->body[$node->language][0]['value'] = file_get_contents( drupal_get_path('module','epe_wp') . '/' . $item['source_file']);
     }
-    $node->body[$node->language][0]['format'] = 'filtered_html'; 
-    $node = node_submit($node); 
-    node_save($node); 
+    $node->body[$node->language][0]['format'] = 'filtered_html';
+    $node = node_submit($node);
+    node_save($node);
 
 */
   }
