@@ -108,8 +108,8 @@ function epe_wp_menu() {
     'type' => MENU_NORMAL_ITEM,
   );*/
 
-  $items['moderate'] = array(
-    'title' => t('Moderate'),
+  $items['review'] = array(
+    'title' => t('Review'),
     'page callback' => 'epe_wp_moderate_view',
     'page arguments' => array('pending'),
     'access callback' => 'user_access',
@@ -119,10 +119,10 @@ function epe_wp_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','moderate','=')->execute()->fetchAssoc();
+  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','review','=')->execute()->fetchAssoc();
 
-  $items['moderate/resources/pending'] = array(
-    'title' => 'View Pending Resources',
+  $items['review/resources/pending'] = array(
+    'title' => 'Review Pending Resources',
     'page callback' => 'epe_wp_moderate_view',
     'page arguments' => array('pending'),
     'access callback' => 'user_access',
@@ -168,11 +168,6 @@ function epe_wp_block_info() {
     'cache' => DRUPAL_NO_CACHE,
   );
 
-  $blocks['epe_user_public_resources'] = array(
-    'info' => t('EPE User Public Resource List'),
-    'cache' => DRUPAL_NO_CACHE,
-  );
-
   return $blocks;
 
 }
@@ -201,11 +196,6 @@ function epe_wp_block_view($delta = '') {
       $block['title'] = t('Featured Resources');
       $block['content'] = theme('epe_featured_block');
     break;
-
-    case 'epe_user_public_resources':
-      $block['title'] = t('Public Resources');
-      $block['content'] = theme('epe_user_public_resources');
-    break;
   }
 
   return $block;
@@ -228,10 +218,6 @@ function epe_wp_theme() {
       'variables' => array(
         'type' => array(),
       ),
-    ),
-    'epe_user_public_resources' => array(
-      'path' => $tpl_path,
-      'template' => 'epe_user_public_resources',
     ),
   );
 }
@@ -296,71 +282,3 @@ function epe_wp_image_default_styles() {
 
   return $styles;
 }
-/*
- * Implement hook_menu_local_tasks_alter()
- * (******NOT USED RIGHT NOW******)
- */
-/*
-function epe_wp_menu_local_tasks_alter(&$data, $router_item, $root_path) {
-  $addtabs = false;
-  //we want to alter local task for epe resource content type only
-  if(arg(0) == 'node' && !arg(2)) {
-    $node = node_load(arg(1));
-    if($node && node_is_page($node)) {
-      foreach(explode(',',RESOURCE_FILE_CONTENT_TYPES) as $type) {
-        if($node->type == "{$type}_resource"): $addtabs = true; break; endif;
-      }
-    }
-  }
-  //no implementation to copy, publish just yet
-  if($addtabs) {
-    $copy = array();
-    $copy['#theme'] = 'menu_local_task';
-    $copy['#link'] = array(
-      'path' => 'node/%/copy',
-      'load_functions' => array('node_load'),
-      'access_callback' => 'node_access',
-      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
-      'title' => t('Copy'),
-      'access' => 1,
-      'href' => 'node/' . arg(1) . '/copy',
-      'tab_root_href' => 'node/' . arg(1),
-      'tab_parent_href' => 'node/' . arg(1),
-      'localized_options' => array(),
-    );
-    array_push($data['tabs'][0]['output'], $copy);
-
-    $delete = array();
-    $delete['#theme'] = 'menu_local_task';
-    $delete['#link'] = array(
-      'path' => 'node/%/delete',
-      'load_functions' => array('node_load'),
-      'access_callback' => 'node_access',
-      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
-      'title' => t('Delete'),
-      'access' => 1,
-      'href' => 'node/' . arg(1) . '/delete',
-      'tab_root_href' => 'node/' . arg(1),
-      'tab_parent_href' => 'node/' . arg(1),
-      'localized_options' => array(),
-    );
-    array_push($data['tabs'][0]['output'], $delete);
-
-    $publish = array();
-    $publish['#theme'] = 'menu_local_task';
-    $publish['#link'] = array(
-      'path' => 'node/%/publish',
-      'load_functions' => array('node_load'),
-      'access_callback' => 'node_access',
-      'access_arguments' => $data['tabs'][0]['output'][0]['#link']['access_arguments'],
-      'title' => t('Publish'),
-      'access' => 1,
-      'href' => 'node/' . arg(1) . '/publish',
-      'tab_root_href' => 'node/' . arg(1),
-      'tab_parent_href' => 'node/' . arg(1),
-      'localized_options' => array(),
-    );
-    array_push($data['tabs'][0]['output'], $publish);
-  }
-}
-*/
