@@ -167,6 +167,7 @@ function epe_ev_menu(){
     'type' => MENU_CALLBACK,
   );
 
+  // ev/embed/%
   $items['ev/api/tool/%'] = array(
     'title' => t('EV Tool'),
     'page callback' => 'epe_ev_api_tool_load',
