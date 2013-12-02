@@ -70,48 +70,83 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 	<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
 
 <!-- content -->
-		<div id="vistool"></div>
 
-		<div>
-			<h4>Tool Controls</h4>
-			<div id="vistool-controls" style="margin:6px;padding:6px;border:2px solid #c8d5de;"></div>
-		</div>
-		
-		<div>
-			<div class="field-container">
-				<!-- <label for="edit-title" class="field-label">* Title:</label> -->
-				<?php echo render($form['title']); ?>	
-			</div>
+    <!-- tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#ev-instance-info" data-toggle="tab">Instance Details</a></li>
+      <li><a href="#ev-instance-controls" data-toggle="tab">Instance Controls</a></li>
+      <li><a href="#ev-instance-preview" data-toggle="tab">Instance Preview</a></li>
+    </ul>
 
-			<div class="field-container" style="display:none;">
-				<?php echo render($form['field_parent_tool']); ?>
-			</div>
+    <!-- tab content -->
 
-			<div class="field-container" style="display:none;">
-				<?php echo render($form['field_instance_configuration']); ?>
-			</div>
+    <div class="tab-content">
+      
+      <div class="tab-pane active" id="ev-instance-info">
+        <!-- tab info -->
+        
+        <div>
+          <div class="field-container">
+            <!-- <label for="edit-title" class="field-label">* Title:</label> -->
+            <?php echo render($form['title']); ?>
+          </div>
 
-			<div class="field-container">
-				<?php echo render($form['body']); ?>
-			</div>
-			
-		</div>
+          <div class="field-container" style="display:none;">
+            <!-- <label for="edit-parent-tool" class="field-label">* Parent Tool:</label> -->
+            <?php echo render($form['field_parent_tool']); ?>
+          </div>
 
-		<?php if (empty($form['nid']['#value'])): ?>
-		  <input type="hidden" name="destination" value="ev/">
-		<?php else: ?>
-		  <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
-		<?php endif; ?>
+          <div class="field-container">
+            <!-- <label for="edit-description-value" class="field-label">Description:</label> -->
+            <?php echo render($form['field_tool_description']); ?>
+          </div>
 
-		<?php echo render($form['actions']); ?>
+          <div class="field-container" style="display:none;">
+            <!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
+            <?php echo render($form['field_instance_configuration']); ?>
+          </div>
 
-		<?php
-		  /* form identifier */
-		  echo render($form['form_build_id']);
-		  echo render($form['form_id']);
-		  echo render($form['form_token']);
-		?>
+          <div class="field-container">
+            <!-- <label for="edit-configuration-value" class="field-label">Configuration:</label> -->
+            <?php echo render($form['field_instance_description']); ?>
+          </div>
 
+        </div>
+         
+         <?php if (empty($form['nid']['#value'])): ?>
+          <input type="hidden" name="destination" value="ev/">
+          <?php else: ?>
+            <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
+          <?php endif; ?>
+
+          <?php echo render($form['actions']); ?>
+
+          <?php
+            /* form identifier */
+            echo render($form['form_build_id']);
+            echo render($form['form_id']);
+            echo render($form['form_token']);
+          ?>
+
+        
+      </div>
+
+      <div class="tab-pane" id="ev-instance-controls">
+        <!-- tab controls -->
+        <div>
+          <h4>Tool Controls</h4>
+          <div id="vistool-controls" style="margin:6px;padding:6px;border:2px solid #c8d5de;"></div>
+        </div>
+
+      </div>
+
+      <div class="tab-pane" id="ev-instance-preview">
+        <!-- tab preview -->
+        <div id="vistool"></div>
+      </div>
+    </div>
+
+      
 <!-- end content -->
 
 	</div>
