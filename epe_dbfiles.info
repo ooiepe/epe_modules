@@ -7,3 +7,6 @@ project = epe_dbfiles
 
 dependencies[] = epe_wp
 dependencies[] = ctools
+dependencies[] = video
+dependencies[] = video_ui
+dependencies[] = videojs

@@ -65,6 +65,15 @@ function epe_dbfiles_enable() {
   menu_link_save($item);
 
   menu_cache_clear_all();
+
+  /* set video extension display mode */
+  variable_set('video_extension_m4v_html5_player','videojs');
+  variable_set('video_extension_mov_html5_player','videojs');
+  variable_set('video_extension_mp3_html5_player','videojs');
+  variable_set('video_extension_mp4_html5_player','videojs');
+  variable_set('video_extension_ogg_html5_player','videojs');
+  variable_set('video_extension_ogv_html5_player','videojs');
+  variable_set('video_extension_webm_html5_player','videojs');
 }
 
 function epe_dbfiles_disable() {

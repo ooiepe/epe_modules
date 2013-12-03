@@ -269,7 +269,6 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
   // If the file passed validation:
   if ($file) {
     $fileext = pathinfo($file->filename, PATHINFO_EXTENSION);
-    print_r($fileext);
     foreach($depend_modules as $module) {
       if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
         //determine which type of content we should create base on the file uploaded
@@ -389,6 +388,8 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
       $thumbnailfile->rdf_mapping = array();
       $thumbnailfile->image_dimensions = array('width'=>$thumbinfo['width'], 'height'=>$thumbinfo['height']);
       $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnailfile'] = $thumbnailfile;
+    } else {
+      $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = NULL;
     }
 
     node_save($node);
