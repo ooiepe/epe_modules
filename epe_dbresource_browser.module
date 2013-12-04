@@ -105,6 +105,8 @@ function epe_dbresource_browser_index() {
   drupal_add_js($app_path . '/js/resourceBrowserServices.js');
   drupal_add_js($app_path . '/js/resourceBrowserDirectives.js');
   drupal_add_js($app_path . '/js/resourceBrowserFilters.js');
+  drupal_add_js(libraries_get_path('ngProgress') . '/ngProgress.min.js');
+  drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');
 
   drupal_add_js(array('theme_path' => base_path() . drupal_get_path('theme','bootstrap')), 'setting');
 

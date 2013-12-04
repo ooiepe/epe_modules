@@ -1,6 +1,6 @@
 'use strict';
 
-var SearchController = function($scope, $routeParams, $location, $filter, epeService) {
+var SearchController = function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
   //model init
   $scope.fn = {};
   $scope.resources = {};
@@ -25,6 +25,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.view_templates = {};
   $scope.view_templates.list = Drupal.settings.epe.base_path + "resource-browser/partial/search-list.html";
   $scope.view_templates.grid = Drupal.settings.epe.base_path + "resource-browser/partial/search-grid.html";
+  $scope.resources.modules = [];
 
   //add my resource option if user is logged in
   if(Drupal.settings.epe_dbresource_browser.userid) {
@@ -48,7 +49,16 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   if(typeof $routeParams['dialog'] != "undefined") {
     $scope.panes.rb_type_selector = false;
+    if(typeof $routeParams['type'] != "undefined") {
+      angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+        if(module.api === $routeParams['type']) $scope.resources.modules.push(module);
+      });
+    }
+  } else {
+    $scope.resources.modules = Drupal.settings.epe_dbresource_browser.modules;
   }
+
+  //console.log($scope.resources.modules);
 
   $scope.term = $routeParams['term'];
   $scope.search = function() {
@@ -111,7 +121,8 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   }
 
   $scope.panes.table = [];
-  angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
+  //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
+  angular.forEach($scope.resources.modules, function(pane, index) {
     var tab = {
       type:pane.label,
       data:[],
@@ -121,6 +132,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       activeClass: '',
       showad: false,
       adurl: pane.adurl,
+      hasrecord: false,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
     };
 
@@ -150,30 +162,53 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     if(typeof $routeParams['term'] != "undefined") searchterm = {search:$routeParams['term']};
 
     $scope.fn.serviceParams = {};
-    angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+  ngProgress.height('10px');
+    var progress = 0;
+    ngProgress.start();
+    //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+    angular.forEach($scope.resources.modules, function(module, index) {
       $scope.fn.serviceParams['resource_type'] = module.api;
       if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
       $scope.resources[module.api] = {};
       $scope.resources[module.api].data = [];
       $scope.resources[module.api].data_filtered = {};
-      var tempData =epeService.get($scope.fn.serviceParams, function() {
+
+      /*var tempData = epeService.get($scope.fn.serviceParams, function() {
         angular.forEach(tempData.nodes, function(node) {
           $scope.resources[module.api].data.push(node.node);
         });
         angular.forEach($scope.panes.table, function(pane, index) {
+          if($scope.resources[pane.api].data.length > 0) pane.hasrecord = true;
           if(pane.type === module.label) {
             if(applyFilter) {
               pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, $scope.filter.view_type.filter);
             } else { pane.data = $scope.resources[module.api].data; }
             //if(typeof $location.search()['filter'] != 'undefined' && $location.search()['filter'] != '')
-
           }
         });
+      });*/
+
+      epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
+        var nodes = res.data.nodes;
+        angular.forEach(nodes, function(node) {
+          $scope.resources[module.api].data.push(node.node);
+        });
+        angular.forEach($scope.panes.table, function(pane, index) {
+          if($scope.resources[pane.api].data.length > 0) pane.hasrecord = true;
+          if(pane.type === module.label) {
+            if(applyFilter) {
+              pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, $scope.filter.view_type.filter);
+            } else { pane.data = $scope.resources[module.api].data; }
+          }
+        });
+        if((index + 1) == $scope.resources.modules.length) ngProgress.complete();
       });
     });
+
   } //loadresource
 
   $scope.fn.loadBrowser();
+
 
   //watch type change and filter data
   $scope.$watch("filter.view_type", function(view_type) {

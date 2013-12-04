@@ -27,8 +27,7 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       if (scope.thumbnail == '')
         scope.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
 
-      template += '<td><div style="width:160px;height:99px;position:relative;">' + element_ck + '<a href="' + scope.url + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.thumbnail + '" /></a></div><div class="author"><a href="' + scope.url + '">' + scope.title + '</a></div></td>';
-      template += '<td>' + scope.summary + '</td>';
+      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.url + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.url + '">' + scope.title + '</a></p></div><div class="text" style="margin-left:160px;"><p>' + scope.summary + '</p></div></td>';
       template += '<td><div class="author">' + scope.author + '<br/>(' + scope.org + ')</div></td>';
       template += '<td>' + scope.updated + '</td>';
 

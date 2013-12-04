@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('resourceBrowserApp', ['ui.bootstrap','resourceBrowserService','resourceBrowserFilter','resourceBrowserDirective'])
+angular.module('resourceBrowserApp', ['ui.bootstrap','ngProgress','resourceBrowserService','resourceBrowserFilter','resourceBrowserDirective'])
   .config(function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
