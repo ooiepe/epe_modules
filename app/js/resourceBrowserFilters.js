@@ -9,9 +9,11 @@ resourceBrowserFilter.filter('resourceFilter', function(){
       var result = [];
 
       angular.forEach(input, function(node){
-        if(query != '') {
+        if(query != '' && query == 'author') {
           //if(query == node.userid) result.push(node);
           if(Drupal.settings.epe_dbresource_browser.userid == node.userid) result.push(node);
+        } else if(query != '' && query == 'featured') {
+          if(node.featured == 'Featured') result.push(node);
         } else {
           result.push(node);
         }

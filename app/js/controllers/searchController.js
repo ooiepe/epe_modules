@@ -20,7 +20,8 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.resource = {};
   $scope.filter = {};
   $scope.resource.view_types = [
-    {filter:'',label:'All Resources'}
+    {filter:'',label:'All Resources'},
+    {filter:'featured',label:'Featured Resources'}
   ];
   $scope.view_templates = {};
   $scope.view_templates.list = Drupal.settings.epe.base_path + "resource-browser/partial/search-list.html";
@@ -162,7 +163,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     if(typeof $routeParams['term'] != "undefined") searchterm = {search:$routeParams['term']};
 
     $scope.fn.serviceParams = {};
-  ngProgress.height('10px');
+    ngProgress.height('10px');
     var progress = 0;
     ngProgress.start();
     //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
