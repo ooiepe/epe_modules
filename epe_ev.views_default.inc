@@ -235,6 +235,16 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['body']['settings'] = array(
     'trim_length' => '200',
   );
+  /* Field: Indexed Node: Featured Status */
+  $handler->display->display_options['fields']['field_featured_status']['id'] = 'field_featured_status';
+  $handler->display->display_options['fields']['field_featured_status']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['fields']['field_featured_status']['field'] = 'field_featured_status';
+  $handler->display->display_options['fields']['field_featured_status']['label'] = 'featured';
+  /* Field: Indexed Node: Public Status */
+  $handler->display->display_options['fields']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['fields']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['label'] = 'public';
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',
