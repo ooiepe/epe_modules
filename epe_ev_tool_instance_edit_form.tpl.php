@@ -13,15 +13,16 @@ if(isset($form["#node"]->field_parent_tool)){
   $ev_tool["instance_configuration"] = epe_getFieldValue("field_instance_configuration", $form["#node"]);
 
   $ev_tool["parent_tool_id"] = $form["#node"]->field_parent_tool["und"][0]["value"];
-
+  
   // load the parent node item
   $parentNode = node_load($ev_tool["parent_tool_id"]);
 
-  //  the name
+  //  the tool name
   $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
-  //$ev_tool["default_thumb"] = epe_getNodeValues(array("field_tool_thumbnail"), $parentNode);
+  $ev_tool["parentThumbnail"] = $parentNode->field_tool_thumbnail["und"][0];
 
+  
 }
 //do we have a query string?
 elseif(isset($_GET["ev_toolid"])){
@@ -58,32 +59,32 @@ else{
 /////
 //THUMBNAIL
 
-module_load_include('inc', 'node', 'node.pages');
-$node_type = 'ev_tool';
-$org_form_id = $node_type . '_node_form';
+// module_load_include('inc', 'node', 'node.pages');
+// $node_type = 'ev_tool';
+// $org_form_id = $node_type . '_node_form';
 
-//drupal_get_form needs a empty node of edit type
-$tmpnode = new stdClass();
-$tmpnode->type = $node_type;
-$tmpnode->language = LANGUAGE_NONE;
-node_object_prepare($tmpnode);
-$evtool_form = drupal_get_form($org_form_id, $tmpnode);
-
+// //drupal_get_form needs a empty node of edit type
+// $tmpnode = new stdClass();
+// $tmpnode->type = $node_type;
+// //$tmpnode->nid = 70;
+// $tmpnode->language = LANGUAGE_NONE;
+// node_object_prepare($tmpnode);
+// $evtool_form = drupal_get_form($org_form_id, $tmpnode);
 //echo render($evtool_form["field_tool_thumbnail"]);
 
-echo "-----" . print_r($evtool_form["field_tool_thumbnail"][und][0]). " ------";
+//echo "-----" . print_r($evtool_form["field_tool_thumbnail"][und][0][fid]). " ------";
 
+// echo "<pre> ";
+// print_r($ev_tool["tool_thumbnail_fid"]);
+// echo "</pre>";
+print_r($form['field_instance_thumbnail']["und"][0]);
+
+//$form['field_instance_thumbnail']["und"][0] = $ev_tool["parentThumbnail"];
 
 // <input type="hidden" name="field_instance_thumbnail[und][0][fid]" value="2">
 // <input type="hidden" name="field_instance_thumbnail[und][0][display]" value="1">
 // <input type="hidden" name="field_instance_thumbnail[und][0][width]" value="1440">
 // <input type="hidden" name="field_instance_thumbnail[und][0][height]" value="101">
-
-//youll change the $node_type to the tool parent, and the last line is loading the edit form of the parent.  
-//you may need to do a print_r to see the structure of the form, but it should be something 
-//like $org_form['field_thumbnail_something']
-
-//so what you'll do is assign your parent thumbnail field to your tool instance thumbnail field, and render the tool instance thumbnail field, give this a try
 
 // END THUMBNAIL
 
