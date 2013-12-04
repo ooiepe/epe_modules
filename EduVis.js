@@ -1,4 +1,4 @@
-//Date Compiled: December 03 2013 15:52:48
+//Date Compiled: December 04 2013 11:41:25
 /*  *  *  *  *  *  *  *
 *
 * EduVis - Educational Visualition Framework
@@ -1302,7 +1302,6 @@ var EduVis = (function () {
                     );
 
                 if(obj_control.default_value.date_type == "realtime"){
-                    alert("realtime");
                     dr_archive.hide();
                     dr_realTime.show();
                     radioRealTime.click();
