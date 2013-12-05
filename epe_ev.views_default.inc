@@ -57,7 +57,7 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['field_tool_thumbnail']['field'] = 'field_tool_thumbnail';
   $handler->display->display_options['fields']['field_tool_thumbnail']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_tool_thumbnail']['settings'] = array(
-    'image_style' => '',
+    'image_style' => 'medium', // options are 'thumbnail', 'medium', custom? similar to resource_browser_thumbnail?
     'image_link' => '',
   );
   /* Sort criterion: Content: Post date */
