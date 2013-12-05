@@ -1,4 +1,4 @@
-<div class="alert alert-info alert-block">
+<!-- <div class="alert alert-info alert-block">
   <div class="tabbable tabs-left">
     <ul class="nav nav-tabs">
       <li class="active"><a href="#<?php echo $key; ?>a" data-toggle="tab">Design Process</a></li>
@@ -17,4 +17,19 @@
       </div>
     </div>
   </div>
+</div> -->
+<div class="alert alert-info alert-block">
+<div class="row-fluid">
+  <div class="row-fluid">
+    <div class="span4">
+    <?php echo $design_process; ?>
+    </div>
+    <div class="span4">
+    <?php echo $pedagogy; ?>
+    </div>
+    <div class="span4">
+    <?php echo $content_tips; ?>
+    </div>
+  </div>
+</div>
 </div>

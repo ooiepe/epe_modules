@@ -3,8 +3,8 @@
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
   <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ddddcc">Instructions</a></li>
-  <li><a href="#goal" data-toggle="tab" style="background-color:#ddddcc">Content Goals</a></li>
-  <li><a href="#intro" data-toggle="tab">Introduction</a></li>
+  <li><a href="#goal" data-toggle="tab" style="background-color:#ddddcc">Learning Objectives</a></li>
+  <li><a href="#motivation" data-toggle="tab">Motivation</a></li>
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
@@ -39,8 +39,8 @@
 
   <div class="row-fluid">
     <div class="span7">
-      <p>Come up with between 1 to 3 science content goals that address what ideas or processes would you like students to learn about and how those ideas relate to larger ideas.</p>
-      <div class="control-group"><?php echo render($form['field_content_goals']); ?></div>
+      <!-- <p>Come up with between 1 to 3 science content goals that address what ideas or processes would you like students to learn about and how those ideas relate to larger ideas.</p>
+      <div class="control-group"><?php /* echo render($form['field_content_goals']); */ ?></div> -->
 
       <p>Establishing science content goals up front will help you keep focus as you develop your activity. The datasets you include and the questions you ask students to think about should support the goals you identified. If you find that you have additional content you wish students to review that go beyond these goals, you might consider creating a separate activity to keep the investigations focused.</p>
       <p>Don't worry about perfecting this right away, you can always come back and adjust them later.</p>
@@ -60,7 +60,7 @@
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#goal -->
 
-<div class="tab-pane" id="intro">
+<div class="tab-pane" id="motivation">
   <?php echo render($form['block_introduction_info']); ?>
   <div class="row-fluid">
     <div class="span6">
@@ -120,6 +120,10 @@
       <p><strong>Image</strong></p>
       <?php echo render($form['field_challenge_thumbnail']); ?>
     </div>
+  </div>
+
+  <div class="control-group">
+    <?php echo render($form['field_desired_assessment']); ?>
   </div>
 
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
@@ -211,9 +215,11 @@
 
 <div class="tab-pane" id="explanation">
   <?php echo render($form['block_explanation_info']); ?>
+  <div class="control-group">
+  <?php echo render($form['field_challenge_content']); ?>
+  </div>
   <div class="field-container control-group row-fluid">
   <div class="span8">
-
     <p>Recall that the research question you are trying to address is:</p>
     <p>Analyze data from observations and models to identify possible relationships between hurricanes and the ocean.</p>
     <p>As you take into account the data you just viewed, consider the following Inference Questions.</p>

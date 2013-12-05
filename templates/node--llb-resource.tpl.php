@@ -61,31 +61,9 @@
   <h3>Activity Introduction</h3>
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
-  <?php if(!empty($content['field_introductory_slideshow'])): ?>
-<div id="this-carousel-id" class="carousel slide pull-right"><!-- class of slide for animation -->
-  <div class="carousel-inner">
-    <?php foreach($content['field_introductory_slideshow']['#items'] as $key=>$slide): ?>
-    <?php $slideclasses = array('item'); ?>
-    <?php if($key == 0): array_push($slideclasses, "active"); endif; ?>
-    <div class="<?php echo implode(' ', $slideclasses); ?>">
-      <?php
-        $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide['uri'], 'alt' => '', 'title' => '');
-        echo theme('image_style', $slide_image);
-      ?>
-      <?php if($slide['title'] != ''): ?>
-      <div class="carousel-caption">
-        <p><?php echo $slide['title']; ?></p>
-      </div>
-      <?php endif; ?>
-    </div>
-    <?php endforeach; ?>
-  </div><!-- /.carousel-inner -->
-  <!--  Next and Previous controls below
-        href values must reference the id for this carousel -->
-    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
-    <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
-</div><!-- /.carousel -->
-  <?php endif; //end checking $content['field_introductory_slideshow'] ?>
+  <?php if(!empty($content['field_introductory_slideshow'])) {
+    echo theme('epe_llb_field_slideshow',array('field'=>$content['field_introductory_slideshow']));
+  } ?>
   <?php echo render($content['field_introductory_content']); ?>
 
   <?php //echo render($content['field_introductory_slideshow']); ?>
@@ -97,7 +75,10 @@
 <div class="tab-pane" id="background">
   <h3>Background</h3>
   <div class="pull-right">
-    <?php echo render($content['field_background_slideshow']); ?>
+    <?php if(!empty($content['field_background_slideshow'])) {
+      echo theme('epe_llb_field_slideshow',array('field'=>$content['field_background_slideshow']));
+    } ?>
+    <?php //echo render($content['field_background_slideshow']); ?>
   </div>
 
   <?php echo render($content['field_background_content']); ?>
@@ -252,6 +233,7 @@ function giveXMLtoJS(value) {
 
 <div class="tab-pane" id="explanation">
   <h3>Develop an Explanation</h3>
+  <p><?php echo render($content['field_explanation_content']); ?></p>
   <p>Recall that the research question you are trying to address is:</p>
   <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
   <p>As you take into account the data you just viewed, consider the following <strong>Inference Questions</strong>.</p>

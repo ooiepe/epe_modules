@@ -294,6 +294,13 @@ function epe_llb_theme() {
       'path' => $tpl_path,
       'template' => 'epe_llb_adhoc_modal_template',
     ),
+    'epe_llb_field_slideshow' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_field_slideshow',
+      'variables' => array(
+        'field' => array(),
+      ),
+    ),
   );
 }
 
@@ -364,10 +371,16 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     $form['field_guidance_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html' );
   }
 
+  foreach ($form['field_desired_assessment']['und']['#options'] as $key => &$label) {
+    $label = '<a href="#" class="assessment" data-toggle="tooltip" title="' . file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/assessment-' . strtolower($key) . '.html' ) . '">' . $label . '</a>';
+  }
+
+  //drupal_add_js("jQuery('[rel=tooltip]').tooltip();",'inline');
+
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
   unset($depend_modules['epe_llb']);
   $resource_browser_btns = array();
-  foreach($depend_modules as $module) {
+  /*foreach($depend_modules as $module) {
     if(isset($module['resource_browser'])) {
       $btn_label = '';
       if(isset($module['resource_browser']['label'])) {
@@ -388,7 +401,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['resource_browser'] = array(
     '#markup' => implode('&nbsp;', $resource_browser_btns), //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
     '#suffix' => '</div>' //end div.app-main
-  );
+  );*/
 
   $resource_browser_add_btns = array();
   $resource_browser_modals = array();

@@ -231,7 +231,7 @@ function _epe_llb_field_default_field_instances() {
       'max_filesize' => '',
       'max_resolution' => '',
       'min_resolution' => '',
-      'title_field' => 0,
+      'title_field' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -374,8 +374,7 @@ function _epe_llb_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-llb_resource-field_content_goals'
-  $field_instances['node-llb_resource-field_content_goals'] = array(
+  $field_instances['node-llb_resource-field_explanation_content'] = array(
     'bundle' => 'llb_resource',
     'default_value' => NULL,
     'deleted' => 0,
@@ -402,8 +401,8 @@ function _epe_llb_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_content_goals',
-    'label' => 'Content Goals',
+    'field_name' => 'field_explanation_content',
+    'label' => 'Explanation Content',
     'required' => 0,
     'settings' => array(
       'better_formats' => array(
@@ -1226,6 +1225,48 @@ function _epe_llb_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => '-1',
+    ),
+  );
+
+  $field_instances['node-llb_resource-field_desired_assessment'] = array(
+    'bundle' => 'llb_resource',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 21,
+      ),
+      'llb_instructor' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_desired_assessment',
+    'label' => 'Desired Assessment',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 19,
     ),
   );
 

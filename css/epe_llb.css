@@ -28,3 +28,4 @@ blockquote p { font-size: 14px; }
 .nav-tabs .active .dropdown-toggle .caret { border-top-color: #555; border-bottom-color: #555; }
 .pull-right { margin-left: 10px; }
 .modal.fade.in { top: 5%; }
+.assessment { color: #000; font-weight: normal; }

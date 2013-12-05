@@ -98,7 +98,7 @@ function _epe_llb_field_default_field_bases() {
   // Exported field_base: 'field_background_slideshow'
   $field_bases['field_background_slideshow'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_background_slideshow',
@@ -186,13 +186,12 @@ function _epe_llb_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_content_goals'
-  $field_bases['field_content_goals'] = array(
+  $field_bases['field_explanation_content'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_content_goals',
+    'field_name' => 'field_explanation_content',
     'foreign keys' => array(
       'format' => array(
         'columns' => array(
@@ -583,6 +582,33 @@ function _epe_llb_field_default_field_bases() {
         'Private' => 'Private',
         'Public' => 'Public',
         'Pending' => 'Pending',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
+  );
+
+  $field_bases['field_desired_assessment'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_desired_assessment',
+    'foreign keys' => array(),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'SE2' => 'Develop a conceptual model or diagram that explains the given evidence',
+        'SE4' => 'Write up a description and analysis of the provided datasets',
+        'SE6' => 'Construct a written explanation of the observed phenomena seen in the data',
+        'SE1' => 'Develop a new question from a provided dataset',
       ),
       'allowed_values_function' => '',
     ),
