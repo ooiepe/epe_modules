@@ -24,7 +24,7 @@ if(isset($form["#node"]->field_parent_tool)){
 
   
 }
-//do we have a query string?
+//do we have a query string? this indicates a new instance
 elseif(isset($_GET["ev_toolid"])){
 
   $ev_tool["parent_tool_id"] = $_GET["ev_toolid"];
@@ -45,6 +45,7 @@ elseif(isset($_GET["ev_toolid"])){
     // grab the name, path_css, and path_js
     $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
+    $ev_tool["parentThumbnailId"] = $parentNode->field_tool_thumbnail["und"][0]["fid"];
   }
 
 }
