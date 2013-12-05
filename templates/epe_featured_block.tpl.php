@@ -46,12 +46,18 @@
         $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $field[0]['thumbnailfile']->uri) . '">';
       }
       break;
+      case 'llb_resource':
+      $image = $wrapper->field_challenge_thumbnail->value();
+      if($image) {
+        $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $image['uri']) . '">';
+      }
+      break;
     }
   }
 ?>
 <li <?php if($key == 0): echo 'class="first"'; endif; ?>>
   <?php if($thumbnail): echo l($thumbnail,"node/{$wrapper->getIdentifier()}",array('html'=>'TRUE')); endif; ?>
-  <div class="title"><?php echo $wrapper->label(); ?></div>
+  <div class="title"><?php echo l($wrapper->label(),"node/{$wrapper->getIdentifier()}"); ?></div>
   <div class="author">by <?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
   <?php if($wrapper->body->value()): ?>
   <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => 'TRUE')),0,200); ?></div>
