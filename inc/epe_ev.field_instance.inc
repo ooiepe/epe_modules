@@ -260,7 +260,7 @@ function _ev_tool_installed_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_tool_thumbnail',
     'label' => 'Tool Thumbnail',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
