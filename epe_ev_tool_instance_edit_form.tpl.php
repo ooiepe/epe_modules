@@ -20,7 +20,7 @@ if(isset($form["#node"]->field_parent_tool)){
   //  the tool name
   $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
-  $ev_tool["parentThumbnail"] = $parentNode->field_tool_thumbnail["und"][0];
+  $ev_tool["parentThumbnailId"] = $parentNode->field_tool_thumbnail["und"][0]["fid"];
 
   
 }
@@ -55,38 +55,6 @@ else{
     'toolname'=>'ev_tool'
   )));
 }
-
-/////
-//THUMBNAIL
-
-// module_load_include('inc', 'node', 'node.pages');
-// $node_type = 'ev_tool';
-// $org_form_id = $node_type . '_node_form';
-
-// //drupal_get_form needs a empty node of edit type
-// $tmpnode = new stdClass();
-// $tmpnode->type = $node_type;
-// //$tmpnode->nid = 70;
-// $tmpnode->language = LANGUAGE_NONE;
-// node_object_prepare($tmpnode);
-// $evtool_form = drupal_get_form($org_form_id, $tmpnode);
-//echo render($evtool_form["field_tool_thumbnail"]);
-
-//echo "-----" . print_r($evtool_form["field_tool_thumbnail"][und][0][fid]). " ------";
-
-// echo "<pre> ";
-// print_r($ev_tool["tool_thumbnail_fid"]);
-// echo "</pre>";
-print_r($form['field_instance_thumbnail']["und"][0]);
-
-//$form['field_instance_thumbnail']["und"][0] = $ev_tool["parentThumbnail"];
-
-// <input type="hidden" name="field_instance_thumbnail[und][0][fid]" value="2">
-// <input type="hidden" name="field_instance_thumbnail[und][0][display]" value="1">
-// <input type="hidden" name="field_instance_thumbnail[und][0][width]" value="1440">
-// <input type="hidden" name="field_instance_thumbnail[und][0][height]" value="101">
-
-// END THUMBNAIL
 
 $EduVis_Paths = epe_EduVis_Paths();
 
@@ -126,11 +94,10 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
       </div>
 
-      <div class="tab-pane" id="ev-instance-preview">
+      <div class="tab-pane" id="ev-instance-preview" style="padding-bottom:100px;">
         <!-- tab preview -->
         <div id="vistool"></div>
       </div>
-
       
       <div class="tab-pane" id="ev-instance-save">
         <!-- tab info -->
@@ -187,7 +154,6 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
       </div>
       
     </div>
-
       
 <!-- end content -->
 
@@ -199,11 +165,17 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
   function EduVis_extract(){
 
     // pull the configuration from the default tool instance
-    var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration;
+    var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration,
+        thumbnailId = $( "input[name='field_instance_thumbnail[und][0][fid]']" );
       
     // update the configuration value of the form element
     $("#edit-field-instance-configuration-und-0-value")
       .val(JSON.stringify(config));
+
+    // check for the instance thumbnail.. if nothing is present, use the parent
+    if(thumbnailId.val() == "0"){
+      thumbnailId.val(<?php print $ev_tool["parentThumbnailId"];?>)
+    }
   
     return true;
   }
