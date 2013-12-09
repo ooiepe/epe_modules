@@ -10,7 +10,7 @@ if(isset($field['#items']) && !empty($field['#items'])): ?>
         $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide['uri'], 'alt' => '', 'title' => '');
         echo theme('image_style', $slide_image);
       ?>
-      <?php if($slide['title'] != '' && count($field['#item']) > 1): ?>
+      <?php if($slide['title'] != ''): ?>
       <div class="carousel-caption">
         <p><?php echo $slide['title']; ?></p>
       </div>
@@ -20,7 +20,7 @@ if(isset($field['#items']) && !empty($field['#items'])): ?>
   </div><!-- /.carousel-inner -->
   <!--  Next and Previous controls below
         href values must reference the id for this carousel -->
-    <?php if(count($field['#item']) > 1): ?>
+    <?php if(count($field['#items']) > 1): ?>
     <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
     <?php endif; ?>

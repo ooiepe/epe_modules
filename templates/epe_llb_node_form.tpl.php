@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <div class="span6">
+    <div class="span6 background-slideshow">
       <p><strong>Slideshow (or single image?)</strong></p>
       <?php echo render($form['field_background_slideshow']); ?>
     </div>

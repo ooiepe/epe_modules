@@ -99,7 +99,7 @@
 <div class="tab-pane" id="challenge">
   <h3>Challenge</h3>
   <div class="pull-right"><?php echo render($content['field_challenge_thumbnail']); ?></div>
-  <p>In this activity you will investigate the following challenge:</p>
+  <p><?php echo render($content['field_desired_assessment']); ?></p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
   <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
@@ -107,6 +107,7 @@
 
 <div class="tab-pane" id="exploration">
   <h3>Explore the Data</h3>
+  <p><?php echo render($content['field_guidance_content']); ?></p>
   <p>Investigate each piece of evidence below and answer the investigation questions on each page.  After viewing all of the data, come up with a list of possible impacts the ocean and hurricanes have on each other, and justify each based on the evidence you reviewed.</p>
   <ul class="thumbnails">
     <?php foreach($datasets as $key => $dataset): ?>

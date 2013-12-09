@@ -631,6 +631,7 @@ function epe_llb_node_view_alter(&$build) {
     $build['field_background_question']['#label_display'] = 'hidden';
     $build['field_challenge_content']['#label_display'] = 'hidden';
     $build['field_challenge_thumbnail']['#label_display'] = 'hidden';
+    if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'In this activity you will ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
   }
 
   $epe_menu = variable_get('epe_menu',array());
@@ -740,7 +741,9 @@ function epe_llb_block_view($delta = '') {
 
 function epe_llb_theme_file_dataset($dataset) {
   $output = '';
-  $output = '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" alt="' . $dataset->title . '" />';
+  //$output = '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" width="886px" alt="' . $dataset->title . '" />';
+  $output = '<img src="' . file_create_url($dataset->uri) .'"" width="886px" alt="' . $dataset->title . '" />';
+
   if(isset($dataset->file)) {
     switch($dataset->type) {
       case 'video_resource':
