@@ -190,6 +190,22 @@ function giveXMLtoJS(value) {
 }
 </script>
 
+<!-- add eduvis -->
+<?php
+  // include php file for epe_ev functions.
+  include realpath(drupal_get_path('module', 'epe_ev') . "/inc/epe_ev_lib.php");
+
+  // set paths for EduVis and epe_ev
+  $EduVis_Paths = epe_EduVis_Paths();
+  // add EduVis framework to page
+  drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
+
+  // canvas export resources
+  drupal_add_js("http://canvg.googlecode.com/svn/trunk/rgbcolor.js");
+  drupal_add_js("http://canvg.googlecode.com/svn/trunk/StackBlur.js");
+  drupal_add_js("http://canvg.googlecode.com/svn/trunk/canvg.js");
+?>
+
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
@@ -212,7 +228,81 @@ function giveXMLtoJS(value) {
 
 <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
 
-  <?php } //end elseif type == cm ?>
+  <?php } elseif($dataset->type == 'ev_tool_instance') { ?>
+
+<?php
+    $vis_instance = node_load($dataset->nid);
+    $ev_tool["instance_configuration"] = epe_getFieldValue( "field_instance_configuration", $vis_instance );
+
+    $ev_tool["parent_tool_id"] = epe_getFieldValue( "field_parent_tool", $vis_instance );
+
+    $parentNode = node_load($ev_tool["parent_tool_id"]);
+
+    $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
+?>
+    <div id="vistool"></div>
+
+    <div style="display:none;">
+      <canvas id="canvas<?php echo $dataset->nid; ?>"></canvas>
+    </div>
+
+<script type="text/javascript">
+
+(function(){
+
+  function svgToCanvas(){
+
+    //load an svg snippet in the canvas
+    canvg(
+      document.getElementById('canvas<?php echo $dataset->nid; ?>'),
+      $('<div>').append($("#vistool svg").clone()).html(), // hack to pull html contents
+      { ignoreMouse: true, ignoreAnimation: true }
+    );
+  }
+
+  function canvasToImage(){
+    // save canvas image as data url (png format by default)
+      var canvas = document.getElementById("canvas<?php echo $dataset->nid; ?>"),
+        dataURL = canvas.toDataURL();
+        window.open(dataURL,"Tool Image","location=0");
+  }
+
+  // set EduVis environment paths
+  EduVis.Environment.setPaths(
+    '<?php echo $EduVis_Paths["EduVis"]["root"];?>', // eduvis
+    '<?php echo $EduVis_Paths["EduVis"]["tools"];?>', // tools
+    '<?php echo $EduVis_Paths["EduVis"]["resources"];?>' // resources
+  );
+
+  EduVis.tool.load(
+    {
+      "name" : '<?php print $ev_tool['tool']['field_tool_name'];?>',
+      "tool_container_div": "vistool",
+      "instance_config": <?php
+            if(isset($ev_tool['instance_configuration']))
+              print $ev_tool["instance_configuration"] . "\n";
+            else
+              print "{}";
+
+          ?>
+    }
+  );
+
+  // tool buttons
+
+  $("#tool-function-export-image")
+    .on("click", function(){
+
+      svgToCanvas();
+      canvasToImage();
+
+    });
+
+}());
+
+</script>
+
+  <?php } //end elseif type == ev_tool_instance ?>
 
   <?php echo $dataset->body; ?>
   <?php if(!empty($dataset->questions)): ?>
