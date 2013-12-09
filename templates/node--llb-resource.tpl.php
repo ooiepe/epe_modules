@@ -68,7 +68,7 @@
 
   <?php //echo render($content['field_introductory_slideshow']); ?>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 
 </div> <!-- /#intro -->
 
@@ -92,7 +92,7 @@
   }
   ?>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 
 </div> <!-- /#background -->
 
@@ -102,7 +102,7 @@
   <p>In this activity you will investigate the following challenge:</p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#challenge -->
 
 <div class="tab-pane" id="exploration">
@@ -132,7 +132,7 @@
     <?php endforeach; ?>
   </ul>
   <p>When you're done investigating the datasets, continue to the last section.</p>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llb li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llb li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div>
 
 <?php
@@ -317,7 +317,7 @@ function giveXMLtoJS(value) {
     </div>
   </div>
   <?php endif; ?>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button>
+  <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button> -->
 </div>
 <?php endforeach; ?>
 

@@ -1,3 +1,5 @@
+<?php
+if(isset($field['#items']) && !empty($field['#items'])): ?>
 <div id="this-carousel-id" class="carousel slide pull-right"><!-- class of slide for animation -->
   <div class="carousel-inner">
     <?php foreach($field['#items'] as $key=>$slide): ?>
@@ -23,3 +25,4 @@
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
     <?php endif; ?>
 </div><!-- /.carousel -->
+<?php endif; ?>
