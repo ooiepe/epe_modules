@@ -31,35 +31,79 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'semanticviews_default';
-  $handler->display->display_options['style_options']['list']['element_type'] = 'ul';
-  $handler->display->display_options['style_options']['list']['class'] = 'thumbnails';
-  $handler->display->display_options['style_options']['row']['element_type'] = 'li';
-  $handler->display->display_options['style_options']['row']['class'] = 'thumbnail';
-  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['style_options']['group']['element_type'] = '';
+  $handler->display->display_options['style_options']['group']['class'] = '';
+  $handler->display->display_options['style_options']['list']['class'] = 'span4';
+  $handler->display->display_options['style_options']['row']['element_type'] = '';
+  $handler->display->display_options['style_options']['row']['first_class'] = '';
+  $handler->display->display_options['style_options']['row']['last_class'] = '';
+  $handler->display->display_options['style_options']['row']['last_every_nth'] = '';
+  $handler->display->display_options['row_plugin'] = 'semanticviews_fields';
+  $handler->display->display_options['row_options']['skip_blank'] = 0;
+  $handler->display->display_options['row_options']['semantic_html'] = array(
+    'nid' => array(
+      'element_type' => 'div',
+      'class' => 'span6 thumbnail',
+    ),
+  );
+  /* Field: Content: Tool Thumbnail */
+  $handler->display->display_options['fields']['field_tool_thumbnail']['id'] = 'field_tool_thumbnail';
+  $handler->display->display_options['fields']['field_tool_thumbnail']['table'] = 'field_data_field_tool_thumbnail';
+  $handler->display->display_options['fields']['field_tool_thumbnail']['field'] = 'field_tool_thumbnail';
+  $handler->display->display_options['fields']['field_tool_thumbnail']['label'] = '';
+  $handler->display->display_options['fields']['field_tool_thumbnail']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_tool_thumbnail']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_tool_thumbnail']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['field_tool_thumbnail']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_tool_thumbnail']['settings'] = array(
+    'image_style' => 'medium',
+    'image_link' => '',
+  );
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['exclude'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* Field: Content: Description */
+  $handler->display->display_options['fields']['body']['id'] = 'body';
+  $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
+  $handler->display->display_options['fields']['body']['field'] = 'body';
+  $handler->display->display_options['fields']['body']['label'] = '';
+  $handler->display->display_options['fields']['body']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['body']['type'] = 'text_summary_or_trimmed';
+  $handler->display->display_options['fields']['body']['settings'] = array(
+    'trim_length' => '200',
+  );
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['nid']['alter']['text'] = '<a href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Create Instance</a>';
+  $handler->display->display_options['fields']['nid']['alter']['text'] = '<div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span4">
+        [field_tool_thumbnail]
+      </div>
+      <div class="span8">
+        <div><b>Title:</b> [title]</div>
+        <div id="thumbnail_viewmore_[nid]"><b>Description:</b>
+          [body]
+        </div>
+        <div>
+          <a class="btn" href="../node/[nid]">Preview</a> &nbsp;&nbsp; <a class="btn" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Create Instance</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  ';
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Field: Content: Tool Thumbnail */
-  $handler->display->display_options['fields']['field_tool_thumbnail']['id'] = 'field_tool_thumbnail';
-  $handler->display->display_options['fields']['field_tool_thumbnail']['table'] = 'field_data_field_tool_thumbnail';
-  $handler->display->display_options['fields']['field_tool_thumbnail']['field'] = 'field_tool_thumbnail';
-  $handler->display->display_options['fields']['field_tool_thumbnail']['click_sort_column'] = 'fid';
-  $handler->display->display_options['fields']['field_tool_thumbnail']['settings'] = array(
-    'image_style' => 'medium', // options are 'thumbnail', 'medium', custom? similar to resource_browser_thumbnail?
-    'image_link' => '',
-  );
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -83,20 +127,8 @@ function epe_ev_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'ev/tools';
+
   $export['ev_tools'] = $view;
-
-//
-//
-//
-  // from allan
-
-  /**
-  * Change [your_module_name] placeholder text to the name of the module that contains this view include file
-  * Change [your view machine name] placeholder text to the name you want, machine name must be text_text_text format
-  * Change [your view name] placeholder to the name you want, this is the name displayed on the admin/structure/views page
- * Change [your search api index machine name] to the machine name of the search api inex, you will find the name in the .module file
- * Change [your image thumbnail field name] to the image thumbnail field machine name of your content type
- */
 
   $view = new view();
   $view->name = 'epe_ev_search_view';
@@ -301,10 +333,6 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['defaults']['arguments'] = FALSE;
 
   $export['epe_ev_search_view'] = $view;
-
-//
-// end from allan
-//
 
   return $export;
 }
