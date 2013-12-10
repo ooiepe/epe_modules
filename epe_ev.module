@@ -170,7 +170,7 @@ function epe_ev_menu(){
   $items['ev/embed/%'] = array(
     'title' => t('EV Tool'),
     'page callback' => 'epe_ev_api_tool_load',
-    'page arguments' => array(3,4,5),
+    'page arguments' => array(2,3,4),
     'file' => 'epe_ev.api.inc',
     'file path' => drupal_get_path('module', 'epe_ev') . "/inc",
     'access callback' => TRUE,

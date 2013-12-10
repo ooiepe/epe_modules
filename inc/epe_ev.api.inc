@@ -223,6 +223,9 @@ $EduVis_Paths = epe_EduVis_Paths();
 	if(isset($ev_tool["configuration"])){
 		$__EPE_EDUVIS_CONFIGURATION__ = ",\n    " .'"instance_config" : ' . $ev_tool["configuration"] ."\n";
 	}
+  else{
+    $__EPE_EDUVIS_CONFIGURATION__ = ""; 
+  }
 
   $htmlOut = str_replace("__EPE_EDUVIS_CONFIGURATION__",$__EPE_EDUVIS_CONFIGURATION__, $htmlOut);
 
