@@ -184,10 +184,7 @@ $EduVis_Paths = epe_EduVis_Paths();
 <head>
 	<title>EV Framework __EPE_EDUVIS_TOOLNAME__ </title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<style type="text/css">
-
-	</style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 <div id="vistool"></div>
