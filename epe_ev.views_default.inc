@@ -88,16 +88,16 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['nid']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['nid']['alter']['text'] = '<div class="container-fluid">
     <div class="row-fluid">
-      <div class="span4">
+      <div class="span5">
         [field_tool_thumbnail]
       </div>
-      <div class="span8">
-        <div><b>Title:</b> [title]</div>
-        <div id="thumbnail_viewmore_[nid]"><b>Description:</b>
+      <div class="span7">
+        <div><b>[title]</b></div>
+        <div>
           [body]
         </div>
         <div>
-          <a class="btn" href="../node/[nid]">Preview</a> &nbsp;&nbsp; <a class="btn" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Create Instance</a>
+          <a class="btn" href="../node/[nid]">Preview <i class="icon-chevron-right"></i></a> &nbsp;&nbsp; <a class="btn" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Customize <i class="icon-chevron-right"></i></a>
         </div>
       </div>
     </div>
