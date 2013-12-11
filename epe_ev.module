@@ -13,17 +13,17 @@ function epe_ev_views_api($module = NULL, $api = NULL) {
 function epe_ev_node_info() {
   $items = array(
     'ev_tool' => array(
-      'name' => t('EV Tool'),
+      'name' => t('Visualization Tool'),
       'base' => 'node_content',
-      'description' => 'Content type for EV Tools.',
+      'description' => 'Use <em>Visualization Tools</em> to create customizable visualizations.',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
     ),
     'ev_tool_instance' => array(
-      'name' => t('EV Tool Instance'),
+      'name' => t('Visualization Instance'),
       'base' => 'node_content',
-      'description' => t('Content type for EV Tool Instances.'),
+      'description' => t('<em>Visualization Instances</em> are used to save customized versions of Visualization Tools.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -193,7 +193,7 @@ function epe_ev_menu(){
 function epe_ev_default_search_api_index() {
   $items = array();
   $items['epe_ev_search_index'] = entity_create('search_api_index', array(
-    'name' => 'EPE EV Instance Search Index',
+    'name' => 'visualization instance resource index',
     'machine_name' => 'epe_ev_search_index',
     'description' => null,
     'server' => 'database_service',
