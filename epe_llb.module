@@ -631,7 +631,7 @@ function epe_llb_node_view_alter(&$build) {
     $build['field_background_question']['#label_display'] = 'hidden';
     $build['field_challenge_content']['#label_display'] = 'hidden';
     $build['field_challenge_thumbnail']['#label_display'] = 'hidden';
-    if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'In this activity you will ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
+    if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'The goal of this exercise is to ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
   }
 
   $epe_menu = variable_get('epe_menu',array());

@@ -19,13 +19,15 @@
   <?php
     if(file_exists(drupal_get_path('module','epe_llb') . '/contents/instruction/instruction.html')) {
       $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/instruction/instruction.html');
-      $dom = new domDocument;
-      $dom->loadHTML($content);
-      $images = $dom->getElementsByTagName('img');
-      foreach($images as $img) {
-        $content = str_replace($img->getAttribute('src'), base_path() . drupal_get_path('module','epe_llb') . '/contents/instruction/' . basename($img->getAttribute('src')), $content);
+      if($content) {
+        $dom = new domDocument;
+        $dom->loadHTML($content);
+        $images = $dom->getElementsByTagName('img');
+        foreach($images as $img) {
+          $content = str_replace($img->getAttribute('src'), base_path() . drupal_get_path('module','epe_llb') . '/contents/instruction/' . basename($img->getAttribute('src')), $content);
+        }
+        echo $content;
       }
-      echo $content;
     }
   ?>
 
@@ -48,13 +50,18 @@
       <div class="control-group"><?php echo render($form['field_student_objectives']); ?></div>
     </div>
 
-    <div class="span5 well">
     <?php
       if( file_exists(drupal_get_path('module','epe_llb') . '/contents/goals/goals-example.html') ) {
-        echo file_get_contents(drupal_get_path('module','epe_llb') . '/contents/goals/goals-example.html');
+        $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/goals/goals-example.html');
+        if($content):
+    ?>
+    <div class="span5 well">
+    <?php echo $content; ?>
+    </div>
+    <?php
+        endif;
       }
     ?>
-    </div>
   </div>
 
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
@@ -202,13 +209,14 @@
   <?php echo render($form['field_guidance_content']); ?>
   </div>
 
-  <div class="control-group">
   <?php
     if(file_exists(drupal_get_path('module','epe_llb') . '/contents/exploration/guidance-text.html')) {
-      echo file_get_contents(drupal_get_path('module','epe_llb') . '/contents/exploration/guidance-text.html');
+      $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/exploration/guidance-text.html');
+      if($content) {
+        echo '<div class="control-group">' . $content . '</div>';
+      }
     }
   ?>
-  </div>
 
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#exploration -->
@@ -216,7 +224,7 @@
 <div class="tab-pane" id="explanation">
   <?php echo render($form['block_explanation_info']); ?>
   <div class="control-group">
-  <?php echo render($form['field_challenge_content']); ?>
+  <?php echo render($form['field_explanation_content']); ?>
   </div>
   <div class="field-container control-group row-fluid">
   <div class="span8">
@@ -227,13 +235,14 @@
 
     <?php echo render($form['field_inference_question']); ?>
   </div>
-  <div class="span4">
-    <?php
-      if(file_exists(drupal_get_path('module','epe_llb') . '/contents/explanation/inference-questions-example.html')) {
-        echo file_get_contents(drupal_get_path('module','epe_llb') . '/contents/explanation/inference-questions-example.html');
+  <?php
+    if(file_exists(drupal_get_path('module','epe_llb') . '/contents/explanation/inference-questions-example.html')) {
+      $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/explanation/inference-questions-example.html');
+      if($content) {
+        echo '<div class="span4">' . $content . '</div>';
       }
-    ?>
-  </div>
+    }
+  ?>
   </div>
 
   <div class="field-container control-group row-fluid">
@@ -245,13 +254,14 @@
     <?php echo render($form['field_extrapolation_question']); ?>
   </div>
 
-  <div class="span4">
-    <?php
-      if( file_exists(drupal_get_path('module','epe_llb') . '/contents/explanation/extrapolation-questions-example.html') ) {
-        echo file_get_contents(drupal_get_path('module','epe_llb') . '/contents/explanation/extrapolation-questions-example.html');
+  <?php
+    if( file_exists(drupal_get_path('module','epe_llb') . '/contents/explanation/extrapolation-questions-example.html') ) {
+      $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/explanation/extrapolation-questions-example.html');
+      if($content) {
+        echo '<div class="span4">' . $content . '</div>';
       }
-    ?>
-  </div>
+    }
+  ?>
   </div>
 
   <div class="clearfix"></div>
@@ -283,13 +293,14 @@
   <label class="control-label" for="inputTitle"><strong>Activity Title</strong></label>
   <?php echo render($form['title']); ?>
   </div>
-  <div class="span4 well">
-    <?php
-      if( file_exists(drupal_get_path('module','epe_llb') . '/contents/setup/title-example.html') ) {
-        echo file_get_contents(drupal_get_path('module','epe_llb') . '/contents/setup/title-example.html');
+  <?php
+    if( file_exists(drupal_get_path('module','epe_llb') . '/contents/setup/title-example.html') ) {
+      $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/setup/title-example.html');
+      if($content) {
+        echo '<div class="span4 well">' . $content . '</div>';
       }
-    ?>
-  </div>
+    }
+  ?>
   </div>
 
   <div class="row-fluid">

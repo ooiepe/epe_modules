@@ -99,7 +99,7 @@
 <div class="tab-pane" id="challenge">
   <h3>Challenge</h3>
   <div class="pull-right"><?php echo render($content['field_challenge_thumbnail']); ?></div>
-  <p><?php echo render($content['field_desired_assessment']); ?></p>
+  <p>In this activity you will investigate the following challenge ...</p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
   <!-- <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
@@ -108,7 +108,6 @@
 <div class="tab-pane" id="exploration">
   <h3>Explore the Data</h3>
   <p><?php echo render($content['field_guidance_content']); ?></p>
-  <p>Investigate each piece of evidence below and answer the investigation questions on each page.  After viewing all of the data, come up with a list of possible impacts the ocean and hurricanes have on each other, and justify each based on the evidence you reviewed.</p>
   <ul class="thumbnails">
     <?php foreach($datasets as $key => $dataset): ?>
     <?php
@@ -324,7 +323,49 @@ function giveXMLtoJS(value) {
 
 <div class="tab-pane" id="explanation">
   <h3>Develop an Explanation</h3>
-  <p><?php echo render($content['field_explanation_content']); ?></p>
+
+  <div class="row-fluid control-group">
+    <div class="span6">
+      <?php if(!empty($content['field_challenge_content'])): ?>
+      <p>Recall that the research question you are trying to address is:</p>
+      <div class="control-group">
+      <?php echo render($content['field_challenge_content']); ?>
+      </div>
+      <?php endif; ?>
+
+      <?php if(!empty($content['field_inference_question'])): ?>
+      <p>As you consider the data you just investigated, consider the following questions:</p>
+      <div class="control-group">
+      <ol>
+      <?php
+      foreach($content['field_inference_question'] as $key => $question) {
+        if(is_numeric($key)) {
+          echo '<li>';
+          echo $question['#markup'];
+          echo '</li>';
+        }
+      }
+      ?>
+      </ol>
+      </div>
+      <?php endif; ?>
+    </div>
+    <div class="span6">
+      <?php if(!empty($content['field_desired_assessment'])): ?>
+      <p><strong>Assessment</strong></p>
+      <div class="control-group">
+      <?php echo render($content['field_desired_assessment']); ?>
+      </div>
+      <?php endif; ?>
+      <?php if(!empty($content['field_explanation_content'])): ?>
+      <p><strong>Instructions</strong></p>
+      <div class="control-group">
+      <?php echo render($content['field_explanation_content']); ?>
+      </div>
+      <?php endif; ?>
+    </div>
+  </div>
+<!--   <p><?php echo render($content['field_explanation_content']); ?></p>
   <p>Recall that the research question you are trying to address is:</p>
   <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
   <p>As you take into account the data you just viewed, consider the following <strong>Inference Questions</strong>.</p>
@@ -348,7 +389,7 @@ function giveXMLtoJS(value) {
     }
   }
   ?>
-  <p></p>
+  <p></p> -->
 </div> <!-- /#explanation -->
 
 </div> <!-- /.tab-content -->
