@@ -19,7 +19,8 @@
   $wrapper = entity_metadata_wrapper('node',$node);
   $thumbnail = '';
   if(in_array($wrapper->getBundle(),array('cm_resource','ev_tool_instance'))) {
-
+    /* temporary fix */
+    $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
   } else {
     switch($wrapper->getBundle()) {
       case 'image_resource':

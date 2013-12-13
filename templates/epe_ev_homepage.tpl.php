@@ -34,36 +34,36 @@
 </div>
 <br clear="all">
 
-<div id="tool-featured">
+<!-- <div id="tool-featured">
   <h2>Featured Visualizations</h2>
   <ul>
     <li class="first">
       <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_1.jpg" width="190" height="141"></a>
-      <div class="title">Sandy Wave Heights and Wind Speed</div>      
-      <div class="author">by Sage Lichtenwalner</div>      
-      <div class="summary">Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit. </div>      
+      <div class="title">Sandy Wave Heights and Wind Speed</div>
+      <div class="author">by Sage Lichtenwalner</div>
+      <div class="summary">Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit. </div>
     </li>
     <li>
       <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_2.jpg" width="190" height="141"></a>
-      <div class="title">RU23 - Hurricane Sandy</div>      
-      <div class="author">by Sage Lichtenwalner</div>      
-      <div class="summary">Pellentesque potenti. Donec ac tempus velit. </div>      
+      <div class="title">RU23 - Hurricane Sandy</div>
+      <div class="author">by Sage Lichtenwalner</div>
+      <div class="summary">Pellentesque potenti. Donec ac tempus velit. </div>
     </li>
     <li>
       <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_3.jpg" width="190" height="141"></a>
-      <div class="title">Title of the item</div>      
-      <div class="author">by Joe Wieclawek</div>      
-      <div class="summary">Suspendisse potenti. Donec ac tempus velit. </div>      
+      <div class="title">Title of the item</div>
+      <div class="author">by Joe Wieclawek</div>
+      <div class="summary">Suspendisse potenti. Donec ac tempus velit. </div>
     </li>
     <li>
       <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_4.jpg" width="190" height="141"></a>
-      <div class="title">Title of the item</div>      
-      <div class="author">by Joe Wieclawek</div>      
-      <div class="summary">Suspendisse potenti. Donec ac tempus velit. </div>      
+      <div class="title">Title of the item</div>
+      <div class="author">by Joe Wieclawek</div>
+      <div class="summary">Suspendisse potenti. Donec ac tempus velit. </div>
     </li>
   </ul>
   <br clear="all">
-</div>
+</div> -->
 
 
 <div class="control-group">
