@@ -1,4 +1,5 @@
 <?php if($design_process || $pedagogy || $content_tips): ?>
+  <!--
 <div class="alert alert-info alert-block">
 <div class="row-fluid">
   <div class="row-fluid">
@@ -20,4 +21,5 @@
   </div>
 </div>
 </div>
+-->
 <?php endif; ?>

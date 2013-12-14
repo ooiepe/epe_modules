@@ -280,7 +280,6 @@ function giveXMLtoJS(value) {
       <?php endif; ?>
     </div>
   </div>
-
 </div> <!-- /#explanation -->
 
 </div> <!-- /.tab-content -->
