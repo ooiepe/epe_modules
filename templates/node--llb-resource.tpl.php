@@ -242,7 +242,9 @@ function giveXMLtoJS(value) {
       <?php if(!empty($content['field_challenge_content'])): ?>
       <p>Recall that the research question you are trying to address is:</p>
       <div class="control-group">
+      <blockquote>
       <?php echo render($content['field_challenge_content']); ?>
+      </blockquote>
       </div>
       <?php endif; ?>
 
@@ -278,31 +280,7 @@ function giveXMLtoJS(value) {
       <?php endif; ?>
     </div>
   </div>
-<!--   <p><?php echo render($content['field_explanation_content']); ?></p>
-  <p>Recall that the research question you are trying to address is:</p>
-  <blockquote><?php echo render($content['field_introductory_content']); ?></blockquote>
-  <p>As you take into account the data you just viewed, consider the following <strong>Inference Questions</strong>.</p>
-  <?php
-  foreach($content['field_inference_question'] as $key => $question) {
-    if(is_numeric($key)) {
-      echo '<div>';
-      echo ($key + 1) . '. ' . $question['#markup'];
-      echo '</div>';
-    }
-  }
-  ?>
-  <p></p>
-  <p>Thinking deeper, consider the following <strong>Extrapolation Questions</strong>.</p>
-  <?php
-  foreach($content['field_extrapolation_question'] as $key => $question) {
-    if(is_numeric($key)) {
-      echo '<div>';
-      echo ($key + 1) . '. ' . $question['#markup'];
-      echo '</div>';
-    }
-  }
-  ?>
-  <p></p> -->
+
 </div> <!-- /#explanation -->
 
 </div> <!-- /.tab-content -->
