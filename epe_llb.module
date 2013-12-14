@@ -632,6 +632,7 @@ function epe_llb_node_view_alter(&$build) {
     $build['field_challenge_content']['#label_display'] = 'hidden';
     $build['field_challenge_thumbnail']['#label_display'] = 'hidden';
     if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'The goal of this exercise is to ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
+    drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.exploration_dataset.view.js',array('scope'=>'footer'));
   }
 
   $epe_menu = variable_get('epe_menu',array());
