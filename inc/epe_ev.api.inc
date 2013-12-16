@@ -201,8 +201,7 @@ $EduVis_Paths = epe_EduVis_Paths();
   );
 
   EduVis.tool.load({
-    "name" : "__EPE_EDUVIS_TOOLNAME__",
-    "tool_container_div": "vistool"__EPE_EDUVIS_CONFIGURATION__
+    "name" : "__EPE_EDUVIS_TOOLNAME__"__EPE_EDUVIS_CONFIGURATION__
   });
 
 }());
