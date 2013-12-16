@@ -11,9 +11,10 @@ function epe_db_node_lookup() {
 
   if($_GET['xml']) {
     $xml = new SimpleXMLElement($_GET['xml']);
-    foreach($xml as $element) {
-      if($element && $element->node['id']) {
-        $nid = (string)$element->node['id'];
+    foreach($xml as $collection) {
+      if($collection && $collection->node['id']) {
+      foreach ($collection as $element) {
+        $nid = (string)$element['id'];
         $node = node_load($nid);
         if($node) {
           $item = array();
@@ -62,6 +63,7 @@ function epe_db_node_lookup() {
             break;
           }
         }
+      }
       }
     }
 
