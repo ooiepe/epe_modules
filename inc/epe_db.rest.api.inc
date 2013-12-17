@@ -38,7 +38,11 @@ function epe_db_node_lookup() {
             break;
             case 'image_resource':
               $file = $wrapper->field_image_resource_file->value();
-              if($file) $item['img'] = file_create_url($file['uri']);
+//              if($file) $item['img'] = file_create_url($file['uri']);
+              if($file) {
+                $item['img'] = file_create_url($file['uri']);
+                $item['imgthm'] = image_style_url('resource_browser_thumbnail', $file['uri']);
+              }
               $images[] = $item;
             break;
             case 'document_resource':
@@ -81,7 +85,7 @@ function epe_db_node_lookup() {
     if(!empty($images)) {
       $output .= '<images>';
       foreach($images as $item) {
-        $output .= '<node id="' . $item['id'] . '" img="' . $item['img'] . '" url="' . $item['url'] . '">';
+        $output .= '<node id="' . $item['id'] . '" img="' . $item['imgthm'] . '" url="' . $item['url'] . '" source = "' . $item['img'] .  '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
         $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
