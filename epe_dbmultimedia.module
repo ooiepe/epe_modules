@@ -89,11 +89,12 @@ function epe_dbmultimedia_restful_api_node($nid) {
         $item['file'] = $file['uri'];
       }
     } else {
+      
       $field = field_get_items('node', $node, 'field_video_resource_file');
       if($field) {
         $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
-        $item['uri'] = $field[0]['thumbnailfile']->uri;
-        $item['file'] = $field[0]['uri'];
+        $item['uri'] = file_create_url($field[0]['thumbnailfile']->uri);
+        $item['file'] = file_create_url($field[0]['uri']);
       }
     }
   }
