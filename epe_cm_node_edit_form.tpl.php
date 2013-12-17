@@ -75,7 +75,7 @@ function loadFlash() {
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
   
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20131216_1049.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20131216_1710.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
   
   return;
 }
@@ -149,9 +149,9 @@ function generateXMLFromItems(items) {
     } else if (items[i].type == 'llb_resource') {
       strLLB += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>/node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     } else if (items[i].type == 'image_resource') {
-      strImages += '<node id="' + items[i].nid + '" img="' + items[i].thumbnail + '" source="' + items[i].thumbnail + '" sourcew="" sourceh="" hires="" hiresw="" hiresh="" url="' + items[i].thumbnail + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
-    } else if (items[i].type == 'video_resource' && items[i].type == 'audio_resource') {
-      strVideos += '<node id="' + items[i].nid + '" img="' + items[i].thumbnail + '" imgw="" imgh="" source="' + items[i].thumbnail + '" audio=""><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
+      strImages += '<node id="' + items[i].nid + '" img="' + items[i].thumbnail + '" source="' + items[i].file + '" sourcew="" sourceh="" hires="" hiresw="" hiresh="" url="' + items[i].thumbnail + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
+    } else if (items[i].type == 'video_resource' || items[i].type == 'audio_resource') {
+      strVideos += '<node id="' + items[i].nid + '" img="' + items[i].thumbnail + '" imgw="" imgh="" source="' + items[i].file + '" audio=""><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     } else if (items[i].type == 'document_resource') {
       strDocs += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>/node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     }
@@ -179,6 +179,8 @@ function generateXMLFromItems(items) {
 
   // add the xml tags
   str = '<xml>' + str + '</xml>';
+
+  console.log(str);
 
   return str;
 }
