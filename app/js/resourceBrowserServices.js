@@ -9,9 +9,11 @@ resourceBrowserService.factory('epeService', function($resource) {
 
 resourceBrowserService.factory('epeServiceProvider', function($http) {
   var getData = function(param) {
+    var apiurl = Drupal.settings.epe.base_path + 'api/resource/' + param.resource_type;
+    if(param.hasOwnProperty('search') && param.search != '') apiurl = apiurl + '?search=' + param.search;
     return $http({
       method: 'GET',
-      url: Drupal.settings.epe.base_path + 'api/resource/' + param.resource_type,
+      url: apiurl,
       tracker: 'pizza'
     }).then(function(data) {
       return data;
