@@ -49,8 +49,8 @@
       </div>
       <p class="pull-right">
         <a href="<?php echo base_path() . 'node/' . arg(1); ?>/instructor" class="btn btn-primary">Instructor Notes <i class="icon-chevron-right icon-white"></i></a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="<?php echo base_path() . 'node/' . arg(1); ?>/detail" class="btn btn-primary">Begin this investigation <i class="icon-chevron-right icon-white"></i></a>
+        &nbsp;
+        <a href="<?php echo base_path() . 'node/' . arg(1); ?>/detail" class="btn btn-primary">Begin this Investigation <i class="icon-chevron-right icon-white"></i></a>
       </p>
     </div>
   </div>

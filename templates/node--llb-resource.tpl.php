@@ -297,6 +297,6 @@ function giveXMLtoJS(value) {
 </div>
 </div>
 
-<p><?php echo l('View Lesson Information', "node/" . arg(1)); ?></p>
+<p><?php echo l('About this Data Investigation', "node/" . arg(1)); ?></p>
 
 </article> <!-- /.node -->

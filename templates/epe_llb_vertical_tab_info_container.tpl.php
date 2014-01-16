@@ -1,25 +1,25 @@
-<?php if($design_process || $pedagogy || $content_tips): ?>
-  <!--
+<?php if($step_previous || $step_this || $step_next): ?>
+
 <div class="alert alert-info alert-block">
 <div class="row-fluid">
   <div class="row-fluid">
-    <?php if($design_process): ?>
+    <?php if($step_previous): ?>
     <div class="span4">
-    <?php echo $design_process; ?>
+    <?php echo $step_previous; ?>
     </div>
     <?php endif; ?>
-    <?php if($pedagogy): ?>
+    <?php if($step_this): ?>
     <div class="span4">
-    <?php echo $pedagogy; ?>
+    <?php echo $step_this; ?>
     </div>
     <?php endif; ?>
-    <?php if($content_tips): ?>
+    <?php if($step_next): ?>
     <div class="span4">
-    <?php echo $content_tips; ?>
+    <?php echo $step_next; ?>
     </div>
     <?php endif; ?>
   </div>
 </div>
 </div>
--->
+
 <?php endif; ?>

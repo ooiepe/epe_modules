@@ -19,10 +19,10 @@
     <div class="control-group">
       <div>
         <div class="clearbox">
-          <input type="radio" name="filter" value="" checked="checked">&nbsp;All Lessons<br>
+          <input type="radio" name="filter" value="" checked="checked">&nbsp;All Investigations<br>
         </div>
         <div class="<?php if(!user_is_logged_in()): echo 'graybox'; else: echo 'clearbox'; endif; ?>">
-        <input type="radio" name="filter" value="author" <?php if(!user_is_logged_in()): echo 'disabled'; endif; ?> >&nbsp;My Lessons Only
+        <input type="radio" name="filter" value="author" <?php if(!user_is_logged_in()): echo 'disabled'; endif; ?> >&nbsp;My Investigations Only
         <?php if(!user_is_logged_in()): ?>
           <div style="float:right;"><small>Not registered? <?php echo l('Click here','user'); ?></small></div>
         <?php endif; ?>

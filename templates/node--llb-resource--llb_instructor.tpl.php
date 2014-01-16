@@ -15,14 +15,25 @@
     hide($content['field_tags']);
   ?>
   <div class=".row-fluid">
-    <?php echo render($content['field_instructional_content']); ?>
-    <?php echo render($content['field_preconception_content']); ?>
-    <?php echo render($content['field_resources_content']); ?>
+    <?php if(!empty($content['field_instructional_content'])) { ?>
+    <p><strong>Instructional Tips</strong></p>
+    <?php echo render($content['field_instructional_content']);
+    } ?>
+
+    <?php if(!empty($content['field_preconception_content'])) { ?>
+    <p><strong>Preconceptions and Lecture Questions</strong></p>
+    <?php echo render($content['field_preconception_content']);
+    } ?>
+
+    <?php if(!empty($content['field_resources_content'])) { ?>
+    <p><strong>Resources</strong></p>
+    <?php echo render($content['field_resources_content']);
+    } ?>    
   </div>
 
 </div>
 </div>
 
-<p><?php echo l('View Lesson Information', "node/" . arg(1)); ?></p>
+<p align="center"><?php echo l('Data Investigation Details', "node/" . arg(1)); ?> | <?php echo l('Begin this Investigation', "node/" . arg(1) . "/detail"); ?></p>
 
 </article> <!-- /.node -->

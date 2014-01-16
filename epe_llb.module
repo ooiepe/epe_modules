@@ -179,11 +179,11 @@ function epe_llb_menu() {
 function epe_llb_node_info() {
   $items = array(
     'llb_resource' => array(
-      'name' => t('Lab Lesson Builder'),
+      'name' => t('Data Investigation'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => 'Use <em>Investigations</em> to create customizable data investigations',
       'has_title' => '1',
-      'title_label' => t('Activity Title'),
+      'title_label' => t('Investigation Title'),
       'help' => '',
     ),
   );
@@ -342,6 +342,10 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['field_preconception_content']['#prefix'] = $form_values['llb_preconception_content'];
   $form['field_resources_content']['#prefix'] = $form_values['llb_resources_content'];*/
 
+  $form['block_objectives_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_objectives = module_invoke('epe_llb','block_view','epe_llb_objectives_info');
+  $form['block_objectives_info'][] = array('#markup'=>$block_objectives['content']);
+
   $form['block_introduction_info'] = array('#type' => 'container', '#attributes' => array());
   $block_introduction = module_invoke('epe_llb','block_view','epe_llb_introduction_info');
   $form['block_introduction_info'][] = array('#markup'=>$block_introduction['content']);
@@ -367,13 +371,13 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['field_exploration_dataset']['#prefix'] = '<div class="app-main" ng-controller="main">';
   $form['field_exploration_dataset']['und'][0]['value']['#default_value'] = '{{items}}';
 
-  if( file_exists(drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html') ) {
-    $form['field_guidance_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html' );
-  }
+  //if( file_exists(drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html') ) {
+  //  $form['field_guidance_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html' );
+  //}
 
-  foreach ($form['field_desired_assessment']['und']['#options'] as $key => &$label) {
-    $label = '<a href="#" class="assessment" data-toggle="tooltip" title="' . file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/assessment-' . strtolower($key) . '.html' ) . '">' . $label . '</a>';
-  }
+  //foreach ($form['field_desired_assessment']['und']['#options'] as $key => &$label) {
+  //  $label = '<a href="#" class="assessment" data-toggle="tooltip" title="' . file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/assessment-' . strtolower($key) . '.html' ) . '">' . $label . '</a>';
+  //}
 
   //drupal_add_js("jQuery('[rel=tooltip]').tooltip();",'inline');
 
@@ -631,7 +635,7 @@ function epe_llb_node_view_alter(&$build) {
     $build['field_background_question']['#label_display'] = 'hidden';
     $build['field_challenge_content']['#label_display'] = 'hidden';
     $build['field_challenge_thumbnail']['#label_display'] = 'hidden';
-    if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'The goal of this exercise is to ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
+    if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'The goal of this investigation is to ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
     drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.exploration_dataset.view.js',array('scope'=>'footer'));
   }
 
@@ -657,6 +661,11 @@ function epe_llb_field_formatter_rebuild($form, &$form_state) {
 */
 
 function epe_llb_block_info() {
+  $blocks['epe_llb_objectives_info'] = array(
+    'info' => t('EPE LLB Objectives Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
   $blocks['epe_llb_introduction_info'] = array(
     'info' => t('EPE LLB Introduction Information'),
     'cache' => DRUPAL_NO_CACHE,
@@ -702,6 +711,7 @@ function epe_llb_block_view($delta = '') {
   $blocks_content = variable_get(
     'epe_llb_info_blocks_content',
     array(
+      'epe_llb_objectives_info' => '',
       'epe_llb_introduction_info' => '',
       'epe_llb_background_info' => '',
       'epe_llb_challenge_info' => '',
@@ -711,6 +721,10 @@ function epe_llb_block_view($delta = '') {
   );
 
   switch ($delta) {
+    case 'epe_llb_objectives_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('objectives'); //$blocks_content['epe_llb_objectives_info'];
+    break;
+
     case 'epe_llb_introduction_info':
       $block['content'] = epe_llb_load_tab_info_block_content('introduction'); //$blocks_content['epe_llb_introduction_info'];
     break;
@@ -732,7 +746,7 @@ function epe_llb_block_view($delta = '') {
     break;
 
     case 'epe_llb_featured':
-      $block['title'] = t('Featured Lesson Resources');
+      $block['title'] = t('Featured Investigations');
       $block['content'] = theme('epe_featured_block', array('type'=>array('llb_resource')));
     break;
   }
