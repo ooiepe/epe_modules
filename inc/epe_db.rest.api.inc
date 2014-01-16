@@ -25,7 +25,7 @@ function epe_db_node_lookup() {
           if($wrapper->body->value()) {
             $item['longdesc'] = $wrapper->body->value->value(array('sanitize' => TRUE));
           }
-          $item['url'] = "node/{$wrapper->getIdentifier()}";
+          $item['url'] = base_path() . "node/{$wrapper->getIdentifier()}";
           $item['authorid'] = $wrapper->author->uid->value();
           $item['author_name'] = $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value();
           $item['changed'] = $wrapper->changed->value();
@@ -56,9 +56,11 @@ function epe_db_node_lookup() {
                 $item['file'] = file_create_url($field[0]['uri']);
                 if($field[0]['thumbnailfile']) {
                   $item['img'] = file_create_url($field[0]['thumbnailfile']->uri);
+                  $item['imgthm'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
                 }
               }
               $videos[] = $item;
+            break;
             case 'cm_resource':
               $cm[] = $item;
             break;
@@ -107,7 +109,7 @@ function epe_db_node_lookup() {
     if(!empty($videos)) {
       $output .= '<videos>';
       foreach($videos as $item) {
-        $output .= '<node id="' . $item['id'] . '" img="' . $item['img'] . '" source="' . $item['file'] . '" url="' . $item['url'] . '">';
+        $output .= '<node id="' . $item['id'] . '" img="' . $item['imgthm'] . '" source="' . $item['file'] . '" url="' . $item['url'] . '">';
         $output .= '<title><![CDATA[' . $item['title'] . ']]></title>';
         $output .= '<longDesc><![CDATA[' . $item['longdesc'] . ']]></longDesc>';
         $output .= '<author id="' . $item['authorid'] . '"><![CDATA[' . $item['author_name'] . ']]></author></node>';
