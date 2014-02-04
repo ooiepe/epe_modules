@@ -182,3 +182,13 @@ function epe_llb_uninstall() {
   node_types_rebuild();
   menu_rebuild();
 }
+
+/**
+ * Update LLB's "desired assessment" field's required setting.
+ */
+function epe_llb_update_7000() {
+  $content_type = 'llb_resource';
+  $instance = field_read_instance('node','field_desired_assessment',$content_type);
+  $instance['required'] = 0;
+  field_update_instance($instance);
+}
