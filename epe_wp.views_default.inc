@@ -98,6 +98,13 @@ function epe_wp_views_default_views() {
     'cm_resource' => 'cm_resource',
     'ev_tool_instance' => 'ev_tool_instance',
   );
+  /* Filter criterion: Content: Public Status (field_public_status) */
+  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
+  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
+    'Pending' => 'Pending',
+  );
 
   /* Display: Pending */
   $handler = $view->new_display('block', 'Pending', 'pending_block');
