@@ -1,0 +1,183 @@
+<?php
+/**
+ * Implements hook_views_api().
+ */
+function epe_db_views_api() {
+  return array("api" => "3.0");
+}
+
+function epe_db_menu() {
+  $items = array();
+
+  $items['api/resource/lookup'] = array(
+    'title' => t('Resource Lookup'),
+    'page callback' => 'epe_db_node_lookup',
+    'file' => 'epe_db.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_db') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function epe_db_node_view_alter(&$build) {
+  $epe_help = variable_get('epe_help',array('path'=>array()));
+  if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page') {
+    foreach($epe_help['path'] as $key => $id) {
+      if($build['#node']->nid == $id) {
+        $build['post_render_param'] = $key;
+        $build['#post_render'][] = 'epe_db_help_content_render';
+      }
+    }
+  }
+}
+
+/*
+ * Implement hook_theme
+ * This hook is to style edit form, the theme key needs to be the same as the form function name
+ */
+function epe_db_theme() {
+  $tpl_path = drupal_get_path('module','epe_db') . '/templates';
+  return array(
+    'epe_help_index_content' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_help_index',
+      'variables' => array(
+        'content' => array(),
+        'tag' => array(),
+      ),
+    ),
+    'epe_help_section_content' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_help_section',
+      'variables' => array(
+        'tag' => array(),
+      ),
+    ),
+  );
+}
+
+function epe_db_help_content_render($content, $element) {
+  $theme_key = 'epe_help_index_content';
+  if($element['post_render_param'] != 'kb') $theme_key = 'epe_help_section_content';
+  return theme($theme_key,array('content'=>$content,'tag'=>array($element['post_render_param'])));
+}
+
+/**
+ * Implements hook_default_search_api_server().
+ */
+function epe_db_default_search_api_server() {
+  $items = array();
+  $items['database_service'] = entity_create('search_api_server', array(
+    'name' => 'database-service',
+    'machine_name' => 'database_service',
+    'description' => '',
+    'class' => 'search_api_db_service',
+    'options' => array(
+      'database' => 'default:default',
+      'min_chars' => 3,
+    ),
+    'enabled' => 1,
+  ));
+  return $items;
+}
+
+function epe_db_default_search_api_index() {
+  $items = array();
+  $items['published_basic_page_index'] = entity_import('search_api_index', '{
+    "name" : "published basic page index",
+    "machine_name" : "published_basic_page_index",
+    "description" : null,
+    "server" : "database_service",
+    "item_type" : "node",
+    "options" : {
+      "index_directly" : 1,
+      "cron_limit" : "50",
+      "fields" : {
+        "nid" : { "type" : "integer" },
+        "title" : { "type" : "text" },
+        "url" : { "type" : "uri" },
+        "created" : { "type" : "date" },
+        "changed" : { "type" : "date" },
+        "field_tags" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
+        "search_api_language" : { "type" : "string" },
+        "body:value" : { "type" : "text" }
+      },
+      "data_alter_callbacks" : {
+        "search_api_alter_bundle_filter" : {
+          "status" : 1,
+          "weight" : "-10",
+          "settings" : { "default" : "0", "bundles" : { "page" : "page" } }
+        },
+        "search_api_alter_node_access" : { "status" : 0, "weight" : "0", "settings" : [] },
+        "search_api_alter_node_status" : { "status" : 1, "weight" : "0", "settings" : [] },
+        "search_api_alter_add_hierarchy" : { "status" : 0, "weight" : "0", "settings" : { "fields" : [] } },
+        "search_api_alter_add_viewed_entity" : { "status" : 0, "weight" : "0", "settings" : { "mode" : "full" } },
+        "search_api_alter_add_url" : { "status" : 0, "weight" : "0", "settings" : [] },
+        "search_api_alter_add_aggregation" : { "status" : 0, "weight" : "0", "settings" : [] }
+      },
+      "processors" : {
+        "search_api_case_ignore" : {
+          "status" : 1,
+          "weight" : "0",
+          "settings" : { "fields" : { "title" : true, "body:value" : true } }
+        },
+        "search_api_html_filter" : {
+          "status" : 1,
+          "weight" : "10",
+          "settings" : {
+            "fields" : { "title" : true, "body:value" : true },
+            "title" : 0,
+            "alt" : 1,
+            "tags" : "h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5"
+          }
+        },
+        "search_api_tokenizer" : {
+          "status" : 0,
+          "weight" : "20",
+          "settings" : {
+            "fields" : { "title" : true, "body:value" : true },
+            "spaces" : "[^[:alnum:]]",
+            "ignorable" : "[\\u0027]"
+          }
+        },
+        "search_api_stopwords" : {
+          "status" : 0,
+          "weight" : "30",
+          "settings" : {
+            "fields" : { "title" : true, "body:value" : true },
+            "file" : "",
+            "stopwords" : "but\\r\\ndid\\r\\nthe this that those\\r\\netc"
+          }
+        }
+      }
+    },
+    "enabled" : "1",
+    "read_only" : "0",
+    "rdf_mapping" : []
+  }');
+  return $items;
+}
+
+
+/*
+ * Implement hook_menu_local_tasks_alter()
+ */
+/*function epe_db_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if(arg(0) == 'node' && !arg(2)) {
+    $node = node_load(arg(1));
+    if($node && node_is_page($node)) {
+      $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+      foreach($depend_modules as $module=>$type) {
+        if($type == 'file') {
+          $file_type = str_replace('epe_db', '', $module);
+          if($node->type === "{$file_type}_resource") {
+            $data['tabs'][0]['output'][1]['#link']['path'] = 'resource/file/%/edit';
+            $data['tabs'][0]['output'][1]['#link']['href'] = "resource/file/{$node->nid}/edit";
+          }
+        }
+      }
+    }
+  }
+}*/
