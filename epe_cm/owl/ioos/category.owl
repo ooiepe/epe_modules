@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://mmisw.org/ont/ioos/category/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:omv="http://omv.ontoware.org/2005/05/ontology#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:omvmmi="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xml:base="http://mmisw.org/ont/ioos/category">
+    <owl:Ontology rdf:about="">
+        <omvmmi:hasResourceType>keyword</omvmmi:hasResourceType>
+        <omvmmi:origVocManager>SECOORA</omvmmi:origVocManager>
+        <omvmmi:hasContentCreator>Sara Haines</omvmmi:hasContentCreator>
+        <dc:description>Additional Categories (not listed in IOOS Core Variables Table 3-3).</dc:description>
+        <omv:creationDate>2013-10-01T16:37:53+0000</omv:creationDate>
+        <omv:uri>http://mmisw.org/ont/ioos/category</omv:uri>
+        <omvmmi:contactRole>ontology producer</omvmmi:contactRole>
+        <dc:date>2012-10-03T18:52:15+0000</dc:date>
+        <omv:hasCreator>Sara Haines</omv:hasCreator>
+        <omvmmi:creditRequired>not specified</omvmmi:creditRequired>
+        <omv:version>20121003T185215</omv:version>
+        <omvmmi:shortNameUri>http://mmisw.org/ont/mmi/resourcetype/keyword</omvmmi:shortNameUri>
+        <omvmmi:contact>SECOORA</omvmmi:contact>
+        <dc:creator>Sara Haines</dc:creator>
+        <omv:description>Additional Categories (not listed in IOOS Core Variables Table 3-3).</omv:description>
+        <omvmmi:temporaryMmiRole>ontology producer</omvmmi:temporaryMmiRole>
+        <omv:name>IOOS Category Vocabulary</omv:name>
+        <omv:acronym>category</omv:acronym>
+        <omvmmi:origMaintainerCode>ioos</omvmmi:origMaintainerCode>
+        <omv:usedOntologyEngineeringTool rdf:resource="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/voc2rdf"/>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://mmisw.org/ont/ioos/category/Category">
+        <rdfs:label>Category</rdfs:label>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/category/name">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/category/Category"/>
+        <rdfs:label>name</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/category/definition">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/category/Category"/>
+        <rdfs:label>definition</rdfs:label>
+    </owl:DatatypeProperty>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/chemical">
+        <definition>Chemical Constituent</definition>
+        <name>chemical</name>
+        <rdfs:label>chemical</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/atmospheric">
+        <definition>Atmospheric Variable</definition>
+        <name>atmospheric</name>
+        <rdfs:label>atmospheric</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/coordinate">
+        <definition>Observed properties of sensor or platform</definition>
+        <name>coordinate</name>
+        <rdfs:label>coordinate</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/water_property">
+        <definition>Water Property</definition>
+        <name>water_property</name>
+        <rdfs:label>water_property</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/waves">
+        <definition>Surface Waves</definition>
+        <name>waves</name>
+        <rdfs:label>waves</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/water_quality">
+        <definition>Water Quality</definition>
+        <name>water_quality</name>
+        <rdfs:label>water_quality</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/relative_location">
+        <definition>Relative Location</definition>
+        <name>relative_location</name>
+        <rdfs:label>relative_location</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/sensor">
+        <definition>Sensor</definition>
+        <name>sensor</name>
+        <rdfs:label>sensor</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/currents">
+        <definition>Ocean Currents</definition>
+        <name>currents</name>
+        <rdfs:label>currents</rdfs:label>
+    </Category>
+    <Category rdf:about="http://mmisw.org/ont/ioos/category/quality_control">
+        <definition>Quality Control</definition>
+        <name>quality_control</name>
+        <rdfs:label>quality_control</rdfs:label>
+    </Category>
+</rdf:RDF>

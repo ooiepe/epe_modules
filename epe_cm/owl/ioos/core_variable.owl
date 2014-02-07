@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://mmisw.org/ont/ioos/core_variable/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:omv="http://omv.ontoware.org/2005/05/ontology#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:omvmmi="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xml:base="http://mmisw.org/ont/ioos/core_variable">
+    <owl:Ontology rdf:about="">
+        <omv:reference>IOOS Core Variables in Table 3-3, in U.S. Integrated Ocean Observing System: A Blueprint for Full Capability Ver 1.0 (Nov 2010). http://www.ioos.gov/library/us_ioos_blueprint_ver1.pdf. Accessed July 31, 2012.</omv:reference>
+        <omv:acronym>core_variable</omv:acronym>
+        <omvmmi:shortNameUri>http://mmisw.org/ont/mmi/resourcetype/keyword</omvmmi:shortNameUri>
+        <omv:hasCreator>Sara Haines</omv:hasCreator>
+        <omv:creationDate>2013-10-01T16:27:57+0000</omv:creationDate>
+        <omvmmi:origMaintainerCode>ioos</omvmmi:origMaintainerCode>
+        <dc:date>2013-02-05T19:50:46+0000</dc:date>
+        <omv:uri>http://mmisw.org/ont/ioos/core_variable</omv:uri>
+        <omvmmi:hasResourceType>keyword</omvmmi:hasResourceType>
+        <omvmmi:creditRequired>not specified</omvmmi:creditRequired>
+        <omv:version>20130205T195046</omv:version>
+        <omvmmi:contact>SECOORA</omvmmi:contact>
+        <omvmmi:origVocManager>SECOORA</omvmmi:origVocManager>
+        <omvmmi:contactRole>ontology producer</omvmmi:contactRole>
+        <omvmmi:hasContentCreator>Sara Haines</omvmmi:hasContentCreator>
+        <omv:name>IOOS Core Variable Vocabulary</omv:name>
+        <dc:creator>Sara Haines</dc:creator>
+        <omvmmi:temporaryMmiRole>ontology producer</omvmmi:temporaryMmiRole>
+        <omv:description>IOOS Core Variables in Table 3-3, in U.S. Integrated Ocean Observing System: A Blueprint for Full Capability Ver 1.0 (Nov 2010). http://www.ioos.gov/library/us_ioos_blueprint_ver1.pdf. Accessed July 31, 2012.</omv:description>
+        <omv:usedOntologyEngineeringTool rdf:resource="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/voc2rdf"/>
+        <dc:description>IOOS Core Variables in Table 3-3, in U.S. Integrated Ocean Observing System: A Blueprint for Full Capability Ver 1.0 (Nov 2010). http://www.ioos.gov/library/us_ioos_blueprint_ver1.pdf. Accessed July 31, 2012.</dc:description>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://mmisw.org/ont/ioos/core_variable/Core_Variable">
+        <rdfs:label>Core_Variable</rdfs:label>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/core_variable/definition">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/core_variable/Core_Variable"/>
+        <rdfs:label>definition</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/core_variable/name">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/core_variable/Core_Variable"/>
+        <rdfs:label>name</rdfs:label>
+    </owl:DatatypeProperty>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/optical_properties">
+        <definition>Optical properties</definition>
+        <name>optical_properties</name>
+        <rdfs:label>optical_properties</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/fish_species">
+        <definition>Fish species</definition>
+        <name>fish_species</name>
+        <rdfs:label>fish_species</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/bathymetry">
+        <definition>Bathymetry</definition>
+        <name>bathymetry</name>
+        <rdfs:label>bathymetry</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/dissolved_oxygen">
+        <definition>Dissolved oxygen</definition>
+        <name>dissolved_oxygen</name>
+        <rdfs:label>dissolved_oxygen</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/heat_flux">
+        <definition>Heat flux</definition>
+        <name>heat_flux</name>
+        <rdfs:label>heat_flux</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/phytoplankton_species">
+        <definition>Phytoplankton species</definition>
+        <name>phytoplankton_species</name>
+        <rdfs:label>phytoplankton_species</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/surface_waves">
+        <definition>Surface waves</definition>
+        <name>surface_waves</name>
+        <rdfs:label>surface_waves</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/ice_distribution">
+        <definition>Ice distribution</definition>
+        <name>ice_distribution</name>
+        <rdfs:label>ice_distribution</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/fish_abundance">
+        <definition>Fish abundance</definition>
+        <name>fish_abundance</name>
+        <rdfs:label>fish_abundance</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/salinity">
+        <definition>Salinity</definition>
+        <name>salinity</name>
+        <rdfs:label>salinity</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/bottom_character">
+        <definition>Bottom character</definition>
+        <name>bottom_character</name>
+        <rdfs:label>bottom_character</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/wind">
+        <definition>Wind Speed and Direction</definition>
+        <name>wind</name>
+        <rdfs:label>wind</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/zooplankton_abundance">
+        <definition>Zooplankton abundance</definition>
+        <name>zooplankton_abundance</name>
+        <rdfs:label>zooplankton_abundance</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/stream_flow">
+        <definition>Stream flow</definition>
+        <name>stream_flow</name>
+        <rdfs:label>stream_flow</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/dissolved_nutrients">
+        <definition>Dissolved Nutrients</definition>
+        <name>dissolved_nutrients</name>
+        <rdfs:label>dissolved_nutrients</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/zooplankton_species">
+        <definition>Zooplankton species</definition>
+        <name>zooplankton_species</name>
+        <rdfs:label>zooplankton_species</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/acidity">
+        <definition>Acidity</definition>
+        <name>acidity</name>
+        <rdfs:label>acidity</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/pathogens">
+        <definition>Pathogens</definition>
+        <name>pathogens</name>
+        <rdfs:label>pathogens</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/temperature">
+        <definition>Temperature</definition>
+        <name>temperature</name>
+        <rdfs:label>temperature</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/pco2">
+        <definition>Partial pressure of carbon dioxide</definition>
+        <name>pco2</name>
+        <rdfs:label>pco2</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/contaminants">
+        <definition>Contaminants</definition>
+        <name>contaminants</name>
+        <rdfs:label>contaminants</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/surface_currents">
+        <definition>Surface currents</definition>
+        <name>surface_currents</name>
+        <rdfs:label>surface_currents</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/cdom">
+        <definition>Color dissolved organic matter</definition>
+        <name>cdom</name>
+        <rdfs:label>cdom</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/ocean_color">
+        <definition>Ocean color</definition>
+        <name>ocean_color</name>
+        <rdfs:label>ocean_color</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/sea_level">
+        <definition>Sea level</definition>
+        <name>sea_level</name>
+        <rdfs:label>sea_level</rdfs:label>
+    </Core_Variable>
+    <Core_Variable rdf:about="http://mmisw.org/ont/ioos/core_variable/total_suspended_matter">
+        <definition>Total suspended matter</definition>
+        <name>total_suspended_matter</name>
+        <rdfs:label>total_suspended_matter</rdfs:label>
+    </Core_Variable>
+</rdf:RDF>

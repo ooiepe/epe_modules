@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:omv="http://omv.ontoware.org/2005/05/ontology#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:omvmmi="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/"
+    xmlns="http://mmisw.org/ont/ioos/societal_areas/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xml:base="http://mmisw.org/ont/ioos/societal_areas">
+    <owl:Ontology rdf:about="">
+        <omvmmi:origVocManager>SECCORA</omvmmi:origVocManager>
+        <omvmmi:contact>SECOORA</omvmmi:contact>
+        <dc:description>IOOS Societal Benefit Areas in Table 3-3, in U.S. Integrated Ocean Observing System: A Blueprint for Full Capability Ver 1.0 (Nov 2010). http://www.ioos.gov/library/us_ioos_blueprint_ver1.pdf. Accessed July 31, 2012.</dc:description>
+        <omv:creationDate>2013-10-01T16:46:34+0000</omv:creationDate>
+        <omvmmi:creditRequired>not specified</omvmmi:creditRequired>
+        <omvmmi:shortNameUri>http://mmisw.org/ont/mmi/resourcetype/keyword</omvmmi:shortNameUri>
+        <omvmmi:hasResourceType>keyword</omvmmi:hasResourceType>
+        <omv:uri>http://mmisw.org/ont/ioos/societal_areas</omv:uri>
+        <omv:reference>IOOS Societal Benefit Areas in Table 3-3, in U.S. Integrated Ocean Observing System: A Blueprint for Full Capability Ver 1.0 (Nov 2010). http://www.ioos.gov/library/us_ioos_blueprint_ver1.pdf. Accessed July 31, 2012.</omv:reference>
+        <omv:description>IOOS Societal Benefit Areas in Table 3-3, in U.S. Integrated Ocean Observing System: A Blueprint for Full Capability Ver 1.0 (Nov 2010). http://www.ioos.gov/library/us_ioos_blueprint_ver1.pdf. Accessed July 31, 2012.</omv:description>
+        <omv:version>20121003T185713</omv:version>
+        <omv:name>IOOS Societal Benefit Areas</omv:name>
+        <dc:creator>Sara Haines</dc:creator>
+        <omvmmi:origMaintainerCode>ioos</omvmmi:origMaintainerCode>
+        <dc:date>2012-10-03T18:57:13+0000</dc:date>
+        <omv:acronym>societal_areas</omv:acronym>
+        <omv:usedOntologyEngineeringTool rdf:resource="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/voc2rdf"/>
+        <omv:hasCreator>Sara Haines</omv:hasCreator>
+        <omvmmi:hasContentCreator>IOOS</omvmmi:hasContentCreator>
+    </owl:Ontology>
+    <owl:Class rdf:about="http://mmisw.org/ont/ioos/societal_areas/Societal_Area">
+        <rdfs:label>Societal_Area</rdfs:label>
+    </owl:Class>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/societal_areas/name">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/societal_areas/Societal_Area"/>
+        <rdfs:label>name</rdfs:label>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://mmisw.org/ont/ioos/societal_areas/definition">
+        <rdfs:domain rdf:resource="http://mmisw.org/ont/ioos/societal_areas/Societal_Area"/>
+        <rdfs:label>definition</rdfs:label>
+    </owl:DatatypeProperty>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/marine_operations">
+        <definition>Marine Operations</definition>
+        <name>marine_operations</name>
+        <rdfs:label>marine_operations</rdfs:label>
+    </Societal_Area>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/natural_hazards">
+        <definition>Natural Hazards</definition>
+        <name>natural_hazards</name>
+        <rdfs:label>natural_hazards</rdfs:label>
+    </Societal_Area>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/national_security">
+        <definition>National Security</definition>
+        <name>national_security</name>
+        <rdfs:label>national_security</rdfs:label>
+    </Societal_Area>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/weather_climate">
+        <definition>Weather and Climate</definition>
+        <name>weather_climate</name>
+        <rdfs:label>weather_climate</rdfs:label>
+    </Societal_Area>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/healthy_ecosystems">
+        <definition>Healthy Ecosystems</definition>
+        <name>healthy_ecosystems</name>
+        <rdfs:label>healthy_ecosystems</rdfs:label>
+    </Societal_Area>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/sustained_resources">
+        <definition>Sustained Resources</definition>
+        <name>sustained_resources</name>
+        <rdfs:label>sustained_resources</rdfs:label>
+    </Societal_Area>
+    <Societal_Area rdf:about="http://mmisw.org/ont/ioos/societal_areas/public_health">
+        <definition>Public Health</definition>
+        <name>public_health</name>
+        <rdfs:label>public_health</rdfs:label>
+    </Societal_Area>
+</rdf:RDF>

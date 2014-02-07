@@ -1,0 +1,88 @@
+<?php
+/**
+ * Implements hook_install().
+ */
+function epe_cm_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_cm_resource',0);
+  variable_set('comment_default_mode_cm_resource',1);
+  variable_set('comment_default_per_page_cm_resource','50');
+  variable_set('comment_form_location_cm_resource',1);
+  variable_set('comment_cm_resource','2');
+  variable_set('comment_preview_cm_resource','0');
+  variable_set('comment_subject_field_cm_resource',1);
+  variable_set('field_bundle_settings_node__cm_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_cm_resource',array());
+  variable_set('menu_parent_cm_resource','main-menu:0');
+  variable_set('node_options_cm_resource',array());
+  variable_set('node_preview_cm_resource','0');
+  variable_set('node_submitted_cm_resource',0);
+}
+
+/*
+ * Implement hook_enable
+ * this adds [your module name] module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_cm_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  /*
+   * resource_name: identifing which file resource type this module is (use in dbfiles) (if not use in dbfiles, this can just be content type name)
+   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles) (expected value: file or anything else)
+   * resource_browser_tab: indentify this content type should be apart of resource browser and some resource browser specific attributes (resource browser module is expacting the api to be api/resource/[api name] for the list of resources and api/resource/[api name]/% for individual resource information)
+   */
+ /* $modules['epe_cm'] = array('resource_name' => 'Concept Maps','resource_type' => 'cm_resource', 'resource_browser_tab' => array('label'=>'Concept Maps','api'=>'cm','default'=>FALSE,'order'=>1));
+  variable_set('EPE_CONTENT_MODULES', $modules);*/
+
+  $modules['epe_cm'] = array('content_type' => 'cm_resource','resource_browser' => array('api'=>'cm','adurl'=>'node/add/cm-resource','weight'=>1));
+  variable_set('EPE_CONTENT_MODULES', $modules);
+
+}
+
+/*
+ * Implement hook_disable
+ * this remove [your module name] module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_cm_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_cm']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of image resource content type
+ */
+function epe_cm_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('cm_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+  }
+
+  node_type_delete('cm_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%cm_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
+}
