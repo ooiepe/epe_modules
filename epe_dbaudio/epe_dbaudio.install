@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function epe_dbaudio_install() {
+  //set content type setting variables when content type is created
+  variable_set('audiofield_audioplayer','google_reader');
+  variable_set('comment_anonymous_audio_resource',0);
+  variable_set('comment_default_mode_audio_resource',1);
+  variable_set('comment_default_per_page_audio_resource','50');
+  variable_set('comment_form_location_audio_resource',1);
+  variable_set('comment_audio_resource','2');
+  variable_set('comment_preview_audio_resource','0');
+  variable_set('comment_subject_field_audio_resource',1);
+  variable_set('field_bundle_settings_node__audio_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_audio_resource',array());
+  variable_set('menu_parent_audio_resource','main-menu:0');
+  variable_set('node_options_audio_resource',array());
+  variable_set('node_preview_audio_resource','0');
+  variable_set('node_submitted_audio_resource',0);
+}
+
+/*
+ * Implement hook_enable
+ * this adds epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbaudio_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_dbaudio'] = array('content_type' => 'audio_resource', 'resource_type' => 'file');
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbaudio_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_dbaudio']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of document resource content type
+ */
+function epe_dbaudio_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('audio_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+  }
+
+  node_type_delete('audio_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%audio_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
+}
