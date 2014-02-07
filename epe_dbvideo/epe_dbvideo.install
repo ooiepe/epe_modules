@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function epe_dbvideo_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_video_resource',0);
+  variable_set('comment_default_mode_video_resource',1);
+  variable_set('comment_default_per_page_video_resource','50');
+  variable_set('comment_form_location_video_resource',1);
+  variable_set('comment_video_resource','2');
+  variable_set('comment_preview_video_resource','0');
+  variable_set('comment_subject_field_video_resource',1);
+  variable_set('field_bundle_settings_node__video_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_video_resource',array());
+  variable_set('menu_parent_video_resource','main-menu:0');
+  variable_set('node_options_video_resource',array());
+  variable_set('node_preview_video_resource','0');
+  variable_set('node_submitted_video_resource',0);
+}
+
+/*
+ * Implement hook_enable
+ * this adds epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbvideo_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  /*
+   * resource_name: identifing which file resource type this module is (use in dbfiles)
+   * resource_type: identifing whether module is part of db file resource type or not (use in dbfiles)
+   * not part of resource browser so not declaring resoruce_browser_tab array key
+   */
+  $modules['epe_dbvideo'] = array('content_type' => 'video_resource','resource_type' => 'file');
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbvideo_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_dbvideo']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of video resource content type
+ */
+function epe_dbvideo_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('video_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+  }
+
+  node_type_delete('video_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%video_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
+}

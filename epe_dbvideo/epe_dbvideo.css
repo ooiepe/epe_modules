@@ -1,0 +1,7 @@
+.view-display-id-block_list .image {
+  float: left;
+}
+.view-display-id-block_list .text {
+  margin-left: 110px;
+}
+.view-display-id-block_list .text label { font-weight: normal; float: left; margin-right: 10px; }
