@@ -1,0 +1,284 @@
+<?php
+
+/*function epe_wp_default_roles() {
+  $role = new stdClass();
+  $role->name = 'author';
+  user_role_save($role);
+}*/
+/**
+ * Implements hook_views_api().
+ */
+function epe_wp_views_api() {
+  return array("api" => "3.0");
+}
+
+/**
+  * Implement hook_permission
+  */
+function epe_wp_permission() {
+  return array(
+    'epe wp moderate menu' => array(
+      'title' => 'EPE WP access moderate menu',
+      'description' => 'Allow user to access moderate menu.',
+    ),
+  );
+}
+
+function epe_wp_block_info_alter(&$blocks, $theme, $code_blocks) {
+  $blocks['system']['navigation']['status'] = 0;
+  $blocks['system']['powered-by']['status'] = 0;
+  $blocks['user']['login']['status'] = 0;
+  $blocks['search']['form']['status'] = 0;
+}
+
+function epe_wp_menu_alter(&$items) {
+    // Change the title of user profile pages to the user's name.  Gak.
+    $items['user/%user']['title callback'] = 'epe_wp_user_page_title';
+}
+
+function epe_wp_user_page_title() {
+    if (arg(0) == 'user') {
+        // Load uid from url
+        $user = user_load(arg(1));
+        if (isset($user->field_account_fname['und'][0]['safe_value']) && isset($user->field_account_lname['und'][0]['safe_value']))
+        $output = trim($user->field_account_fname['und'][0]['safe_value'] . ' ' . $user->field_account_lname['und'][0]['safe_value']);
+    }
+    // Fallback to username if no fields are present
+    if (empty($output)) {
+        $output = $user->name;
+    }
+    return 'Member Profile: ' . $output;
+}
+
+
+function epe_wp_menu() {
+  $items = array();
+
+/*  $items['home'] = array(
+    'title' => t('EPE Home Page'),
+    'page callback' => 'epe_wp_epe_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+    'type' => MENU_NORMAL_ITEM,
+  );
+*/
+
+  $items['ev'] = array(
+    'title' => t('Visualizations'),
+    'page callback' => 'epe_wp_ev_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['cm'] = array(
+    'title' => t('Concept Maps'),
+    'page callback' => 'epe_wp_cm_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+/*  $items['llb'] = array(
+    'title' => t('Lessons'),
+    'page callback' => 'epe_wp_llb_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'type' => MENU_NORMAL_ITEM,
+  );*/
+
+/*  $items['db'] = array(
+    'title' => t('Resources'),
+    'page callback' => 'epe_wp_db_home',
+    'file' => 'epe_wp.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_wp') . '/inc',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+    'type' => MENU_NORMAL_ITEM,
+  );*/
+
+  $items['review'] = array(
+    'title' => t('Review'),
+    'page callback' => 'epe_wp_moderate_view',
+    'page arguments' => array('pending'),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe wp moderate menu'),
+    'menu_name' => 'main-menu',
+    'weight' => 10,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','review','=')->execute()->fetchAssoc();
+
+  $items['review/resources/pending'] = array(
+    'title' => 'Review Pending Resources',
+    'page callback' => 'epe_wp_moderate_view',
+    'page arguments' => array('pending'),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe wp moderate menu'),
+    'menu_name' => 'main-menu',
+    'plid' => $parent['mlid'],
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+function epe_wp_moderate_view($delta) {
+  switch ($delta) {
+    case 'pending':
+      return views_embed_view('moderator_resource_list', $display_id = 'pending_block');
+      break;
+
+    default:
+      drupal_access_denied();
+      break;
+  }
+}
+
+function epe_wp_block_info() {
+  $blocks['epe_wp_top_menu_links'] = array(
+    'info' => t('EPE WP Top Menu Links'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_cm_featured'] = array(
+    'info' => t('EPE Featured CM Resources'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_ev_featured'] = array(
+    'info' => t('EPE Featured Visualization Resources'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_db_featured'] = array(
+    'info' => t('EPE Featured Resources'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+
+}
+
+function epe_wp_block_view($delta = '') {
+  $block = array();
+  $block['title'] = t('<none>');
+  $block['content'] = '';
+
+  switch ($delta) {
+    case 'epe_wp_top_menu_links':
+      $block['content'] = '<ul><li><a href="' . base_path() . 'about"><div>About</div>the OOI</a></li><li><a href="' . base_path() . 'learn"><div>Learn</div>to Use Our Tools</a></li><li><a href="' . base_path() . 'teach"><div>Teach</div>with Data</a></li></ul>';
+    break;
+
+    case 'epe_cm_featured':
+      $block['title'] = t('Featured CM Resources');
+      $block['content'] = theme('epe_featured_block', array('type'=>array('cm_resource')));
+    break;
+
+    case 'epe_ev_featured':
+      $block['title'] = t('Featured Visualization Resources');
+      $block['content'] = theme('epe_featured_block', array('type'=>array('ev_tool_instance')));
+    break;
+
+    case 'epe_db_featured':
+      $block['title'] = t('Featured Resources');
+      $block['content'] = theme('epe_featured_block');
+    break;
+  }
+
+  return $block;
+}
+
+function epe_wp_theme() {
+  $tpl_path = drupal_get_path('module','epe_wp') . '/templates/';
+  return array(
+    'epe_ev_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_ev_homepage',
+    ),
+    'epe_cm_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_cm_homepage',
+    ),
+    'epe_featured_block' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_featured_block',
+      'variables' => array(
+        'type' => array(),
+      ),
+    ),
+  );
+}
+
+
+
+function epe_wp_form_user_register_form_alter(&$form, $form_state) {
+  // Insert our handler BEFORE user_register_submit().
+  // This allows us to add the role before the new user is saved.
+  array_unshift($form['#submit'], 'epe_wp_form_user_register_submit');
+}
+
+function epe_wp_form_user_register_submit(&$form, &$form_state) {
+  $author_role = user_role_load_by_name('author');
+  $roles = user_roles(TRUE);
+  $form_state['values']['roles'][$author_role->rid] = $roles[$author_role->rid];
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function epe_wp_image_default_styles() {
+  $styles = array();
+
+  $styles['homepage_featured_image'] = array(
+    'name' => 'homepage_featured_image',
+    'effects' => array(
+      4 => array(
+        'label' => 'Scale',
+        'help' => 'Scaling will maintain the aspect-ratio of the original image. If only a single dimension is specified, the other dimension will be calculated.',
+        'effect callback' => 'image_scale_effect',
+        'dimensions callback' => 'image_scale_dimensions',
+        'form callback' => 'image_scale_form',
+        'summary theme' => 'image_scale_summary',
+        'module' => 'image',
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 190,
+          'height' => '',
+          'upscale' => 0,
+        ),
+        'weight' => 1,
+      ),
+      5 => array(
+        'label' => 'Crop',
+        'help' => 'Cropping will remove portions of an image to make it the specified dimensions.',
+        'effect callback' => 'image_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_crop_form',
+        'summary theme' => 'image_crop_summary',
+        'module' => 'image',
+        'name' => 'image_crop',
+        'data' => array(
+          'width' => 190,
+          'height' => 141,
+          'anchor' => 'center-top',
+        ),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  return $styles;
+}
