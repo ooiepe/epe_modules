@@ -1,0 +1,144 @@
+<?php 
+
+/**
+ * Implements hook_install().
+ */
+function epe_ev_install() {
+
+  variable_set('comment_anonymous_ev_tool',0);
+  variable_set('comment_default_mode_ev_tool',1);
+  variable_set('comment_default_per_page_ev_tool','50');
+  variable_set('comment_ev_tool','2');
+  variable_set('comment_form_location_ev_tool',1);
+  variable_set('comment_preview_ev_tool','0');
+  variable_set('comment_subject_field_ev_tool',1);
+  variable_set('field_bundle_settings_node__ev_tool', array(
+      'view_modes' => array(),
+      'extra_fields' => array(
+        'form' => array(
+          'title' => array(
+            'weight' => '0',
+          ),
+        ),
+        'display' => array()
+      )
+    ));
+  
+  variable_set('menu_options_ev_tool',array());
+  variable_set('menu_parent_ev_tool','main-menu:0');
+  variable_set('node_options_ev_tool',array());
+  variable_set('node_preview_ev_tool','0');
+  variable_set('node_submitted_ev_tool',0);
+
+  variable_set('comment_anonymous_ev_tool_instance',0);
+  variable_set('comment_default_mode_ev_tool_instance',1);
+  variable_set('comment_default_per_page_ev_tool_instance','50');
+  variable_set('comment_ev_tool_instance','2');
+  variable_set('comment_form_location_ev_tool_instance',1);
+  variable_set('comment_preview_ev_tool_instance','1');
+  variable_set('comment_subject_field_ev_tool_instance',1);
+  variable_set('field_bundle_settings_node__ev_tool_instance',
+    array(
+      'view_modes' => array(
+        'teaser' => array(
+          'custom_settings' => TRUE,
+        ),
+        'full' => array(
+          'custom_settings' => FALSE,
+        ),
+        'rss' => array(
+          'custom_settings' => FALSE,
+        ),
+        'search_index' => array(
+          'custom_settings' => FALSE,
+        ),
+        'search_result' => array(
+          'custom_settings' => FALSE,
+        ),
+        'token' => array(
+          'custom_settings' => FALSE,
+        ),
+      ),
+      'extra_fields' => array(
+        'form' => array(
+          'title' => array(
+            'weight' => '0',
+          ),
+        ),
+        'display' => array(),
+      ),
+    ));
+
+  // todo: review variables
+  variable_set('menu_options_ev_tool_instance', array(
+      0 => 'main-menu',
+    ));
+
+  variable_set('menu_parent_ev_tool_instance','main-menu:0');
+
+  variable_set('node_options_ev_tool_instance', array(
+      0 => 'status',
+      1 => 'promote',
+    ));
+
+  variable_set('node_preview_ev_tool_instance','1');
+
+  variable_set('node_submitted_ev_tool_instance',1);
+
+  // adjust the weight for template overrides.. must be greater than views weight of 10
+  db_query("UPDATE {system} SET weight = 11 WHERE name = 'epe_ev'");
+
+}
+
+/*
+ * remove content type and all nodes of image resource content type
+ */
+function epe_ev_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('ev_tool_instance','ev_tool'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+  }
+
+  node_type_delete('ev_tool');
+  node_type_delete('ev_tool_instance');
+
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%ev_tool%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
+}
+
+function epe_ev_enable() { 
+
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+
+  $modules['epe_ev'] = array(
+      'content_type' => 'ev_tool_instance',
+      'resource_browser' => array('api'=>'ev','adurl'=>'ev/tools','weight'=>2)
+    );
+
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_ev module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_ev_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_ev']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
