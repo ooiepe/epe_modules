@@ -1,0 +1,194 @@
+<?php
+
+
+/**
+ * Implements hook_install().
+ */
+function epe_llb_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_llb_resource',0);
+  variable_set('comment_default_mode_llb_resource',1);
+  variable_set('comment_default_per_page_llb_resource','50');
+  variable_set('comment_form_location_llb_resource',1);
+  variable_set('comment_llb_resource','2');
+  variable_set('comment_preview_llb_resource','0');
+  variable_set('comment_subject_field_llb_resource',1);
+  variable_set('field_bundle_settings_node__llb_resource',array(
+    'view_modes' => array(
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_index' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => FALSE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
+      'revision' => array(
+        'custom_settings' => FALSE,
+      ),
+      'llb_instructor' => array(
+        'custom_settings' => TRUE,
+      ),
+    ),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+
+  variable_set('menu_options_llb_resource',array());
+  variable_set('menu_parent_llb_resource','main-menu:0');
+  variable_set('node_options_llb_resource',array());
+  variable_set('node_preview_llb_resource','0');
+  variable_set('node_submitted_llb_resource',0);
+}
+
+/*
+ * Implement hook_enable
+ * this adds epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_llb_enable() {
+  db_update('system')
+    ->fields(array('weight' => 10))
+    ->condition('type', 'module')
+    ->condition('name', 'epe_llb')
+    ->execute();
+
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lessons','api'=>'llb','adurl'=>'node/add/llb-resource','weight'=>3));
+  variable_set('EPE_CONTENT_MODULES', $modules);
+
+  $epe_menu = variable_get('epe_menu',array());
+
+  $node = new stdClass();
+  $node->type = "page";
+  $node->title = "Lessons";
+  $node->language = LANGUAGE_NONE;
+  $node->path = array('alias' => 'llb');
+  node_object_prepare($node);
+  $node->uid = 1;
+  $node = node_submit($node);
+  node_save($node);
+  $epe_menu['llb']['nid'] = $node->nid;
+
+  $item = array(
+    'link_path' => 'node/' . $node->nid,
+    'link_title' => 'Lessons',
+    'menu_name' => 'main-menu',
+    'weight' => 3,
+    'expanded' => 0,
+    );
+  $epe_menu['llb']['mlid'] = menu_link_save($item);
+
+  variable_set('epe_menu',$epe_menu);
+
+  $item = array(
+      'link_path' => 'node/' . $node->nid,
+      'link_title' => 'About Lessons',
+      'menu_name' => 'main-menu',
+      'weight' => 1,
+      'expanded' => 0,
+      'plid' => $epe_menu['llb']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'node/add/llb-resource',
+      'link_title' => 'Create a Lesson',
+      'menu_name' => 'main-menu',
+      'weight' => 2,
+      'expanded' => 0,
+      'plid' => $epe_menu['llb']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=' . $modules['epe_llb']['resource_browser']['api'],
+      'link_title' => 'My Lessons',
+      'menu_name' => 'main-menu',
+      'weight' => 3,
+      'expanded' => 0,
+      'plid' => $epe_menu['llb']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=' . $modules['epe_llb']['resource_browser']['api'],
+      'link_title' => 'Browse Lessons',
+      'menu_name' => 'main-menu',
+      'weight' => 4,
+      'expanded' => 0,
+      'plid' => $epe_menu['llb']['mlid'],
+      );
+  menu_link_save($item);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_image module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_llb_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_llb']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of video resource content type
+ */
+function epe_llb_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('llb_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+
+    foreach($nids as $nid) {
+      db_delete('resources_assoc')
+      ->condition('parent',$nid)
+      ->execute();
+    }
+  }
+
+  node_type_delete('llb_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%llb_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+  variable_del('epe_llb_config');
+
+  node_types_rebuild();
+  menu_rebuild();
+}
+
+/**
+ * Update LLB's "desired assessment" field's required setting.
+ */
+function epe_llb_update_7000() {
+  $content_type = 'llb_resource';
+  $instance = field_read_instance('node','field_desired_assessment',$content_type);
+  $instance['required'] = 0;
+  field_update_instance($instance);
+}

@@ -1,0 +1,876 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function epe_llb_views_api() {
+  return array("api" => "3.0");
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function epe_llb_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "ds" && $api == "ds") {
+    return array("version" => "1");
+  }
+}
+
+/**
+ * Implements hook_ds_view_modes_info().
+ */
+function epe_llb_ds_view_modes_info() {
+  $export = array();
+
+  $ds_view_mode = new stdClass();
+  $ds_view_mode->api_version = 1;
+  $ds_view_mode->view_mode = 'llb_instructor';
+  $ds_view_mode->label = 'LLB Instructor';
+  $ds_view_mode->entities = array(
+    'node' => 'node',
+  );
+  $export['llb_instructor'] = $ds_view_mode;
+
+  return $export;
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+/*
+ * image style specifically setup for llb resource
+ */
+function epe_llb_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: llb_dataset_teaser.
+  $styles['llb_dataset_teaser'] = array(
+    'name' => 'llb_dataset_teaser',
+    'effects' => array(
+      3 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 270,
+          'height' => 116,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  // Exported image style: llb_detail_view.
+  $styles['llb_detail_view'] = array(
+    'name' => 'llb_detail_view',
+    'effects' => array(
+      2 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 480,
+          'height' => 320,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  // Exported image style: llb_teaser_view.
+  $styles['llb_teaser_view'] = array(
+    'name' => 'llb_teaser_view',
+    'effects' => array(
+      1 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 360,
+          'height' => 240,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
+  * Implements hook_menu
+  */
+function epe_llb_menu() {
+  $items = array();
+
+/*  $items['admin/config/epe/llb-form'] = array(
+    'title' => 'Lab Lesson Builder Form Field',
+    'description' => 'Configure lab lesson builder ',
+    'page arguments' => array('epe_llb_admin_config'),
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('epe llb configuration'),
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'file' => 'epe_llb.admin.inc',
+  );*/
+
+  $items['api/resource/llb'] = array(
+    'title' => t('Restful Lab Lesson Builder Resource Query'),
+    'page callback' => 'epe_llb_restful_api',
+    'file' => 'epe_llb.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['api/resource/llb/%'] = array(
+    'title' => t('Restful Single Lab Lesson Builder Resource Query'),
+    'page callback' => 'epe_llb_restful_api_node',
+    'page arguments' => array(3),
+    'file' => 'epe_llb.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+/*
+  $items['resource/add/llb'] = array(
+    'title' => t('Create Lab Lesson Builder Resrouce'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('epe_llb_node_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('create llb content'),
+    'file' => 'epe_llb.form.inc',
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['resource/llb/%/edit'] = array(
+    'title' => t('Edit Lab Lesson Builder Resrouce'),
+    'page callback' => 'epe_llb_node_edit',
+    'page arguments' => array(2),
+    'access callback' => 'user_access',
+    'access arguments' => array('edit own llb content'),
+    'file' => 'epe_llb.form.inc',
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'type' => MENU_CALLBACK,
+  );
+*/
+
+  return $items;
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function epe_llb_node_info() {
+  $items = array(
+    'llb_resource' => array(
+      'name' => t('Data Investigation'),
+      'base' => 'node_content',
+      'description' => 'Use <em>Investigations</em> to create customizable data investigations',
+      'has_title' => '1',
+      'title_label' => t('Investigation Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_node_type_insert().
+ */
+function epe_llb_node_type_insert($content_type) {
+  if ($content_type->type == 'llb_resource') {
+    module_load_include('inc','epe_llb','inc/epe_llb.field_base');
+    module_load_include('inc','epe_llb','inc/epe_llb.field_instance');
+
+    // Create all the fields we are adding to our content type.
+    foreach (_epe_llb_field_default_field_bases() as $field) {
+      //in case content type share fields
+      if(!field_info_field($field['field_name'])) {
+        field_create_field($field);
+      }
+    }
+
+    // Create all the instances for our fields.
+    foreach (_epe_llb_field_default_field_instances() as $instance) {
+      field_create_instance($instance);
+    }
+
+    //assign custom content type permission
+    _assign_epe_llb_permission();
+  }
+}
+
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
+function _assign_epe_llb_permission() {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
+    $role = user_role_load_by_name($role_name);
+    $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
+    $author_permissions = array(
+      'create llb_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'delete any llb_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'delete own llb_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'edit any llb_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'edit own llb_resource content' => array('grant' => TRUE, 'module' => 'node'),
+    );
+    //I am not sure what hook I should use to invoke user_role_grant_permissions function
+    //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
+    foreach($author_permissions as $key=>$assignment) {
+      if($assignment['grant'] && !array_key_exists($key, $role_perm[$role->rid])) {
+        db_insert('role_permission')
+          ->fields(array(
+            'rid' => $role->rid,
+            'permission' => $key,
+            'module' => $assignment['module'],
+          ))
+          ->execute();
+      }
+    }
+  }
+
+  // Clear the user access cache.
+  drupal_static_reset('user_access');
+  drupal_static_reset('user_role_permissions');
+}
+
+/*
+ * Implement hook_theme
+ * This hook is to style edit form, the theme key needs to be the same as the form function name
+ */
+function epe_llb_theme() {
+  $tpl_path = drupal_get_path('module','epe_llb') . '/templates/';
+  $angular_tpl_path = drupal_get_path( 'module' , 'epe_llb' ) . '/app';
+  return array(
+    'llb_resource_node_form' => array(
+      'path' => $tpl_path,
+      'template' =>  "epe_llb_node_form",
+      'render element' => 'form',
+    ),
+    'epe_llb_exploration.index.html' => array(
+      'path' => "$angular_tpl_path/partial",
+      'template'=> "epe_llb_exploration.index.html",
+    ),
+    'epe_llb_vertical_tab_info_container' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_vertical_tab_info_container',
+      'variables' => array(
+        'key' => '',
+        'design_process' => '',
+        'content_tips' => '',
+        'pedagogy' => '',
+      ),
+    ),
+    'epe_llb_homepage' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_homepage',
+    ),
+    'epe_llb_add_resource_modal_template' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_add_resource_modal_template',
+      'variables' => array(
+        'templateid' => '',
+        'label' => '',
+      ),
+    ),
+    'epe_llb_adhoc_modal_template' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_adhoc_modal_template',
+    ),
+    'epe_llb_field_slideshow' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_llb_field_slideshow',
+      'variables' => array(
+        'field' => array(),
+      ),
+    ),
+  );
+}
+
+function epe_llb_homepage_render() {
+  drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.homepage.js');
+  return theme('epe_llb_homepage');
+}
+
+
+/*
+ * implement node form alter
+ */
+function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['title']['#title_display'] = 'invisible';
+
+  if( file_exists(drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-prefix.html') ) {
+    $form['field_challenge_thumbnail']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-prefix.html');
+  }
+
+  if( file_exists(drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-suffix.html') ) {
+    $form['field_challenge_thumbnail']['#suffix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-suffix.html');
+  }
+
+  if( file_exists(drupal_get_path('module','epe_llb') . '/contents/instructor/field-instructional_content-prefix.html') ) {
+    $form['field_instructional_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/instructor/field-instructional_content-prefix.html');
+  }
+
+  if( file_exists(drupal_get_path('module','epe_llb') . '/contents/instructor/field-preconception_content-prefix.html') ) {
+    $form['field_preconception_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/instructor/field-preconception_content-prefix.html');
+  }
+
+  if( file_exists(drupal_get_path('module','epe_llb') . '/contents/instructor/field-resources_content-prefix.html') ) {
+    $form['field_resources_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/instructor/field-resources_content-prefix.html');
+  }
+
+/*  $form['field_challenge_thumbnail']['#prefix'] = $form_values['llb_challenge_thumbnail_prefix'];
+  $form['field_challenge_thumbnail']['#suffix'] = $form_values['llb_challenge_thumbnail_suffix'];
+  $form['field_instructional_content']['#prefix'] = $form_values['llb_instructional_content'];
+  $form['field_preconception_content']['#prefix'] = $form_values['llb_preconception_content'];
+  $form['field_resources_content']['#prefix'] = $form_values['llb_resources_content'];*/
+
+  $form['block_objectives_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_objectives = module_invoke('epe_llb','block_view','epe_llb_objectives_info');
+  $form['block_objectives_info'][] = array('#markup'=>$block_objectives['content']);
+
+  $form['block_introduction_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_introduction = module_invoke('epe_llb','block_view','epe_llb_introduction_info');
+  $form['block_introduction_info'][] = array('#markup'=>$block_introduction['content']);
+
+  $form['block_background_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_background = module_invoke('epe_llb','block_view','epe_llb_background_info');
+  $form['block_background_info'][] = array('#markup'=>$block_background['content']);
+
+  $form['block_challenge_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_challenge = module_invoke('epe_llb','block_view','epe_llb_challenge_info');
+  $form['block_challenge_info'][] = array('#markup'=>$block_challenge['content']);
+
+  $form['block_exploration_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_exploration = module_invoke('epe_llb','block_view','epe_llb_exploration_info');
+  $form['block_exploration_info'][] = array('#markup'=>$block_exploration['content']);
+
+  $form['block_explanation_info'] = array('#type' => 'container', '#attributes' => array());
+  $block_explanation = module_invoke('epe_llb','block_view','epe_llb_explanation_info');
+  $form['block_explanation_info'][] = array('#markup'=>$block_explanation['content']);
+
+  $default_dataset_value = $form['field_exploration_dataset']['und'][0]['value']['#default_value'];
+  $form['field_exploration_dataset']['und'][0]['value']['#type'] = 'hidden';
+  $form['field_exploration_dataset']['#prefix'] = '<div class="app-main" ng-controller="main">';
+  $form['field_exploration_dataset']['und'][0]['value']['#default_value'] = '{{items}}';
+
+  //if( file_exists(drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html') ) {
+  //  $form['field_guidance_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html' );
+  //}
+
+  //foreach ($form['field_desired_assessment']['und']['#options'] as $key => &$label) {
+  //  $label = '<a href="#" class="assessment" data-toggle="tooltip" title="' . file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/assessment-' . strtolower($key) . '.html' ) . '">' . $label . '</a>';
+  //}
+
+  //drupal_add_js("jQuery('[rel=tooltip]').tooltip();",'inline');
+
+  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($depend_modules['epe_llb']);
+  $resource_browser_btns = array();
+  /*foreach($depend_modules as $module) {
+    if(isset($module['resource_browser'])) {
+      $btn_label = '';
+      if(isset($module['resource_browser']['label'])) {
+        $btn_label = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $btn_label = $node_type->name;
+      }
+      if(isset($module['resource_browser']['weight'])) {
+        $resource_browser_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
+      } else {
+        $resource_browser_btns[] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
+      }
+    }
+  }
+  ksort($resource_browser_btns);
+
+  $form['resource_browser'] = array(
+    '#markup' => implode('&nbsp;', $resource_browser_btns), //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
+    '#suffix' => '</div>' //end div.app-main
+  );*/
+
+  $resource_browser_add_btns = array();
+  $resource_browser_modals = array();
+  foreach($depend_modules as $module) {
+    if(isset($module['resource_browser'])) {
+      $btn_label = '';
+      if(isset($module['resource_browser']['label'])) {
+        $btn_label = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $btn_label = $node_type->name;
+      }
+
+      $adhoc = false;
+      if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
+        $adhoc = true;
+      }
+
+      if(isset($module['resource_browser']['weight'])) {
+    /*    $resource_browser_add_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
+        /*$resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#modal' . $module['resource_browser']['api'] . '" class="btn btn-success" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';*/
+        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+      } else {
+/*        $resource_browser_add_btns[] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
+        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
+      }
+      //$resource_browser_modals[] = theme('epe_llb_add_resource_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
+    }
+  }
+  ksort($resource_browser_add_btns);
+
+  //$resource_browser_modals[] = '<div id="rbmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body"><iframe src="" seamless width="779" height="500" class="rb-modal-iframe" /></div><div class="modal-footer"><button type="button" class="btn btn-primary pull-left add-selected" data-dismiss="modal" aria-hidden="true">Add Selected</button><a href="#adhocmodal" class="btn btn-success" data-dismiss="modal" aria-hidden="true" data-toggle="modal">Add New Resource</a><button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div></div>';
+
+  $resource_browser_modals[] = theme('epe_llb_add_resource_modal_template');
+
+  $resource_browser_modals[] = theme('epe_llb_adhoc_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
+
+  $form['resource_browser_modal'] = array(
+    '#markup' => implode('', $resource_browser_modals) . '<div>' . implode('&nbsp;', $resource_browser_add_btns) . '</div>', //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
+    '#suffix' => '</div>' //end div.app-main
+  );
+
+  // Create our own javascript that will be used to theme a modal.
+  /*
+  $modal_style = array(
+    'rb-modal-style' => array(
+      'modalSize' => array(
+        'type' => 'fixed',
+        'width' => 900,
+        'height' => 800,
+        'addWidth' => 10,
+        'addHeight' => 10,
+        'contentRight' => 0,
+        'contentBottom' => 0,
+      ),
+      'modalOptions' => array(
+        'opacity' => .6,
+        'background-color' => '#684C31',
+      ),
+      'animation' => 'fadeIn',
+      'modalTheme' => 'llb_modal',
+      // Customize the AJAX throbber like so:
+      // This function assumes the images are inside the module directory's "images" directory:
+      // ctools_image_path($image, $module = 'ctools', $dir = 'images')
+      'throbber' => theme('image', array('path' => ctools_image_path('ajax-loader.gif', 'epe_llb', 'images'), 'alt' => t('Loading...'), 'title' => t('Loading'))),
+      'closeImage' => theme('image', array('path' => ctools_image_path('modal-close.png', 'epe_llb', 'images'), 'alt' => t('Close window'), 'title' => t('Close window'))),
+    ),
+  );
+  // Add the settings array defined above to Drupal 7's JS settings:
+  drupal_add_js($modal_style, 'setting');
+  // The function below assumes the happy.js file resides in [module_dir]/js
+  ctools_add_js('rb-modal', 'epe_llb');
+  // The function below assumes the happy.css file resides in [module_dir]/css
+  //ctools_add_css('llb-modal', 'epe_llb');
+*/
+
+
+  $form['#attached']['css'] = array(
+    //'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'=>array('type'=>'external'),
+    drupal_get_path('module','epe_llb') . '/css/epe_llb.css'=>array('type'=>'file','group'=>CSS_THEME),
+  );
+  /*$form['#attached']['js'] = array(
+    'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'=>array('type'=>'external'),
+  );*/
+
+  drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
+  drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
+
+  $app_path = drupal_get_path('module', 'epe_llb') . '/app';
+
+  $form['#attached']['js'][] = $app_path . '/app.js';
+  //$form['#attached']['js'][] = $app_path . '/explorationController.js';
+  //$form['#attached']['js'][] = $app_path . '/explorationFactory.js';
+  $form['#attached']['js'][] = $app_path . '/explorationDirective.js';
+  $form['#attached']['js'][] = libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js';
+  $form['#attached']['js'][] = libraries_get_path('ui-sortable') . '/src/sortable.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/epe_llb.exploration_dataset.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/epe_llb.edit.intro_slideshow.js';
+
+  $form['#attached']['js'][] = libraries_get_path('formSavior') . '/jquery.formSavior.min.js';
+
+  $form['#attached']['js'][] = array(
+    'data' => array(
+      'default_dataset_value'=>$default_dataset_value,
+      'llb'=> array(
+        'thumbnail_placeholder'=>drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg'
+      ),
+    ),
+    'type' => 'setting',
+  );
+  $form['#attached']['js']['jQuery(document).ready(function($) { $("form#llb-resource-node-form").formSavior(); });'] = array( 'type' => 'inline');
+  //$form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/test.js';
+  /*$form['#attached']['css']['http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css'] = array('type'=>'external');*/
+
+  //$form['#after_build'][] = 'epe_llb_field_formatter_rebuild';
+}
+
+function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
+  if(isset($element['#bundle']) && $element['#bundle'] == 'llb_resource') {
+    unset($element['#title']);
+  }
+
+  if($context['field']['type'] == 'image') {
+    unset($element[0]['#title']);
+    //if(isset($element['#theme'])): unset($element['#file_upload_title']); endif;
+  }
+}
+
+function epe_llb_node_insert($node) {
+  $wrapper = entity_metadata_wrapper('node',$node);
+  if($wrapper->getBundle() == 'llb_resource') {
+    $datasets = json_decode($wrapper->field_exploration_dataset->value());
+
+    foreach($datasets as $dataset) {
+      db_insert('resources_assoc')
+      ->fields(array(
+        'parent' => $wrapper->getIdentifier(),
+        'child' => $dataset->nid
+      ))
+      ->execute();
+    }
+  }
+}
+
+function epe_llb_node_udpate($node) {
+  $wrapper = entity_metadata_wrapper('node',$node);
+  if($wrapper->getBundle() == 'llb_resource') {
+    db_delete('resources_assoc')
+    ->condition('parent', $wrapper->getIdentifier(), '=')
+    ->execute();
+
+    $datasets = json_decode($wrapper->field_exploration_dataset->value());
+
+    foreach($datasets as $dataset) {
+      db_insert('resources_assoc')
+      ->fields(array(
+        'parent' => $wrapper->getIdentifier(),
+        'child' => $dataset->nid
+      ))
+      ->execute();
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_llb_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_llb') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_llb_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_llb_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}
+
+/*
+ * implement hook_entity_view_mode_alter
+ */
+function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
+  if($view_mode == 'full' && $context['entity_type'] == 'node' && $context['entity']->type == 'llb_resource') {
+    $node = node_load($context['entity']->nid);
+    if($view_mode == 'full') {
+      comment_node_view($node,'full');
+    }
+
+    if(!arg(2)) {
+      $view_mode = 'teaser';
+    } elseif ( arg(2) && arg(2) == 'detail') {
+      drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css',array('group'=>CSS_THEME));
+      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
+      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
+
+      drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+
+      if(libraries_get_path('video-js')) {
+        drupal_add_css(libraries_get_path('video-js') . '/video-js.css');
+        drupal_add_js(libraries_get_path('video-js') . '/video.js');
+        drupal_add_js('videojs.options.flash.swf = "' . base_path() . libraries_get_path('video-js') . '/video-js.swf"',array('type'=>'inline'));
+      }
+    } elseif ( arg(2) && arg(2) == 'instructor' ) {
+      $view_mode = 'llb_instructor';
+    }
+  }
+}
+
+/*
+ * implement hook_node_view_alter
+ */
+function epe_llb_node_view_alter(&$build) {
+  if($build['#view_mode'] == 'full') {
+    $build['field_introductory_content']['#label_display'] = 'hidden';
+    $build['field_background_content']['#label_display'] = 'hidden';
+    $build['field_background_slideshow']['#label_display'] = 'hidden';
+    $build['field_background_question']['#label_display'] = 'hidden';
+    $build['field_challenge_content']['#label_display'] = 'hidden';
+    $build['field_challenge_thumbnail']['#label_display'] = 'hidden';
+    if(!empty($build['field_desired_assessment'])) { $build['field_desired_assessment'][0]['#markup'] = 'The goal of this investigation is to ' . strtolower($build['field_desired_assessment'][0]['#markup']); }
+    drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.exploration_dataset.view.js',array('scope'=>'footer'));
+  }
+
+  $epe_menu = variable_get('epe_menu',array());
+  if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page' && $build['#node']->nid == $epe_menu['llb']['nid']) {
+    $build['#post_render'][] = 'epe_llb_homepage_render';
+  }
+}
+
+/*
+function epe_llb_field_formatter_rebuild($form, &$form_state) {
+  //$form['field']['#prefix'] = 'This text will rule them all!';
+  //drupal_add_css('hello.css'); //This line works even after validation fails.
+
+  $form['field_background_question']['#title_display'] = 'invisible';
+  $form['field_background_question']['und']['#title_display'] = 'invisible';
+  $form['field_background_question']['und'][0]['value']['#title_display'] = 'invisible';
+  echo '<pre>';
+  print_r($form['field_background_question']);
+  echo '</pre>';
+  return $form;
+}
+*/
+
+function epe_llb_block_info() {
+  $blocks['epe_llb_objectives_info'] = array(
+    'info' => t('EPE LLB Objectives Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_llb_introduction_info'] = array(
+    'info' => t('EPE LLB Introduction Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_llb_background_info'] = array(
+    'info' => t('EPE LLB Background Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_llb_challenge_info'] = array(
+    'info' => t('EPE LLB Challenge Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_llb_exploration_info'] = array(
+    'info' => t('EPE LLB Exploration Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_llb_explanation_info'] = array(
+    'info' => t('EPE LLB Explanation Information'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['epe_llb_featured'] = array(
+    'info' => t('EPE Featured Lesson Resources'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function epe_llb_block_view($delta = '') {
+  module_load_include('inc','epe_llb','inc/epe_llb.block');
+  $block = array();
+  $block['title'] = t('<none>');
+  $block['content'] = '';
+
+  $blocks_content = variable_get(
+    'epe_llb_info_blocks_content',
+    array(
+      'epe_llb_objectives_info' => '',
+      'epe_llb_introduction_info' => '',
+      'epe_llb_background_info' => '',
+      'epe_llb_challenge_info' => '',
+      'epe_llb_exploration_info' => '',
+      'epe_llb_explanation_info' => '',
+    )
+  );
+
+  switch ($delta) {
+    case 'epe_llb_objectives_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('objectives'); //$blocks_content['epe_llb_objectives_info'];
+    break;
+
+    case 'epe_llb_introduction_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('introduction'); //$blocks_content['epe_llb_introduction_info'];
+    break;
+
+    case 'epe_llb_background_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('background');//$blocks_content['epe_llb_background_info'];
+    break;
+
+    case 'epe_llb_challenge_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('challenge');//$blocks_content['epe_llb_challenge_info'];
+    break;
+
+    case 'epe_llb_exploration_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('exploration');//$blocks_content['epe_llb_exploration_info'];
+    break;
+
+    case 'epe_llb_explanation_info':
+      $block['content'] = epe_llb_load_tab_info_block_content('explanation');//$blocks_content['epe_llb_explanation_info'];
+    break;
+
+    case 'epe_llb_featured':
+      $block['title'] = t('Featured Investigations');
+      $block['content'] = theme('epe_featured_block', array('type'=>array('llb_resource')));
+    break;
+  }
+
+  return $block;
+}
+
+function epe_llb_theme_file_dataset($dataset) {
+  $output = '';
+  //$output = '<img src="' . image_style_url("llb_detail_view",$dataset->uri) .'"" width="886px" alt="' . $dataset->title . '" />';
+  $output = '<img src="' . file_create_url($dataset->uri) .'"" width="886px" alt="' . $dataset->title . '" />';
+
+  if(isset($dataset->file)) {
+    switch($dataset->type) {
+      case 'video_resource':
+        $output = '<video id="video_' . $dataset->nid . '" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="' . image_style_url("llb_detail_view",$dataset->uri) . '"><source src="' . file_create_url($dataset->file) . '" /></video>';
+      break;
+
+      default:
+        $output = '<a href="' . file_create_url($dataset->file) .'">' . $output . '</a>';
+      break;
+    }
+  }
+  return '<center>' . $output . '</center>';
+}
+
+/**
+ * Implements hook_default_rules_configuration().
+ */
+function epe_llb_default_rules_configuration() {
+  $items = array();
+  $items['rules_llb_resource_redirect_on_save'] = entity_import('rules_config', '{ "rules_llb_resource_redirect_on_save" : {
+      "LABEL" : "LLB resource redirect on save",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "node" ],
+      "REQUIRES" : [ "rules" ],
+      "ON" : {
+        "node_insert--llb_resource" : { "bundle" : "llb_resource" },
+        "node_update--llb_resource" : { "bundle" : "llb_resource" }
+      },
+      "DO" : [ { "redirect" : { "url" : "node\\/[node:nid]\\/detail" } } ]
+    }
+  }');
+  return $items;
+}
+
+/**
+ * Implements hook_default_search_api_index().
+ * Add this function to your .module file, and replace the following placeholder text
+ *
+ * change [your_module_name] to your module name
+ * change [your search index name] to a human readable name of your choice
+ * change [your search index machine name] to a name of your choice must be text_text_text_etc format
+ * change [content type machine name] to the machine name of your content type that this index is for
+ *
+ */
+function epe_llb_default_search_api_index() {
+  $items = array();
+  $items['llb_resource_index'] = entity_create('search_api_index', array(
+    'name' => 'llb resource index',
+    'machine_name' => 'llb_resource_index',
+    'description' => null,
+    'server' => 'database_service',
+    'item_type' => 'node',
+    'options' => array(
+      'index_directly' => 1,
+      'cron_limit' => '50',
+      'fields' => array(
+        'nid' => array('type'=>'integer'),
+        'type' => array('type'=>'string'),
+        'title' => array('type'=>'text'),
+        'url' => array('type'=>'string'),
+        'status' => array('type'=>'integer'),
+        'promote' => array('type'=>'boolean'),
+        'created' => array('type'=>'date'),
+        'changed' => array('type'=>'date'),
+        'author' => array('type'=>'integer', 'entity_type'=>'user'),
+        'search_api_language' => array('type'=>'string'),
+        'author:uid' => array('type'=>'integer'),
+        'author:name' => array('type'=>'string'),
+        'author:mail' => array('type'=>'string'),
+        'author:field_account_fname' => array('type'=>'text'),
+        'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_organization' => array('type'=>'text'),
+        'body:value' => array('type'=>'text'),
+        'body:summary' => array('type'=>'text'),
+      ),
+      'data_alter_callbacks' => array(
+        'search_api_alter_bundle_filter' => array(
+          'status' => 1,
+          'weight' => '-10',
+          'settings' => array(
+            'default' => 0,
+            'bundles' => array('llb_resource'=>'llb_resource'),
+          ),
+          'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
+          'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
+          'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
+          'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+        ),
+        'processors' => array(
+          'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),
+          'search_api_html_filter' => array('status'=>0, 'weight'=>'10',
+            'settings'=>array(
+              'fields'=>array('title'=>true, 'body:value'=>true),
+              'title'=>0, 'alt'=>1, 'tags'=>array('h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5'),
+            ),
+          ),
+          'search_api_tokenizer' => array('status'=>0, 'weight'=>'20',
+            'fields'=>array('title'=>true, 'body:value'=>true),
+            'spaces'=>'[^[:alnum:]]','ignorable'=>'[\\u0027]',
+          ),
+          'search_api_stopwords' => array('status'=>0, 'weight'=>'30', 'fields'=>array('title'=>true, 'body:value'=>true),'file'=>'','stopwords'=>'but\\r\\ndid\\r\\nthe this that those\\r\\netc',
+          )
+        ),
+      ),
+    ),
+    'enabled' => '1',
+    'read_only' => '0',
+    'rdf_mapping' => array(),
+  ));
+  return $items;
+}
+

@@ -1,0 +1,31 @@
+.group-left { float:left; width: 50%; }
+.group-right { float: left; width: 50%; }
+fieldset { border: none; }
+fieldset.filter-wrapper { border: 1px solid #cccccc; }
+fieldset legend { display: none; }
+form .field-multiple-table th.field-label { display: none; }
+/*
+input.dataset,
+textarea.dataset { border: 0; }
+*/
+.resource-browser-modal { width: 829px; height: 500px; }
+.tabledrag-toggle-weight-wrapper { display: none; }
+
+.table-condensed .item.body { height: 250px; overflow: auto; }
+label { font-weight: bold; }
+
+.dataset { margin-left: 20px !important; }
+.dataset.first { margin-left: 0 !important; }
+.dataset .thumbnail { width: 270px; height: 200px; text-align: center; }
+.dataset .thumbnail .image { width: 270px; height: 150px; }
+.thumbnail img { margin:auto; display: block; }
+.modal { width: 805px; }
+.modal-body { max-height: 700px; }
+#adhocmodal .modal-body { max-height: 740px; }
+ul.table, ul.list { list-style: none; margin: 0; }
+blockquote p { font-size: 14px; }
+.nav .dropdown-toggle .caret { border-top-color: #0088cc; border-bottom-color: #0088cc;}
+.nav-tabs .active .dropdown-toggle .caret { border-top-color: #555; border-bottom-color: #555; }
+.pull-right { margin-left: 10px; }
+.modal.fade.in { top: 5%; }
+.assessment { color: #000; font-weight: normal; }
