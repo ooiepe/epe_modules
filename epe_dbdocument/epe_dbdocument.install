@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function epe_dbdocument_install() {
+  //set content type setting variables when content type is created
+  variable_set('comment_anonymous_document_resource',0);
+  variable_set('comment_default_mode_document_resource',1);
+  variable_set('comment_default_per_page_document_resource','50');
+  variable_set('comment_image_resource','2');
+  variable_set('comment_form_location_document_resource',1);
+  variable_set('comment_preview_document_resource','0');
+  variable_set('comment_subject_field_document_resource',1);
+  variable_set('field_bundle_settings_node__document_resource',array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  ));
+  variable_set('menu_options_document_resource',array());
+  variable_set('menu_parent_document_resource','main-menu:0');
+  variable_set('node_options_document_resource',array());
+  variable_set('node_preview_document_resource','0');
+  variable_set('node_submitted_document_resource',0);
+}
+
+/*
+ * Implement hook_enable
+ * this adds epe_document module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbdocument_enable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_dbdocument'] = array('content_type' => 'document_resource', 'resource_type' => 'file', 'resource_browser' => array('label'=>'Documents','api'=>'document','adurl'=>'resource/add/file','weight'=>6));
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * Implement hook_disable
+ * this remove epe_document module to epe_content_modules variable which is used in epe_files module
+ */
+function epe_dbdocument_disable() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  unset($modules['epe_dbdocument']);
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/*
+ * remove content type and all nodes of document resource content type
+ */
+function epe_dbdocument_uninstall() {
+  $results = db_select('node', 'n')
+              ->fields('n', array('nid'))
+              ->condition('type', array('document_resource'), 'IN')
+              ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+  }
+
+  node_type_delete('document_resource');
+  $results = db_select('variable','v')
+              ->fields('v',array('name'))
+              ->condition('name','%document_resource%','LIKE')
+              ->execute();
+  foreach($results as $result) {
+    variable_del($result->name);
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
+}
