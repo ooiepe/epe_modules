@@ -534,10 +534,35 @@ function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
   }
 }
 
+function epe_llb_node_presave($node) {
+  if($node->type == 'llb_resource' && $node->nid) {
+    db_delete('resources_assoc')
+    ->condition('parent', $node->nid, '=')
+    ->execute();
+
+    $datasets = _compile_associated_resources(json_decode($node->field_exploration_dataset['und'][0]['value']));
+
+    foreach($datasets as $dataset) {
+      db_insert('resources_assoc')
+      ->fields(array(
+        'parent' => $node->nid,
+        'child' => $dataset->nid
+      ))
+      ->execute();
+    }
+  }
+}
+
+function epe_llb_node_delete($node) {
+  db_delete('resources_assoc')
+  ->condition('parent', $node->nid, '=')
+  ->execute();
+}
+
 function epe_llb_node_insert($node) {
   $wrapper = entity_metadata_wrapper('node',$node);
   if($wrapper->getBundle() == 'llb_resource') {
-    $datasets = json_decode($wrapper->field_exploration_dataset->value());
+    $datasets = _compile_associated_resources(json_decode($wrapper->field_exploration_dataset->value()));
 
     foreach($datasets as $dataset) {
       db_insert('resources_assoc')
@@ -550,24 +575,13 @@ function epe_llb_node_insert($node) {
   }
 }
 
-function epe_llb_node_udpate($node) {
-  $wrapper = entity_metadata_wrapper('node',$node);
-  if($wrapper->getBundle() == 'llb_resource') {
-    db_delete('resources_assoc')
-    ->condition('parent', $wrapper->getIdentifier(), '=')
-    ->execute();
-
-    $datasets = json_decode($wrapper->field_exploration_dataset->value());
-
-    foreach($datasets as $dataset) {
-      db_insert('resources_assoc')
-      ->fields(array(
-        'parent' => $wrapper->getIdentifier(),
-        'child' => $dataset->nid
-      ))
-      ->execute();
+function _compile_associated_resources($datasets,$filtered_datasets=array()) {
+  foreach($datasets as $dataset) {
+    if(!array_key_exists($dataset->nid, $filtered_datasets)) {
+      $filtered_datasets[$dataset->nid] = $dataset;
     }
   }
+  return $filtered_datasets;
 }
 
 /**
