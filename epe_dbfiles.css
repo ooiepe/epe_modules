@@ -7,8 +7,10 @@
 .text-format-wrapper .form-item,
 .form-radios .form-item { margin-left: 0; }
 .filter-help,
-.form-type-select
+.form-type-select,
+.thumbnail
 { display: none; }
+.thumbnail { margin-top: 15px; }
 .filter-wrapper .fieldset-wrapper { margin-top: 0; }
 .form-radios .form-item-permission { width: 70px; float: left; }
 .form-radios label { float: none; width: 23px; }
@@ -18,3 +20,4 @@ input.form-text, textarea.form-textarea { border: 1px solid #6d8c9f; }
 #wrapper_submit { clear: left; text-align: center; }
 .form-actions { text-align: center; }
 .field-type-image img { margin: 0; }
+.help-block { margin-top: 0px; }
