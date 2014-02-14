@@ -120,7 +120,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       activeClass: '',
       showad: false,
       currentPage: 0,
-      pageSize: 1,
+      pageSize: 10,
       adurl: pane.adurl,
       hasrecord: false,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
