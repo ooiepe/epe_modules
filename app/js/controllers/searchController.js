@@ -45,8 +45,6 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     });
     if(!applyFilter) $scope.filter.view_type = $scope.resource.view_types[0];
   } else { $scope.filter.view_type = $scope.resource.view_types[0]; }
-  //console.log($location.search()['filter']);
-  //$scope.filter.view_type = $scope.resource.view_types[0];
 
   if(typeof $routeParams['dialog'] != "undefined") {
     $scope.panes.rb_type_selector = false;
@@ -59,24 +57,13 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     $scope.resources.modules = Drupal.settings.epe_dbresource_browser.modules;
   }
 
-  //console.log($scope.resources.modules);
-
   $scope.term = $routeParams['term'];
   $scope.search = function() {
     var params = {};
     if(typeof $routeParams['dialog'] != "undefined") {
-      //$location.search({dialog:true});
-      //params.push({dialog:true});
       params['dialog'] = true;
     }
 
-/*    if(typeof $routeParams['filter'] != "undefined" || typeof $scope.filter.view_type.filter == "undefined") {
-      //$location.search({dialog:true});
-      //params.push({dialog:true});
-      params['filter'] = $routeParams['filter'];
-    } else if ( $scope.filter.view_type.filter != '' ) {
-      params['filter'] = $scope.filter.view_type.filter;
-    }*/
     if($scope.filter.view_type.filter != '') {
       params['filter'] = $scope.filter.view_type.filter;
     }
@@ -132,10 +119,14 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       api:pane.api,
       activeClass: '',
       showad: false,
+      currentPage: 0,
+      pageSize: 1,
       adurl: pane.adurl,
       hasrecord: false,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
     };
+
+    tab.numberOfPages = function() { return Math.ceil(tab.data.length/tab.pageSize); }
 
     if(typeof $location.search()['dialog'] == 'undefined' || ( (typeof $location.search()['dialog'] != 'undefined') && (typeof $location.search()['type'] != 'undefined') && $location.search()['type'] == pane.api)) {
       $scope.panes.table.push(tab);
@@ -173,21 +164,6 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       $scope.resources[module.api] = {};
       $scope.resources[module.api].data = [];
       $scope.resources[module.api].data_filtered = {};
-
-      /*var tempData = epeService.get($scope.fn.serviceParams, function() {
-        angular.forEach(tempData.nodes, function(node) {
-          $scope.resources[module.api].data.push(node.node);
-        });
-        angular.forEach($scope.panes.table, function(pane, index) {
-          if($scope.resources[pane.api].data.length > 0) pane.hasrecord = true;
-          if(pane.type === module.label) {
-            if(applyFilter) {
-              pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, $scope.filter.view_type.filter);
-            } else { pane.data = $scope.resources[module.api].data; }
-            //if(typeof $location.search()['filter'] != 'undefined' && $location.search()['filter'] != '')
-          }
-        });
-      });*/
 
       epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
         var nodes = res.data.nodes;
