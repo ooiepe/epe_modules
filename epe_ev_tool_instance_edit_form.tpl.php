@@ -21,7 +21,6 @@ if(isset($form["#node"]->field_parent_tool)){
   $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
   $ev_tool["parentThumbnailId"] = $parentNode->field_tool_thumbnail["und"][0]["fid"];
-
   
 }
 //do we have a query string? this indicates a new instance
@@ -208,22 +207,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
           else
             print "{}";
         ?>,
-        "onLoadComplete": function(){
-
-          // todo: move to function in framework.. pass target_id, instance reference, 
-          var divToolControls = $("#vistool-controls"),
-            evTool = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"];
-
-          EduVis.controls.drupal_edit_controls(divToolControls, evTool);
-          
-          // disable enter key press form submission on inputs textboxes.. restrict to type textbox only?
-          $("input").bind('keypress keydown keyup', function(e){
-             if(e.keyCode == 13) { 
-                e.preventDefault(); 
-             }
-          });
-
-        }
+        "isEdit" : true
       }
     );
 
