@@ -10,11 +10,17 @@
       <tr ng-show="!pane.hasrecord">
         <td colspan="3" style="text-align:center;">No {{pane.type}} Found</td>
       </tr>
-      <tr ng-repeat="row in pane.data | resourceFilter:query.filter | orderBy:sort:reverse"
+      <tr ng-repeat="row in pane.data | resourceFilter:query.filter | orderBy:sort:reverse | startFrom:pane.currentPage*pane.pageSize | limitTo:pane.pageSize"
         table-row
         checkbox="pane.show_checkbox" id="row.id" summary="row.summary" type="pane.api" url="row.url" thumbnail="row.thumbnail" title="row.title" author="row.author" updated="row.last_updated" org="row.org">
       </tr>
     </tbody>
   </table>
+
+  <div ng-show="pane.data.length > pane.pageSize" class="pagination">
+  <button ng-disabled="pane.currentPage == 0" ng-click="pane.currentPage=pane.currentPage-1">Previous</button>
+  {{pane.currentPage+1}}/{{pane.numberOfPages()}}
+  <button ng-disabled="pane.currentPage >= pane.data.length/pane.pageSize - 1" ng-click="pane.currentPage=pane.currentPage+1">Next</button>
   </tab>
+  </div>
 </tabset>
