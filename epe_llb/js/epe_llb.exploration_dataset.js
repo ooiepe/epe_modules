@@ -70,10 +70,15 @@ jQuery(document).ready(function($) {
             });
           }
         });
+        $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
+          $(this).attr('checked', false);
+        });
     });
 
     $('.rbmodal').bind('click', function(e) {
-      if($(this).data('adhoc') == true) { $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide(); }
+      if($(this).data('adhoc') == true) {
+        $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide();
+      }
       $('#rbmodal')
         .height($(window).height() * 0.9)
         /*.bind('show', function(event) {
@@ -89,6 +94,9 @@ jQuery(document).ready(function($) {
       $('#adhocmodal').height($(window).height() * 0.8)
       .find('.adhocmodal-iframe').height($(window).height() * 0.65);
       $('.btn-back').attr('data-api',$(this).data('api'));
+      $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
+        $(this).attr('checked', false);
+      });
     });
 
     $('.btn-back').bind('click', function(e) {
