@@ -78,22 +78,29 @@ function epe_dbfiles_node_form($node, &$form_state) {
 
     $file_field_modules = array();
     $file_field_extensions = '';
+    $file_field_extensions_validator = array();
     foreach($depend_modules as $module) {
       if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
         $node_info = node_type_load(str_replace('_','-',$module['content_type']));
         $file_field_modules[] = ucwords($node_info->name);
         $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file', $module['content_type']);
         $file_field_extensions .= "{$node_info->name}: " . $field_instance['settings']['file_extensions'] . '<br/>';
+        foreach(explode(' ', $field_instance['settings']['file_extensions']) as $file_extension) {
+          $file_field_extensions_validator[] = $file_extension;
+        }
       }
     }
     $file_field_desc = 'Upload a file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions are:<br/>' . $file_field_extensions;
 
     $form['file'] = array(
-      '#type' => 'file',
+      '#type' => 'managed_file',
       '#title_display' => 'invisible',
       '#title' => t('Upload file resource'),
       '#description' => t($file_field_desc),
       '#attributes' => array('class'=>array('form-file-field')),
+      '#upload_validators' => array(
+        'file_validate_extensions' => array(implode(' ', $file_field_extensions_validator)),
+      ),
     );
 
     $form['title'] = array(
@@ -114,10 +121,13 @@ function epe_dbfiles_node_form($node, &$form_state) {
 
     if (($key = array_search('Image', $file_field_modules)) !== false) { unset($file_field_modules[$key]); }
     $form['thumbnail'] = array(
-      '#type' => 'file',
+      '#type' => 'managed_file',
       '#title' => t('Upload thumbnail'),
       '#title_display' => 'invisible',
       '#description' => t('Upload a thumbnail image for the file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions: jpg, jpeg, png, gif'),
+      '#upload_validators' => array(
+        'file_validate_extensions' => array('jpg jpeg png gif'),
+      ),
     );
 
     //$permission = array(1=>t('Yes'),0=>t('No'));
@@ -131,9 +141,9 @@ function epe_dbfiles_node_form($node, &$form_state) {
       //'#field_prefix' => t('I hereby certify that this file is either my own work or I have been given permission to use it within an educational context'),
     );*/
 
-    $form['form-container']['node_type'] = array(
+    $form['node_type'] = array(
       '#type' => 'hidden',
-      '#value' => '',
+      '#default_value ' => '',
     );
 
     $form['submit'] = array(
@@ -149,11 +159,19 @@ function epe_dbfiles_node_form($node, &$form_state) {
       drupal_get_path('module', 'epe_dbfiles') . '/epe_dbfiles.css' => array('type'=>'file','group'=>CSS_THEME),
     );
     $form['#attached']['js'][] = drupal_get_path('module', 'epe_dbfiles') . '/epe.dbfiles.js';
-    $form['#attached']['js'][] = array(
-      'data' => epe_dbfiles_js_settings(),
-      'type' => 'setting',
-    );
+
+    //attach drupal setting using after_build will fix losing setting on 1st refresh
+    $form['#after_build'][] = 'epe_dbfiles_node_form_after_build';
   }
+
+  return $form;
+}
+
+function epe_dbfiles_node_form_after_build($form, $form_state) {
+  $form['#attached']['js'][] = array(
+    'data' => epe_dbfiles_js_settings(),
+    'type' => 'setting',
+  );
 
   return $form;
 }
@@ -264,44 +282,6 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
     }
   }
 
-  $file = file_save_upload('file', array('file_validate_extensions' => array(trim($allowed_extensions)))); // Validate extensions.
-
-  // If the file passed validation:
-  if ($file) {
-    $fileext = pathinfo($file->filename, PATHINFO_EXTENSION);
-    foreach($depend_modules as $module) {
-      if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
-        //determine which type of content we should create base on the file uploaded
-        $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file',$module['content_type']);
-        $allowed_extensions = explode(' ', $field_instance['settings']['file_extensions']);
-        if(in_array(strtolower($fileext), $allowed_extensions)) {
-          $form_state['values']['node_type'] = $module['content_type'];
-          break;
-        }
-      }
-    }
-    $file_destination = 'private://' . $user->uid . '/' . $form_state['values']['node_type'];
-    file_prepare_directory($file_destination, FILE_CREATE_DIRECTORY);
-    // Move the file, into the Drupal file system
-    if ($file = file_move($file, $file_destination)) {
-      $fileext = pathinfo($file->filename, PATHINFO_EXTENSION);
-      // Save the file for use in the submit handler.
-      $form_state['storage']['file'] = $file;
-    }
-    else {
-      form_set_error('file', t('Failed to write the uploaded file to the site\'s file folder.'));
-    }
-  }
-  else {
-    form_set_error('file', t('No file was uploaded.'));
-  }
-
-  $thumb = file_save_upload('thumbnail', array('file_validate_extensions' => array('jpg gif png')));
-  //if file pass validation
-  if($thumb) {
-    if($thumb = file_move($thumb, $file_destination)) { $form_state['storage']['thumbnail'] = $thumb; }
-  }
-
   //reset permission form value
   $form_state['complete form']['permission'][0]['#value'] = 0;
   $form_state['complete form']['permission'][0]['#input'] = 0;
@@ -324,14 +304,17 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->title->set($form_state['values']['title']);
   $wrapper->body->set($form_state['values']['body']);
+
   //we'll deal with video file upload separately
   if($form_state['values']['node_type'] != 'video_resource') {
+    if($form_state['values']['file']):
     $entity_file_field = 'field_' . $form_state['values']['node_type'] . '_file';
-    $wrapper->{$entity_file_field}->file->set($form_state['storage']['file']);
+    $wrapper->{$entity_file_field}->file->set(file_load($form_state['values']['file']));
+    endif;
 
-    if(isset($form_state['storage']['thumbnail'])) {
+    if($form_state['values']['thumbnail']) {
       $entity_thumb_field = 'field_' . $form_state['values']['node_type'] . '_image';
-      $wrapper->{$entity_thumb_field}->file->set($form_state['storage']['thumbnail']);
+      $wrapper->{$entity_thumb_field}->file->set(file_load($form_state['values']['thumbnail']));
     }
   }
 
@@ -343,54 +326,49 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
    */
   if($form_state['values']['node_type'] == 'video_resource') {
     $node = node_load($wrapper->nid->value());
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['fid'] = $form_state['storage']['file']->fid;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = '';
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['uid'] = $form_state['storage']['file']->uid;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['filename'] = $form_state['storage']['file']->filename;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['uri'] = $form_state['storage']['file']->uri;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['filemime'] = $form_state['storage']['file']->filemime;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['filesize'] = $form_state['storage']['file']->filesize;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['status'] = $form_state['storage']['file']->status;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['timestamp'] = $form_state['storage']['file']->timestamp;
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['type'] = 'video';
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['rdf_mapping'] = array();
-    $playablefiles = new stdClass;
-    $playablefiles->fid = $form_state['storage']['file']->fid;
-    $playablefiles->thumbnail = '';
-    $playablefiles->uid = $form_state['storage']['file']->uid;
-    $playablefiles->filename = $form_state['storage']['file']->filename;
-    $playablefiles->filemime = $form_state['storage']['file']->filemime;
-    $playablefiles->uri = $form_state['storage']['file']->uri;
-    $playablefiles->filesize = $form_state['storage']['file']->filesize;
-    $playablefiles->status = $form_state['storage']['file']->status;
-    $playablefiles->timestamp = $form_state['storage']['file']->timestamp;
-    $playablefiles->type = 'video';
-    $playablefiles->rdf_mapping = array();
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['playablefiles'] = array( $playablefiles );
-    $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnailfile'] = '';
 
-    if(isset($form_state['storage']['thumbnail'])) {
-      $thumbinfo = image_get_info($form_state['storage']['thumbnail']->uri);
-      $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = $form_state['storage']['thumbnail']->fid;
-      $node->field_video_resource_file[LANGUAGE_NONE][0]['playablefiles'][0]->thumbnail = $form_state['storage']['thumbnail']->fid;
-      $thumbnailfile = new stdClass;
-      $thumbnailfile->fid = $form_state['storage']['thumbnail']->fid;
-      $thumbnailfile->uid = $form_state['storage']['thumbnail']->uid;
-      $thumbnailfile->filename = $form_state['storage']['thumbnail']->filename;
-      $thumbnailfile->uri = $form_state['storage']['thumbnail']->uri;
-      $thumbnailfile->filemime = $form_state['storage']['thumbnail']->filemime;
-      $thumbnailfile->filesize = $form_state['storage']['thumbnail']->filesize;
-      $thumbnailfile->status = $form_state['storage']['thumbnail']->status;
-      $thumbnailfile->timestamp = $form_state['storage']['thumbnail']->timestamp;
-      $thumbnailfile->type = 'image';
-      $thumbnailfile->field_file_image_alt_text = array();
-      $thumbnailfile->field_file_image_title_text = array();
-      $thumbnailfile->rdf_mapping = array();
-      $thumbnailfile->image_dimensions = array('width'=>$thumbinfo['width'], 'height'=>$thumbinfo['height']);
-      $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnailfile'] = $thumbnailfile;
-    } else {
-      $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = NULL;
-    }
+    if($form_state['values']['file']):
+      $video_file = file_load($form_state['values']['file']);
+      $node->field_video_resource_file = array(
+        LANGUAGE_NONE => array(
+          '0' => array(
+            'fid' => $video_file->fid,
+            'thumbnail' => array(),
+            'type' => 'video',
+            'filename' => $video_file->filename,
+            'filemime' => $video_file->filemime,
+            'filesize' => $video_file->filesize,
+            'uri' => $video_file->uri,
+            'timestamp' => $video_file->timestamp,
+            'status' => $video_file->status,
+          ),
+        ),
+      );
+
+      if($form_state['values']['thumbnail']) {
+        $video_thumb = file_load($form_state['values']['thumbnail']);
+        $thumbinfo = image_get_info($video_thumb->uri);
+        $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = $video_thumb->fid;
+
+        $thumbnailfile = new stdClass;
+        $thumbnailfile->fid = $video_thumb->fid;
+        $thumbnailfile->uid = $video_thumb->uid;
+        $thumbnailfile->filename = $video_thumb->filename;
+        $thumbnailfile->uri = $video_thumb->uri;
+        $thumbnailfile->filemime = $video_thumb->filemime;
+        $thumbnailfile->filesize = $video_thumb->filesize;
+        $thumbnailfile->status = $video_thumb->status;
+        $thumbnailfile->timestamp = $video_thumb->timestamp;
+        $thumbnailfile->type = 'image';
+        $thumbnailfile->field_file_image_alt_text = array();
+        $thumbnailfile->field_file_image_title_text = array();
+        $thumbnailfile->rdf_mapping = array();
+        $thumbnailfile->image_dimensions = array('width'=>$thumbinfo['width'], 'height'=>$thumbinfo['height']);
+        $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnailfile'] = $thumbnailfile;
+      } else {
+        $node->field_video_resource_file[LANGUAGE_NONE][0]['thumbnail'] = NULL;
+      }
+    endif;
 
     node_save($node);
   } //end video field save
@@ -412,10 +390,12 @@ function epe_dbfiles_js_settings() {
 
   $image_exts = array();
   $other_exts = array();
+  $file_type_exts = array();
   foreach($depend_modules as $module) {
     if(isset($module['resource_type']) && $module['resource_type'] == 'file') {
       $field_instance = field_info_instance('node','field_'. $module['content_type'] .'_file', $module['content_type']);
       if($field_instance['settings']['file_extensions']) {
+        $file_type_exts[$module['content_type']] = $field_instance['settings']['file_extensions'];
         if($module['content_type'] == 'image_resource') {
           $image_exts = explode(" ",$field_instance['settings']['file_extensions']);
         } else {
@@ -428,6 +408,7 @@ function epe_dbfiles_js_settings() {
   return array(
     'image_exts' => json_encode($image_exts),
     'other_exts' => json_encode($other_exts),
+    'file_type_exts' => $file_type_exts,
   );
 }
 
