@@ -1,5 +1,6 @@
 <?php angularjs_init_application('app'); ?>
 
+<div class="form-help"><a href="<?php echo base_path() . "node/214" ?>" target="_blank">Help with this form</a></div>
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
   <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ddddcc">Instructions</a></li>
