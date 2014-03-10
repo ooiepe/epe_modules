@@ -54,6 +54,7 @@
       </p>
     </div>
   </div>
+  <br clear="all"/>
 
   <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
     <footer>
