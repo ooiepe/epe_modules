@@ -30,6 +30,8 @@ function epe_cm_node_delete_function($node) {
 function epe_cm_node_submit_public_function($node) {
 	// update the status to pending
 	$node->field_public_status[$node->language][0]['value'] = 'Pending';
+	// automatically set this to "drupal published" or "epe shared"
+	$node->status = 1;
 	// save the node
 	node_save($node);
 	// set the message

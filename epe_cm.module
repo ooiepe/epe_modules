@@ -49,6 +49,10 @@ function epe_cm_permission() {
       'title' => 'EPE DB Public Approval',
       'description' => 'Allow user to approve items for inclusion in the public db.',
     ),
+    'epe dbpublic feature' => array(
+      'title' => 'EPE DB Feature Resources',
+      'description' => 'Allow user to feature resources.',
+    ),
   );
 }
 
