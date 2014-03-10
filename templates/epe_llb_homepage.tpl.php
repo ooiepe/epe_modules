@@ -30,6 +30,7 @@
         <div class="form-horizontal">
           <input type="text" name="search_llb" size="50"> <button type="button" id="llb_submit" class="btn btn-primary">Search</button>
         </div>
+        <br><a href="<?php echo base_path() ?>node/add/llb-resource" class="btn btn-primary">Create an Investigation<i class="icon-chevron-right icon-white"></i></a>
       </div>
     </div>
   </div>
