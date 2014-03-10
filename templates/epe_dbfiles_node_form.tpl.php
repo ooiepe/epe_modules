@@ -1,3 +1,5 @@
+
+<div class="form-help"><a href="<?php echo base_path() . "node/171" ?>" target="_blank">Help with this form</a></div>
 <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
 <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
 
