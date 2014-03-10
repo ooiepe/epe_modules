@@ -61,7 +61,7 @@
   <div class="title"><?php echo l($wrapper->label(),"node/{$wrapper->getIdentifier()}"); ?></div>
   <div class="author">by <?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
   <?php if($wrapper->body->value()): ?>
-  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => 'TRUE')),0,200); ?></div>
+  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => 'TRUE')),0,200); ?><div class="after"></div></div>
   <?php endif; ?>
 </li>
 <?php endif; ?>
