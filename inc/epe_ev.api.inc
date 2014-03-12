@@ -42,7 +42,7 @@ include($_SERVER["DOCUMENT_ROOT"] . $GLOBALS["base_path"] . $epe_ev_path . "/inc
 
 function epe_ev_instance_config($instance_nid){
 
-  // load the node based on ID, built from the url 
+  // load the node based on ID, built from the url
   $node = node_load($instance_nid);
 
   // get the configuration from the instance node
@@ -50,7 +50,7 @@ function epe_ev_instance_config($instance_nid){
 
   // echo instance configuration
   echo $ev_tool["instance_configuration"];
-  
+
 }
 
 /*
@@ -110,9 +110,12 @@ function epe_ev_restful_api_node($nid) {
 
 // tool id -> type_ name/id
 function epe_ev_api_tool_load($tool_id_type, $tool_id, $tool_configuration){
+  global $user;
+  $node = node_load($tool_id);
 
+  if($node && ($node->status == NODE_PUBLISHED || ($node->status != NODE_PUBLISHED && $node->uid == $user->uid))) {
   // we will need to test for published status
-	
+
   //if(user_is_logged_in()) {
 		//echo "LOGGED IN!";
 	//}
@@ -156,7 +159,10 @@ function epe_ev_api_tool_load($tool_id_type, $tool_id, $tool_configuration){
 	}
 
   echo epe_ev_html_wrapper($ev_tool);
-
+  } //valided node published
+  else {
+    echo "Access Denied";
+  }
 }
 
 function epe_ev_html_wrapper($ev_tool){
@@ -178,7 +184,7 @@ $EduVis_Paths = epe_EduVis_Paths();
   //         [resources] => http://ooi.dev/epe/epedev/deploy2/sites/all/modules/custom/epe_ev/resources/
   //     )
 
-	$htmlOut = 
+	$htmlOut =
 '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -194,7 +200,7 @@ $EduVis_Paths = epe_EduVis_Paths();
 
   // set the EduVis, tools, and resources paths
 
-  EduVis.Environment.setPaths( 
+  EduVis.Environment.setPaths(
       "__EPE_EDUVIS_PATH_ROOT__", // eduvis
       "__EPE_EDUVIS_PATH_TOOLS__", // tools
       "__EPE_EDUVIS_PATH_RESOURCES__" // resources
@@ -205,7 +211,7 @@ $EduVis_Paths = epe_EduVis_Paths();
   });
 
 }());
-	
+
 </script>
 </body>
 </html>';
@@ -220,7 +226,7 @@ $EduVis_Paths = epe_EduVis_Paths();
 		$__EPE_EDUVIS_CONFIGURATION__ = ",\n    " .'"instance_config" : ' . $ev_tool["configuration"] ."\n";
 	}
   else{
-    $__EPE_EDUVIS_CONFIGURATION__ = ""; 
+    $__EPE_EDUVIS_CONFIGURATION__ = "";
   }
 
   $htmlOut = str_replace("__EPE_EDUVIS_CONFIGURATION__",$__EPE_EDUVIS_CONFIGURATION__, $htmlOut);
