@@ -78,3 +78,12 @@ function epe_dbimage_uninstall() {
   node_types_rebuild();
   menu_rebuild();
 }
+
+/**
+ * Add allowAdHoc param setting to EPE_CONTENT_MODULES drupal variable
+ */
+function epe_dbimage_update_7000() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_dbimage']['resource_browser']['allowAdHoc'] = true;
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
