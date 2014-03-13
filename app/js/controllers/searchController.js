@@ -16,7 +16,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.panes = {};
   $scope.panes.table = [];
   $scope.panes.active = '';
-  $scope.panes.rb_type_selector = true;
+  $scope.panes.dialogmode = false;
   $scope.resource = {};
   $scope.filter = {};
   $scope.resource.view_types = [
@@ -47,7 +47,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   } else { $scope.filter.view_type = $scope.resource.view_types[0]; }
 
   if(typeof $routeParams['dialog'] != "undefined") {
-    $scope.panes.rb_type_selector = false;
+    $scope.panes.dialogmode = true;
     if(typeof $routeParams['type'] != "undefined") {
       angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
         if(module.api === $routeParams['type']) $scope.resources.modules.push(module);

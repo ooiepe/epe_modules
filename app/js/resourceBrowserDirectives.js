@@ -16,10 +16,11 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       title: '=',
       author: '=',
       updated: '=',
-      org: '='
+      org: '=',
+      dialogmode: '='
     },
     link: function (scope, elem, attrs) {
-      var template = '', element_ck = '';
+      var template = '', element_ck = '', link_target = '_self';
       if(scope.checkbox) {
         element_ck = '<input type="checkbox" style="margin-right:0;position:absolute;" name="nid" data-type="' + scope.type + '" value="' + scope.id + '">';
       }
@@ -27,7 +28,9 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       if (scope.thumbnail == '')
         scope.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
 
-      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.url + '" target="_blank"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.url + '">' + scope.title + '</a></p></div><div class="text" style="margin-left:160px;"><p>' + scope.summary + '</p></div></td>';
+      if(scope.dialogmode) { link_target = '_blank'; }
+
+      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.url + '" target="' + link_target + '">' + scope.title + '</a></p></div><div class="text" style="margin-left:160px;"><p>' + scope.summary + '</p></div></td>';
       template += '<td><div class="author">' + scope.author + '<br/>(' + scope.org + ')</div></td>';
       template += '<td>' + scope.updated + '</td>';
 

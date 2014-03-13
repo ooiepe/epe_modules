@@ -8,7 +8,7 @@
 </form>
 </div>
 
-<div ng-show="panes.rb_type_selector==true">
+<div ng-show="panes.dialogmode != true">
 <div class="rb-type-selector">
 	<ul>
     <li ng-repeat="pane in panes.table" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
