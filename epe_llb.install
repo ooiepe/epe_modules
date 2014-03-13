@@ -186,9 +186,86 @@ function epe_llb_uninstall() {
 /**
  * Update LLB's "desired assessment" field's required setting.
  */
-function epe_llb_update_7000() {
+function epe_llb_update_7000(&$sandbox) {
   $content_type = 'llb_resource';
   $instance = field_read_instance('node','field_desired_assessment',$content_type);
   $instance['required'] = 0;
   field_update_instance($instance);
+}
+
+/**
+ * EPEDEV-227: Remove all LLB image fields and convert them to standard text field with resource browser functionality
+ * Fix view output with change from image field to resource browser
+ * EPEDEV-315: Replace "Lessons" with "Investigations" in all menus.
+ */
+function epe_llb_update_7001(&$sandbox) {
+  module_load_include('inc','epe_llb','inc/epe_llb.field_base.update_7001');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance.update_7001');
+
+  /* delete existing image fields */
+  foreach (_epe_llb_field_default_field_bases() as $field) {
+    field_delete_field($field['field_name']);
+  }
+
+  /* recreate the same field base with text data type */
+  foreach (_epe_llb_field_default_field_bases() as $field) {
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  /* recreate the same field instance with text data type */
+  foreach (_epe_llb_field_default_field_instances() as $instance) {
+    field_create_instance($instance);
+  }
+
+  $body_field_instance = field_info_instance('node','body','llb_resource');
+  $body_field_instance['display']['llb_instructor'] = array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 10,
+      );
+  field_update_instance($body_field_instance);
+
+  $epe_menu = variable_get('epe_menu',array());
+
+  $node = node_load($epe_menu['llb']['nid']);
+  $node->title = 'Investigations';
+  node_save($node);
+
+  $menu_item = menu_link_load($epe_menu['llb']['mlid']);
+  $menu_item['link_title'] = 'Investigations';
+  menu_link_save($menu_item);
+
+  $results = db_select('menu_links','a')
+            ->fields('a',array('mlid'))
+            ->condition('plid',$epe_menu['llb']['mlid'],'=')
+            ->execute();
+  foreach ($results as $result) {
+    $menu_item = menu_link_load($result->mlid);
+    $menu_item['link_title'] = str_replace('Lesson', 'Investigation', $menu_item['link_title']);
+    menu_link_save($menu_item);
+  }
+
+  $view = views_get_view('llb_resource_index', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['fields']['php']['php_output']  = '<?php
+        $node = node_load($data->entity);
+        $wrapper = entity_metadata_wrapper(\'node\',$node);
+        $field_value = $wrapper->field_challenge_thumbnail->value();
+        $output = \'\';
+    if($field_value) {
+      $thumbnail_info = drupal_json_decode($field_value);
+      $node = node_load($thumbnail_info[0][\'nid\']);
+      $wrapper = entity_metadata_wrapper(\'node\',$node );
+      $image = $wrapper->field_image_resource_file->value();
+      $output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[\'uri\']));
+    }
+    echo render($output);
+    ?>';
+
+  views_save_view($view);
 }

@@ -15,16 +15,13 @@
     <?php endif; ?>
   </header>
 -->
-
-
-
-
 <?php
+  $showContent = false;
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
+<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
 
   <?php
     // Hide comments, tags, and links now so that we can render them later.
@@ -63,9 +60,9 @@
     </footer>
   <?php endif; ?>
 
-  <?php print render($content['comments']); ?>
+</div>
+</div>
 
-</div>
-</div>
+<?php print render($content['comments']); ?>
 
 </article> <!-- /.node -->

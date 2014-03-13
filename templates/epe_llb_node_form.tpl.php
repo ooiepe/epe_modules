@@ -47,14 +47,14 @@
         <li>What content, context or dataset will they use to study this concept?</li>
         <li>What outcome do you hope they will achieve, that is, how will you assess their learning?</li>
       </ul>
-      
+
       <p>By specifying your learning objective up front, you will be able to focus your investigation on those elements that students need to accomplish your specific goal.</p>
-    
+
       <p><em>Identify a learning objective you would like your students to investigate in this investigation.</em></p>
       <div class="control-group"><?php echo render($form['field_student_objectives']); ?></div>
-      
+
       <p>Don't worry about perfecting this right away, you can always come back and adjust it later.</p>
-      
+
       <p>As you develop your investigation, the datasets and questions you include should support the goal(s) you identified.  If they don't, you probably don't need to include them in this exercise (otherwise, you should rewrite your objective).  If you find that you have additional content you would like students to investigate that goes beyond your specified goal, you could consider creating another activity with a more advanced objective.</p>
     </div>
 
@@ -100,6 +100,35 @@
       <p><strong>Introductory Slideshow</strong></p>
       <p>Choose one or more images that help explain the story behind this investigation.  You can provide a caption for each image.</p>
       <?php echo render($form['field_introductory_slideshow']); ?>
+
+      <div ng-show="currentCopies.keys.length > 0" class="control-group text-warning">
+        <table class="table">
+          <tr class="warning"><td>All changes are temporary.</td></tr>
+        </table>
+      </div>
+
+      <table class="table table-condensed">
+        <tbody ui-sortable ng-model="items">
+        <tr ng-repeat="item in items">
+          <td>
+            <img ng-src="{{item.thumbnail}}" style="cursor: move;">
+            <div ng-show="fn.inItemEditArray(item.key)">
+              <textarea name="title" ng-model="currentCopies.items[item.key].title" cols="35" rows="2"></textarea>
+              <br/>
+              <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.key);">Cancel</button>
+              <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.key);">Save</button>
+            </div>
+            <div ng-show="!fn.inItemEditArray(item.key)">
+              <p>{{item.title}}</p>
+              <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
+                   <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <?php echo render($form['intro_slideshow_button']); ?>
     </div>
   </div>
 
@@ -125,13 +154,34 @@
         <li>Information about a scientific concept or process</li>
         <li>Details on where or how a dataset was collected or how an instrument collects and processes data</li>
         <li>Background information about an event, study area or phenomena students will be studying</li>
-      </ul>      
+      </ul>
     </div>
 
     <div class="span6 background-slideshow">
       <p><strong>Slideshow</strong></p>
       <p>Choose one or more images that will help provide background information on this investigation.  You can provide a caption for each image.</p>
       <?php echo render($form['field_background_slideshow']); ?>
+      <table class="table table-condensed">
+        <tbody ui-sortable ng-model="items">
+        <tr ng-repeat="item in items">
+          <td>
+            <img ng-src="{{item.thumbnail}}" style="cursor: move;">
+            <div ng-show="fn.inItemEditArray(item.key)">
+              <textarea name="title" ng-model="currentCopies.items[item.key].title" cols="35" rows="2"></textarea>
+              <br/>
+              <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.key);">Cancel</button>
+              <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.key);">Save</button>
+            </div>
+            <div ng-show="!fn.inItemEditArray(item.key)">
+              <p>{{item.title}}</p>
+              <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
+                   <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <?php echo render($form['background_slideshow_button']); ?>
     </div>
   </div>
   <hr>
@@ -139,7 +189,7 @@
     <div class="span7">
       <p><strong>Background Questions</strong></p>
       <p>Before beginning an investigation, students should reflect on their current knowledge.  Generally, information that students need to know to complete an investigation should be provided in the investigation or via prior activities or lectures.  The questions you ask here should &quot;wet their appetite&quot; for the subject at hand, helping them understand the relevance of the topic to other subjects they may have already studied or know about.</p>
-      
+
       <p>Enter one or more questions you would like students to think about before starting the investigation.</p>
       <div class="control-group">
         <?php echo render($form['field_background_question']); ?>
@@ -149,7 +199,7 @@
     <p><strong>Question Tips</strong></p>
     <p>The view in contemporary learning theory is that people construct new knowledge and understanding based on what they already know and believe.  This is why it is a good idea to ask students up front about content they should already know about to check their knowledge level.  These questions can also be used to establish the current thought processes students use, which can then be compared with any gains or changes in their knowledge after they complete an exercise.  Identifying changes in student thought processes can help you distinguish between the concepts they understand and those they need more guidance on.</p>
     </div>
-  </div>  
+  </div>
 
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#background -->
@@ -168,7 +218,21 @@
     <div class="span6">
       <p><strong>Challenge Image</strong></p>
       <p>Choose an image that you feel represents this investigation.  Note, this image will also be used as the thumbnail for your investigation.</p>
+
       <?php echo render($form['field_challenge_thumbnail']); ?>
+      <table class="table table-condensed">
+        <tbody ui-sortable ng-model="items">
+        <tr ng-repeat="item in items">
+          <td>
+            <img ng-src="{{item.thumbnail}}" style="cursor: move;">
+            <div>
+              <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <?php echo render($form['challenge_thumbnail_button']); ?>
     </div>
   </div>
   <hr>
@@ -193,7 +257,7 @@
       </ul>
     </div>
   </div>
-  
+
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#challenge -->
 
@@ -221,7 +285,6 @@
       </table>
     </div>
 
-
     <table class="table table-condensed">
       <tr>
         <th width="25%">Dataset</th>
@@ -229,44 +292,49 @@
         <th width="35%">Investigation Questions</th>
       </tr>
       <tbody ui-sortable ng-model="items">
+      <tr ng-show="items.length < 1" class="text-warning">
+        <td colspan="3" class="warning" style="text-align:center;padding:10px;">
+          This investigation does not yet include any datasets. Choose an option below to add your first dataset.
+        </td>
+      </tr>
       <tr ng-repeat="item in items">
         <td>
           <img ng-src="{{item.thumbnail}}" style="cursor: move;">
-          <div ng-show="fn.inItemEditArray(item.nid)">
-            <textarea name="title" ng-model="currentCopies.items[item.nid].title" cols="35" rows="2"></textarea>
+          <div ng-show="fn.inItemEditArray(item.key)">
+            <textarea name="title" ng-model="currentCopies.items[item.key].title" cols="35" rows="2"></textarea>
             <br/>
-            <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.nid);">Cancel</button>
-            <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.nid);">Save</button>
+            <button type="button" class="btn btn-small" ng-click="fn.cancelItemEdit(item.key);">Cancel</button>
+            <button type="button" class="btn btn-small btn-primary" ng-click="fn.saveEditItem(item.key);">Save</button>
           </div>
-          <div ng-show="!fn.inItemEditArray(item.nid)">
+          <div ng-show="!fn.inItemEditArray(item.key)">
             <p>{{item.title}}</p>
-            <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a> 
+            <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
                  <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
           </div>
         </td>
         <td>
-          <div ng-show="fn.inItemEditArray(item.nid)">
-            <textarea name="body" cols="70" rows="10" ng-model="currentCopies.items[item.nid].body"></textarea>
+          <div ng-show="fn.inItemEditArray(item.key)">
+            <textarea name="body" cols="70" rows="10" ng-model="currentCopies.items[item.key].body"></textarea>
           </div>
-          <div ng-show="!fn.inItemEditArray(item.nid)">
+          <div ng-show="!fn.inItemEditArray(item.key)">
             <div ng-bind-html="item.body" class="item body"></div>
           </div>
         </td>
         <td>
           <ul class="list">
-            <div ng-show="!fn.inItemEditArray(item.nid)">
+            <div ng-show="!fn.inItemEditArray(item.key)">
             <li ng-repeat="question in item.questions">
               {{question.text}}
             </li>
             </div>
-            <div ng-show="fn.inItemEditArray(item.nid)">
-              <li ng-repeat="question in currentCopies.items[item.nid].questions">
-                <textarea name="question" rows="3" cols="35" ng-model="question.text"></textarea><span>&nbsp;<i class="icon-trash" ng-click="fn.removeItemQuestion(item.nid, $index);"></i></span>
+            <div ng-show="fn.inItemEditArray(item.key)">
+              <li ng-repeat="question in currentCopies.items[item.key].questions">
+                <textarea name="question" rows="3" cols="35" ng-model="question.text"></textarea><span>&nbsp;<i class="icon-trash" ng-click="fn.removeItemQuestion(item.key, $index);"></i></span>
               </li>
             </div>
           </ul>
-          <div ng-show="fn.inItemEditArray(item.nid)">
-          <button type="button" class="btn btn-small btn-primary" ng-click="fn.addQuestion(item.nid);">Add Question</button>
+          <div ng-show="fn.inItemEditArray(item.key)">
+          <button type="button" class="btn btn-small btn-primary" ng-click="fn.addQuestion(item.key);">Add Question</button>
           </div>
         </td>
       </tr>
@@ -276,7 +344,7 @@
     <p><strong>Add another Dataset:</strong></p>
     <?php //echo render($form['resource_browser']); ?>
 
-    <?php echo render($form['resource_browser_modal']); ?>
+    <?php echo render($form['resource_browser_buttons']); ?>
   </div>
 
   <hr>
@@ -321,8 +389,8 @@
       <div class="control-group">
         <?php echo render($form['field_inference_question']); ?>
       </div>
-      
-      <!-- 
+
+      <!--
       <p><strong>Extrapolation Questions</strong></p>
       <div class="control-group">
         <?php echo render($form['field_extrapolation_question']); ?>
@@ -354,7 +422,7 @@
 <div class="tab-pane" id="notes">
   <h3>Instructor Notes</h3>
   <p>The fields on this page will become part of the Instructor Notes page.  If you do not intend to publish or share your investigation with other instructors than this page is optional.  However, if you do intend to share this investigation, completing this page will greatly assist others in implementing the activity in their classroom.</p>
-  
+
   <div class="control-group">
   <label class="control-label" for="inputTitle"><strong>Instructional Tips</strong></label>
   <?php echo render($form['field_instructional_content']); ?>
@@ -408,8 +476,7 @@
   <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
 <?php endif; ?>
 
-
-
+<?php echo render($form['resource_browser_modal']); ?>
 
 <?php echo render($form['actions']); ?>
 

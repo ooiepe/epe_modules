@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
                     dataType: 'json',
                     async: true,
                     success: function(data) {
-                      window.addItem(data, true);
+                      window.addDataSetItem(data, true);
                     }
                   });
               }
@@ -54,7 +54,8 @@ jQuery(document).ready(function($) {
     });
 
     $('button.add-selected').bind('click', function(e) {
-        var selected = [];
+        var selected = [],
+            addSelectedBtn = $(this);
         e.preventDefault();
         var checkboxes = $('.rbmodal-iframe').contents().find('input[name="nid"]');
         checkboxes.each(function() {
@@ -65,7 +66,15 @@ jQuery(document).ready(function($) {
               async: true,
               success: function(data) {
                 if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
-                window.parent.addItem(data, true);
+                if(addSelectedBtn.data('controller') == 'intro') {
+                  window.parent.addIntroItem(data, true);
+                } else if(addSelectedBtn.data('controller') == 'dataset') {
+                  window.parent.addDataSetItem(data, true);
+                } else if(addSelectedBtn.data('controller') == 'background') {
+                  window.parent.addBackgroundSlideshowItem(data, true);
+                } else if(addSelectedBtn.data('controller') == 'challenge') {
+                  window.parent.addChallengeThumbnailItem(data, true);
+                }
               }
             });
           }
@@ -79,6 +88,7 @@ jQuery(document).ready(function($) {
       if($(this).data('adhoc') == true) {
         $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide();
       }
+      $('button.add-selected').data('controller', $(this).data('controller'));
       $('#rbmodal')
         .height($(window).height() * 0.9)
         /*.bind('show', function(event) {
@@ -105,8 +115,30 @@ jQuery(document).ready(function($) {
 
     if(Drupal.settings.default_dataset_value != null) {
       var items = JSON.parse( Drupal.settings.default_dataset_value );
-      $.each(items, function( index,value ) {
-        window.addItem(value, false);
+      $.each(items, function( index, value ) {
+        value = loadResourceThumbnail(value);
+        window.addDataSetItem(value, false);
+      });
+    }
+    if(Drupal.settings.default_intro_slideshow != null) {
+      var items = JSON.parse( Drupal.settings.default_intro_slideshow );
+      $.each(items, function( index, value ) {
+        value = loadResourceThumbnail(value);
+        window.addIntroItem(value, false);
+      });
+    }
+    if(Drupal.settings.default_background_slideshow != null) {
+      var items = JSON.parse( Drupal.settings.default_background_slideshow );
+      $.each(items, function( index, value ) {
+        value = loadResourceThumbnail(value);
+        window.addBackgroundSlideshowItem(value, false);
+      });
+    }
+    if(Drupal.settings.default_challenge_thumbnail != null) {
+      var items = JSON.parse( Drupal.settings.default_challenge_thumbnail );
+      $.each(items, function( index, value ) {
+        value = loadResourceThumbnail(value);
+        window.addChallengeThumbnailItem(value, false);
       });
     }
 
@@ -115,7 +147,28 @@ jQuery(document).ready(function($) {
       window.saveDatasets();
       $('#llb-resource-node-form').submit();
     });
-})
+});
+
+function loadResourceThumbnail(value) {
+  jQuery.map(Drupal.settings.epe_dbresource_browser.modules, function(obj) {
+    if(obj.content_type === value.type) {
+      var apiurl = Drupal.settings.epe.base_path + 'api/resource/';
+      if(obj.content_type === 'video_resource' || obj.content_type === 'audio_resource') {
+        apiurl += 'multimedia';
+      } else {
+        apiurl += obj.resource_browser.api;
+      }
+
+      jQuery.get(apiurl + '/' + value.nid, function(result) {
+        var result = JSON.parse(result);
+        value.thumbnail = result.thumbnail;
+      }).fail(function() {
+        value.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+      });
+    }
+  });
+  return value;
+}
 /*  }
 };
 })(jQuery)*/
