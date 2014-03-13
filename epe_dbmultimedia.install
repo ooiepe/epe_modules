@@ -23,3 +23,12 @@ function epe_dbmultimedia_disable() {
   unset($modules['epe_dbmultimedia']);
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
+
+/**
+ * Add allowAdHoc param setting to EPE_CONTENT_MODULES drupal variable
+ */
+function epe_dbmultimedia_update_7000() {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_dbmultimedia']['resource_browser']['allowAdHoc'] = true;
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}
