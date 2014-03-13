@@ -293,6 +293,8 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
 function epe_dbfiles_node_form_submit($form, &$form_state) {
   global $user;
 
+$file = file_load($form_state['values']['file']);
+
   //create corresponding node with entity api
   $node_values = array(
     'type' => $form_state['values']['node_type'],
@@ -372,6 +374,31 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
 
     node_save($node);
   } //end video field save
+
+  if($form_state['values']['file']) {
+    $file = file_load($form_state['values']['file']);
+    //$source = $file->uri;
+    //$form_state['storage']['file'] = $file;
+    //drupal_move_uploaded_file($file->filename, 'private://' . $file->filename);
+    $file->status = FILE_STATUS_PERMANENT;
+    //$file->uri = 'private://' . $file->filename;
+    //$file->destination = $file->uri;
+    //file_save_upload($source, array(), $file->uri, FILE_EXISTS_REPLACE);
+    file_save($file);
+    file_move($file, 'private://');
+  }
+
+  if($form_state['values']['thumbnail']) {
+    $file = file_load($form_state['values']['thumbnail']);
+    //$source = $file->uri;
+    //drupal_move_uploaded_file($file->filename, 'private://' . $file->filename);
+    $file->status = FILE_STATUS_PERMANENT;
+    //$file->uri = 'private://' . $file->filename;
+    //$file->destination = $file->uri;
+    //file_save_upload($source, array(), $file->uri, FILE_EXISTS_REPLACE);
+    file_save($file);
+    file_move($file, 'private://');
+  }
 
   drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
 

@@ -32,7 +32,7 @@ function epe_dbfiles_adhoc_response($nid) {
                     dataType: 'json',
                     async: true,
                     success: function(data) {
-                      window.parent.addItem(data, true);
+                      window.parent.addDataSetItem(data, true);
                     }
                   });", 'inline');
 
