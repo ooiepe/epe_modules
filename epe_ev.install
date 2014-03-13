@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Implements hook_install().
@@ -23,7 +23,7 @@ function epe_ev_install() {
         'display' => array()
       )
     ));
-  
+
   variable_set('menu_options_ev_tool',array());
   variable_set('menu_parent_ev_tool','main-menu:0');
   variable_set('node_options_ev_tool',array());
@@ -121,7 +121,7 @@ function epe_ev_uninstall() {
   menu_rebuild();
 }
 
-function epe_ev_enable() { 
+function epe_ev_enable() {
 
   $modules = variable_get('EPE_CONTENT_MODULES',array());
 
@@ -141,4 +141,27 @@ function epe_ev_disable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
   unset($modules['epe_ev']);
   variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/**
+ * EPEDEV-350: update php field in epe_ev_search_view to use the right thumbnail field to render image
+ * Running Update.php is required.
+ */
+function epe_ev_update_7000(&$sandbox) {
+  $view = views_get_view('epe_ev_search_view', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['fields']['php']['php_output']  =  '<?php
+      $node = node_load($data->entity);
+      $image = field_get_items(\'node\', $node, \'field_instance_thumbnail\');
+      $output = field_view_value(\'node\', $node, \'field_instance_thumbnail\', $image[0], array(
+        \'type\' => \'image\',
+        \'settings\' => array(
+           \'image_style\' => \'thumbnail\',
+        ),
+      ));
+      echo render($output);
+      ?>';
+
+  views_save_view($view);
 }

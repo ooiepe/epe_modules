@@ -103,6 +103,12 @@ function epe_ev_restful_api_node($nid) {
     if($wrapper->body->value()) {
       $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
     }
+
+    $image = $wrapper->field_instance_thumbnail->value();
+    $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+    $item['uri'] = $image['uri'];
+
+    $item['file'] = file_create_url($image['uri']);
   }
 
   echo json_encode($item);
