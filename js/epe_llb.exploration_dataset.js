@@ -88,8 +88,8 @@ jQuery(document).ready(function($) {
       if($(this).data('adhoc') == true) {
         $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide();
       }
-      $('button.add-selected').data('controller', $(this).data('controller'));
-      $('#rbmodal')
+      //$('button.add-selected').data('controller', $(this).data('controller'));
+      $('#rbmodal').attr('data-controller', $(this).data('controller'))
         .height($(window).height() * 0.9)
         /*.bind('show', function(event) {
           $(this).width($(this).find('.rbmodal-iframe').width() + 25).find('.modal-body').css('max-height',$(this).find('.rbmodal-iframe').height());
@@ -101,7 +101,8 @@ jQuery(document).ready(function($) {
     });
 
     $('.add-adhoc').bind('click', function(e) {
-      $('#adhocmodal').height($(window).height() * 0.8)
+      console.log($('#rbmodal').data('controller'));
+      $('#adhocmodal').attr('data-controller',$('#rbmodal').data('controller')).height($(window).height() * 0.8)
       .find('.adhocmodal-iframe').height($(window).height() * 0.65);
       $('.btn-back').attr('data-api',$(this).data('api'));
       $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
