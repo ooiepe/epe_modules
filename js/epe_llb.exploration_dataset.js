@@ -54,8 +54,7 @@ jQuery(document).ready(function($) {
     });
 
     $('button.add-selected').bind('click', function(e) {
-        var selected = [],
-            addSelectedBtn = $(this);
+        var selected = [];
         e.preventDefault();
         var checkboxes = $('.rbmodal-iframe').contents().find('input[name="nid"]');
         checkboxes.each(function() {
@@ -66,13 +65,14 @@ jQuery(document).ready(function($) {
               async: true,
               success: function(data) {
                 if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
-                if(addSelectedBtn.data('controller') == 'intro') {
+                console.log($('#rbmodal').attr('data-controller'));
+                if($('#rbmodal').attr('data-controller') == 'intro') {
                   window.parent.addIntroItem(data, true);
-                } else if(addSelectedBtn.data('controller') == 'dataset') {
+                } else if($('#rbmodal').attr('data-controller') == 'dataset') {
                   window.parent.addDataSetItem(data, true);
-                } else if(addSelectedBtn.data('controller') == 'background') {
+                } else if($('#rbmodal').attr('data-controller') == 'background') {
                   window.parent.addBackgroundSlideshowItem(data, true);
-                } else if(addSelectedBtn.data('controller') == 'challenge') {
+                } else if($('#rbmodal').attr('data-controller') == 'challenge') {
                   window.parent.addChallengeThumbnailItem(data, true);
                 }
               }
@@ -88,6 +88,7 @@ jQuery(document).ready(function($) {
       if($(this).data('adhoc') == true) {
         $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide();
       }
+      console.log($(this).data('controller'));
       //$('button.add-selected').data('controller', $(this).data('controller'));
       $('#rbmodal').attr('data-controller', $(this).data('controller'))
         .height($(window).height() * 0.9)
@@ -101,7 +102,6 @@ jQuery(document).ready(function($) {
     });
 
     $('.add-adhoc').bind('click', function(e) {
-      console.log($('#rbmodal').data('controller'));
       $('#adhocmodal').attr('data-controller',$('#rbmodal').data('controller')).height($(window).height() * 0.8)
       .find('.adhocmodal-iframe').height($(window).height() * 0.65);
       $('.btn-back').attr('data-api',$(this).data('api'));
