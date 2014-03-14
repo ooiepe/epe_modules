@@ -27,14 +27,24 @@ function epe_dbfiles_adhoc_response($nid) {
     }
   }
 
-  drupal_add_js("jQuery.ajax({
+  /* drupal_add_js("jQuery.ajax({
                     url: '" . base_path() . "api/resource/{$api}/{$nid}',
                     dataType: 'json',
                     async: true,
                     success: function(data) {
                       window.parent.addDataSetItem(data, true);
                     }
-                  });", 'inline');
+                  });", 'inline'); */
+  drupal_add_js(drupal_get_path('module','epe_dbfiles') . '/js/epe_dbfiles_adhoc_response.js');
+  drupal_add_js(array(
+      'response' => array(
+        'adhoc' => array(
+          'api' => $api,
+          'nid' => $nid,
+        ),
+      ),
+    ),
+    'setting');
 
   return 'Your new resource has been added to the lesson.  To add another one, please click ' . l('here', 'dialog/resource/add/file');
 }
