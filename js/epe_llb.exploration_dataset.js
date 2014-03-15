@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
               async: true,
               success: function(data) {
                 if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
-                console.log($('#rbmodal').attr('data-controller'));
+
                 if($('#rbmodal').attr('data-controller') == 'intro') {
                   window.parent.addIntroItem(data, true);
                 } else if($('#rbmodal').attr('data-controller') == 'dataset') {
@@ -88,7 +88,7 @@ jQuery(document).ready(function($) {
       if($(this).data('adhoc') == true) {
         $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide();
       }
-      console.log($(this).data('controller'));
+
       //$('button.add-selected').data('controller', $(this).data('controller'));
       $('#rbmodal').attr('data-controller', $(this).data('controller'))
         .height($(window).height() * 0.9)

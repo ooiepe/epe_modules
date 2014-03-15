@@ -108,7 +108,7 @@
       </div>
 
       <table class="table table-condensed">
-        <tbody ui-sortable ng-model="items">
+        <tbody ng-model="items">
         <tr ng-repeat="item in items">
           <td>
             <img ng-src="{{item.thumbnail}}" style="cursor: move;">
@@ -162,7 +162,7 @@
       <p>Choose one or more images that will help provide background information on this investigation.  You can provide a caption for each image.</p>
       <?php echo render($form['field_background_slideshow']); ?>
       <table class="table table-condensed">
-        <tbody ui-sortable ng-model="items">
+        <tbody ng-model="items">
         <tr ng-repeat="item in items">
           <td>
             <img ng-src="{{item.thumbnail}}" style="cursor: move;">
@@ -221,7 +221,7 @@
 
       <?php echo render($form['field_challenge_thumbnail']); ?>
       <table class="table table-condensed">
-        <tbody ui-sortable ng-model="items">
+        <tbody ng-model="items">
         <tr ng-repeat="item in items">
           <td>
             <img ng-src="{{item.thumbnail}}" style="cursor: move;">
@@ -291,7 +291,7 @@
         <th width="40%">Dataset Description</th>
         <th width="35%">Investigation Questions</th>
       </tr>
-      <tbody ui-sortable ng-model="items">
+      <tbody ng-model="items">
       <tr ng-show="items.length < 1" class="text-warning">
         <td colspan="3" class="warning" style="text-align:center;padding:10px;">
           This investigation does not yet include any datasets. Choose an option below to add your first dataset.

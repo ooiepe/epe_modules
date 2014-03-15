@@ -106,8 +106,6 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
       */
       $scope.currentCopies.keys.push(editCopy.key);
       $scope.currentCopies.items[editCopy.key] = editCopy;
-      console.log($scope.currentCopies.keys);
-      console.log($scope.currentCopies.items);
     }
 
     $scope.fn.cancelItemEdit = function(hashkey) {
