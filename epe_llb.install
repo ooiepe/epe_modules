@@ -295,3 +295,18 @@ function epe_llb_update_7002(&$sandbox) {
 
   views_save_view($view);
 }
+
+/**
+ * Fix challenge thumbnail on LLB teaser view rendering
+ */
+function epe_llb_update_7003(&$sandbox) {
+  $challenge_thumbnail_field_instance = field_info_instance('node','field_challenge_thumbnail','llb_resource');
+  $challenge_thumbnail_field_instance['display']['teaser'] = array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 10,
+      );
+  field_update_instance($challenge_thumbnail_field_instance);
+}

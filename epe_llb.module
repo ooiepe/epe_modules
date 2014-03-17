@@ -299,6 +299,7 @@ function epe_llb_theme() {
       'template' => 'epe_llb_field_slideshow',
       'variables' => array(
         'images' => array(),
+        'custom_id' => '',
       ),
     ),
   );

@@ -2,7 +2,7 @@
 /*if(isset($field['#items']) && !empty($field['#items'])): */
 if($images):
 ?>
-<div id="this-carousel-id" class="carousel slide pull-right"><!-- class of slide for animation -->
+<div id="carousel-<?php echo $custom_id; ?>" class="carousel slide pull-right"><!-- class of slide for animation -->
   <div class="carousel-inner">
     <?php foreach($images as $key=>$slide): ?>
     <?php $slideclasses = array('item'); ?>
@@ -23,8 +23,8 @@ if($images):
   <!--  Next and Previous controls below
         href values must reference the id for this carousel -->
     <?php if(count($images) > 1): ?>
-    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
-    <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
+    <a class="carousel-control left" href="#carousel-<?php echo $custom_id; ?>" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#carousel-<?php echo $custom_id; ?>" data-slide="next">&rsaquo;</a>
     <?php endif; ?>
 </div><!-- /.carousel -->
 <?php endif; ?>

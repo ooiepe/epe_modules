@@ -66,7 +66,7 @@
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
   <?php if(!empty($content['field_introductory_slideshow'])) {
-    echo theme('epe_llb_field_slideshow',array('images'=>$intro_slideshow));
+    echo theme('epe_llb_field_slideshow',array('images'=>$intro_slideshow,'custom_id'=>'intro'));
   } ?>
   <?php echo render($content['field_introductory_content']); ?>
 
@@ -80,7 +80,7 @@
   <h3>Background</h3>
   <div class="pull-right">
     <?php if(!empty($content['field_background_slideshow'])) {
-      echo theme('epe_llb_field_slideshow',array('images'=>$background_slideshow));
+      echo theme('epe_llb_field_slideshow',array('images'=>$background_slideshow,'custom_id'=>'background'));
     } ?>
     <?php //echo render($content['field_background_slideshow']); ?>
   </div>
@@ -104,7 +104,7 @@
   <h3>Challenge</h3>
   <div class="pull-right">
     <?php if(!empty($content['field_challenge_thumbnail'])) {
-      echo theme('epe_llb_field_slideshow',array('images'=>$challenge_thumbnail));
+      echo theme('epe_llb_field_slideshow',array('images'=>$challenge_thumbnail,'custom_id'=>'thumbnail'));
     } ?>
     <?php /* echo render($content['field_challenge_thumbnail']); */ ?>
   </div>
