@@ -98,11 +98,12 @@ jQuery(document).ready(function($) {
         .find('.rbmodal-iframe')
         .attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog&type=' + $(this).data('api'))
         .height($(window).height() * 0.8);
+        $('#adhocmodal').attr('data-controller', $(this).data('controller'));
       //$('.rbmodal-iframe').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog&type=' + $(this).data('api'));
     });
 
     $('.add-adhoc').bind('click', function(e) {
-      $('#adhocmodal').attr('data-controller',$('#rbmodal').data('controller')).height($(window).height() * 0.8)
+      $('#adhocmodal').height($(window).height() * 0.8)
       .find('.adhocmodal-iframe').height($(window).height() * 0.65);
       $('.btn-back').attr('data-api',$(this).data('api'));
       $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
