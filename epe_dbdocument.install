@@ -87,3 +87,28 @@ function epe_dbdocument_update_7000() {
   $modules['epe_dbdocument']['resource_browser']['allowAdHoc'] = true;
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
+
+/**
+ * Modify document view's php thumbnail field (default view) to account for no image uplaod and return empty string
+ */
+function epe_dbdocument_update_7001(&$sandbox) {
+  $view = views_get_view('document_resource_index', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['fields']['php']['php_output']  = '<?php
+          $node = node_load($data->entity);
+          $image = field_get_items(\'node\', $node, \'field_document_resource_image\');
+          $output = \'\';
+          if($image) {
+          $output = field_view_value(\'node\', $node, \'field_document_resource_image\', $image[0], array(
+            \'type\' => \'image\',
+            \'settings\' => array(
+               \'image_style\' => \'resource_browser_thumbnail\',
+            ),
+          ));
+          }
+    echo render($output);
+?>';
+
+  views_save_view($view);
+}
