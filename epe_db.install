@@ -778,3 +778,34 @@ $parentid = menu_link_save($item);*/
 
 
 }
+
+
+
+/**
+ * EPEDEV-202: updates the "Create" and "Upload" links to be fully qualified links for this server.
+ */
+function epe_db_update_7000(&$sandbox) {
+  $results = db_select('menu_links','a')
+          ->fields('a',array('mlid', 'link_title', 'link_path'))
+          ->condition('menu_name', 'main-menu','=')
+          ->condition('link_title', 'Create%','LIKE')
+          ->execute();
+  foreach ($results as $result) {
+     $menu_item = menu_link_load($result->mlid);
+     $menu_item['link_path'] = 'http://' . $_SERVER['HTTP_HOST'] . base_path() . $result->link_path;
+     menu_link_save($menu_item);
+  }
+
+  $results = db_select('menu_links','a')
+          ->fields('a',array('mlid', 'link_title', 'link_path'))
+          ->condition('menu_name', 'main-menu','=')
+          ->condition('link_title', 'Upload a%','LIKE')
+          ->execute();
+  foreach ($results as $result) {
+     $menu_item = menu_link_load($result->mlid);
+     $menu_item['link_path'] = 'http://' . $_SERVER['HTTP_HOST'] . base_path() . $result->link_path;
+     menu_link_save($menu_item);
+  }
+
+}
+
