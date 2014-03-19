@@ -36,7 +36,7 @@ function epe_dbmultimedia_update_7000() {
 /**
  * Modify multimedia view's php thumbnail field (default view) to account for no image uplaod and return empty string
  */
-function epe_dbaudio_update_7001(&$sandbox) {
+function epe_dbmultimedia_update_7001(&$sandbox) {
   $view = views_get_view('multimedia_resource_index', TRUE);
   $view->set_display('default');
 
@@ -59,6 +59,40 @@ function epe_dbaudio_update_7001(&$sandbox) {
             echo render($output);
           }
         ?>';
+
+  views_save_view($view);
+}
+
+/**
+ * Make sure the view has the following fields: author name, public status, featured status, and organization
+ */
+function epe_dbmultimedia_update_7002(&$sandbox) {
+  $view = views_get_view('multimedia_resource_index', TRUE);
+  $view->set_display('default');
+
+  /* Field: Author: Institution / School (indexed) */
+  $handler->display[$view->current_display]->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
+  $handler->display[$view->current_display]->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display[$view->current_display]->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
+  $handler->display[$view->current_display]->display_options['fields']['author_field_account_organization']['label'] = 'org';
+
+/* Field: Indexed Node: Featured Status */
+  $handler->display[$view->current_display]->display_options['fields']['field_featured_status']['id'] = 'field_featured_status';
+  $handler->display[$view->current_display]->display_options['fields']['field_featured_status']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display[$view->current_display]->display_options['fields']['field_featured_status']['field'] = 'field_featured_status';
+  $handler->display[$view->current_display]->display_options['fields']['field_featured_status']['label'] = 'featured';
+  /* Field: Indexed Node: Public Status */
+  $handler->display[$view->current_display]->display_options['fields']['field_public_status']['id'] = 'field_public_status';
+  $handler->display[$view->current_display]->display_options['fields']['field_public_status']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display[$view->current_display]->display_options['fields']['field_public_status']['field'] = 'field_public_status';
+  $handler->display[$view->current_display]->display_options['fields']['field_public_status']['label'] = 'public';
+  /* Field: Author: Name (indexed) */
+  $handler->display[$view->current_display]->display_options['fields']['author_name']['id'] = 'author_name';
+  $handler->display[$view->current_display]->display_options['fields']['author_name']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display[$view->current_display]->display_options['fields']['author_name']['field'] = 'author_name';
+  $handler->display[$view->current_display]->display_options['fields']['author_name']['label'] = 'author_name';
+  $handler->display[$view->current_display]->display_options['fields']['author_name']['element_label_colon'] = FALSE;
+  $handler->display[$view->current_display]->display_options['fields']['author_name']['link_to_entity'] = 0;
 
   views_save_view($view);
 }
