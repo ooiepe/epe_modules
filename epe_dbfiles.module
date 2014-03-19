@@ -26,10 +26,7 @@ function epe_dbfiles_menu() {
     'page arguments' => array('epe_dbfiles_node_form'),
     'access callback' => 'user_access',
     'access arguments' => array('epe dbfiles interface'),
-    'menu_name' => 'main-menu',
-    'type' => MENU_NORMAL_ITEM,
-    'weight' => 2,
-    'plid' => $epe_menu['db']['mlid'],
+    'type' => MENU_CALLBACK,
   );
 
   $items['dialog/resource/add/file'] = array(

@@ -47,6 +47,15 @@ function epe_dbfiles_enable() {
   menu_link_save($item);
 
   $item = array(
+      'link_path' => 'resource/add/file',
+      'link_title' => 'Upload a Resource',
+      'menu_name' => 'main-menu',
+      'weight' => 2,
+      'plid' => $epe_menu['db']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=image',
       'link_title' => 'My Images',
       'menu_name' => 'main-menu',
