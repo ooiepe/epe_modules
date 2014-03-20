@@ -147,6 +147,8 @@ jQuery(document).ready(function($) {
     $('#edit-submit').click(function(event) {
       event.preventDefault();
       window.saveDatasets();
+      window.saveIntroItems();
+      window.saveBackgroundItems();
       $('#llb-resource-node-form').submit();
     });
 });

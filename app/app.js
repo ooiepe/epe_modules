@@ -130,7 +130,7 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
             $scope.fn.cancelItemEdit(hashkey);
           }
         }
-      })
+      });
     }
 
     $scope.fn.removeItemQuestion = function(hashkey, index) {
@@ -139,8 +139,19 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
 
     $window.saveDatasets = function() {
       angular.forEach($scope.currentCopies.keys, function(key, index) {
-        $scope.fn.saveEditItem(key);
+        //$scope.fn.saveEditItem(key);
+        var found = false;
+        angular.forEach($scope.items, function(item, index) {
+          if(!found) {
+            if(item.key == key) {
+              found = true;
+              $scope.items[index] = angular.copy($scope.currentCopies.items[key]);
+            }
+          }
+        });
       });
+      $scope.currentCopies.keys = [];
+      $scope.currentCopies.items = [];
       $scope.$digest();
     }
 });
@@ -189,13 +200,24 @@ app.controller('intro', function($window, $scope, intro_data, $http) {
             $scope.fn.cancelItemEdit(hashkey);
           }
         }
-      })
+      });
     }
 
-    $window.saveDatasets = function() {
+    $window.saveIntroItems = function() {
       angular.forEach($scope.currentCopies.keys, function(key, index) {
-        $scope.fn.saveEditItem(key);
+        //$scope.fn.saveEditItem(key);
+        var found = false;
+        angular.forEach($scope.items, function(item, index) {
+          if(!found) {
+            if(item.key == key) {
+              found = true;
+              $scope.items[index] = angular.copy($scope.currentCopies.items[key]);
+            }
+          }
+        });
       });
+      $scope.currentCopies.keys = [];
+      $scope.currentCopies.items = [];
       $scope.$digest();
     }
 });
@@ -244,13 +266,24 @@ app.controller('background', function($window, $scope, background_data, $http) {
             $scope.fn.cancelItemEdit(hashkey);
           }
         }
-      })
+      });
     }
 
-    $window.saveDatasets = function() {
+    $window.saveBackgroundItems = function() {
       angular.forEach($scope.currentCopies.keys, function(key, index) {
-        $scope.fn.saveEditItem(key);
+        //$scope.fn.saveEditItem(key);
+        var found = false;
+        angular.forEach($scope.items, function(item, index) {
+          if(!found) {
+            if(item.key == key) {
+              found = true;
+              $scope.items[index] = angular.copy($scope.currentCopies.items[key]);
+            }
+          }
+        });
       });
+      $scope.currentCopies.keys = [];
+      $scope.currentCopies.items = [];
       $scope.$digest();
     }
 });
