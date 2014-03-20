@@ -3,7 +3,7 @@ Drupal.behaviors.epe_files = {
   attach: function(context, settings) {
     var imgexts = $.parseJSON(settings.image_exts), otherexts = $.parseJSON(settings.other_exts);
 
-    $('.form-file-field .form-file', context).once().bind('change', function() {
+    $('.form-file-field .form-file', context).bind('change', function() {
       var ext = $(this).val().split('.').pop();
       $.each(settings.file_type_exts, function(index, value) {
         if($.inArray(ext,value.split(' ')) >= 0) { $("input[name='node_type']").val(index); }
