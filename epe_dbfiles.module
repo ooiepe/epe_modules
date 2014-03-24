@@ -397,6 +397,8 @@ $file = file_load($form_state['values']['file']);
     file_move($file, $storage_location);
   }
 
+  node_save($node); //clear cache after file moves
+
   drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
 
   if(arg(0) == 'dialog') {
@@ -529,6 +531,6 @@ function epe_dbfiles_block_view($delta='') {
 
 function _epe_dbfiles_file_storage_location($node) {
   global $user;
-  $location = 'private://' . $user->uid . '/' . $node->type . '/';
+  $location = 'private://' . $user->uid . '/' . $node->type;
   return $location;
 }
