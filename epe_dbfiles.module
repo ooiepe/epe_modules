@@ -319,13 +319,13 @@ $file = file_load($form_state['values']['file']);
 
   $wrapper->save(true);
 
+  $node = node_load($wrapper->nid->value());
+  $storage_location = _epe_dbfiles_file_storage_location($node);
   /*
    * field from video module not showing in entity wrapper, not sure why, nothing in issue queue either
    * for now saving video file in the traditional node_save way
    */
   if($form_state['values']['node_type'] == 'video_resource') {
-    $node = node_load($wrapper->nid->value());
-
     if($form_state['values']['file']):
       $video_file = file_load($form_state['values']['file']);
       $node->field_video_resource_file = array(
@@ -382,7 +382,7 @@ $file = file_load($form_state['values']['file']);
     //$file->destination = $file->uri;
     //file_save_upload($source, array(), $file->uri, FILE_EXISTS_REPLACE);
     file_save($file);
-    file_move($file, 'private://');
+    file_move($file, $storage_location);
   }
 
   if($form_state['values']['thumbnail']) {
@@ -394,7 +394,7 @@ $file = file_load($form_state['values']['file']);
     //$file->destination = $file->uri;
     //file_save_upload($source, array(), $file->uri, FILE_EXISTS_REPLACE);
     file_save($file);
-    file_move($file, 'private://');
+    file_move($file, $storage_location);
   }
 
   drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
@@ -525,4 +525,10 @@ function epe_dbfiles_block_view($delta='') {
   }
 
   return $block;
+}
+
+function _epe_dbfiles_file_storage_location($node) {
+  global $user;
+  $location = 'private://' . $user->uid . '/' . $node->type . '/';
+  return $location;
 }
