@@ -17,6 +17,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
   $scope.panes.table = [];
   $scope.panes.active = '';
   $scope.panes.dialogmode = false;
+  $scope.panes.showtabs = true;
   $scope.resource = {};
   $scope.filter = {};
   $scope.resource.view_types = [
@@ -48,11 +49,27 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   if(typeof $routeParams['dialog'] != "undefined") {
     $scope.panes.dialogmode = true;
-    if(typeof $routeParams['type'] != "undefined") {
+/*    if($routeParams['dialog'] != true) {
       angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
-        if(module.api === $routeParams['type']) $scope.resources.modules.push(module);
+        if(module.api === $routeParams['dialog']) $scope.resources.modules.push(module);
       });
-    }
+    } else {
+      $scope.resources.modules = Drupal.settings.epe_dbresource_browser.modules;
+    }*/
+    angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+      if(module.api === $routeParams['dialog']) {
+        $scope.panes.showtabs = false;
+        $scope.resources.modules.push(module);
+      }
+    });
+
+    if($scope.resources.modules.length == 0) $scope.resources.modules = Drupal.settings.epe_dbresource_browser.modules;
+
+    //if(typeof $routeParams['type'] != "undefined") {
+    //  angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+    //    if(module.api === $routeParams['dialog']) $scope.resources.modules.push(module);
+    //  });
+    //}
   } else {
     $scope.resources.modules = Drupal.settings.epe_dbresource_browser.modules;
   }
@@ -106,7 +123,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     });
     //set active pane indicator for search function
     $scope.panes.active = tab.api;
-  }
+  };
 
   $scope.panes.table = [];
   //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
@@ -128,9 +145,12 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
     tab.numberOfPages = function() { return Math.ceil(tab.data.length/tab.pageSize); }
 
-    if(typeof $location.search()['dialog'] == 'undefined' || ( (typeof $location.search()['dialog'] != 'undefined') && (typeof $location.search()['type'] != 'undefined') && $location.search()['type'] == pane.api)) {
+    if(typeof $location.search()['dialog'] == 'undefined' || (typeof $location.search()['dialog'] && ($location.search()['dialog'] == pane.api || $location.search()['dialog'] == true)) ) {
       $scope.panes.table.push(tab);
     }
+/*    if(typeof $location.search()['dialog'] == 'undefined' || ( (typeof $location.search()['dialog'] != 'undefined') && (typeof $location.search()['type'] != 'undefined') && $location.search()['type'] == pane.api)) {
+      $scope.panes.table.push(tab);
+    }*/
   });
   $scope.panes.table.sort($scope.fn.sortPane);
 
@@ -158,6 +178,7 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     var progress = 0;
     ngProgress.start();
     //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(module, index) {
+
     angular.forEach($scope.resources.modules, function(module, index) {
       $scope.fn.serviceParams['resource_type'] = module.api;
       if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
