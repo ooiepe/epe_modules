@@ -117,3 +117,37 @@ function epe_dbvideo_update_7000(&$sandbox) {
 
   views_save_view($view);
 }
+
+/**
+ * add php field for author name to view
+ */
+function epe_dbvideo_update_7001(&$sandbox) {
+  $view = views_get_view('video_resource_index', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_fname']['exclude'] = TRUE;
+
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_lname']['exclude'] = TRUE;
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_lname']['label'] = '';
+  unset($view->display[$view->current_display]->display_options['fields']['author_field_account_lname']['alter']);
+
+  $view->display[$view->current_display]->display_options['fields']['php_1']['id'] = 'php_1';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['table'] = 'views';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['field'] = 'php';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['label'] = 'author';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['use_php_setup'] = 0;
+  $view->display[$view->current_display]->display_options['fields']['php_1']['php_output'] = '<?php
+  $fullname = array();
+  if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
+    $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
+  }
+  if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
+    $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
+  }
+  echo implode(\' \',$fullname);
+  ?>';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['php_click_sortable'] = '';
+
+  views_save_view($view);
+}
