@@ -531,6 +531,7 @@ function epe_dbfiles_block_view($delta='') {
 
 function _epe_dbfiles_file_storage_location($node) {
   global $user;
-  $location = 'private://' . $user->uid . '/' . $node->type;
+  $location = 'private://' . $user->uid . '/' . $node->type . '/' . $node->nid;
+  file_prepare_directory($location, FILE_CREATE_DIRECTORY);
   return $location;
 }
