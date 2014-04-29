@@ -18,7 +18,7 @@
 <?php
   $wrapper = entity_metadata_wrapper('node',$node);
   $thumbnail = '';
-  if(in_array($wrapper->getBundle(),array('cm_resource','ev_tool_instance'))) {
+  if(in_array($wrapper->getBundle(),array('cm_resource'))) {
     /* temporary fix */
     $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
   } else {
@@ -48,12 +48,23 @@
       }
       break;
       case 'llb_resource':
-      $image = $wrapper->field_challenge_thumbnail->value();
+      $thumbnail_field = $wrapper->field_challenge_thumbnail->value();
+      if($thumbnail_field) {
+        $thumbnail_node_info = json_decode($thumbnail_field);
+        foreach($thumbnail_node_info as $info) {
+          $node_info = epe_llb_dataset_query($info);
+          $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $node_info->uri) . '">';
+        }
+      }
+      break;
+      case 'ev_tool_instance':
+      $image = $wrapper->field_instance_thumbnail->value();
       if($image) {
         $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $image['uri']) . '">';
       }
       break;
     }
+    if(!$thumbnail) $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
   }
 ?>
 <li <?php if($key == 0): echo 'class="first"'; endif; ?>>
@@ -61,7 +72,7 @@
   <div class="title"><?php echo l($wrapper->label(),"node/{$wrapper->getIdentifier()}"); ?></div>
   <div class="author">by <?php echo $wrapper->author->field_account_fname->value() . ' ' . $wrapper->author->field_account_lname->value(); ?></div>
   <?php if($wrapper->body->value()): ?>
-  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => 'TRUE')),0,200); ?></div>
+  <div class="summary"><?php echo substr($wrapper->body->value->value(array('sanitize' => 'TRUE')),0,200); ?><div class="after"></div></div>
   <?php endif; ?>
 </li>
 <?php endif; ?>

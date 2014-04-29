@@ -24,6 +24,7 @@
         <div class="form-horizontal">
           <input type="text" name="search_cm" size="50"> <button type="button" id="cm_submit" class="btn btn-primary">Search</button>
         </div>
+        <br><a href="<?php echo base_path() ?>node/add/cm-resource" class="btn btn-primary">Create a Concept Map<i class="icon-chevron-right icon-white"></i></a>
       </div>
     </div>
   </div>

@@ -22,6 +22,7 @@
         <div class="form-horizontal">
           <input type="text" name="search_ev" size="50"> <button type="button" id="ev_submit" class="btn btn-primary">Search</button>
         </div>
+        <br><a href="<?php echo base_path() ?>ev/tools" class="btn btn-primary">Create a Visualization<i class="icon-chevron-right icon-white"></i></a>
       </div>
     </div>
   </div>

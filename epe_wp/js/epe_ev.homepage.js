@@ -12,6 +12,19 @@ Drupal.behaviors.epe_ev_homepage = {
       }
       window.location = url;
     });
+    $('input[name=search_ev]').on('keydown',function(event) {
+      if(event.which == 13) {
+        var url = Drupal.settings.epe.base_path + 'resource-browser#/search';
+        if($('input[name=search_ev]').val() != '') {
+          url += '/' + $('input[name=search_ev]').val();
+        }
+        url += '?type=ev';
+        if($('input:radio[name=filter]:checked').val() != '') {
+          url += '&filter=' + $('input:radio[name=filter]:checked').val();
+        }
+        window.location = url;
+      }
+    });    
   }
 };
 })(jQuery)
