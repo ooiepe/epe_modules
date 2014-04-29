@@ -47,8 +47,17 @@ function epe_dbfiles_enable() {
   menu_link_save($item);
 
   $item = array(
+      'link_path' => 'resource/add/file',
+      'link_title' => 'Upload a Resource',
+      'menu_name' => 'main-menu',
+      'weight' => 2,
+      'plid' => $epe_menu['db']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=image',
-      'link_title' => 'My Resources',
+      'link_title' => 'My Images',
       'menu_name' => 'main-menu',
       'weight' => 3,
       'plid' => $epe_menu['db']['mlid'],
@@ -57,9 +66,45 @@ function epe_dbfiles_enable() {
 
   $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=image',
-      'link_title' => 'Browse Resources',
+      'link_title' => 'Browse Images',
       'menu_name' => 'main-menu',
       'weight' => 4,
+      'plid' => $epe_menu['db']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=multimedia',
+      'link_title' => 'My Multimedia',
+      'menu_name' => 'main-menu',
+      'weight' => 5,
+      'plid' => $epe_menu['db']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=multimedia',
+      'link_title' => 'Browse Multimedia',
+      'menu_name' => 'main-menu',
+      'weight' => 6,
+      'plid' => $epe_menu['db']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=document',
+      'link_title' => 'My Documents',
+      'menu_name' => 'main-menu',
+      'weight' => 7,
+      'plid' => $epe_menu['db']['mlid'],
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=document',
+      'link_title' => 'Browse Documents',
+      'menu_name' => 'main-menu',
+      'weight' => 8,
       'plid' => $epe_menu['db']['mlid'],
       );
   menu_link_save($item);
@@ -80,4 +125,89 @@ function epe_dbfiles_disable() {
   $epe_menu = variable_get('epe_menu',array());
   unset($epe_menu['db']);
   variable_set('epe_menu',$epe_menu);
+}
+
+
+/**
+ * EPEDEV-169: updates the my and browse links under resources
+ */
+function epe_dbfiles_update_7000(&$sandbox) {
+
+  // remove the previous links
+  $results = db_select('menu_links','a')
+            ->fields('a',array('mlid', 'plid', 'link_title', 'link_path'))
+            ->condition('menu_name', 'main-menu','=')
+            ->condition('link_title', 'My Resources','=')
+            ->execute();
+  foreach ($results as $result) {
+     menu_link_delete($result->mlid);
+  }
+
+  $results = db_select('menu_links','a')
+            ->fields('a',array('mlid', 'plid', 'link_title', 'link_path'))
+            ->condition('menu_name', 'main-menu','=')
+            ->condition('link_title', 'Browse Resources','=')
+            ->execute();
+  foreach ($results as $result) {
+     $dbMenu = $result->plid;
+     menu_link_delete($result->mlid);
+  }
+
+  // add the new links
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=image',
+      'link_title' => 'My Images',
+      'menu_name' => 'main-menu',
+      'weight' => 3,
+      'plid' => $dbMenu,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=image',
+      'link_title' => 'Browse Images',
+      'menu_name' => 'main-menu',
+      'weight' => 4,
+      'plid' => $dbMenu,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=multimedia',
+      'link_title' => 'My Multimedia',
+      'menu_name' => 'main-menu',
+      'weight' => 5,
+      'plid' => $dbMenu,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=multimedia',
+      'link_title' => 'Browse Multimedia',
+      'menu_name' => 'main-menu',
+      'weight' => 6,
+      'plid' => $dbMenu,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=document',
+      'link_title' => 'My Documents',
+      'menu_name' => 'main-menu',
+      'weight' => 7,
+      'plid' => $dbMenu,
+      );
+  menu_link_save($item);
+
+  $item = array(
+      'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=document',
+      'link_title' => 'Browse Documents',
+      'menu_name' => 'main-menu',
+      'weight' => 8,
+      'plid' => $dbMenu,
+      );
+  menu_link_save($item);
+
+
+
 }

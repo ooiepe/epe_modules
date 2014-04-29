@@ -30,6 +30,7 @@
         <div class="form-horizontal">
           <input type="text" name="search_db" size="50"> <button type="button" id="db_submit" class="btn btn-primary">Search</button>
         </div>
+        <br><a href="<?php echo base_path() ?>resource/add/file" class="btn btn-primary">Upload a Resource<i class="icon-chevron-right icon-white"></i></a>
       </div>
     </div>
   </div>
