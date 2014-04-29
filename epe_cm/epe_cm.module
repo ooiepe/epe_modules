@@ -49,6 +49,10 @@ function epe_cm_permission() {
       'title' => 'EPE DB Public Approval',
       'description' => 'Allow user to approve items for inclusion in the public db.',
     ),
+    'epe dbpublic feature' => array(
+      'title' => 'EPE DB Feature Resources',
+      'description' => 'Allow user to feature resources.',
+    ),
   );
 }
 
@@ -247,6 +251,78 @@ function epe_cm_menu() {
 
   return $items;
 }
+
+
+
+function epe_cm_node_insert($node) {
+  $wrapper = entity_metadata_wrapper('node',$node);
+  if($wrapper->getBundle() == 'cm_resource') {
+    $child_assets = array();
+    db_delete('resources_assoc')
+    ->condition('parent', $wrapper->getIdentifier(), '=')
+    ->execute();
+
+    $xml = new SimpleXMLElement($wrapper->field_cm_data->value());
+
+    foreach($xml->concept as $concept) {
+      if($concept->assets) {
+        foreach ($concept->assets as $asset) {
+          foreach ($asset->xpath('//node') as $asset_node) {
+            if (!in_array((string)$asset_node['id'], $child_assets))
+              $child_assets[] = (string)$asset_node['id'];
+
+          }
+        }
+      } 
+    }
+
+    foreach ($child_assets as $child_asset) {
+      db_insert('resources_assoc')
+      ->fields(array(
+        'parent' => $wrapper->getIdentifier(),
+        'child' => $child_asset
+      ))
+      ->execute();
+    }
+  }
+}
+
+function epe_cm_node_update($node) {
+  $wrapper = entity_metadata_wrapper('node',$node);
+  if($wrapper->getBundle() == 'cm_resource') {
+    $child_assets = array();
+    db_delete('resources_assoc')
+    ->condition('parent', $wrapper->getIdentifier(), '=')
+    ->execute();
+
+    $xml = new SimpleXMLElement($wrapper->field_cm_data->value());
+
+    foreach($xml->concept as $concept) {
+      if($concept->assets) {
+        foreach ($concept->assets as $asset) {
+          foreach ($asset->xpath('//node') as $asset_node) {
+            if (!in_array((string)$asset_node['id'], $child_assets))
+              $child_assets[] = (string)$asset_node['id'];
+
+          }
+        }
+      } 
+    }
+
+    foreach ($child_assets as $child_asset) {
+      db_insert('resources_assoc')
+      ->fields(array(
+        'parent' => $wrapper->getIdentifier(),
+        'child' => $child_asset
+      ))
+      ->execute();
+    }
+  }
+}
+
+
+
+
 
 /**
  * Implements hook_views_api().

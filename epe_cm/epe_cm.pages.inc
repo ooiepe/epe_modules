@@ -30,8 +30,27 @@ function epe_cm_node_delete_function($node) {
 function epe_cm_node_submit_public_function($node) {
 	// update the status to pending
 	$node->field_public_status[$node->language][0]['value'] = 'Pending';
+	// automatically set this to "drupal published" or "epe shared"
+	$node->status = 1;
 	// save the node
 	node_save($node);
+
+	// auto share the children
+	if ($node->type == 'cm_resource' || $node->type == 'llb_resource') {
+		$results = db_select('resources_assoc', 'ra')
+    	           ->fields('ra', array('child'))
+        	       ->condition('parent', $node->nid)
+            	   ->execute();
+	    foreach ($results as $result) {
+	    	// load the children and share if same author
+	    	$child_node = node_load($result->child);
+	    	if ($node->uid == $child_node->uid) {
+				$child_node->status = 1;
+				node_save($child_node);
+	    	}
+	    }
+	}
+
 	// set the message
 	drupal_set_message(t('@type %title has been submitted for inclusion in the public database.', array('@type' => node_type_get_name($node), '%title' => $node->title)));
 	// return to the view page
@@ -76,6 +95,23 @@ function epe_cm_node_share_function($node) {
 	$node->status = 1;
 	// save the node
 	node_save($node);
+
+	// auto share the children
+	if ($node->type == 'cm_resource' || $node->type == 'llb_resource') {
+		$results = db_select('resources_assoc', 'ra')
+    	           ->fields('ra', array('child'))
+        	       ->condition('parent', $node->nid)
+            	   ->execute();
+	    foreach ($results as $result) {
+	    	// load the children and share if same author
+	    	$child_node = node_load($result->child);
+	    	if ($node->uid == $child_node->uid) {
+				$child_node->status = 1;
+				node_save($child_node);
+	    	}
+	    }
+	}
+
 	// set the message
 	drupal_set_message(t('@type %title has been published and is now visible to anyone with the url.', array('@type' => node_type_get_name($node), '%title' => $node->title)));
 	// return to the view page
