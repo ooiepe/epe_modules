@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Implements hook_install().
@@ -23,7 +23,7 @@ function epe_ev_install() {
         'display' => array()
       )
     ));
-  
+
   variable_set('menu_options_ev_tool',array());
   variable_set('menu_parent_ev_tool','main-menu:0');
   variable_set('node_options_ev_tool',array());
@@ -121,7 +121,7 @@ function epe_ev_uninstall() {
   menu_rebuild();
 }
 
-function epe_ev_enable() { 
+function epe_ev_enable() {
 
   $modules = variable_get('EPE_CONTENT_MODULES',array());
 
@@ -141,4 +141,98 @@ function epe_ev_disable() {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
   unset($modules['epe_ev']);
   variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
+/**
+ * EPEDEV-350: update php field in epe_ev_search_view to use the right thumbnail field to render image
+ * Running Update.php is required.
+ */
+function epe_ev_update_7000(&$sandbox) {
+  $view = views_get_view('epe_ev_search_view', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['fields']['php']['php_output']  =  '<?php
+      $node = node_load($data->entity);
+      $image = field_get_items(\'node\', $node, \'field_instance_thumbnail\');
+      $output = \'\';
+      if($image) {
+      $output = field_view_value(\'node\', $node, \'field_instance_thumbnail\', $image[0], array(
+        \'type\' => \'image\',
+        \'settings\' => array(
+           \'image_style\' => \'thumbnail\',
+        ),
+      ));
+      }
+      echo render($output);
+      ?>';
+
+  views_save_view($view);
+}
+
+/**
+ * Make sure the view has the following fields: author name, public status, featured status, and organization
+ */
+function epe_ev_update_7001(&$sandbox) {
+  $view = views_get_view('epe_ev_search_view', TRUE);
+  $view->set_display('default');
+
+  /* Field: Author: Institution / School (indexed) */
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_epe_ev_search_index';
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_organization']['label'] = 'org';
+
+  /* Field: Indexed Node: Featured Status */
+  $view->display[$view->current_display]->display_options['fields']['field_featured_status']['id'] = 'field_featured_status';
+  $view->display[$view->current_display]->display_options['fields']['field_featured_status']['table'] = 'search_api_index_epe_ev_search_index';
+  $view->display[$view->current_display]->display_options['fields']['field_featured_status']['field'] = 'field_featured_status';
+  $view->display[$view->current_display]->display_options['fields']['field_featured_status']['label'] = 'featured';
+  /* Field: Indexed Node: Public Status */
+  $view->display[$view->current_display]->display_options['fields']['field_public_status']['id'] = 'field_public_status';
+  $view->display[$view->current_display]->display_options['fields']['field_public_status']['table'] = 'search_api_index_epe_ev_search_index';
+  $view->display[$view->current_display]->display_options['fields']['field_public_status']['field'] = 'field_public_status';
+  $view->display[$view->current_display]->display_options['fields']['field_public_status']['label'] = 'public';
+  /* Field: Author: Name (indexed) */
+  $view->display[$view->current_display]->display_options['fields']['author_name']['id'] = 'author_name';
+  $view->display[$view->current_display]->display_options['fields']['author_name']['table'] = 'search_api_index_epe_ev_search_index';
+  $view->display[$view->current_display]->display_options['fields']['author_name']['field'] = 'author_name';
+  $view->display[$view->current_display]->display_options['fields']['author_name']['label'] = 'author_name';
+  $view->display[$view->current_display]->display_options['fields']['author_name']['element_label_colon'] = FALSE;
+  $view->display[$view->current_display]->display_options['fields']['author_name']['link_to_entity'] = 0;
+
+  views_save_view($view);
+}
+
+/**
+ * add php field for author name to view
+ */
+function epe_ev_update_7002(&$sandbox) {
+  $view = views_get_view('epe_ev_search_view', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_fname']['exclude'] = TRUE;
+
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_lname']['exclude'] = TRUE;
+  $view->display[$view->current_display]->display_options['fields']['author_field_account_lname']['label'] = '';
+  unset($view->display[$view->current_display]->display_options['fields']['author_field_account_lname']['alter']);
+
+  $view->display[$view->current_display]->display_options['fields']['php_1']['id'] = 'php_1';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['table'] = 'views';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['field'] = 'php';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['label'] = 'author';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['use_php_setup'] = 0;
+  $view->display[$view->current_display]->display_options['fields']['php_1']['php_output'] = '<?php
+  $fullname = array();
+  if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
+    $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
+  }
+  if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
+    $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
+  }
+  echo implode(\' \',$fullname);
+  ?>';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
+  $view->display[$view->current_display]->display_options['fields']['php_1']['php_click_sortable'] = '';
+
+  views_save_view($view);
 }

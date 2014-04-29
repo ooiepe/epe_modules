@@ -69,10 +69,11 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
   }
 </style>
 
+<div class="form-help"><a href="<?php echo base_path() . "node/163" ?>" target="_blank">Help with this form</a></div>
 <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
   <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
 
-<!-- content -->
+  <!-- content -->
 
     <!-- tabs -->
     <ul class="nav nav-tabs">
@@ -82,26 +83,25 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
     </ul>
 
     <!-- tab content -->
-
     <div class="tab-content">
 
       <div class="tab-pane active" id="ev-instance-configure">
         <!-- tab controls -->
+        <p><em>Use the controls below to customize your visualization tool.</em></p>
         <div>
-          <h4>Tool Controls</h4>
           <div id="vistool-controls" style="margin:6px;padding:6px;border:2px solid #c8d5de;"></div>
         </div>
-
       </div>
 
       <div class="tab-pane" id="ev-instance-preview" style="padding-bottom:100px;">
         <!-- tab preview -->
+        <p><em>Here is a preview of the custom visualization tool you have made.  This is what others will see when you share it.</em></p>
         <div id="vistool"></div>
       </div>
       
       <div class="tab-pane" id="ev-instance-save">
         <!-- tab info -->
-        
+        <p><em>Before saving your custom visualization tool, be sure to describe it appropriately using the fields below.</em></p>
         <div>
           <div class="field-container">
             <!-- <label for="edit-title" class="field-label">* Title:</label> -->
@@ -155,8 +155,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
       
     </div>
       
-<!-- end content -->
-
+  <!-- end content -->
   </div>
 </div>
 
