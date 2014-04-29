@@ -48,9 +48,18 @@ function epe_llb_restful_api_node($nid) {
       $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
     }
 
-    $image = $wrapper->field_challenge_thumbnail->value();
-    if($image) {
+    $field_value = $wrapper->field_challenge_thumbnail->value();
+    if($field_value) {
+      $thumbnail_info = drupal_json_decode($field_value);
+      $node = node_load($thumbnail_info[0]['nid']);
+      $wrapper = entity_metadata_wrapper('node',$node );
+
+      $image = $wrapper->field_image_resource_file->value();
+
       $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+      $item['uri'] = $image['uri'];
+
+      $item['file'] = file_create_url($image['uri']);
     }
   }
 

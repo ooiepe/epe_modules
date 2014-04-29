@@ -15,16 +15,13 @@
     <?php endif; ?>
   </header>
 -->
-
-
-
-
 <?php
+  $showContent = false;
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
+<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
 
   <?php
     // Hide comments, tags, and links now so that we can render them later.
@@ -41,8 +38,16 @@
         <p>
           <?php //echo render($content['field_challenge_thumbnail']);
             if(isset($content['field_challenge_thumbnail']) && $content['field_challenge_thumbnail']) {
-              $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $content['field_challenge_thumbnail']['#items'][0]['uri'], 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
-              echo theme('image_style', $thumbnail);
+              try{
+                $thumbnail_node_info = json_decode($content['field_challenge_thumbnail']['#items'][0]['value']);
+                foreach($thumbnail_node_info as $info) {
+                  $node_info = epe_llb_dataset_query($info);
+                  $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $node_info->uri, 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
+                  echo theme('image_style', $thumbnail);
+                }
+              } catch (exception $e) {
+                $output = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg">';
+              }
             }
           ?>
         </p>
@@ -54,6 +59,7 @@
       </p>
     </div>
   </div>
+  <br clear="all"/>
 
   <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
     <footer>
@@ -62,9 +68,9 @@
     </footer>
   <?php endif; ?>
 
-  <?php print render($content['comments']); ?>
+</div>
+</div>
 
-</div>
-</div>
+<?php print render($content['comments']); ?>
 
 </article> <!-- /.node -->

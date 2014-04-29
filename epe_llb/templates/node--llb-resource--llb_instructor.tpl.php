@@ -2,6 +2,7 @@
 
 <?php
   $hideActionButtons = 0;
+  $showContent = false;
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
@@ -15,6 +16,10 @@
     hide($content['field_tags']);
   ?>
   <div class=".row-fluid">
+    <?php if(isset($content['body'])): ?>
+    <?php echo render($content['body']); ?>
+    <?php endif; ?>
+
     <?php if(!empty($content['field_instructional_content'])) { ?>
     <p><strong>Instructional Tips</strong></p>
     <?php echo render($content['field_instructional_content']);
@@ -28,7 +33,7 @@
     <?php if(!empty($content['field_resources_content'])) { ?>
     <p><strong>Resources</strong></p>
     <?php echo render($content['field_resources_content']);
-    } ?>    
+    } ?>
   </div>
 
 </div>

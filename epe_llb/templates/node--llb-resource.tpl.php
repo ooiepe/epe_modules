@@ -4,6 +4,7 @@
 
 <?php
   $hideActionButtons = 0;
+  $showContent = false;
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
@@ -37,6 +38,9 @@
   ?>
   <!-- datasets data array -->
   <?php $datasets = json_decode($content['field_exploration_dataset']['#items'][0]['value']); ?>
+  <?php $intro_slideshow = json_decode($content['field_introductory_slideshow']['#items'][0]['value']); ?>
+  <?php $background_slideshow = json_decode($content['field_background_slideshow']['#items'][0]['value']); ?>
+  <?php $challenge_thumbnail = json_decode($content['field_challenge_thumbnail']['#items'][0]['value']); ?>
 
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
@@ -62,7 +66,7 @@
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
   <?php if(!empty($content['field_introductory_slideshow'])) {
-    echo theme('epe_llb_field_slideshow',array('field'=>$content['field_introductory_slideshow']));
+    echo theme('epe_llb_field_slideshow',array('images'=>$intro_slideshow,'custom_id'=>'intro'));
   } ?>
   <?php echo render($content['field_introductory_content']); ?>
 
@@ -76,7 +80,7 @@
   <h3>Background</h3>
   <div class="pull-right">
     <?php if(!empty($content['field_background_slideshow'])) {
-      echo theme('epe_llb_field_slideshow',array('field'=>$content['field_background_slideshow']));
+      echo theme('epe_llb_field_slideshow',array('images'=>$background_slideshow,'custom_id'=>'background'));
     } ?>
     <?php //echo render($content['field_background_slideshow']); ?>
   </div>
@@ -98,7 +102,12 @@
 
 <div class="tab-pane" id="challenge">
   <h3>Challenge</h3>
-  <div class="pull-right"><?php echo render($content['field_challenge_thumbnail']); ?></div>
+  <div class="pull-right">
+    <?php if(!empty($content['field_challenge_thumbnail'])) {
+      echo theme('epe_llb_field_slideshow',array('images'=>$challenge_thumbnail,'custom_id'=>'thumbnail'));
+    } ?>
+    <?php /* echo render($content['field_challenge_thumbnail']); */ ?>
+  </div>
   <p>In this activity you will investigate the following challenge ...</p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
@@ -217,7 +226,7 @@ function giveXMLtoJS(value) {
 <iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
 <?php } //end elseif type == ev_tool_instance ?>
 
-  <?php echo $dataset->body; ?>
+  <div class="well well-sm"><?php echo $dataset->body; ?></div>
   <?php if(!empty($dataset->questions)): ?>
   <div>
     <div>

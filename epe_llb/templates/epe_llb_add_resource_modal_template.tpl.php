@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div id="rbmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="rbmodal" class="modal hide fade" tabindex="-1" role="dialog" data-controller="" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-body">
     <iframe src="" seamless width="779" class="rbmodal-iframe"></iframe>
   </div>
