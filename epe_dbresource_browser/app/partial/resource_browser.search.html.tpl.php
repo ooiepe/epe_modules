@@ -27,8 +27,9 @@
 </div>
 -->
 <br clear="all">
+<div ng-include="view_templates.list"></div>
 
-<div ng-switch="radioModel">
+<!-- <div ng-switch="radioModel">
   <div ng-switch-when="list" ng-include="view_templates.list"></div>
   <div ng-switch-when="grid" ng-include="view_templates.grid"></div>
-</div>
+</div> -->

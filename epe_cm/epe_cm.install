@@ -154,3 +154,14 @@ function epe_cm_update_7001(&$sandbox) {
 
   views_save_view($view);
 }
+
+/**
+ * epedev-286 enable cm resource revision tracking
+ */
+function epe_cm_update_7002(&$sandbox) {
+  $cm_resource_options = variable_get('node_options_cm_resource');
+  if(!in_array('revision',$cm_resource_options)) {
+    $cm_resource_options[] = 'revision';
+  }
+  variable_set('node_options_cm_resource',$cm_resource_options);
+}

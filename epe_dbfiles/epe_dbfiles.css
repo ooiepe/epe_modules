@@ -15,9 +15,10 @@
 .form-radios .form-item-permission { width: 70px; float: left; }
 .form-radios label { float: none; width: 23px; }
 input.form-text, textarea.form-textarea { border: 1px solid #6d8c9f; }
-.text-format-wrapper .filter-wrapper { padding: 0; border: 1px solid #6d8c9f; border-top: 1px solid #c1ced7;}
+.text-format-wrapper .filter-wrapper { padding: 0; border: 1px solid #6d8c9f; border-top: 1px solid #c1ced7; margin-bottom: 10px; }
 .filter-wrapper.form-wrapper { background: #c1ced7; }
 #wrapper_submit { clear: left; text-align: center; }
 .form-actions { text-align: center; }
 .field-type-image img { margin: 0; }
 .help-block { margin-top: 0px; }
+.control-group.form-type-textarea { margin-bottom: 0; }

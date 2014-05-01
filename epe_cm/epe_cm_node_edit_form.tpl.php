@@ -271,6 +271,7 @@ function launchResourceBrowser() {
   echo render($form['form_build_id']);
   echo render($form['form_id']);
   echo render($form['form_token']);
+  echo render($form['revision']);
 ?>
 
 </div>

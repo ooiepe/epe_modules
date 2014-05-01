@@ -24,6 +24,15 @@ $form['actions']['cancel'] = array(
 
 }
 
+  if($form_id == 'cm_resource_node_form') {
+    //additional settings
+    $form['revision'] = array(
+      '#type'=>'hidden',
+      '#name' => 'revision',
+      '#value' => 1
+    );
+  }
+
 
 }
 

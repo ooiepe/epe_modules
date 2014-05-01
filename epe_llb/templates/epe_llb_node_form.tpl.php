@@ -438,6 +438,11 @@
   <?php echo render($form['field_resources_content']); ?>
   </div>
 
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Resources File</strong></label>
+  <?php echo render($form['field_resource_file']); ?>
+  </div>
+
   <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#notes -->
 
@@ -485,4 +490,5 @@
   echo render($form['form_build_id']);
   echo render($form['form_id']);
   echo render($form['form_token']);
+  echo render($form['revision']);
 ?>

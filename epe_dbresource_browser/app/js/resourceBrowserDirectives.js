@@ -18,6 +18,8 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       authorname: '=',
       updated: '=',
       org: '=',
+      credit: '=',
+      sourceurl: '=',
       dialogmode: '='
     },
     link: function (scope, elem, attrs) {
@@ -32,8 +34,15 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       if(scope.dialogmode) { link_target = '_blank'; }
 
      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.url + '">' + scope.title + '</a></p></div><div class="text" style="margin-left:160px;">';
+     var credit = '', summary = '';
+     if(scope.credit) credit = scope.credit;
+     if(scope.sourceurl) credit = '<a href="'+ scope.sourceurl +'" target="_blank">'+ credit +'</a>';
+     if(credit !== '') summary = '<strong>Credit/Source:</strong>&nbsp;' + credit;
       if (scope.summary)
-        template += '<p>' + scope.summary + '</p>';
+        summary = scope.summary + '<br/>' + summary;
+
+      template += '<p>' + summary + '</p>';
+
       template += '</div></td>';
 
       // start the author cell

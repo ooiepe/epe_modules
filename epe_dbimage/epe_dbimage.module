@@ -114,22 +114,6 @@ function _assign_epe_dbimage_permission() {
 }
 
 /**
- * Implements hook_block_view_alter()
- * Provide default styling to views block
- * (******NOT USED NOW******)
- */
-/*
-function epe_dbimage_block_view_alter(&$data, $block) {
-  $views_block_hashes = variable_get('views_block_hashes',array());
-  foreach($views_block_hashes as $hash=>$value) {
-    if($value == 'image_resource_index-block_list' && $block->delta == $hash) {
-      drupal_add_css(drupal_get_path('module','epe_dbimage') . '/epe_dbimage.css');
-    }
-  }
-}
-*/
-
-/**
  * Implements hook_default_search_api_index().
  */
 function epe_dbimage_default_search_api_index() {
@@ -201,52 +185,3 @@ function epe_dbimage_default_search_api_index() {
   ));
   return $items;
 }
-
-/*
- * custom function for creating test node
- * this function may be removed in the future pending design
- * (******NOT USED NOW******)
- */
-/*
-function epe_dbimage_default_nodes() {
-  global $user;
-  //default node for image resource list block layout
-  $node_values = array(
-    'type' => 'page',
-    'uid' => $user->uid,
-    'status' => 1
-  );
-  $entity = entity_create('node', $node_values);
-  $wrapper = entity_metadata_wrapper('node', $entity);
-  $wrapper->title->set('image resource list');
-  //$wrapper->url = 'image-resource-list';
-  $wrapper->save(true);
-
-  ctools_include('export');
-  $context = ctools_export_new_object('context');
-  $context->name = 'image-resource-list';
-  $context->description = 'default image resource list page';
-  $context->tag = 'block layout';
-  $context->conditions = array(
-    'path' => array(
-      'values' => array(
-        'image-resource-list' => 'image-resource-list',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-4b5995069acedbe7bfa31e2745b013e6' => array(
-          'module' => 'views',
-          'delta' => '4b5995069acedbe7bfa31e2745b013e6',
-          'region' => 'content',
-          'weight' => '-10',
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-  $saved = context_save($context);
-}
-*/

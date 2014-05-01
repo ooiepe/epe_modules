@@ -1,6 +1,7 @@
 'use strict';
 
-var SearchController = function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
+rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location', '$filter', 'epeServiceProvider', 'ngProgress',
+  function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
   //model init
   $scope.fn = {};
   $scope.resources = {};
@@ -148,9 +149,6 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     if(typeof $location.search()['dialog'] == 'undefined' || (typeof $location.search()['dialog'] && ($location.search()['dialog'] == pane.api || $location.search()['dialog'] == true)) ) {
       $scope.panes.table.push(tab);
     }
-/*    if(typeof $location.search()['dialog'] == 'undefined' || ( (typeof $location.search()['dialog'] != 'undefined') && (typeof $location.search()['type'] != 'undefined') && $location.search()['type'] == pane.api)) {
-      $scope.panes.table.push(tab);
-    }*/
   });
   $scope.panes.table.sort($scope.fn.sortPane);
 
@@ -214,4 +212,4 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.filter);
     });
   });
-}
+}]);

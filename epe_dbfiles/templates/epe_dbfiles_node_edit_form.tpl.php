@@ -3,8 +3,6 @@
 <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
 <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
 
-
-
 <?php if (empty($form['nid']['#value'])): ?>
   <input type="hidden" name="destination" value="db/">
 <?php else: ?>
@@ -25,6 +23,16 @@
 <div class="field-container">
 <label for="edit-description-value" class="field-label">* Description:</label>
 <?php echo render($form['body']); ?>
+</div>
+
+<div class="field-container">
+<label for="edit-credit" class="field-label">Credit:</label>
+<?php echo render($form['field_credit']); ?>
+</div>
+
+<div class="field-container">
+<label for="edit-source-url" class="field-label">Source URL:</label>
+<?php echo render($form['field_source_url']); ?>
 </div>
 
 <?php if(!empty($form['thumb-container']['#attributes'])): ?>
