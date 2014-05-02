@@ -323,6 +323,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['#validate'][] = 'epe_llb_form_llb_resource_node_form_validate';
 
   $form['title']['#title_display'] = 'invisible';
+  $form['field_source_nid']['#type'] = 'hidden';
 
   if( file_exists(drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-prefix.html') ) {
     $form['field_challenge_thumbnail']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/thumbnail-prefix.html');

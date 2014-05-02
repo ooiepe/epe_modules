@@ -157,6 +157,7 @@ function epe_cm_update_7001(&$sandbox) {
 
 /**
  * epedev-286 enable cm resource revision tracking
+ * epedev-230 create field_source_nid field for cm for clone reference
  */
 function epe_cm_update_7002(&$sandbox) {
   $cm_resource_options = variable_get('node_options_cm_resource');
@@ -164,4 +165,19 @@ function epe_cm_update_7002(&$sandbox) {
     $cm_resource_options[] = 'revision';
   }
   variable_set('node_options_cm_resource',$cm_resource_options);
+
+  module_load_include('inc','epe_cm','inc/epe_cm.field_base.update_7002');
+  module_load_include('inc','epe_cm','inc/epe_cm.field_instance.update_7002');
+  // Create all the fields we are adding to our content type.
+  foreach (_cm_resource_installed_fields() as $field) {
+    //in case content type share fields
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  // Create all the instances for our fields.
+  foreach (_cm_resource_installed_instances() as $instance) {
+    field_create_instance($instance);
+  }
 }

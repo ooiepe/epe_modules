@@ -31,6 +31,8 @@ $form['actions']['cancel'] = array(
       '#name' => 'revision',
       '#value' => 1
     );
+
+    $form['field_source_nid']['#type'] = 'hidden';
   }
 
 
@@ -282,7 +284,7 @@ function epe_cm_node_insert($node) {
 
           }
         }
-      } 
+      }
     }
 
     foreach ($child_assets as $child_asset) {
@@ -315,7 +317,7 @@ function epe_cm_node_update($node) {
 
           }
         }
-      } 
+      }
     }
 
     foreach ($child_assets as $child_asset) {

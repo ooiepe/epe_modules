@@ -491,4 +491,5 @@
   echo render($form['form_id']);
   echo render($form['form_token']);
   echo render($form['revision']);
+  echo render($form['field_source_nid']);
 ?>

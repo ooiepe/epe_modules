@@ -131,6 +131,12 @@ function epe_ev_theme() {
   );
 }
 
+function epe_ev_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'ev_tool_instance_node_form') {
+    $form['field_source_nid']['#type'] = 'hidden';
+  }
+}
+
 /*
 * HOOK MENU
 */

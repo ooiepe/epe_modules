@@ -382,6 +382,7 @@ function epe_llb_update_7005(&$sandbox) {
 /**
  * epedev-360: add resource file field to llb content type
  * epedev-295: turn on default drupal revision setting for LLB
+ * epedev-230 create field_source_nid field for llb for clone reference
  */
 function epe_llb_update_7006(&$sandbox) {
   module_load_include('inc','epe_llb','inc/epe_llb.field_base.update_7006');
@@ -396,7 +397,9 @@ function epe_llb_update_7006(&$sandbox) {
 
   /* recreate the same field instance with text data type */
   foreach (_epe_llb_field_default_field_instances() as $instance) {
-    field_create_instance($instance);
+    if(!field_info_instance('node', $instance['field_name'], 'llb_resource')) {
+      field_create_instance($instance);
+    }
   }
 
   $llb_resource_options = variable_get('node_options_llb_resource');

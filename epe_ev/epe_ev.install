@@ -236,3 +236,23 @@ function epe_ev_update_7002(&$sandbox) {
 
   views_save_view($view);
 }
+
+/**
+ * epedev-230 create field_source_nid field for ev for clone reference
+ */
+function epe_ev_update_7003(&$sandbox) {
+  module_load_include('inc','epe_ev','inc/epe_ev.field_base.update_7003');
+  module_load_include('inc','epe_ev','inc/epe_ev.field_instance.update_7003');
+  // Create all the fields we are adding to our content type.
+  foreach (_ev_tool_instance_installed_fields() as $field) {
+    //in case content type share fields
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  // Create all the instances for our fields.
+  foreach (_ev_tool_instance_installed_instances() as $instance) {
+    field_create_instance($instance);
+  }
+}

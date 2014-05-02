@@ -22,7 +22,7 @@
 
 <!-- content -->
     <div id="vistool"></div>
-    
+
     <div>
       <div class="field-container">
         <!-- <label for="edit-title" class="field-label">* Title:</label> -->
@@ -44,10 +44,10 @@
       </div>
 
       <div class="field-container">
-        
+
         <label class="option checkbox control-label" for="edit-status">
-        <input type="checkbox" id="edit-status" name="status" value="<?php echo $form["#node"]->status; ?>" 
-        <?php 
+        <input type="checkbox" id="edit-status" name="status" value="<?php echo $form["#node"]->status; ?>"
+        <?php
 
           // checked published status.. if published (0), show checked
           echo ($form["#node"]->status == 1 ? 'checked="checked"' : "");
@@ -64,7 +64,7 @@
       <div class="field-container">
         <?php echo render($form['body']); ?>
       </div>
-      
+
     </div>
 
     <?php if (empty($form['nid']['#value'])): ?>
@@ -80,6 +80,7 @@
       echo render($form['form_build_id']);
       echo render($form['form_id']);
       echo render($form['form_token']);
+      echo render($form['field_source_nid']);
     ?>
 
 <!-- end content -->
@@ -93,8 +94,8 @@
 
     // disable enter key press form submission on inputs textboxes.. restrict to type textbox only?
     $("input").bind('keypress keydown keyup', function(e){
-       if(e.keyCode == 13) { 
-          e.preventDefault(); 
+       if(e.keyCode == 13) {
+          e.preventDefault();
        }
     });
 
