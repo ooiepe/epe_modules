@@ -16,6 +16,7 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       title: '=',
       author: '=',
       authorname: '=',
+      userid: '=',
       updated: '=',
       org: '=',
       credit: '=',
@@ -46,12 +47,14 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       template += '</div></td>';
 
       // start the author cell
-      template += '<td><div class="author">';
+      template += '<td><div class="author"><a href="' + Drupal.settings.epe.base_path + 'user/' + scope.userid + '" target="' + link_target + '">';
 
       if (scope.author)
         template += scope.author;
       else
         template += scope.authorname;
+
+      template += '</a>';
 
       if (scope.org)
         template += '<br/>(' + scope.org + ')';
