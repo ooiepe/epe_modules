@@ -741,6 +741,9 @@ function epe_llb_node_view_alter(&$build) {
   }
 
   if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'llb_resource') {
+
+    drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.tab-history.js');
+
     $nodes = array();
     $query = db_select('resources_assoc', 'a');
     $query->join('node','b','a.child = b.nid');

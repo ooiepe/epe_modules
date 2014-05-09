@@ -11,7 +11,7 @@
 <div ng-show="panes.showtabs == true">
 <div class="rb-type-selector">
 	<ul>
-    <li ng-repeat="pane in panes.table" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
+    <li ng-repeat="pane in panes.table" data-api="{{pane.api}}" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
 	</ul>
 </div>
 

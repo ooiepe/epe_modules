@@ -10,11 +10,13 @@ resourceBrowserApp.config(['$routeProvider','$locationProvider',
       })
       .when('/search', {
         controller:'SearchController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
+        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html',
+        reloadOnSearch: false
       })
       .when('/search/:term', {
         controller:'SearchController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
+        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html',
+        reloadOnSearch: false
       })
       .otherwise({redirecTo:'/'});
 

@@ -123,8 +123,12 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
       }
     });
     //set active pane indicator for search function
-    $scope.panes.active = tab.api;
-  };
+      //$scope.panes.active = tab.api;
+      //$location.search()['type'] = tab.api
+      var queryParams = {};
+      queryParams['type'] = tab.api;
+      $location.search(queryParams);
+    };
 
   $scope.panes.table = [];
   //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
