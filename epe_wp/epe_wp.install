@@ -326,10 +326,11 @@ function epe_wp_update_7001(&$sandbox) {
   $view->display[$view->current_display]->display_options['arguments']['uid']['default_argument_type'] = 'php';
   $view->display[$view->current_display]->display_options['arguments']['uid']['default_argument_options']['code'] = 'global $user;
   if(arg(0) == \'user\' && arg(1)) {
-        $user_from_url = user_load(arg(1));
-        if($user_from_url) $user = $user_from_url;
-  }
-  return $user->uid;';
+    $user_from_url = user_load(arg(1));
+    if($user_from_url) { return $user_from_url->uid; } else {  return $user->uid; }
+  } else {
+    return $user->uid;
+  }';
   $view->display[$view->current_display]->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
   $view->display[$view->current_display]->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
   $view->display[$view->current_display]->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
