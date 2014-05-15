@@ -28,7 +28,7 @@ function _document_resource_installed_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_credit',
     'label' => 'Credit',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(

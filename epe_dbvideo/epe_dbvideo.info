@@ -13,5 +13,6 @@ dependencies[] = semanticviews
 dependencies[] = video
 dependencies[] = views_php
 dependencies[] = token
+dependencies[] = link
 
 files[] = epe_dbvideo.views_default.inc

@@ -29,7 +29,7 @@
 </div>
 
 <div class="field-container">
-<label for="edit-credit-value" class="field-label">Credit:</label>
+<label for="edit-credit-value" class="field-label">* Credit:</label>
 <?php echo render($form['credit']); ?>
 </div>
 
