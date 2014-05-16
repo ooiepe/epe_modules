@@ -1,7 +1,7 @@
 <?php
 
 
-function epe_cm_node_delete_function($node) {
+function epe_db_node_delete_function($node) {
   
   // Taken from node modules node_delete_confirm submit handler
   node_delete($node->nid);
@@ -27,7 +27,7 @@ function epe_cm_node_delete_function($node) {
 }
 
 
-function epe_cm_node_submit_public_function($node) {
+function epe_db_node_submit_public_function($node) {
 	// update the status to pending
 	$node->field_public_status[$node->language][0]['value'] = 'Pending';
 	// automatically set this to "drupal published" or "epe shared"
@@ -57,7 +57,7 @@ function epe_cm_node_submit_public_function($node) {
   	drupal_goto($path = "node/" . $node -> nid);
 }
 
-function epe_cm_node_unsubmit_public_function($node) {
+function epe_db_node_unsubmit_public_function($node) {
 	// update the status to pending
 	$node->field_public_status[$node->language][0]['value'] = 'Private';
 	// save the node
@@ -68,7 +68,7 @@ function epe_cm_node_unsubmit_public_function($node) {
   	drupal_goto($path = "node/" . $node -> nid);
 }
 
-function epe_cm_node_approve_public_function($node) {
+function epe_db_node_approve_public_function($node) {
 	// update the status to pending
 	$node->field_public_status[$node->language][0]['value'] = 'Public';
 	$node->status = 1;
@@ -79,7 +79,7 @@ function epe_cm_node_approve_public_function($node) {
 	// return to the view page
   	drupal_goto($path = "node/" . $node -> nid);
 }
-function epe_cm_node_reject_public_function($node) {
+function epe_db_node_reject_public_function($node) {
 	// update the status to pending
 	$node->field_public_status[$node->language][0]['value'] = 'Private';
 	// save the node
@@ -90,7 +90,7 @@ function epe_cm_node_reject_public_function($node) {
   	drupal_goto($path = "node/" . $node -> nid);
 }
 
-function epe_cm_node_share_function($node) {
+function epe_db_node_share_function($node) {
 	// update the published status to pending
 	$node->status = 1;
 	// save the node
@@ -119,7 +119,7 @@ function epe_cm_node_share_function($node) {
 }
 
 
-function epe_cm_node_unshare_function($node) {
+function epe_db_node_unshare_function($node) {
 	// update the published status to pending
 	$node->status = 0;
 	// save the node
@@ -131,7 +131,7 @@ function epe_cm_node_unshare_function($node) {
 }
 
 
-function epe_cm_node_feature_function($node) {
+function epe_db_node_feature_function($node) {
 	// update the status to pending
 	$node->field_featured_status[$node->language][0]['value'] = 'Featured';
 	// save the node
@@ -142,7 +142,7 @@ function epe_cm_node_feature_function($node) {
   	drupal_goto($path = "node/" . $node -> nid);
 }
 
-function epe_cm_node_unfeature_function($node) {
+function epe_db_node_unfeature_function($node) {
 	// update the status to pending
 	$node->field_featured_status[$node->language][0]['value'] = 'Not-Featured';
 	// save the node
