@@ -1004,12 +1004,6 @@ function epe_llb_theme_file_dataset($dataset) {
     }
   }
 
-  if(isset($dataset->credit) && $dataset->credit): $credit_output = $dataset->credit; endif;
-  if(isset($dataset->source_url) && $dataset->source_url):
-    $credit_output = '<a href="' . $dataset->source_url . '" target="_blank">' . $credit_output . '</a>';
-  endif;
-  if($credit_output): $output .= '<br/><strong>Credit/Source<strong>: ' . $credit_output; endif;
-
   return '<center>' . $output . '</center>';
 }
 
