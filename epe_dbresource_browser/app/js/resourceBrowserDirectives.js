@@ -26,7 +26,7 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
     link: function (scope, elem, attrs) {
       var template = '', element_ck = '', link_target = '_self';
       if(scope.checkbox) {
-        element_ck = '<input type="checkbox" style="margin-right:0;position:absolute;" name="nid" data-type="' + scope.type + '" value="' + scope.id + '">';
+        element_ck = '<div style="float:left;"><input type="checkbox" style="margin-right:0;position:absolute;" name="nid" data-type="' + scope.type + '" value="' + scope.id + '"></div>';
       }
 
       if (scope.thumbnail == '')
