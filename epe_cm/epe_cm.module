@@ -7,14 +7,41 @@
  * This hook is to style edit form, the theme key needs to be the same as the form function name
  */
 function epe_cm_theme() {
+  $tpl_path = drupal_get_path('module','epe_cm') . '/templates/';
   return array(
     'cm_resource_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_cm_node_edit_form',
       'render element' => 'form',
     ),
   );
 }
 
+
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_cm_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_cm') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_cm_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_cm_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}
 
 /**
  * Implements hook_node_info().
