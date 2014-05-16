@@ -119,16 +119,43 @@ function _assign_epe_ev_permission() {
 }
 
 function epe_ev_theme() {
+  $tpl_path = drupal_get_path('module','epe_ev') . '/templates/';
   return array(
     'ev_tool_instance_node_form'  => array(
       'render element' => 'form',
+      'path' => $tpl_path,
       'template' => 'epe_ev_tool_instance_edit_form',
     ),
     'ev_tool_node_form'  => array(
       'render element' => 'form',
+      'path' => $tpl_path,
       'template' => 'epe_ev_tool_edit_form'
     )
   );
+}
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_ev_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_ev') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_ev_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_ev_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
 }
 
 function epe_ev_form_alter(&$form, &$form_state, $form_id) {
