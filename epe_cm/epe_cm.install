@@ -178,6 +178,8 @@ function epe_cm_update_7002(&$sandbox) {
 
   // Create all the instances for our fields.
   foreach (_cm_resource_installed_instances() as $instance) {
-    field_create_instance($instance);
+    if(!field_info_instance('node',$instance['field_name'],'cm_resource')) {
+      field_create_instance($instance);
+    }
   }
 }

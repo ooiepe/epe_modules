@@ -253,6 +253,8 @@ function epe_ev_update_7003(&$sandbox) {
 
   // Create all the instances for our fields.
   foreach (_ev_tool_instance_installed_instances() as $instance) {
-    field_create_instance($instance);
+    if(!field_info_instance('node',$instance['field_name'],'ev_tool_instance')) {
+      field_create_instance($instance);
+    }
   }
 }

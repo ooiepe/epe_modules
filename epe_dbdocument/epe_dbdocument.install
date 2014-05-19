@@ -198,7 +198,7 @@ function epe_dbdocument_update_7004(&$sandbox) {
 
   // Create all the instances for our fields.
   foreach (_document_resource_installed_instances() as $instance) {
-    if(!field_info_instance('node','field_credit','document_resource')) {
+    if(!field_info_instance('node',$instance['field_name'],'document_resource')) {
       field_create_instance($instance);
     }
   }

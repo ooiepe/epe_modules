@@ -173,7 +173,7 @@ function epe_dbimage_update_7003(&$sandbox) {
 
   // Create all the instances for our fields.
   foreach (_image_resource_installed_instances() as $instance) {
-    if(!field_info_instance('node','field_credit','image_resource')) {
+    if(!field_info_instance('node',$instance['field_name'],'image_resource')) {
       field_create_instance($instance);
     }
   }

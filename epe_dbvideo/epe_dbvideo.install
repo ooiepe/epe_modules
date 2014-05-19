@@ -170,7 +170,7 @@ function epe_dbvideo_update_7002(&$sandbox) {
 
   // Create all the instances for our fields.
   foreach (_video_resource_installed_instances() as $instance) {
-    if(!field_info_instance('node','field_credit','video_resource')) {
+    if(!field_info_instance('node',$instance['field_name'],'video_resource')) {
       field_create_instance($instance);
     }
   }

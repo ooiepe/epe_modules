@@ -182,7 +182,7 @@ function epe_dbaudio_update_7002(&$sandbox) {
 
   // Create all the instances for our fields.
   foreach (_audio_resource_installed_instances() as $instance) {
-    if(!field_info_instance('node','field_credit','audio_resource')) {
+    if(!field_info_instance('node',$instance['field_name'],'audio_resource')) {
       field_create_instance($instance);
     }
   }
