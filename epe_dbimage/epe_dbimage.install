@@ -204,11 +204,5 @@ function epe_dbimage_update_7003(&$sandbox) {
   $view->display[$view->current_display]->display_options['fields']['field_source_url']['type'] = 'link_plain';
   $view->display[$view->current_display]->display_options['fields']['field_source_url']['label'] = 'source_url';
 
-  $view->display[$view->current_display]->display_options['pager']['type'] = 'full';
-  $view->display[$view->current_display]->display_options['pager']['options']['items_per_page'] = '15';
-  $view->display[$view->current_display]->display_options['pager']['options']['offset'] = '0';
-  $view->display[$view->current_display]->display_options['pager']['options']['id'] = '0';
-  $view->display[$view->current_display]->display_options['pager']['options']['quantity'] = '9';
-
   views_save_view($view);
 }
