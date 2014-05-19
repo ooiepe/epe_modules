@@ -22,3 +22,4 @@ input.form-text, textarea.form-textarea { border: 1px solid #6d8c9f; }
 .field-type-image img { margin: 0; }
 .help-block { margin-top: 0px; }
 .control-group.form-type-textarea { margin-bottom: 0; }
+.required.error { border-color: #b94a48 !important; }
