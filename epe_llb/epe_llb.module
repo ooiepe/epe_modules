@@ -1013,8 +1013,8 @@ function epe_llb_reload_dataset($dataset, $assoc_resources) {
   if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
   if(isset($data->uri)): $dataset->uri = $data->uri; endif;
   if(isset($data->file)): $dataset->file = $data->file; endif;
-  $dataset->credit = $data->credit;
-  $dataset->source_url = $data->source_url;
+  if(isset($data->credit)): $dataset->credit = $data->credit; endif;
+  if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
 
   return $dataset;
 }

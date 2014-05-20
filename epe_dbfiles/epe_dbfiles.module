@@ -98,6 +98,7 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#upload_validators' => array(
         'file_validate_extensions' => array(implode(' ', $file_field_extensions_validator)),
       ),
+      '#required' => TRUE,
     );
 
     $form['title'] = array(
@@ -120,6 +121,7 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#type' => 'textfield',
       '#title' => t('Credit'),
       '#title_display' => 'invisible',
+      '#required' => TRUE,
     );
 
     $form['source_url'] = array(
