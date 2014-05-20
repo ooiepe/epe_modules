@@ -1,6 +1,6 @@
 <?php
 
-require_once("../inc/epe_ev_lib.php");
+module_load_include('php', 'epe_ev', 'inc/epe_ev_lib');
 
 $ev_tool = array();
 
