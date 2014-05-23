@@ -347,3 +347,16 @@ function epe_wp_update_7001(&$sandbox) {
   );
   views_save_view($view);
 }
+
+/**
+ * EPEDEV-366: add first name, last name and organization to registration form and make them required
+ */
+function epe_wp_update_7002(&$sandbox) {
+  $fields = array('fname','lname','organization');
+  foreach($fields as $field) {
+    $field_instance = field_info_instance('user','field_account_'. $field,'user');
+    $field_instance['required'] = 1;
+    $field_instance['settings']['user_register_form'] = 1;
+    field_update_instance($field_instance);
+  }
+}
