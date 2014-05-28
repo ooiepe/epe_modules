@@ -350,6 +350,7 @@ function epe_wp_update_7001(&$sandbox) {
 
 /**
  * EPEDEV-366: add first name, last name and organization to registration form and make them required
+ * epedev-303: add new display "favorite" to user resource view
  */
 function epe_wp_update_7002(&$sandbox) {
   $fields = array('fname','lname','organization');
@@ -359,4 +360,9 @@ function epe_wp_update_7002(&$sandbox) {
     $field_instance['settings']['user_register_form'] = 1;
     field_update_instance($field_instance);
   }
+
+  module_load_include('inc','epe_wp','epe_wp.views_default');
+
+  $view_definition = epe_wp_views_default_views();
+  views_save_view($view_definition['user_resources']);
 }

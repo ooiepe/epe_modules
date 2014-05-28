@@ -32,6 +32,7 @@
   <div>
     <div class="span7">
       <?php echo render($content['body']); ?>
+      <?php echo render($content['links']); ?>
     </div>
     <div class="span5">
       <div class="pull-right">
