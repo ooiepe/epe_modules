@@ -223,7 +223,6 @@ function epe_llb_views_default_views() {
   /* Display: REST API Block */
   $handler = $view->new_display('block', 'REST API Block', 'all');
 
-
   $export['llb_resource_index'] = $view;
 
   return $export;

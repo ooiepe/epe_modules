@@ -407,4 +407,8 @@ function epe_llb_update_7006(&$sandbox) {
     $llb_resource_options[] = 'revision';
   }
   variable_set('node_options_llb_resource',$llb_resource_options);
+
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
 }
