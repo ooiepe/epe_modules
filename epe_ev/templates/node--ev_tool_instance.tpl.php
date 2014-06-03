@@ -48,6 +48,7 @@
 
       <div id="tool-functions">
         <button class="btn btn-primary" value="Export to Image" id="tool-function-export-image">Export to Image</button>
+        <?php echo render($content['links']); ?>
       </div>
 
 
