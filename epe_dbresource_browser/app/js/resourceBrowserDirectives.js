@@ -40,10 +40,10 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       // start the author cell
       template += '<td><div class="author"><a href="' + Drupal.settings.epe.base_path + 'user/' + scope.row.userid + '" target="' + link_target + '">';
 
-      if (scope.author)
+      if (scope.row.author)
         template += scope.row.author;
       else
-        template += scope.row.authorname;
+        template += scope.row.author_name;
 
       template += '</a>';
 
