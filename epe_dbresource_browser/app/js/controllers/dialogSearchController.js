@@ -1,6 +1,6 @@
 'use strict';
-
-rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location', '$filter', 'epeServiceProvider', 'ngProgress',
+/*temporary fix for LLB usage*/
+rbcontroller.controller('DialogSearchController',['$scope', '$routeParams', '$location', '$filter', 'epeServiceProvider', 'ngProgress',
   function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
   //model init
   $scope.fn = {};
@@ -17,7 +17,7 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
   $scope.panes = {};
   $scope.panes.table = [];
   $scope.panes.active = '';
-  $scope.panes.dialogmode = false;
+  $scope.panes.dialogmode = true;
   $scope.panes.showtabs = true;
   $scope.resource = {};
   $scope.filter = {};
@@ -79,27 +79,30 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
   $scope.search = function() {
     var params = {};
     if(typeof $routeParams['dialog'] != "undefined") {
-      params['dialog'] = true;
+      params['dialog'] = $routeParams['dialog'];
+    }
+    if(typeof $routeParams['dialogmode'] != "undefined") {
+      params['dialogmode'] = $routeParams['dialogmode'];
     }
 
     if($scope.filter.view_type.filter != '') {
       params['filter'] = $scope.filter.view_type.filter;
     }
 
-    if(typeof $routeParams['type'] != "undefined" && $scope.panes.active == '') {
+/*    if(typeof $routeParams['type'] != "undefined" && $scope.panes.active == '') {
       //$location.search({type:$scope.radioModel.id});
       //params.push({type:$scope.radioModel.id});
       params['type'] = $routeParams['type'];
     } else if ($scope.panes.active != '') {
       params['type'] = $scope.panes.active;
-    }
+    }*/
     //console.log(params)
     $location.search(params);
 
     if(typeof $scope.term == "undefined") {
-      $location.path('/search');
+      $location.path('/dialog/search');
     } else {
-      $location.path('/search/' + $scope.term);
+      $location.path('/dialog/search/' + $scope.term);
     }
   }
 
@@ -123,11 +126,11 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
       }
     });
     //set active pane indicator for search function
-      //$scope.panes.active = tab.api;
+      $scope.panes.active = tab.api;
       //$location.search()['type'] = tab.api
-      var queryParams = {};
+      /*var queryParams = {};
       queryParams['type'] = tab.api;
-      $location.search(queryParams);
+      $location.search(queryParams);*/
     };
 
   $scope.panes.table = [];

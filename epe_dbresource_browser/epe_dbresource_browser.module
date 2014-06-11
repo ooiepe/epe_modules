@@ -102,6 +102,7 @@ function epe_dbresource_browser_index() {
   drupal_add_js($app_path . '/app.js');
   drupal_add_js($app_path . '/js/controllers/indexController.js');
   drupal_add_js($app_path . '/js/controllers/searchController.js');
+  drupal_add_js($app_path . '/js/controllers/dialogSearchController.js');
   drupal_add_js($app_path . '/js/resourceBrowserServices.js');
   drupal_add_js($app_path . '/js/resourceBrowserDirectives.js');
   drupal_add_js($app_path . '/js/resourceBrowserFilters.js');

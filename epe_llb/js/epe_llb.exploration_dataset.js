@@ -4,7 +4,7 @@ Drupal.behaviors.epe_llb_exploration_dataset = {
 jQuery(document).ready(function($) {
     $('.btn.add-resources').on("click", function() {
       bootbox.dialog({
-        message: '<iframe src="' + Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&module=' + $(this).data('api') + '" seamless width="779" height="500" class="resource-browser-iframe" />',
+        message: '<iframe src="' + Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&dialog=' + $(this).data('api') + '" seamless width="779" height="500" class="resource-browser-iframe" />',
         className: 'resource-browser-modal',
         buttons: {
           main: {
@@ -96,7 +96,7 @@ jQuery(document).ready(function($) {
           $(this).width($(this).find('.rbmodal-iframe').width() + 25).find('.modal-body').css('max-height',$(this).find('.rbmodal-iframe').height());
         })*/
         .find('.rbmodal-iframe')
-        .attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&module=' + $(this).data('api'))
+        .attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&dialog=' + $(this).data('api'))
         .height($(window).height() * 0.8);
         $('#adhocmodal').attr('data-controller', $(this).data('controller'));
       //$('.rbmodal-iframe').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog&type=' + $(this).data('api'));
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
     });
 
     $('.btn-back').bind('click', function(e) {
-      $('#rbmodal').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&module=' + $(this).data('api'));
+      $('#rbmodal').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&dialog=' + $(this).data('api'));
     });
 
     if(Drupal.settings.default_dataset_value != null) {
