@@ -25,7 +25,7 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
       if(scope.row.status == 'Published') row_status += '<span class="btn btn-default btn-sm disabled">Published</span>&nbsp;';
       if(scope.row.public == 'Public') row_status += '<span class="btn btn-info btn-sm disabled">Public</span>&nbsp;';
       if(scope.row.featured == 'Featured') row_status += '<span class="btn btn-success btn-sm disabled">Featured</span>';
-      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.row.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.row.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.row.url + '">' + scope.row.title + '</a><br/>' + row_status + '</p></div><div class="text" style="margin-left:160px;">';
+      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.row.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.row.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.row.url + '" target="' + link_target + '">' + scope.row.title + '</a><br/>' + row_status + '</p></div><div class="text" style="margin-left:160px;">';
       var credit = '', summary = '';
       if(scope.row.credit) credit = scope.row.credit;
       if(scope.row.sourceurl) credit = '<a href="'+ scope.row.sourceurl +'" target="_blank">'+ credit +'</a>';

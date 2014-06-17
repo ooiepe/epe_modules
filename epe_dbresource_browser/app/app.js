@@ -18,6 +18,14 @@ resourceBrowserApp.config(['$routeProvider','$locationProvider',
         templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html',
         reloadOnSearch: false
       })
+      .when('/dialog/search', {
+        controller:'DialogSearchController',
+        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
+      })
+      .when('/dialog/search/:term', {
+        controller:'DialogSearchController',
+        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
+      })
       .otherwise({redirecTo:'/'});
 
     //$locationProvider.html5Mode(true);

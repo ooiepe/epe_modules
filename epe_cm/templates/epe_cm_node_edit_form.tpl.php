@@ -201,7 +201,7 @@ function launchResourceBrowser() {
   selectedResources.length = 0;
 
   bootbox.dialog({
-        message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/search" seamless width="779" height="500" class="resource-browser-iframe" />',
+        message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/dialog/search" seamless width="779" height="500" class="resource-browser-iframe" />',
         className: 'resource-browser-modal',
         buttons: {
           main: {
