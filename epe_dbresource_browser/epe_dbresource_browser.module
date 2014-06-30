@@ -51,11 +51,20 @@ function epe_dbresource_browser_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  /* new resource browser */
+  $items['rb'] = array(
+    'title' => t('Resource Browser'),
+    'page callback' => 'rb_index',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
 function epe_dbresource_browser_theme() {
   $path = drupal_get_path( 'module' , 'epe_dbresource_browser' ) . '/app';
+  $rb_path = drupal_get_path( 'module' , 'epe_dbresource_browser' ) . '/rb';
   return array(
     'resource_browser_main'=>array(
       'path' => "$path",
@@ -77,6 +86,11 @@ function epe_dbresource_browser_theme() {
       'path' => "$path/partial",
       'template'=> "resource_browser.search-list.html",
     ),
+    //new rb themes
+    'rb_main'=>array(
+      'path'=>"$rb_path",
+      'template'=>'rb.main', //main index file
+    ),
   );
 }
 
@@ -91,6 +105,8 @@ function epe_dbresource_browser_dialog_index() {
 
 function epe_dbresource_browser_index() {
   global $user;
+
+  drupal_add_js(libraries_get_path('underscore') . '/underscore-min.js');
 
 /*  $resource_browser_settings = array(
     'checkbox' => FALSE,
@@ -160,6 +176,170 @@ function epe_dbresource_browser_index() {
   angularjs_init_application('resourceBrowserApp');
 
   return theme('resource_browser_main');
+}
+
+function rb_index() {
+  global $user;
+  //angularjs_init_application('rbapp');
+
+  //setup filter
+  $resource_filter = array(
+    array('filter'=>'','label'=>'All Resources'),
+    array('filter'=>'featured','label'=>'Featured Resources'),
+  );
+  //add filter if not anonymous user
+  if($user->uid > 0) $resource_filter[] = array('filter'=>'author','label'=>'My Resources');
+
+  //
+  $epe_modules = variable_get('EPE_CONTENT_MODULES',array());
+  $enabled_modules = array();
+  foreach($epe_modules as $module) {
+    if(isset($module['resource_browser'])) {
+      $enabled_module = array();
+      if(isset($module['resource_browser']['label'])) {
+        $enabled_module['label'] = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $enabled_module['label'] = $node_type->name;
+      }
+
+      $enabled_module['api'] = $module['resource_browser']['api'];
+      if(isset($module['resource_browser']['default'])) {
+        $enabled_module['default'] = $module['resource_browser']['default'];
+      }
+      if(isset($module['resource_browser']['weight'])) {
+        $enabled_module['weight'] = $module['resource_browser']['weight'];
+      }
+      if(isset($module['resource_browser']['adurl'])) {
+        $enabled_module['adurl'] = base_path() . $module['resource_browser']['adurl'];
+      }
+      $enabled_module['adimagepath'] = base_path() . drupal_get_path('module','epe_dbresource_browser') . '/images/rb-ads-' . $enabled_module['api'] . '.jpg';
+      $enabled_module['page'] = 1;
+      $enabled_module['sort'] = 'title';
+
+      switch($enabled_module['api']) {
+        case "image":
+          $view_name = "image_resource_index";
+        break;
+        case "document":
+          $view_name = "document_resource_index";
+        break;
+        case "cm":
+          $view_name = "epe_cm_search_view";
+        break;
+        case "ev":
+          $view_name = "epe_ev_search_view";
+        break;
+        case "multimedia":
+          $view_name = "multimedia_resource_index";
+        break;
+        case "llb":
+          $view_name = "llb_resource_index";
+        break;
+      }
+
+      $view = views_get_view($view_name);
+      //set view to the display machine id
+      $view->set_display('all');
+
+      //if log in user, pass in userid to exposed filter
+      if(user_is_logged_in()) {
+        $filter = $view->get_item('all', 'filter', 'author_uid');
+        $filter['value'] = $user->uid;
+        $view->set_item('all', 'filter', 'author_uid', $filter);
+      }
+      $view->execute();
+
+      $enabled_module['total_rows'] = $view->total_rows;
+
+      $enabled_modules[] = $enabled_module;
+    }
+  }
+  usort($enabled_modules,"_epe_dbresource_browser_module_sort");
+
+  drupal_add_js(array('jslibraries'=>array(
+    'path'=>array(
+      'angular'=>base_path() . libraries_get_path('angular-1.2.18'),
+      'underscore'=>base_path() . libraries_get_path('underscore'),
+      'requirejs'=>base_path() . libraries_get_path('requirejs'),
+      'angularAMD'=>base_path() . libraries_get_path('angularAMD'),
+      'ngProgress'=>base_path() . libraries_get_path('ngProgress'),
+      'angularUi'=>base_path() . libraries_get_path('angular-ui-bootstrap'),
+    ),
+  )),'setting');
+  drupal_add_js(array('resourceBrowser'=>array(
+    'appPath'=>base_path() . drupal_get_path('module','epe_dbresource_browser') . '/rb',
+    'resource_filter'=>json_encode($resource_filter),
+    'epe_modules'=>json_encode($enabled_modules),
+    'page_size'=>10,
+  )),'setting');
+
+  /*drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js');*/
+  drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
+  drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
+
+  //epe_dbresource_browser_load_js();
+  //angularjs_init_application('rbapp');
+
+  return theme('rb_main');
+}
+
+/**
+ * custom sort function to sort module order by weight
+ */
+function _epe_dbresource_browser_module_sort($mod_a, $mod_b) {
+  return $mod_a['weight'] > $mod_b['weight'];
+}
+
+function epe_dbresource_browser_load_js() {
+  global $user;
+
+  $app_path = drupal_get_path('module', 'epe_dbresource_browser') . '/rb/app';
+  drupal_add_js($app_path . '/js/app.js');
+  drupal_add_js(libraries_get_path('ngProgress') . '/ngProgress.min.js');
+  drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');
+
+  drupal_add_js(array('theme_path' => base_path() . drupal_get_path('theme','bootstrap')), 'setting');
+
+  //maybe this should be under .install with hook_requirement?  but can't get hook_requirement to work correctly
+  if(!libraries_get_path('angular-ui-bootstrap')):
+    drupal_set_message(t('Library angular-ui-bootstrap not found under /sites/libraries'),'error');
+  endif;
+
+  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+  $enabled_modules = array();
+  foreach($depend_modules as $module) {
+/*    if(isset($module['resource_browser_tab'])) {
+      $resource_browser_tabs[] = $module['resource_browser_tab'];
+    }*/
+    if(isset($module['resource_browser'])) {
+      $tab = array();
+      if(isset($module['resource_browser']['label'])) {
+        $tab['label'] = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $tab['label'] = $node_type->name;
+      }
+
+      $tab['api'] = $module['resource_browser']['api'];
+      if(isset($module['resource_browser']['default'])) {
+        $tab['default'] = $module['resource_browser']['default'];
+      }
+      if(isset($module['resource_browser']['weight'])) {
+        $tab['weight'] = $module['resource_browser']['weight'];
+      }
+      if(isset($module['resource_browser']['adurl'])) {
+        $tab['adurl'] = $module['resource_browser']['adurl'];
+      }
+      $enabled_modules[] = $tab;
+    }
+  }
+
+  /* angular ui bootstrap */
+  drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js');
+  drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
+  drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
+  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$enabled_modules)),'setting');
 }
 
 function epe_dbresource_browser_view_partial($partial) {

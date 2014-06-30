@@ -53,8 +53,27 @@ function epe_dbmultimedia_restful_api() {
     $view->set_item('all', 'filter', 'search_api_views_fulltext', $filter);
   }
 
+/*  $view->execute();
+  echo $view->render();*/
+  if(isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+    $page = $_GET['page'];
+  } else {
+    $page = 0;
+  }
+
+  $view->current_page = $page;
+  $view->pre_execute();
   $view->execute();
-  echo $view->render();
+
+  if(isset($_GET['get_pager']) && $_GET['get_pager'] == true) {
+    $result = array();
+    $result['total_pages'] = ceil($view->total_rows / $view->display_handler->options['items_per_page']);
+    $result['current_page'] = $page;
+    $result['total_rows'] = $view->total_rows;
+    echo json_encode($result);
+  } else {
+    echo $view->render();
+  }
 }
 
 function epe_dbmultimedia_restful_api_node($nid) {

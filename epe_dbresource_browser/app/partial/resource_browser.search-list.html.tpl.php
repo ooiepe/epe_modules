@@ -1,5 +1,5 @@
 <tabset id="rb-tabs">
-  <tab ng-repeat="pane in panes.table" heading="{{pane.type}} ({{pane.data.length}})" active="pane.active" select="fn.activeTab(pane);">
+  <tab ng-repeat="pane in panes.table" heading="{{pane.type}} ({{pane.recordcount}})" active="pane.active" select="fn.activeTab(pane);">
   <table id="rb-tab-pane-{{pane.api}}">
     <thead>
       <th><a ng-click="sort='title'; reverse=!reverse">Title/Info</a></th>
@@ -17,10 +17,10 @@
     </tbody>
   </table>
 
-  <div ng-show="pane.data.length > pane.pageSize" class="pagination">
-  <button ng-disabled="pane.currentPage == 0" ng-click="pane.currentPage=pane.currentPage-1">Previous</button>
-  {{pane.currentPage+1}}/{{pane.numberOfPages()}}
-  <button ng-disabled="pane.currentPage >= pane.data.length/pane.pageSize - 1" ng-click="pane.currentPage=pane.currentPage+1">Next</button>
+  <div ng-show="pane.total_pages > 1" class="pagination">
+  <button ng-disabled="pane.currentPage == 0" ng-click="fn.toPrevPage(pane)">Previous</button>
+  {{pane.currentPage+1}}/{{pane.total_pages}}
+  <button ng-disabled="pane.currentPage >= pane.total_pages - 1" ng-click="fn.toNextPage(pane)">Next</button>
   </tab>
   </div>
 </tabset>

@@ -1,7 +1,7 @@
 'use strict';
 
-rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location', '$filter', 'epeServiceProvider', 'ngProgress',
-  function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
+rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location', '$filter', 'epeServiceProvider', 'ngProgress', '_',
+  function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress, _) {
   //model init
   $scope.fn = {};
   $scope.resources = {};
@@ -38,7 +38,7 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
   //set default resource type
   var applyFilter = false;
   //set default filter
-  if(typeof $location.search()['filter'] != 'undefined') {
+/*  if(typeof $location.search()['filter'] != 'undefined') {
     angular.forEach($scope.resource.view_types, function(view_type, index) {
       if(view_type.filter == $location.search()['filter'] && !applyFilter) {
         applyFilter = true;
@@ -46,7 +46,7 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
       }
     });
     if(!applyFilter) $scope.filter.view_type = $scope.resource.view_types[0];
-  } else { $scope.filter.view_type = $scope.resource.view_types[0]; }
+  } else { $scope.filter.view_type = $scope.resource.view_types[0]; }*/
 
   if(typeof $routeParams['dialog'] != "undefined") {
     $scope.panes.dialogmode = true;
@@ -104,7 +104,7 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
   }
 
   //default sort, default view
-  $scope.sort = "title";
+  //$scope.sort = "title";
   $scope.radioModel = "list";
 
   $scope.fn.sortPane = function(a,b) {
@@ -125,10 +125,12 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
     //set active pane indicator for search function
       //$scope.panes.active = tab.api;
       //$location.search()['type'] = tab.api
-      var queryParams = {};
-      queryParams['type'] = tab.api;
-      $location.search(queryParams);
-    };
+    var queryParams = {};
+    queryParams['type'] = tab.api;
+    var current_pane = _.find($scope.panes.table, function (pane) { return pane.type === tab.type });
+    queryParams['page'] = current_pane.currentPage + 1;
+    $location.search(queryParams);
+  };
 
   $scope.panes.table = [];
   //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
@@ -142,13 +144,14 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
       activeClass: '',
       showad: false,
       currentPage: 0,
-      pageSize: 10,
+      pageSize: 15,
       adurl: pane.adurl,
       hasrecord: false,
+      recordcount: 0,
       show_checkbox:typeof Drupal.settings.epe_dbresource_browser_modal === 'undefined' ? false : Drupal.settings.epe_dbresource_browser_modal.checkbox
     };
 
-    tab.numberOfPages = function() { return Math.ceil(tab.data.length/tab.pageSize); }
+    //tab.numberOfPages = function() { return Math.ceil(tab.data.length/tab.pageSize); }
 
     if(typeof $location.search()['dialog'] == 'undefined' || (typeof $location.search()['dialog'] && ($location.search()['dialog'] == pane.api || $location.search()['dialog'] == true)) ) {
       $scope.panes.table.push(tab);
@@ -188,6 +191,12 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
       $scope.resources[module.api].data = [];
       $scope.resources[module.api].data_filtered = {};
 
+      epeServiceProvider.getPager($scope.fn.serviceParams,true).then(function(res) {
+        var current_pane = _.find($scope.panes.table, function (pane) { return pane.type === module.label });
+        current_pane.recordcount = res.data.total_rows;
+        current_pane.total_pages = res.data.total_pages;
+      });
+
       epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
         var nodes = res.data.nodes;
         angular.forEach(nodes, function(node) {
@@ -196,9 +205,10 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
         angular.forEach($scope.panes.table, function(pane, index) {
           if($scope.resources[pane.api].data.length > 0) pane.hasrecord = true;
           if(pane.type === module.label) {
-            if(applyFilter) {
-              pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, $scope.filter.view_type.filter);
-            } else { pane.data = $scope.resources[module.api].data; }
+            //if(applyFilter) {
+            //  pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, $scope.filter.view_type.filter);
+            //} else { pane.data = $scope.resources[module.api].data; }
+            pane.data = $scope.resources[module.api].data;
           }
         });
         if((index + 1) == $scope.resources.modules.length) ngProgress.complete();
@@ -209,10 +219,111 @@ rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location
 
   $scope.fn.loadBrowser();
 
-  //watch type change and filter data
-  $scope.$watch("filter.view_type", function(view_type) {
-    angular.forEach($scope.panes.table, function(pane, index) {
-      pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.filter);
+  $scope.fn.toPrevPage = function(pane) {
+    ngProgress.height('10px');
+    var progress = 0;
+    ngProgress.start();
+
+    pane.currentPage=pane.currentPage-1
+    var queryParams = {"type":$location.search()['type']};
+    queryParams['page'] = pane.currentPage + 1;
+    $location.search(queryParams);
+
+    $scope.fn.serviceParams['resource_type'] = pane.api;
+    if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
+    $scope.fn.serviceParams['page'] = pane.currentPage;
+    console.log($scope.resources[pane.api].data);
+    epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
+      var nodes = res.data.nodes;
+      var results = [];
+      angular.forEach(nodes, function(node) {
+        results.push(node.node);
+      });
+      pane.data = results;
+      ngProgress.complete();
     });
-  });
+  }
+
+  $scope.fn.toNextPage = function(pane) {
+    ngProgress.height('10px');
+    var progress = 0;
+    ngProgress.start();
+
+    pane.currentPage=pane.currentPage+1
+    var queryParams = {"type":$location.search()['type']};
+    queryParams['page'] = pane.currentPage + 1;
+    console.log(queryParams);
+    $location.search(queryParams);
+
+    $scope.fn.serviceParams['resource_type'] = pane.api;
+    if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
+    $scope.fn.serviceParams['page'] = pane.currentPage;
+    epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
+      var nodes = res.data.nodes;
+      var results = [];
+      angular.forEach(nodes, function(node) {
+        results.push(node.node);
+      });
+      pane.data = results;
+      ngProgress.complete();
+    });
+  }
+
+  $scope.fn.changeViewType = function() {
+    ngProgress.height('10px');
+    var progress = 0;
+    ngProgress.start();
+
+    angular.forEach($scope.panes.table, function(pane, index) {
+      var queryParams = {"type":$location.search()['type']};
+      if($location.search()['page'] !== 'undefined') queryParams['page'] = $location.search()['page'];
+      if($scope.filter.view_type.filter !== '') {
+        queryParams['view_type'] = $scope.filter.view_type.filter;
+      }
+      $location.search(queryParams);
+
+      $scope.fn.serviceParams['resource_type'] = pane.api;
+      if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
+      $scope.fn.serviceParams['page'] = 0;
+
+      epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
+        var nodes = res.data.nodes;
+        var results = [];
+        angular.forEach(nodes, function(node) {
+          results.push(node.node);
+        });
+        pane.data = results;
+        if((index + 1) == $scope.panes.table.length) ngProgress.complete();
+      });
+    });
+  }
+
+  //watch type change and filter data
+/*  $scope.$watch("filter.view_type", function(view_type) {
+    //angular.forEach($scope.panes.table, function(pane, index) {
+    //  pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.filter);
+    //});
+
+    angular.forEach($scope.panes.table, function(pane, index) {
+      var queryParams = {"type":$location.search()['type']};
+      if($location.search()['page'] !== 'undefined') queryParams['page'] = $location.search()['page'];
+      if(view_type.filter !== '') {
+        queryParams['view_type'] = view_type.filter;
+      }
+      $location.search(queryParams);
+
+      $scope.fn.serviceParams['resource_type'] = pane.api;
+      if(typeof $routeParams['term'] != "undefined") $scope.fn.serviceParams['search'] = $routeParams['term'];
+      $scope.fn.serviceParams['page'] = 0;
+
+      epeServiceProvider.getData($scope.fn.serviceParams).then(function(res) {
+        var nodes = res.data.nodes;
+        var results = [];
+        angular.forEach(nodes, function(node) {
+          results.push(node.node);
+        });
+        pane.data = results;
+      });
+    });
+  });*/
 }]);

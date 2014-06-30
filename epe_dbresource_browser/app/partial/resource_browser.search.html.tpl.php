@@ -1,5 +1,5 @@
 <div class="rb-search-filter">
-<select ng-options="type.label for type in resource.view_types" ng-model="filter.view_type"></select>
+<select ng-init="filter.view_type=resource.view_types[0]" ng-options="type.label for type in resource.view_types" ng-model="filter.view_type" ng-change="fn.changeViewType()"></select>
 
 <form ng-submit="search()">
 <div class="form-horizontal">
@@ -11,7 +11,7 @@
 <div ng-show="panes.showtabs == true">
 <div class="rb-type-selector">
 	<ul>
-    <li ng-repeat="pane in panes.table" data-api="{{pane.api}}" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
+    <li ng-repeat="pane in panes.table" data-api="{{pane.api}}" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.recordcount}})</span></li>
 	</ul>
 </div>
 
