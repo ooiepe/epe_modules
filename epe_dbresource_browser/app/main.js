@@ -18,7 +18,6 @@ require.config({
     'underscore': Drupal.settings.resourceBrowser.appPath + '/services/_',
     'angularUi': Drupal.settings.jslibraries.path.angularUi + '/ui-bootstrap-tpls-0.6.0.min',
     'angularWebstorage': Drupal.settings.jslibraries.path.angularWebstorage + '/angular-webstorage',
-    'loadingBar': Drupal.settings.jslibraries.path.loadingBar + '/loading-bar',
     'ngProgress': Drupal.settings.jslibraries.path.ngProgress + '/ngProgress.min',
     /* app controllers */
     'SearchCtrl': Drupal.settings.resourceBrowser.appPath + '/controllers/search_ctrl',
