@@ -412,3 +412,49 @@ function epe_llb_update_7006(&$sandbox) {
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
 }
+
+/**
+ * update multimedia views to support resource browser
+ */
+function epe_llb_update_7007(&$sandbox) {
+  module_load_include('inc','epe_llb','inc/epe_llb.field_base.update_7007');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance.update_7007');
+
+  /* recreate the same field base with text data type */
+  foreach (_epe_llb_field_default_field_bases() as $field) {
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  /* recreate the same field instance with text data type */
+  foreach (_epe_llb_field_default_field_instances() as $instance) {
+    if(!field_info_instance('node', $instance['field_name'], 'llb_resource')) {
+      field_create_instance($instance);
+    }
+  }
+
+  $search_api_index = entity_load_single('search_api_index', 'llb_resource_index');
+
+  $search_api_index->options['fields']['search_api_aggregation_1'] = array('type'=>'text');
+
+  $search_api_index->options['data_alter_callbacks']['search_api_alter_add_aggregation'] = array('status'=>1,'weight'=>0,'settings'=>array(
+      'fields'=>array('search_api_aggregation_1'=>array(
+        'name'=>'title_main_body_fulltext_search',
+        'type'=>'fulltext',
+        'fields'=>array('title','body:value'),
+        'description'=>'A Fulltext aggregation of the following fields: Title, The main body text.',
+        ),
+      ),
+    ),
+  );
+
+  $search_api_index->options['processors']['search_api_case_ignore']['settings']['fields']=array('title'=>true, 'body:value'=>true, 'search_api_aggregation_1'=>true);
+  $search_api_index->options['processors']['search_api_html_filter']['settings']['fields']=array('title'=>true, 'body:value'=>true,'search_api_aggregation_1'=>true);
+
+  entity_save('search_api_index', $search_api_index);
+
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
+}

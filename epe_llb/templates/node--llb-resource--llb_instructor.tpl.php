@@ -35,8 +35,15 @@
     <?php echo render($content['field_resources_content']);
     } ?>
 
-    <?php if(!empty($content['field_resource_file'])) { ?>
-    <?php echo render($content['field_resource_file']);
+    <?php if(!empty($content['field_resource_file_type'])) {
+      echo '<div style="float:left;"><strong>Resources Type:&nbsp;</strong></div>';
+      echo render($content['field_resource_file_type']);
+    } ?>
+    <?php if(!empty($content['field_resource_file'])) {
+      echo render($content['field_resource_file']);
+    } ?>
+    <?php if(!empty($content['field_resource_file_note'])) {
+    echo render($content['field_resource_file_note']);
     } ?>
   </div>
 

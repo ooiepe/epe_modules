@@ -7,8 +7,8 @@ angular.module('dataServices',['ngResource'])
     var urlparams = [];
     if(param.hasOwnProperty('search') && param.search != '') urlparams.push('search=' + param.search);
     if(param.hasOwnProperty('page') && param.page != '') urlparams.push('page=' + param.page);
+    if(param.hasOwnProperty('filter') && param.filter != '') urlparams.push('filter=' + param.filter);
     if(urlparams.length > 0) apiurl = apiurl + '?' + urlparams.join('&');
-    console.log(apiurl);
     return $http({
       method: 'GET',
       url: apiurl
@@ -18,10 +18,10 @@ angular.module('dataServices',['ngResource'])
   }
 
   var getPager = function(param) {
-    var apiurl = Drupal.settings.epe.base_path + 'api/resource/' + param.resource_type;
+    var apiurl = Drupal.settings.epe.base_path + 'api/resource/pager';
     var urlparams = [];
     if(param.hasOwnProperty('search') && param.search != '') urlparams.push('search=' + param.search);
-    urlparams.push('get_pager=true');
+    if(param.hasOwnProperty('filter') && param.filter != '') urlparams.push('filter=' + param.filter);
     if(urlparams.length > 0) apiurl = apiurl + '?' + urlparams.join('&');
     return $http({
       method: 'GET',

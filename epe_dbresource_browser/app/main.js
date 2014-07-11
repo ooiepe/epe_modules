@@ -10,12 +10,16 @@ require.config({
     'angularResource': Drupal.settings.jslibraries.path.angular + '/angular-resource',
     'angularRoute': Drupal.settings.jslibraries.path.angular + '/angular-route',
     'angularSanitize': Drupal.settings.jslibraries.path.angular + '/angular-sanitize',
+    'angularAnimate': Drupal.settings.jslibraries.path.angular + '/angular-animate.js',
     /* 3rd party libraries */
     'angularAMD': Drupal.settings.jslibraries.path.angularAMD + '/angularAMD',
     'domReady': Drupal.settings.jslibraries.path.requirejs + '/domReady',
     'ngload': Drupal.settings.jslibraries.path.requirejs + '/ngload',
-    'underscore': Drupal.settings.resourceBrowser.appPath + '/_',
+    'underscore': Drupal.settings.resourceBrowser.appPath + '/services/_',
     'angularUi': Drupal.settings.jslibraries.path.angularUi + '/ui-bootstrap-tpls-0.6.0.min',
+    'angularWebstorage': Drupal.settings.jslibraries.path.angularWebstorage + '/angular-webstorage',
+    'loadingBar': Drupal.settings.jslibraries.path.loadingBar + '/loading-bar',
+    'ngProgress': Drupal.settings.jslibraries.path.ngProgress + '/ngProgress.min',
     /* app controllers */
     'SearchCtrl': Drupal.settings.resourceBrowser.appPath + '/controllers/search_ctrl',
     /* app services */
@@ -28,8 +32,14 @@ require.config({
     'angularResource':['angular'],
     'angularRoute':['angular'],
     'angularSanitize':['angular'],
-    'angularUi':['angular']
+    'angularUi':['angular'],
+    'angularAnimate':['angular'],
+    'angularWebstorage':['angular'],
+    'ngProgress': {
+      exports: 'ngProgress',
+      deps: ['angular']
+    }
   },
   priority: ["angular"],
-  deps: ['app','underscore']
+  deps: ['app']
 });

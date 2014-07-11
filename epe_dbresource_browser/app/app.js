@@ -1,37 +1,25 @@
-'use strict';
-
-var underscore = angular.module('underscore', []);
-underscore.factory('_', function() {
-  return window._; // assumes underscore has already been loaded on the page
-});
-
-var resourceBrowserApp = angular.module('resourceBrowserApp', ['ngRoute','ui.bootstrap','ngProgress','rbcontroller','resourceBrowserService','resourceBrowserFilter','resourceBrowserDirective','underscore']);
-resourceBrowserApp.config(['$routeProvider','$locationProvider',
-  function($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/', {
-        controller:'IndexController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/index.html'
-      })
-      .when('/search', {
-        controller:'SearchController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html',
-        reloadOnSearch: false
-      })
-      .when('/search/:term', {
-        controller:'SearchController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html',
-        reloadOnSearch: false
-      })
-      .when('/dialog/search', {
-        controller:'DialogSearchController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
-      })
-      .when('/dialog/search/:term', {
-        controller:'DialogSearchController',
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
-      })
-      .otherwise({redirecTo:'/'});
-
-    //$locationProvider.html5Mode(true);
+define(['angularAMD','angularRoute','angularWebstorage','ngProgress','underscore'], function(angularAMD) {
+  var app = angular.module("app", ['ngRoute','underscore','webStorageModule','ngProgress']);
+  app.config(['$routeProvider','$locationProvider',
+    function ($routeProvider,$locationProvider) {
+    $routeProvider.
+      when('/search', angularAMD.route({
+        templateUrl: Drupal.settings.resourceBrowser.appPath + '/partial/resource_browser.html',
+        controller: 'SearchCtrl'
+      })).
+      otherwise({redirectTo: '/search'});
   }]);
+
+
+  require(['domReady!'], function(document) {
+      try {
+          // Wrap this call to try/catch
+          angularAMD.bootstrap(app);
+      }
+      catch (e) {
+          console.error(e.stack || e.message || e);
+      }
+  });
+
+  return app;
+});
