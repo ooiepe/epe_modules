@@ -78,7 +78,7 @@ function loadFlash() {
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
   
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20140619_0828.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20140714_1011.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
   
   return;
 }
@@ -107,8 +107,22 @@ function getMapTitleAndDesc() {
     
 }
 
+function doGetThumb() {
+  
+  // get a reference to the flash object
+  var swf = document.getElementById('conceptMapBuilderViewer');
+  // get the thumb of the map
+  var thumbdata = swf.getThumbnail();
+  document.getElementById('thumbdata').value = thumbdata;
+  return;
+}
+
+
+
 
 function doSave() {
+
+  doGetThumb()
 
   // get a reference to the flash object
   var swf = document.getElementById('conceptMapBuilderViewer');
@@ -264,6 +278,8 @@ function launchResourceBrowser() {
 <?php echo render($form['field_cm_data']); ?>
 </div>
 
+
+<input type="hidden" name="thumbdata" id="thumbdata" value="cm/">
 
 <?php echo render($form['actions']); ?>
 
