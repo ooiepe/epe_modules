@@ -263,3 +263,11 @@ function epe_cm_update_7005(&$sandbox) {
   $view_definition = epe_cm_views_default_views();
   views_save_view($view_definition['epe_cm_search_view']);
 }
+
+
+/**
+ * patches a problem with the cm thumbnail creation/viewing
+ */
+function epe_cm_update_7006(&$sandbox) {
+  module_load_include('inc','epe_cm','epe_cm.views_default');
+}
