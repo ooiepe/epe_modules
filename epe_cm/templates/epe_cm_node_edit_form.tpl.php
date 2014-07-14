@@ -1,4 +1,4 @@
-<?php
+<?php 
 
   $form['title']['#title_display'] = 'invisible';
   $form['body']['und'][0]['value']['#title_display'] = 'invisible';
@@ -30,8 +30,8 @@
 
 
 
-<?php
-
+<?php 
+  
 
   drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
   drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
@@ -60,10 +60,10 @@ Drupal.behaviors.module = {
 }
 function loadFlash() {
 
-
-  var flashvars = {};
-  flashvars.USERNAME = 'sgraham';
-  flashvars.USERID = '4';
+  
+  var flashvars = {}; 
+  flashvars.USERNAME = 'sgraham'; 
+  flashvars.USERID = '4'; 
   flashvars.USERSTATUS = '1';
   flashvars.OOI = 'true';
   flashvars.builder = 'true';
@@ -72,18 +72,19 @@ function loadFlash() {
   flashvars.PHPPROXY = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/php/RetrieveOWL.php' ?>';
   flashvars.OWLPATH = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/owl/ioos/' ?>';
   flashvars.MAPID = '0';
-
+  flashvars.SWFLOCATION = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/swf/' ?>';
+  
   var params = {};
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
-
+  
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20140417_0957.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
-
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20140619_0828.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  
   return;
 }
 
 function getXMLfromJS() {
-
+  
   //alert('joe');
 
   // get the contents of the text area
@@ -100,10 +101,10 @@ function getXMLfromJS() {
 }
 
 function getMapTitleAndDesc() {
-
+  
   var mapTitleAndDesc = {title: document.getElementById('edit-title').value, description: document.getElementById('edit-body-und-0-value').value};
     return mapTitleAndDesc;
-
+    
 }
 
 
@@ -153,37 +154,37 @@ function generateXMLFromItems(items) {
     console.log(items[i]);
 
     if (items[i].type == 'cm_resource') {
-      strCM += '<node id="' + items[i].nid + '" datemodified="2012-03-07 17:25:32" datemodifiedepoch="1331141132"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc><author id="4"><![CDATA[Sean Graham]]></author></node>';
+      strCM += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>node/' + items[i].nid + '" img="' + items[i].thumbnail + '" imgw="" imgh="" datemodified="2012-03-07 17:25:32" datemodifiedepoch="1331141132"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc><author id="4"><![CDATA[Sean Graham]]></author></node>';
     } else if (items[i].type == 'ev_tool_instance') {
-      strEV += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>/node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
+      strEV += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     } else if (items[i].type == 'llb_resource') {
-      strLLB += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>/node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
+      strLLB += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     } else if (items[i].type == 'image_resource') {
       strImages += '<node id="' + items[i].nid + '" img="' + items[i].thumbnail + '" source="' + items[i].file + '" sourcew="" sourceh="" hires="" hiresw="" hiresh="" url="' + items[i].thumbnail + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     } else if (items[i].type == 'video_resource' || items[i].type == 'audio_resource') {
       strVideos += '<node id="' + items[i].nid + '" img="' + items[i].thumbnail + '" imgw="" imgh="" source="' + items[i].file + '" audio=""><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     } else if (items[i].type == 'document_resource') {
-      strDocs += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>/node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
+      strDocs += '<node id="' + items[i].nid + '" url="<?php echo base_path() ?>node/' + items[i].nid + '"><title><![CDATA[' + items[i].title + ']]></title><longDesc><![CDATA[' + items[i].body + ']]></longDesc></node>';
     }
 
   }
 
-  if (strCM.length > 0)
+  if (strCM.length > 0) 
     str += '<conceptmaps>' + strCM + '</conceptmaps>';
 
-  if (strEV.length > 0)
+  if (strEV.length > 0) 
     str += '<visualizations>' + strEV + '</visualizations>';
 
-  if (strLLB.length > 0)
+  if (strLLB.length > 0) 
     str += '<lessons>' + strLLB + '</lessons>';
 
-  if (strImages.length > 0)
+  if (strImages.length > 0) 
     str += '<images>' + strImages + '</images>';
 
-  if (strVideos.length > 0)
+  if (strVideos.length > 0) 
     str += '<videos>' + strVideos + '</videos>';
 
-  if (strDocs.length > 0)
+  if (strDocs.length > 0) 
     str += '<docs>' + strDocs + '</docs>';
 
 
@@ -196,11 +197,11 @@ function generateXMLFromItems(items) {
 }
 
 function launchResourceBrowser() {
-
+  
   selectedResources.length = 0;
 
   bootbox.dialog({
-        message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/search?dialog" seamless width="779" height="500" class="resource-browser-iframe" />',
+        message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/dialog/search" seamless width="779" height="500" class="resource-browser-iframe" />',
         className: 'resource-browser-modal',
         buttons: {
           main: {

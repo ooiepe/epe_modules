@@ -1,6 +1,7 @@
 'use strict';
 
-var SearchController = function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
+rbcontroller.controller('SearchController',['$scope', '$routeParams', '$location', '$filter', 'epeServiceProvider', 'ngProgress',
+  function($scope, $routeParams, $location, $filter, epeServiceProvider, ngProgress) {
   //model init
   $scope.fn = {};
   $scope.resources = {};
@@ -122,8 +123,12 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
       }
     });
     //set active pane indicator for search function
-    $scope.panes.active = tab.api;
-  };
+      //$scope.panes.active = tab.api;
+      //$location.search()['type'] = tab.api
+      var queryParams = {};
+      queryParams['type'] = tab.api;
+      $location.search(queryParams);
+    };
 
   $scope.panes.table = [];
   //angular.forEach(Drupal.settings.epe_dbresource_browser.modules, function(pane, index) {
@@ -148,9 +153,6 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
     if(typeof $location.search()['dialog'] == 'undefined' || (typeof $location.search()['dialog'] && ($location.search()['dialog'] == pane.api || $location.search()['dialog'] == true)) ) {
       $scope.panes.table.push(tab);
     }
-/*    if(typeof $location.search()['dialog'] == 'undefined' || ( (typeof $location.search()['dialog'] != 'undefined') && (typeof $location.search()['type'] != 'undefined') && $location.search()['type'] == pane.api)) {
-      $scope.panes.table.push(tab);
-    }*/
   });
   $scope.panes.table.sort($scope.fn.sortPane);
 
@@ -207,11 +209,10 @@ var SearchController = function($scope, $routeParams, $location, $filter, epeSer
 
   $scope.fn.loadBrowser();
 
-
   //watch type change and filter data
   $scope.$watch("filter.view_type", function(view_type) {
     angular.forEach($scope.panes.table, function(pane, index) {
       pane.data = $filter("resourceFilter")($scope.resources[pane.api].data, view_type.filter);
     });
   });
-}
+}]);

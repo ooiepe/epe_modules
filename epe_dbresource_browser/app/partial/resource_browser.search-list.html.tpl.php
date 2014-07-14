@@ -12,7 +12,7 @@
       </tr>
       <tr ng-repeat="row in pane.data | resourceFilter:query.filter | orderBy:sort:reverse | startFrom:pane.currentPage*pane.pageSize | limitTo:pane.pageSize"
         table-row
-        checkbox="pane.show_checkbox" id="row.id" summary="row.summary" type="pane.api" url="row.url" thumbnail="row.thumbnail" title="row.title" author="row.author" authorname="row.author_name" updated="row.last_updated" org="row.org" dialogmode="panes.dialogmode">
+        checkbox="pane.show_checkbox" row="row" type="pane.api" dialogmode="panes.dialogmode">
       </tr>
     </tbody>
   </table>

@@ -10,6 +10,7 @@ dependencies[] = jquery_update
 dependencies[] = contact
 dependencies[] = clone
 dependencies[] = captcha
+dependencies[] = flag
 dependencies[] = image_captcha
 dependencies[] = better_formats
 dependencies[] = wysiwyg

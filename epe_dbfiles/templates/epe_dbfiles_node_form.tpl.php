@@ -28,6 +28,16 @@
 <?php echo render($form['body']); ?>
 </div>
 
+<div class="field-container">
+<label for="edit-credit-value" class="field-label">* Credit:</label>
+<?php echo render($form['credit']); ?>
+</div>
+
+<div class="field-container">
+<label for="edit-source-url-value" class="field-label">Source URL:</label>
+<?php echo render($form['source_url']); ?>
+</div>
+
 <div class="field-container thumbnail">
 <label for="edit-thumbnail" class="field-label">Thumbnail:</label>
 <?php echo render($form['thumbnail']); ?>

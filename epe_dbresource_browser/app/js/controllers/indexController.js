@@ -1,6 +1,8 @@
 'use strict';
+var rbcontroller = angular.module('rbcontroller',[]);
 
-var IndexController = function($scope, $location, $routeParams) {
+rbcontroller.controller('IndexController', ['$scope','$location','$routeParams',
+  function($scope, $location, $routeParams) {
   $scope.resource_modules = [];
   $scope.radioModel = {};
 
@@ -34,4 +36,4 @@ var IndexController = function($scope, $location, $routeParams) {
       $location.path('/search/' + $scope.term);
     }
   }
-}
+}]);

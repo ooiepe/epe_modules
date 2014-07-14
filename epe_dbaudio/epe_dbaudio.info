@@ -13,5 +13,6 @@ dependencies[] = semanticviews
 dependencies[] = views_php
 dependencies[] = views_json
 dependencies[] = token
+dependencies[] = link
 
 files[] = epe_dbaudio.views_default.inc

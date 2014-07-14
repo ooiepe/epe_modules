@@ -102,11 +102,13 @@ function epe_dbresource_browser_index() {
   drupal_add_js($app_path . '/app.js');
   drupal_add_js($app_path . '/js/controllers/indexController.js');
   drupal_add_js($app_path . '/js/controllers/searchController.js');
+  drupal_add_js($app_path . '/js/controllers/dialogSearchController.js');
   drupal_add_js($app_path . '/js/resourceBrowserServices.js');
   drupal_add_js($app_path . '/js/resourceBrowserDirectives.js');
   drupal_add_js($app_path . '/js/resourceBrowserFilters.js');
   drupal_add_js(libraries_get_path('ngProgress') . '/ngProgress.min.js');
   drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');
+  drupal_add_js(drupal_get_path('module','epe_dbresource_browser') . '/js/resource_browser.tab-history.js');
 
   drupal_add_js(array('theme_path' => base_path() . drupal_get_path('theme','bootstrap')), 'setting');
 
@@ -200,36 +202,19 @@ function epe_dbresource_browser_image_default_styles() {
     'name' => 'resource_browser_thumbnail',
     'effects' => array(
       4 => array(
-        'label' => 'Scale',
-        'help' => 'Scaling will maintain the aspect-ratio of the original image. If only a single dimension is specified, the other dimension will be calculated.',
-        'effect callback' => 'image_scale_effect',
-        'dimensions callback' => 'image_scale_dimensions',
-        'form callback' => 'image_scale_form',
-        'summary theme' => 'image_scale_summary',
-        'module' => 'image',
-        'name' => 'image_scale',
-        'data' => array(
-          'width' => 133,
-          'height' => '',
-          'upscale' => 0,
-        ),
-        'weight' => 1,
-      ),
-      5 => array(
-        'label' => 'Crop',
-        'help' => 'Cropping will remove portions of an image to make it the specified dimensions.',
-        'effect callback' => 'image_crop_effect',
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
         'dimensions callback' => 'image_resize_dimensions',
-        'form callback' => 'image_crop_form',
-        'summary theme' => 'image_crop_summary',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
         'module' => 'image',
-        'name' => 'image_crop',
+        'name' => 'image_scale_and_crop',
         'data' => array(
           'width' => 133,
           'height' => 99,
-          'anchor' => 'center-top',
         ),
-        'weight' => 2,
+        'weight' => 1,
       ),
     ),
   );
