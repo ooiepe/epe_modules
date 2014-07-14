@@ -225,10 +225,20 @@ function epe_cm_update_7003(&$sandbox) {
   views_save_view($view);
 }
 
+
+function epe_cm_update_7004(&$sandbox) {
+
+  module_load_include('inc','epe_cm','epe_cm.views_default');
+  $view_definition = epe_cm_views_default_views();
+  views_save_view($view_definition['epe_cm_search_view']);
+
+}
+
+
 /**
  * update cm views to support resource browser
  */
-function epe_cm_update_7003(&$sandbox) {
+function epe_cm_update_7005(&$sandbox) {
   $search_api_index = entity_load_single('search_api_index', 'epe_cm_search_index');
 
   $search_api_index->options['fields']['search_api_aggregation_1'] = array('type'=>'text');
@@ -252,18 +262,4 @@ function epe_cm_update_7003(&$sandbox) {
   module_load_include('inc','epe_cm','epe_cm.views_default');
   $view_definition = epe_cm_views_default_views();
   views_save_view($view_definition['epe_cm_search_view']);
-}
-
-
-
-function epe_cm_update_7004(&$sandbox) {
-
-
-
-  module_load_include('inc','epe_cm','epe_cm.views_default');
-  $view_definition = epe_cm_views_default_views();
-  views_save_view($view_definition['epe_cm_search_view']);
-
-
-
 }
