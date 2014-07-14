@@ -287,3 +287,12 @@ function epe_ev_update_7004(&$sandbox) {
   $view_definition = epe_ev_views_default_views();
   views_save_view($view_definition['epe_ev_search_view']);
 }
+
+/**
+ * Post 3.3 release fix: fix epe_ev_search_view view's thumbnail field output code that calls the wrong field and the wrong image style type
+ */
+function epe_ev_update_7005(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['epe_ev_search_view']);
+}

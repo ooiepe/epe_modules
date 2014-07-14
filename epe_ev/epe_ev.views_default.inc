@@ -183,11 +183,11 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
       $node = node_load($data->entity);
-      $image = field_get_items(\'node\', $node, \'ev_tool_thumbnail\');
-      $output = field_view_value(\'node\', $node, \'ev_tool_thumbnail\', $image[0], array(
+      $image = field_get_items(\'node\', $node, \'field_instance_thumbnail\');
+      $output = field_view_value(\'node\', $node, \'field_instance_thumbnail\', $image[0], array(
         \'type\' => \'image\',
         \'settings\' => array(
-           \'image_style\' => \'thumbnail\',
+           \'image_style\' => \'resource_browser_thumbnail\',
         ),
       ));
       echo render($output);
