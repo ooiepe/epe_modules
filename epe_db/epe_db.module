@@ -18,6 +18,92 @@ function epe_db_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['node/%node/deleteresource'] = array(
+    'title' => t('Delete a resource'),
+    'page callback' => 'epe_db_node_delete_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/submitpublic'] = array(
+    'title' => t('Submit a resource to public db'),
+    'page callback' => 'epe_db_node_submit_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/unsubmitpublic'] = array(
+    'title' => t('Unsubmit a resource to public db'),
+    'page callback' => 'epe_db_node_unsubmit_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/approvepublic'] = array(
+    'title' => t('Approve a resource to public db'),
+    'page callback' => 'epe_db_node_approve_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic approve'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/rejectpublic'] = array(
+    'title' => t('Reject a resource to public db'),
+    'page callback' => 'epe_db_node_reject_public_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic approve'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/feature'] = array(
+    'title' => t('Feature a resource'),
+    'page callback' => 'epe_db_node_feature_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic feature'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/unfeature'] = array(
+    'title' => t('Unfeature a resource'),
+    'page callback' => 'epe_db_node_unfeature_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbpublic unfeature'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/share'] = array(
+    'title' => t('Share a resource'),
+    'page callback' => 'epe_db_node_share_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['node/%node/unshare'] = array(
+    'title' => t('Unshare a resource'),
+    'page callback' => 'epe_db_node_unshare_function',
+    'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+
   return $items;
 }
 
@@ -181,3 +267,49 @@ function epe_db_default_search_api_index() {
     }
   }
 }*/
+
+
+/*
+ * Alter the cancel behavior of the edit forms
+ */
+function epe_db_form_alter (&$form, &$form_state, $form_id) {
+  if ($form['#id'] == 'cm-resource-node-form' || $form['#id'] == 'image-resource-node-form' || $form['#id'] == 'audio-resource-node-form' || $form['#id'] == 'video-resource-node-form' || $form['#id'] == 'document-resource-node-form' || $form['#id'] == 'llb-resource-node-form' || $form['#id'] == 'ev-tool-instance-node-form') {
+  $form['actions']['cancel'] = array(
+      '#type'   => 'submit',
+      '#value'  => t('Cancel'),
+      '#submit' => array('callback_for_cancel_button'),
+      '#limit_validation_errors' => array(),
+      '#weight'  => 99,
+    );
+    $form['actions']['delete']['#access'] = FALSE;
+    $form['actions']['preview']['#access'] = FALSE;
+  }
+}
+function callback_for_cancel_button($form, &$form_state) {
+  $url = $_POST['destination'] ? $_POST['destination'] : '';
+  drupal_goto($url);
+}
+
+
+/**
+  * setup the approve and feature permissions
+  */
+function epe_db_permission() {
+  return array(
+    'epe dbpublic approve' => array(
+      'title' => 'EPE DB Public Approval',
+      'description' => 'Allow user to approve items for inclusion in the public db.',
+    ),
+    'epe dbpublic feature' => array(
+      'title' => 'EPE DB Feature Resources',
+      'description' => 'Allow user to feature resources.',
+    ),
+  );
+}
+
+
+
+
+
+
+

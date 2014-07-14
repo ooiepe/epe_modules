@@ -1,5 +1,4 @@
 <?php
-/*if(isset($field['#items']) && !empty($field['#items'])): */
 if($images):
 ?>
 <div id="carousel-<?php echo $custom_id; ?>" class="carousel slide pull-right"><!-- class of slide for animation -->
@@ -9,8 +8,16 @@ if($images):
     <?php if($key == 0): array_push($slideclasses, "active"); endif; ?>
     <div class="<?php echo implode(' ', $slideclasses); ?>">
       <?php
-        $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide->uri, 'alt' => '', 'title' => '');
-        echo theme('image_style', $slide_image);
+        if($slide->type == 'video_resource') {
+      ?>
+        <video id="video-<?php echo $slide->nid ?>-video" data-setup="{}" class="video-js vjs-default-skin" width="480" height="320" controls="controls" preload="auto" poster="<?php echo $slide->thumbnail; ?>">
+          <source src="<?php echo $slide->file; ?>">
+        </video>
+      <?php
+        } else {
+          $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide->uri, 'alt' => '', 'title' => '');
+          echo theme('image_style', $slide_image);
+        }
       ?>
       <?php if($slide->title != ''): ?>
       <div class="carousel-caption">

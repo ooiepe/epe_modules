@@ -52,6 +52,31 @@ function epe_dbimage_node_info() {
   return $items;
 }
 
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_dbimage_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_dbimage') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_dbimage_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_dbimage_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}
+
 /**
  * Implements hook_node_type_insert().
  */
@@ -112,22 +137,6 @@ function _assign_epe_dbimage_permission() {
   drupal_static_reset('user_access');
   drupal_static_reset('user_role_permissions');
 }
-
-/**
- * Implements hook_block_view_alter()
- * Provide default styling to views block
- * (******NOT USED NOW******)
- */
-/*
-function epe_dbimage_block_view_alter(&$data, $block) {
-  $views_block_hashes = variable_get('views_block_hashes',array());
-  foreach($views_block_hashes as $hash=>$value) {
-    if($value == 'image_resource_index-block_list' && $block->delta == $hash) {
-      drupal_add_css(drupal_get_path('module','epe_dbimage') . '/epe_dbimage.css');
-    }
-  }
-}
-*/
 
 /**
  * Implements hook_default_search_api_index().
@@ -201,52 +210,3 @@ function epe_dbimage_default_search_api_index() {
   ));
   return $items;
 }
-
-/*
- * custom function for creating test node
- * this function may be removed in the future pending design
- * (******NOT USED NOW******)
- */
-/*
-function epe_dbimage_default_nodes() {
-  global $user;
-  //default node for image resource list block layout
-  $node_values = array(
-    'type' => 'page',
-    'uid' => $user->uid,
-    'status' => 1
-  );
-  $entity = entity_create('node', $node_values);
-  $wrapper = entity_metadata_wrapper('node', $entity);
-  $wrapper->title->set('image resource list');
-  //$wrapper->url = 'image-resource-list';
-  $wrapper->save(true);
-
-  ctools_include('export');
-  $context = ctools_export_new_object('context');
-  $context->name = 'image-resource-list';
-  $context->description = 'default image resource list page';
-  $context->tag = 'block layout';
-  $context->conditions = array(
-    'path' => array(
-      'values' => array(
-        'image-resource-list' => 'image-resource-list',
-      ),
-    ),
-  );
-  $context->reactions = array(
-    'block' => array(
-      'blocks' => array(
-        'views-4b5995069acedbe7bfa31e2745b013e6' => array(
-          'module' => 'views',
-          'delta' => '4b5995069acedbe7bfa31e2745b013e6',
-          'region' => 'content',
-          'weight' => '-10',
-        ),
-      ),
-    ),
-  );
-  $context->condition_mode = 0;
-  $saved = context_save($context);
-}
-*/

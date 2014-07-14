@@ -130,3 +130,31 @@ function epe_dbmultimedia_update_7003(&$sandbox) {
 
   views_save_view($view);
 }
+
+
+/**
+ * add credit field and source url field
+ */
+function epe_dbmultimedia_update_7004(&$sandbox) {
+
+  $search_api_index = entity_load_single('search_api_index', 'multimedia_resource_index');
+  $search_api_index->options['fields']['field_credit'] = array('type'=>'text');
+  $search_api_index->options['fields']['field_source_url:url'] = array('type'=>'uri');
+  entity_save('search_api_index', $search_api_index);
+
+  $view = views_get_view('multimedia_resource_index', TRUE);
+  $view->set_display('default');
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['id'] = 'field_credit';
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['table'] = 'search_api_index_multimedia_resource_index';
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['field'] = 'field_credit';
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['label'] = 'credit';
+
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['id'] = 'field_source_url';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['table'] = 'search_api_index_multimedia_resource_index';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['field'] = 'field_source_url';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['click_sort_column'] = 'url';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['type'] = 'link_plain';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['label'] = 'source_url';
+
+  views_save_view($view);
+}

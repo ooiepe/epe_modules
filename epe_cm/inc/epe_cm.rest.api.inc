@@ -8,7 +8,7 @@ function epe_cm_data_restful_api($nid) {
     'type' => '',
     'title' => '',
     'body' => '',
-    'thumbnail' => ''
+    'thumbnail' => base_path() . path_to_theme() . '/images/no_thumb_small.jpg'
   );
 
   $node = node_load($nid);
@@ -21,6 +21,11 @@ function epe_cm_data_restful_api($nid) {
     if($wrapper->body->value()) {
       $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
     }
+    $image = $wrapper->field_instance_thumbnail->value();
+    if($image) {
+      $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+    }
+
   }
 
   echo json_encode($item);

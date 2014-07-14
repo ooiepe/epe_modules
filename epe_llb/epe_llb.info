@@ -22,5 +22,6 @@ dependencies[] = ds
 dependencies[] = ds_ui
 dependencies[] = rules
 dependencies[] = rules_admin
+dependencies[] = filefield_paths
 
 files[] = epe_llb.views_default.inc

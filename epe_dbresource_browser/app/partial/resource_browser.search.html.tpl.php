@@ -11,12 +11,12 @@
 <div ng-show="panes.showtabs == true">
 <div class="rb-type-selector">
 	<ul>
-    <li ng-repeat="pane in panes.table" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
+    <li ng-repeat="pane in panes.table" data-api="{{pane.api}}" class="{{pane.api}} {{pane.activeClass}}" ng-click="fn.activeTab(pane);"><span>({{pane.data.length}})</span></li>
 	</ul>
 </div>
 
 <div class="rb-ads">
-  <div ng-repeat="pane in panes.table" ng-show="pane.showad"><a href="<?php echo base_path(); ?>{{pane.adurl}}"><img ng-src="<?php echo base_path() . drupal_get_path('module','epe_dbresource_browser') ?>/images/rb-ads-{{pane.api}}.png" width="247" height="65"></a></div>
+  <div ng-repeat="pane in panes.table" ng-show="pane.showad"><a href="<?php echo base_path(); ?>{{pane.adurl}}"><img ng-src="<?php echo base_path() . drupal_get_path('module','epe_dbresource_browser') ?>/images/rb-ads-{{pane.api}}.jpg" width="247" height="65"></a></div>
 </div>
 </div>
 
@@ -27,8 +27,9 @@
 </div>
 -->
 <br clear="all">
+<div ng-include="view_templates.list"></div>
 
-<div ng-switch="radioModel">
+<!-- <div ng-switch="radioModel">
   <div ng-switch-when="list" ng-include="view_templates.list"></div>
   <div ng-switch-when="grid" ng-include="view_templates.grid"></div>
-</div>
+</div> -->

@@ -8,49 +8,52 @@ resourceBrowserDirective.directive('tableRow', function($compile) {
     replace: true,
     scope: {
       checkbox: '=',
-      id: '=',
-      summary: '=',
+      row: '=',
       type: '=',
-      url: '=',
-      thumbnail: '=',
-      title: '=',
-      author: '=',
-      authorname: '=',
-      updated: '=',
-      org: '=',
       dialogmode: '='
     },
     link: function (scope, elem, attrs) {
-      var template = '', element_ck = '', link_target = '_self';
+      var template = '', element_ck = '', link_target = '_self', row_status = '';
       if(scope.checkbox) {
-        element_ck = '<input type="checkbox" style="margin-right:0;position:absolute;" name="nid" data-type="' + scope.type + '" value="' + scope.id + '">';
+        element_ck = '<div style="float:left;"><input type="checkbox" style="margin-right:0;position:absolute;" name="nid" data-type="' + scope.type + '" value="' + scope.row.id + '"></div>';
       }
 
-      if (scope.thumbnail == '')
-        scope.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+      if (scope.row.thumbnail == '')
+        scope.row.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
 
       if(scope.dialogmode) { link_target = '_blank'; }
-
-     template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.url + '">' + scope.title + '</a></p></div><div class="text" style="margin-left:160px;">';
+      if(scope.row.status == 'Published') row_status += '<span class="btn btn-default btn-sm disabled">Published</span>&nbsp;';
+      if(scope.row.public == 'Public') row_status += '<span class="btn btn-info btn-sm disabled">Public</span>&nbsp;';
+      if(scope.row.featured == 'Featured') row_status += '<span class="btn btn-success btn-sm disabled">Featured</span>';
+      template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.row.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.row.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.row.url + '" target="' + link_target + '">' + scope.row.title + '</a><br/>' + row_status + '</p></div><div class="text" style="margin-left:160px;">';
+      var credit = '', summary = '';
+      if(scope.row.credit) credit = scope.row.credit;
+      if(scope.row.sourceurl) credit = '<a href="'+ scope.row.sourceurl +'" target="_blank">'+ credit +'</a>';
+      if(credit !== '') summary = '<strong>Credit/Source:</strong>&nbsp;' + credit;
       if (scope.summary)
-        template += '<p>' + scope.summary + '</p>';
+        summary = scope.row.summary + '<br/>' + summary;
+
+      template += '<p>' + summary + '</p>';
+
       template += '</div></td>';
 
       // start the author cell
-      template += '<td><div class="author">';
+      template += '<td><div class="author"><a href="' + Drupal.settings.epe.base_path + 'user/' + scope.row.userid + '" target="' + link_target + '">';
 
-      if (scope.author)
-        template += scope.author;
+      if (scope.row.author)
+        template += scope.row.author;
       else
-        template += scope.authorname;
+        template += scope.row.author_name;
 
-      if (scope.org)
-        template += '<br/>(' + scope.org + ')';
+      template += '</a>';
+
+      if (scope.row.org)
+        template += '<br/>(' + scope.row.org + ')';
 
       // end the author cell
       template += '</div></td>';
 
-      template += '<td>' + scope.updated + '</td>';
+      template += '<td>' + scope.row.updated + '</td>';
 
       elem.html(template).show();
 

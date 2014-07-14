@@ -37,6 +37,8 @@ function epe_dbimage_restful_api_node($nid) {
     'body' => '',
     'thumbnail' => '',
     'uri' => '',
+    'credit' => '',
+    'source_url' => ''
   );
 
   $node = node_load($nid);
@@ -47,6 +49,12 @@ function epe_dbimage_restful_api_node($nid) {
     $item['title'] = $wrapper->label();
     if($wrapper->body->value()) {
       $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
+    }
+    if($wrapper->field_credit->value()) {
+      $item['credit'] = $wrapper->field_credit->value(array('sanitize' => TRUE));
+    }
+    if($wrapper->field_source_url->value()) {
+      $item['source_url'] = $wrapper->field_source_url->url->value(array('sanitize' => TRUE));
     }
 
     $image = $wrapper->field_image_resource_file->value();

@@ -34,6 +34,10 @@
     <p><strong>Resources</strong></p>
     <?php echo render($content['field_resources_content']);
     } ?>
+
+    <?php if(!empty($content['field_resource_file'])) { ?>
+    <?php echo render($content['field_resource_file']);
+    } ?>
   </div>
 
 </div>

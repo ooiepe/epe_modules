@@ -58,16 +58,16 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-        $node = node_load($data->entity);
-        $image = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
-        $output = field_view_value(\'node\', $node, \'field_challenge_thumbnail\', $image[0], array(
-          \'type\' => \'image\',
-          \'settings\' => array(
-             \'image_style\' => \'resource_browser_thumbnail\',
-          ),
-        ));
-        echo render($output);
-    ?>';
+    $node = node_load($data->entity);
+    $field = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
+    $field_value = drupal_json_decode($field[0][\'value\']);
+
+    $output = \'\';
+    if($field_value) {
+      $output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' =>$field_value[0][\'uri\']));
+    }
+    echo render($output);
+  ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Author: First Name (indexed) */
@@ -75,14 +75,14 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['author_field_account_fname']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['author_field_account_fname']['field'] = 'author_field_account_fname';
   $handler->display->display_options['fields']['author_field_account_fname']['label'] = '';
+  $handler->display->display_options['fields']['author_field_account_fname']['exclude'] = TRUE;
   $handler->display->display_options['fields']['author_field_account_fname']['element_label_colon'] = FALSE;
   /* Field: Author: Last Name (indexed) */
   $handler->display->display_options['fields']['author_field_account_lname']['id'] = 'author_field_account_lname';
   $handler->display->display_options['fields']['author_field_account_lname']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['author_field_account_lname']['field'] = 'author_field_account_lname';
-  $handler->display->display_options['fields']['author_field_account_lname']['label'] = 'author';
-  $handler->display->display_options['fields']['author_field_account_lname']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['author_field_account_lname']['alter']['text'] = '[author_field_account_fname] [author_field_account_lname]';
+  $handler->display->display_options['fields']['author_field_account_lname']['label'] = '';
+  $handler->display->display_options['fields']['author_field_account_lname']['exclude'] = TRUE;
   $handler->display->display_options['fields']['author_field_account_lname']['element_label_colon'] = FALSE;
   /* Field: Author: User ID (indexed) */
   $handler->display->display_options['fields']['author_uid']['id'] = 'author_uid';
@@ -124,11 +124,6 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Field: Author: Institution / School (indexed) */
-  $handler->display->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
-  $handler->display->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_image_resource_index';
-  $handler->display->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
-  $handler->display->display_options['fields']['author_field_account_organization']['label'] = 'org';
   /* Field: Indexed Node: The main body text */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'search_api_index_llb_resource_index';
@@ -138,14 +133,43 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['body']['settings'] = array(
     'trim_length' => '200',
   );
+  /* Field: Author: Institution / School (indexed) */
+  $handler->display->display_options['fields']['author_field_account_organization']['id'] = 'author_field_account_organization';
+  $handler->display->display_options['fields']['author_field_account_organization']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['author_field_account_organization']['field'] = 'author_field_account_organization';
+  $handler->display->display_options['fields']['author_field_account_organization']['label'] = 'org';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_1']['id'] = 'php_1';
+  $handler->display->display_options['fields']['php_1']['table'] = 'views';
+  $handler->display->display_options['fields']['php_1']['field'] = 'php';
+  $handler->display->display_options['fields']['php_1']['label'] = 'author';
+  $handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_1']['php_output'] = '<?php
+    $fullname = array();
+    if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
+      $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
+    }
+    if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
+      $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
+    }
+    echo implode(\' \',$fullname);
+    ?>';
+  $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
+  /* Field: Author: Name (indexed) */
+  $handler->display->display_options['fields']['author_name']['id'] = 'author_name';
+  $handler->display->display_options['fields']['author_name']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['author_name']['field'] = 'author_name';
+  $handler->display->display_options['fields']['author_name']['label'] = 'author_name';
+  $handler->display->display_options['fields']['author_name']['link_to_entity'] = 0;
   /* Field: Indexed Node: Featured Status */
   $handler->display->display_options['fields']['field_featured_status']['id'] = 'field_featured_status';
-  $handler->display->display_options['fields']['field_featured_status']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['fields']['field_featured_status']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['field_featured_status']['field'] = 'field_featured_status';
   $handler->display->display_options['fields']['field_featured_status']['label'] = 'featured';
   /* Field: Indexed Node: Public Status */
   $handler->display->display_options['fields']['field_public_status']['id'] = 'field_public_status';
-  $handler->display->display_options['fields']['field_public_status']['table'] = 'search_api_index_image_resource_index';
+  $handler->display->display_options['fields']['field_public_status']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['field_public_status']['field'] = 'field_public_status';
   $handler->display->display_options['fields']['field_public_status']['label'] = 'public';
   $handler->display->display_options['filter_groups']['groups'] = array(

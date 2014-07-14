@@ -163,3 +163,55 @@ function epe_dbaudio_update_7001(&$sandbox) {
 
   views_save_view($view);
 }
+
+
+/**
+ * add credit field and source url field
+ */
+function epe_dbaudio_update_7002(&$sandbox) {
+  module_load_include('inc','epe_dbaudio','inc/epe_dbaudio.field_base.update_7002');
+  module_load_include('inc','epe_dbaudio','inc/epe_dbaudio.field_instance.update_7002');
+
+  // Create all the fields we are adding to our content type.
+  foreach (_audio_resource_installed_fields() as $field) {
+    //in case content type share fields
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  // Create all the instances for our fields.
+  foreach (_audio_resource_installed_instances() as $instance) {
+    if(!field_info_instance('node',$instance['field_name'],'audio_resource')) {
+      field_create_instance($instance);
+    }
+  }
+
+  //update credit field instance in case field is already created
+  $credit_field_instance = field_info_instance('node','field_credit','audio_resource');
+  if(!$credit_field_instance['required']) {
+    $credit_field_instance['required'] = 1;
+    field_update_instance($credit_field_instance);
+  }
+
+  $search_api_index = entity_load_single('search_api_index', 'audio_resource_index');
+  $search_api_index->options['fields']['field_credit'] = array('type'=>'text');
+  $search_api_index->options['fields']['field_source_url:url'] = array('type'=>'uri');
+  entity_save('search_api_index', $search_api_index);
+
+  $view = views_get_view('audio_resource_index', TRUE);
+  $view->set_display('default');
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['id'] = 'field_credit';
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['table'] = 'search_api_index_audio_resource_index';
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['field'] = 'field_credit';
+  $view->display[$view->current_display]->display_options['fields']['field_credit']['label'] = 'credit';
+
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['id'] = 'field_source_url';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['table'] = 'search_api_index_audio_resource_index';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['field'] = 'field_source_url';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['click_sort_column'] = 'url';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['type'] = 'link_plain';
+  $view->display[$view->current_display]->display_options['fields']['field_source_url']['label'] = 'source_url';
+
+  views_save_view($view);
+}

@@ -98,6 +98,7 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#upload_validators' => array(
         'file_validate_extensions' => array(implode(' ', $file_field_extensions_validator)),
       ),
+      '#required' => TRUE,
     );
 
     $form['title'] = array(
@@ -114,6 +115,19 @@ function epe_dbfiles_node_form($node, &$form_state) {
       '#title' => t('Description'),
       '#required' => TRUE,
       '#format'=>'filtered_html',
+    );
+
+    $form['credit'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Credit'),
+      '#title_display' => 'invisible',
+      '#required' => TRUE,
+    );
+
+    $form['source_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Source URL'),
+      '#title_display' => 'invisible',
     );
 
     if (($key = array_search('Image', $file_field_modules)) !== false) { unset($file_field_modules[$key]); }
@@ -187,6 +201,12 @@ function epe_dbfile_node_edit($nid) {
 
   $form['file-container'] = array( '#type' => 'container', '#attributes' => array() );
   $form['thumb-container'] = array( '#type' => 'container', '#attributes' => array() );
+  $form['field_credit']['und'][0]['value']['#title_display'] = 'invisible';
+  $form['field_credit']['und'][0]['#title_display'] = 'invisible';
+  $form['field_credit']['und']['#title_display'] = 'invisible';
+  $form['field_credit']['#title_display'] = 'invisible';
+
+  $form['field_source_url']['und'][0]['#title_display'] = 'invisible';
 
   switch($node->type) {
     case 'image_resource':
@@ -279,6 +299,10 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
     }
   }
 
+  if($form_state['values']['source_url'] != '' && filter_var($form_state['values']['source_url'], FILTER_VALIDATE_URL) === false) {
+    form_set_error('source_url', t("Please provide a valid URL"));
+  }
+
   //reset permission form value
   $form_state['complete form']['permission'][0]['#value'] = 0;
   $form_state['complete form']['permission'][0]['#input'] = 0;
@@ -290,7 +314,7 @@ function epe_dbfiles_node_form_validate($form, &$form_state) {
 function epe_dbfiles_node_form_submit($form, &$form_state) {
   global $user;
 
-$file = file_load($form_state['values']['file']);
+  $file = file_load($form_state['values']['file']);
 
   //create corresponding node with entity api
   $node_values = array(
@@ -303,6 +327,16 @@ $file = file_load($form_state['values']['file']);
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->title->set($form_state['values']['title']);
   $wrapper->body->set($form_state['values']['body']);
+
+  if($form_state['values']['credit']) {
+    //$wrapper->field_credit = array(LANGUAGE_NONE => array(0 => array('value'=>$form_state['values']['credit'])));
+    $wrapper->field_credit->set($form_state['values']['credit']);
+  }
+
+  if($form_state['values']['source_url']) {
+    //$wrapper->field_source_url = array(LANGUAGE_NONE => array(0 => array('url'=>$form_state['values']['source_url'])));
+    $wrapper->field_source_url->url->set($form_state['values']['source_url']);
+  }
 
   //we'll deal with video file upload separately
   if($form_state['values']['node_type'] != 'video_resource') {
