@@ -1,4 +1,4 @@
-<?php 
+<?php
 
   $form['title']['#title_display'] = 'invisible';
   $form['body']['und'][0]['value']['#title_display'] = 'invisible';
@@ -30,8 +30,8 @@
 
 
 
-<?php 
-  
+<?php
+
 
   drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
   drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
@@ -60,10 +60,10 @@ Drupal.behaviors.module = {
 }
 function loadFlash() {
 
-  
-  var flashvars = {}; 
-  flashvars.USERNAME = 'sgraham'; 
-  flashvars.USERID = '4'; 
+
+  var flashvars = {};
+  flashvars.USERNAME = 'sgraham';
+  flashvars.USERID = '4';
   flashvars.USERSTATUS = '1';
   flashvars.OOI = 'true';
   flashvars.builder = 'true';
@@ -73,18 +73,18 @@ function loadFlash() {
   flashvars.OWLPATH = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/owl/ioos/' ?>';
   flashvars.MAPID = '0';
   flashvars.SWFLOCATION = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/swf/' ?>';
-  
+
   var params = {};
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
-  
+
   // this line is unchanged from the mwsci website
   swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20140619_0828.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
-  
+
   return;
 }
 
 function getXMLfromJS() {
-  
+
   //alert('joe');
 
   // get the contents of the text area
@@ -101,10 +101,10 @@ function getXMLfromJS() {
 }
 
 function getMapTitleAndDesc() {
-  
+
   var mapTitleAndDesc = {title: document.getElementById('edit-title').value, description: document.getElementById('edit-body-und-0-value').value};
     return mapTitleAndDesc;
-    
+
 }
 
 
@@ -169,22 +169,22 @@ function generateXMLFromItems(items) {
 
   }
 
-  if (strCM.length > 0) 
+  if (strCM.length > 0)
     str += '<conceptmaps>' + strCM + '</conceptmaps>';
 
-  if (strEV.length > 0) 
+  if (strEV.length > 0)
     str += '<visualizations>' + strEV + '</visualizations>';
 
-  if (strLLB.length > 0) 
+  if (strLLB.length > 0)
     str += '<lessons>' + strLLB + '</lessons>';
 
-  if (strImages.length > 0) 
+  if (strImages.length > 0)
     str += '<images>' + strImages + '</images>';
 
-  if (strVideos.length > 0) 
+  if (strVideos.length > 0)
     str += '<videos>' + strVideos + '</videos>';
 
-  if (strDocs.length > 0) 
+  if (strDocs.length > 0)
     str += '<docs>' + strDocs + '</docs>';
 
 
@@ -197,18 +197,34 @@ function generateXMLFromItems(items) {
 }
 
 function launchResourceBrowser() {
-  
+
   selectedResources.length = 0;
 
   bootbox.dialog({
-        message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/dialog/search" seamless width="779" height="500" class="resource-browser-iframe" />',
+        //message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/dialog/search" seamless width="779" height="500" class="resource-browser-iframe" />',
+        message: '<iframe src="' + '<?php echo base_path() ?>'  + 'dialog/resource-browser#/search" seamless width="779" height="500" class="resource-browser-iframe" />',
         className: 'resource-browser-modal',
         buttons: {
           main: {
             label: "Add Selected",
             className: "btn btn-primary pull-left",
             callback: function(event) {
-            var selected = [];
+              var selected = JSON.parse(jQuery.session.get('selectedResources'));
+              _.each(_.keys(selected), function(key_val, key) {
+                _.each(selected[key_val], function(val) {
+                  jQuery.ajax({
+                    url: Drupal.settings.epe.base_path + 'api/resource/' + key_val + '/' + val,
+                    dataType: 'json',
+                    async: true,
+                    success: function(data) {
+                      window.addItem(data);
+                    }
+                  });
+                });
+                selected[key_val] = [];
+              });
+              jQuery.session.set('selectedResources',JSON.stringify(selected));
+            /*var selected = [];
             event.preventDefault();
             var checkboxes = jQuery('.resource-browser-iframe').contents().find('input[name="nid"]');
             checkboxes.each(function() {
@@ -222,12 +238,17 @@ function launchResourceBrowser() {
                     }
                   });
               }
-            });
+            });*/
             }
           },
           cancel: {
             label: "Cancel",
-            className: "btn"
+            className: "btn",
+            callback: function(event) {
+              var selected = JSON.parse(jQuery.session.get('selectedResources'));
+              selected = {};
+              $.session.set('selectedResources',JSON.stringify(selected));
+            }
           }
         }
       });

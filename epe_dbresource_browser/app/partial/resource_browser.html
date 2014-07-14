@@ -1,0 +1,43 @@
+<div class="rb-search-filter">
+<select ng-options="filter.label for filter in browser.resource_filters" ng-model="browser.resource_filter" ng-change="fn.changeViewMode()"></select>
+
+<form ng-submit="fn.searchTerm()">
+<div class="form-horizontal">
+<input type="text" ng-model="search.term" value="" placeholder="Search by Keyword"> <input type="submit" class="btn" value="Search">
+</div>
+</form>
+</div>
+
+<div class="rb-type-selector">
+  <ul ng-show="browser.enabled_modules.length > 1" class="clearfix">
+    <li ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
+  </ul>
+
+<div class="rb-ads" ng-show="!browser.selected_module.editmode">
+  <a href="{{browser.selected_module.adurl}}">
+    <img ng-src="{{browser.selected_module.adimagepath}}" width="247" height="65">
+  </a>
+</div>
+</div> <!-- /rb-type-selector -->
+
+<br clear="all">
+
+<table>
+  <thead>
+    <th>Title/Info</th>
+    <th width="134">Author</th>
+    <th width="134">Modify date</th>
+  </thead>
+  <tbody>
+    <tr ng-show="browser.data.length < 1">
+      <td colspan="3" style="text-align:center;">No {{browser.selected_module.type}} Found</td>
+    </tr>
+    <tr tabular-data ng-repeat="data in browser.data"
+      row="data" type="browser.selected_module.api">
+    </tr>
+  </tbody>
+</table>
+
+<div class="paging" ng-show="browser.selected_module.numberofpages > 1">
+  <span ng-repeat="n in [] | range:browser.selected_module.numberofpages"><a ng-click="fn.setCurrentPage(n+1)" ng-class="fn.setActivePage(n+1)">{{n+1}}</a></span>
+</div>

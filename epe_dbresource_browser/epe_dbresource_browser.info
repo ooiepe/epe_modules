@@ -4,5 +4,3 @@ core = 7.x
 package = EPE
 version = 7.x-0.5-alpha
 project = epe_dbresource_browser
-
-dependencies[] = angularjs

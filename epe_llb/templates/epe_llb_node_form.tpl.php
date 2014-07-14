@@ -443,6 +443,15 @@
   <?php echo render($form['field_resource_file']); ?>
   </div>
 
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Resources File Type</strong></label>
+  <?php echo render($form['field_resource_file_type']); ?>
+  </div>
+
+  <div class="control-group">
+  <?php echo render($form['field_resource_file_note']); ?>
+  </div>
+
   <button type="button" class="btn btn-success" data-toggle="tab" data-target="setup" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#notes -->
 

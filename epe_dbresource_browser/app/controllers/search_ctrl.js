@@ -1,0 +1,218 @@
+define(['app','ngload!services/dataServices','directives/tabularData','ngload!filters/range','ngProgress'], function(app) {
+  app.controller('SearchCtrl', ['$scope','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
+    function($scope,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {
+      //init scope params
+      $scope.fn = {};
+      $scope.resources = {};
+      $scope.panes = {};
+      $scope.panes.table = [];
+      $scope.panes.active = '';
+      $scope.panes.dialogmode = false;
+      $scope.panes.showtabs = true;
+      $scope.browser = {};
+      $scope.browser.resource_filters = JSON.parse(Drupal.settings.resourceBrowser.resource_filter);
+      $scope.browser.resource_filter = '';
+      $scope.browser.modules = JSON.parse(Drupal.settings.resourceBrowser.epe_modules);
+      $scope.browser.enabled_modules = [];
+      $scope.browser.selected_module = {};
+      $scope.browser.queryparams = {};
+      $scope.browser.data = [];
+      $scope.search = {};
+
+      //set additional settings for each module view
+      angular.forEach($scope.browser.modules, function(module, index) {
+        var module_config = {
+          type:module.label,
+          data:[],
+          active:module.default,
+          weight:module.weight,
+          api:module.api,
+          active: false,
+          activeClass: '',
+          showad: false,
+          currentPage: 0,
+          pageSize: Drupal.settings.resourceBrowser.page_size,
+          adurl: module.adurl,
+          adimagepath: module.adimagepath,
+          hasrecord: false,
+          total_rows: 0,
+          numberofpages: 0,
+          editmode: Drupal.settings.resourceBrowser.editmode,
+          queryParams: {}
+        };
+
+        if(typeof $routeParams['exclude'] != 'undefined' && $routeParams['exclude'] == 'true') {
+          if($routeParams['type'] == module_config.api) {
+            $scope.browser.enabled_modules.push(module_config);
+          }
+        } else {
+          $scope.browser.enabled_modules.push(module_config);
+        }
+      });
+
+      //define init function
+      $scope.fn.init = function() {
+        _.each($scope.browser.enabled_modules, function(module) {
+          if(module.api == $routeParams['type']) {
+            module.active = true;
+            module.activeClass = 'active';
+            $scope.browser.selected_module  = module;
+          } else {
+            module.active = false;
+            module.activeClass = '';
+          }
+        });
+        $scope.fn.serviceParams = {};
+        $scope.fn.serviceParams['resource_type'] = $scope.browser.selected_module.api;
+        if(typeof $routeParams['page'] != 'undefined') {
+          $scope.fn.serviceParams['page'] = $routeParams['page'] - 1;
+        }
+        if(typeof $routeParams['search'] != 'undefined') {
+          $scope.fn.serviceParams['search'] = $routeParams['search'];
+        }
+        if(typeof $routeParams['filter'] != 'undefined') {
+          $scope.fn.serviceParams['filter'] = $routeParams['filter'];
+          var selected_filter = _.find($scope.browser.resource_filters, function(filter) { return $routeParams['filter'] == filter.filter; });
+          if(selected_filter != 'undefined') $scope.browser.resource_filter = selected_filter;
+        } else {
+          $scope.browser.resource_filter = $scope.browser.resource_filters[0];
+        }
+        //query counts very time, counts return minimal data so performance hit should be minimal however still should cache this somehow
+        epeDataService.getPager($scope.fn.serviceParams,true).then(function(res) {
+          _.each($scope.browser.enabled_modules, function(module, key) {
+            var pager_data = _.find(res.data, function(pager,key) {
+              return pager['api'] == module['api'];
+            });
+            module['total_rows'] = pager_data['total_rows'];
+            module['numberofpages'] = pager_data['total_pages'];
+          });
+        });
+
+        //query selected tab's dataset and only selected tab
+        ngProgress.height('10px');
+        var progress = 0;
+        ngProgress.start();
+        epeDataService.getData($scope.fn.serviceParams).then(function(res) {
+          var nodes = res.data.nodes;
+          angular.forEach(nodes, function(node) {
+            $scope.browser.data.push(node.node);
+          });
+
+          ngProgress.complete();
+        });
+
+        //cache query param into session
+        var params = {};
+        params['type'] = $scope.browser.selected_module.api;
+        params['page'] = $routeParams['page'];
+        if(typeof $routeParams['search'] != 'undefined') {
+          params['search'] = $routeParams['search'];
+        }
+        if(typeof $routeParams['filter'] != 'undefined') {
+          params['filter'] = $routeParams['filter'];
+        }
+        $scope.browser.queryparams = webStorage.session.get('queryparams');
+        if($scope.browser.queryparams == null) {
+          $scope.browser.queryparams = {};
+        }
+        $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
+        webStorage.session.add('queryparams',$scope.browser.queryparams);
+      }
+
+      //no module type defined, we reload the browser with url of the 1st module
+      if(typeof $routeParams['type'] == "undefined" || (
+        typeof $routeParams['type'] != "undefined" && (
+          $routeParams['type'] == '' ||
+          !_.find($scope.browser.enabled_modules, function(module) { return module['api'] == $routeParams['type']; })
+        )
+        )) {
+        var params = {};
+        params['type'] = $scope.browser.enabled_modules[0].api;
+        params['page'] = 1;
+        $location.search(params);
+      } else {
+        $scope.fn.init();
+      }
+
+      $scope.search.term = $routeParams['search'];
+      $scope.fn.searchTerm = function() {
+        var params = {};
+        params['type'] = $scope.browser.selected_module.api;
+        if(typeof $routeParams['page'] != 'undefined' && $routeParams['page'] > 1) {
+          params['page'] = $routeParams['page'] - 1;
+        } else {
+          params['page'] = 1;
+        }
+        if($scope.search.term != '') {
+          params['search'] = $scope.search.term;
+        }
+        if(typeof $routeParams['filter'] != 'undefined') {
+          params['filter'] = $routeParams['filter'];
+        }
+        $location.search(params);
+      }
+
+      //set click action on resource tab icon
+      $scope.fn.setActiveModule = function(module) {
+        var params = {};
+        //cache current viewing module
+        $scope.browser.queryparams = webStorage.session.get('queryparams');
+        if(typeof $scope.browser.queryparams[module.api] == 'undefined') {
+          params['type'] = module.api;
+          params['page'] = 1;
+          if(typeof $routeParams['search'] != 'undefined') {
+            params['search'] = $routeParams['search'];
+          }
+        } else {
+          params = $scope.browser.queryparams[module.api];
+        }
+        if(typeof $routeParams['filter'] != 'undefined') {
+          params['filter'] = $routeParams['filter'];
+        }
+
+        $location.search(params);
+      } //end setActiveModule function
+
+      //swich filter type
+      $scope.fn.changeViewMode = function() {
+        var params = {};
+        params['type'] = $scope.browser.selected_module.api;
+        params['page'] = 1;
+        if(typeof $routeParams['search'] != 'undefined') {
+          params['search'] = $routeParams['search'];
+        }
+        if(typeof $routeParams['exclude'] != 'undefined' && $routeParams['exclude'] == 'true') {
+          params['exclude'] = "true";
+        }
+        params['filter'] = $scope.browser.resource_filter.filter;
+        $location.search(params);
+      }
+
+      $scope.fn.setCurrentPage = function(page) {
+        var params = {};
+        params['type'] = $scope.browser.selected_module.api;
+        params['page'] = page;
+        if(typeof $routeParams['search'] != 'undefined') {
+          params['search'] = $routeParams['search'];
+        }
+        if(typeof $routeParams['exclude'] != 'undefined' && $routeParams['exclude'] == 'true') {
+          params['exclude'] = "true";
+        }
+        if(typeof $routeParams['filter'] != 'undefined') {
+          params['filter'] = $routeParams['filter'];
+        }
+
+        $location.search(params);
+      }
+
+      $scope.fn.setActivePage = function(number) {
+        if(typeof $routeParams['page'] != 'undefined' && number == $routeParams['page'] ) {
+          return 'active';
+        } else if(typeof $routeParams['page'] == 'undefined' && number == 1) {
+          return 'active';
+        } else {
+          return 'inactive';
+        }
+      }
+    }]); //end controller function
+}); //end define

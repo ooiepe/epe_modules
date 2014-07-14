@@ -182,4 +182,79 @@ function epe_cm_update_7002(&$sandbox) {
       field_create_instance($instance);
     }
   }
+
+  $search_api_index = entity_load_single('search_api_index', 'epe_cm_search_index');
+  $search_api_index->options['fields']['title'] = array('type'=>'string');
+  entity_save('search_api_index', $search_api_index);
+
+  $view = views_get_view('epe_cm_search_view', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['pager']['type'] = 'full';
+  $view->display[$view->current_display]->display_options['pager']['options']['items_per_page'] = '10';
+  $view->display[$view->current_display]->display_options['pager']['options']['offset'] = '0';
+  $view->display[$view->current_display]->display_options['pager']['options']['id'] = '0';
+  $view->display[$view->current_display]->display_options['pager']['options']['quantity'] = '9';
+
+  /* Filter criterion: Indexed Node: Featured Status */
+  $view->display[$view->current_display]->display_options['filters']['field_featured_status']['id'] = 'field_featured_status';
+  $view->display[$view->current_display]->display_options['filters']['field_featured_status']['table'] = 'search_api_index_epe_cm_search_index';
+  $view->display[$view->current_display]->display_options['filters']['field_featured_status']['field'] = 'field_featured_status';
+  $view->display[$view->current_display]->display_options['filters']['field_featured_status']['value'] = array(
+    'Not-Featured' => 'Not-Featured',
+    'Featured' => 'Featured',
+  );
+  $view->display[$view->current_display]->display_options['filters']['field_featured_status']['group'] = 2;
+
+  /* Sort criterion: Indexed Node: Title */
+  $view->display[$view->current_display]->display_options['sorts']['title']['id'] = 'title';
+  $view->display[$view->current_display]->display_options['sorts']['title']['table'] = 'search_api_index_epe_cm_search_index';
+  $view->display[$view->current_display]->display_options['sorts']['title']['field'] = 'title';
+  $view->display[$view->current_display]->display_options['sorts']['title']['exposed'] = TRUE;
+  $view->display[$view->current_display]->display_options['sorts']['title']['expose']['label'] = 'Title';
+
+  /* Display: RESTful API for Logged In User */
+  $view->new_display('block', 'RESTful API for Logged In User', 'my_list');
+
+  $view->display['my_list']->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Author: User ID (indexed) */
+  $view->display['my_list']->display_options['arguments']['author_uid']['id'] = 'author_uid';
+  $view->display['my_list']->display_options['arguments']['author_uid']['table'] = 'search_api_index_epe_cm_search_index';
+  $view->display['my_list']->display_options['arguments']['author_uid']['field'] = 'author_uid';
+  $view->display['my_list']->display_options['arguments']['author_uid']['default_action'] = 'default';
+  $view->display['my_list']->display_options['arguments']['author_uid']['default_argument_type'] = 'current_user';
+  $view->display['my_list']->display_options['arguments']['author_uid']['summary']['format'] = 'default_summary';
+  $view->display['my_list']->display_options['arguments']['author_uid']['break_phrase'] = 0;
+  $view->display['my_list']->display_options['arguments']['author_uid']['not'] = 0;
+
+  views_save_view($view);
+}
+
+/**
+ * update cm views to support resource browser
+ */
+function epe_cm_update_7003(&$sandbox) {
+  $search_api_index = entity_load_single('search_api_index', 'epe_cm_search_index');
+
+  $search_api_index->options['fields']['search_api_aggregation_1'] = array('type'=>'text');
+
+  $search_api_index->options['data_alter_callbacks']['search_api_alter_add_aggregation'] = array('status'=>1,'weight'=>0,'settings'=>array(
+      'fields'=>array('search_api_aggregation_1'=>array(
+        'name'=>'title_main_body_fulltext_search',
+        'type'=>'fulltext',
+        'fields'=>array('title','body:value'),
+        'description'=>'A Fulltext aggregation of the following fields: Title, The main body text.',
+        ),
+      ),
+    ),
+  );
+
+  $search_api_index->options['processors']['search_api_case_ignore']['settings']['fields']=array('title'=>true, 'body:value'=>true, 'search_api_aggregation_1'=>true);
+  $search_api_index->options['processors']['search_api_html_filter']['settings']['fields']=array('title'=>true, 'body:value'=>true,'search_api_aggregation_1'=>true);
+
+  entity_save('search_api_index', $search_api_index);
+
+  module_load_include('inc','epe_cm','epe_cm.views_default');
+  $view_definition = epe_cm_views_default_views();
+  views_save_view($view_definition['epe_cm_search_view']);
 }
