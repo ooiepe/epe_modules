@@ -88,10 +88,12 @@ table.ng-scope td .thumb {
     height: 89px;
 }
 
-
+.rb-type-selector { width: 600px; }
 .rb-type-selector ul {
   list-style: none;
   margin: 0;
+  float: left;
+  margin-right: 20px;
 }
 .rb-type-selector ul li {
   float: left;
@@ -177,4 +179,7 @@ table.ng-scope td .thumb {
   text-shadow: none;
   border-color: #52839c;
 }
-
+.paging { padding-top: 10px; text-align: center; }
+.paging a { padding-right: 10px; cursor: pointer; }
+.paging a:hover { font-weight: bold; }
+.paging a.active { font-weight: bold; }

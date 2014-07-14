@@ -16,7 +16,9 @@ if($images):
       <?php
         } else {
           $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide->uri, 'alt' => '', 'title' => '');
-          echo theme('image_style', $slide_image);
+      ?>
+      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>"><?php echo theme('image_style', $slide_image); ?></a>
+      <?php
         }
       ?>
       <?php if($slide->title != ''): ?>

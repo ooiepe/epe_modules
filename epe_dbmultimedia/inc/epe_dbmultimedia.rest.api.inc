@@ -1,12 +1,10 @@
 <?php
-/*
- * declare restful api menu callback
- */
-function epe_dbdocument_restful_api() {
+
+function epe_dbmultimedia_restful_api() {
   global $user;
   $display_name = 'all';
 
-  $view = views_get_view('document_resource_index');
+  $view = views_get_view('multimedia_resource_index');
   //set view to the display machine id
   if(isset($_GET['filter']) && $_GET['filter'] == 'author') {
     $display_name = 'author';
@@ -50,7 +48,7 @@ function epe_dbdocument_restful_api() {
   echo $view->render();
 }
 
-function epe_dbdocument_restful_api_node($nid) {
+function epe_dbmultimedia_restful_api_node($nid) {
   $item = array(
     'nid' => '',
     'type' => '',
@@ -64,7 +62,7 @@ function epe_dbdocument_restful_api_node($nid) {
   );
 
   $node = node_load($nid);
-  if($node && $node->type == 'document_resource') {
+  if($node && in_array($node->type, array('audio_resource','video_resource'))) {
     $wrapper = entity_metadata_wrapper('node',$node);
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
@@ -79,14 +77,24 @@ function epe_dbdocument_restful_api_node($nid) {
       $item['source_url'] = $wrapper->field_source_url->url->value(array('sanitize' => TRUE));
     }
 
-    $image = $wrapper->field_document_resource_image->value();
-    if($image) {
-      $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
-      $item['uri'] = $image['uri'];
-    }
-    $file = $wrapper->field_document_resource_file->value();
-    if($file) {
-      $item['file'] = $file['uri'];
+    if($item['type'] == 'audio_resource') {
+      $image = $wrapper->field_audio_resource_image->value();
+      if($image) {
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+        $item['uri'] = $image['uri'];
+      }
+      $file = $wrapper->field_audio_resource_file->value();
+      if($file) {
+        $item['file'] = $file['uri'];
+      }
+    } else {
+
+      $field = field_get_items('node', $node, 'field_video_resource_file');
+      if($field) {
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
+        $item['uri'] = $field[0]['thumbnailfile']->uri;
+        $item['file'] = file_create_url($field[0]['uri']);
+      }
     }
   }
 

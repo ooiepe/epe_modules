@@ -32,6 +32,8 @@
   <div>
     <div class="span7">
       <?php echo render($content['body']); ?>
+      <?php unset($content['links']['node']['#links']['node-readmore']); ?>
+      <?php unset($content['links']['comment']['#links']['comment-add']); ?>
       <?php echo render($content['links']); ?>
     </div>
     <div class="span5">
@@ -68,7 +70,7 @@
       <?php //print render($content['links']); ?>
     </footer>
   <?php endif; ?>
-  
+
   <!-- display any places this item is included and any items copied from this item -->
   <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 

@@ -135,7 +135,8 @@
           }
         ?>
         </div>
-        <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a>
+        <!-- <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a> -->
+        <a href="#dataset<?php echo $key; ?>"><?php echo $dataset->title; ?></a>
       </div>
     </li>
     <?php endforeach; ?>
@@ -202,7 +203,9 @@ function giveXMLtoJS(value) {
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
-    <li><a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Exploration</a> <span class="divider">/</span></li>
+    <li><!-- <a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');"> -->
+      <a href="#exploration">
+      Exploration</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
