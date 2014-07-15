@@ -72,7 +72,7 @@ function epe_cm_views_default_views() {
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
           $node = node_load($data->entity);
           $image = field_get_items(\'node\', $node, \'field_instance_thumbnail\');
-          $output = '';
+          $output = \'\';
           if($image) {
           $output = field_view_value(\'node\', $node, \'field_instance_thumbnail\', $image[0], array(
             \'type\' => \'image\',
@@ -81,7 +81,7 @@ function epe_cm_views_default_views() {
             ),
           ));
           }
-    echo render($output);
+          echo render($output);
       ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
