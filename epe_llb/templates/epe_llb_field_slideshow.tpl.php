@@ -7,20 +7,22 @@ if($images):
     <?php $slideclasses = array('item'); ?>
     <?php if($key == 0): array_push($slideclasses, "active"); endif; ?>
     <div class="<?php echo implode(' ', $slideclasses); ?>">
-      <?php
-        if($slide->type == 'video_resource') {
-      ?>
+      <?php if($slide->type == 'video_resource') { ?>
         <video id="video-<?php echo $slide->nid ?>-video" data-setup="{}" class="video-js vjs-default-skin" width="480" height="320" controls="controls" preload="auto" poster="<?php echo $slide->thumbnail; ?>">
           <source src="<?php echo $slide->file; ?>">
         </video>
+      <?php } else { ?>
+      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>">
       <?php
-        } else {
-          $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide->uri, 'alt' => '', 'title' => '');
+      if($slide->uri != '') {
+        $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide->uri, 'alt' => '', 'title' => '');
+        echo theme('image_style', $slide_image);
+      } else {
+        echo '<img src="' . $slide->thumbnail . '" style="width:480px;height:320px;">';
+      }
       ?>
-      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>"><?php echo theme('image_style', $slide_image); ?></a>
-      <?php
-        }
-      ?>
+      </a>
+      <?php } ?>
       <?php if($slide->title != ''): ?>
       <div class="carousel-caption">
         <p><?php echo $slide->title; ?></p>

@@ -8,6 +8,8 @@ function epe_cm_data_restful_api($nid) {
     'type' => '',
     'title' => '',
     'body' => '',
+    'uri' => '',
+    'file' => '',
     'thumbnail' => base_path() . path_to_theme() . '/images/no_thumb_small.jpg'
   );
 
@@ -24,8 +26,9 @@ function epe_cm_data_restful_api($nid) {
     $image = $wrapper->field_instance_thumbnail->value();
     if($image) {
       $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+      $item['uri'] = $image['uri'];
+      $item['file'] = file_create_url($image['uri']);
     }
-
   }
 
   echo json_encode($item);
