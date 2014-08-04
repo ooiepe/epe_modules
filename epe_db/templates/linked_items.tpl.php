@@ -35,7 +35,7 @@ if ($copies_of_results->rowCount() > 0)
 ?>
 
 
-<?php if ($isUsedByOtherResources == 1 || $hasCopiesOf == 1): ?>
+<?php if ($isUsedByOtherResources == 1 || $hasChildResources == 1 || $hasCopiesOf == 1): ?>
 
     <div class="tabbable">
     <ul class="nav nav-tabs">
