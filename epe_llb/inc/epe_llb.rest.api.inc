@@ -56,7 +56,9 @@ function epe_llb_restful_api_node($nid) {
     'type' => '',
     'title' => '',
     'body' => '',
-    'thumbnail' => ''
+    'thumbnail' => base_path() . path_to_theme() . '/images/no_thumb_small.jpg',
+    'uri' => '',
+    'file' => ''
   );
 
   $node = node_load($nid);

@@ -111,7 +111,9 @@ function epe_ev_restful_api_node($nid) {
     'type' => '',
     'title' => '',
     'body' => '',
-    'thumbnail' => ''
+    'uri' => '',
+    'file' => '',
+    'thumbnail' => base_path() . path_to_theme() . '/images/no_thumb_small.jpg'
   );
 
   $node = node_load($nid);
@@ -125,10 +127,11 @@ function epe_ev_restful_api_node($nid) {
     }
 
     $image = $wrapper->field_instance_thumbnail->value();
-    $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
-    $item['uri'] = $image['uri'];
-
-    $item['file'] = file_create_url($image['uri']);
+    if($image) {
+      $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
+      $item['uri'] = $image['uri'];
+      $item['file'] = file_create_url($image['uri']);
+    }
   }
 
   echo json_encode($item);

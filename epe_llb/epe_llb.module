@@ -792,6 +792,7 @@ function epe_llb_node_view_alter(&$build) {
         $dataset = epe_llb_reload_dataset($dataset, $assoc_resources);
       }
     }
+
     $build['field_introductory_slideshow']['#items'][0]['value'] = json_encode($intro_slideshow);
 
     $background_slideshow = json_decode($build['field_background_slideshow']['#items'][0]['value']);
@@ -807,6 +808,7 @@ function epe_llb_node_view_alter(&$build) {
         $dataset = epe_llb_reload_dataset($dataset, $assoc_resources);
       }
     }
+
     $build['field_background_slideshow']['#items'][0]['value'] = json_encode($background_slideshow);
 
     $challenge_thumbnail = json_decode($build['field_challenge_thumbnail']['#items'][0]['value']);
