@@ -56,6 +56,16 @@ function epe_dbresource_browser_pager_api() {
         $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
       }
 
+      if($display_name != 'author') {
+        $featured_filter = array('Not-Featured'=>'Not-Featured','Featured'=>'Featured');
+        if(isset($_GET['filter']) && $_GET['filter'] == 'featured') {
+          unset($featured_filter['Not-Featured']);
+        }
+        $filter = $view->get_item($display_name, 'filter', 'field_featured_status');
+        $filter['value'] = $featured_filter;
+        $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
+      }
+
       $view->pre_execute();
       $view->execute();
 
