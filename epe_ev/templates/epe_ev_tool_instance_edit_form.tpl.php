@@ -165,14 +165,14 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
     // pull the configuration from the default tool instance
     var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration,
-        thumbnailId = $( "input[name='field_instance_thumbnail[und][0][fid]']" );
+        thumbnailId = jQuery( "input[name='field_instance_thumbnail[und][0][fid]']" );
       
     // update the configuration value of the form element
-    $("#edit-field-instance-configuration-und-0-value")
+    jQuery("#edit-field-instance-configuration-und-0-value")
       .val(JSON.stringify(config));
 
     // check for the instance thumbnail.. if nothing is present, use the parent
-    if(thumbnailId.val() == "0"){
+    if(thumbnailId.val() === "0"){
       thumbnailId.val(<?php print $ev_tool["parentThumbnailId"];?>)
     }
   
@@ -182,10 +182,10 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
   (function(){
 
     // update the parent tool ID form element
-    $("#edit-field-parent-tool-und-0-value").val("<?php print $ev_tool["parent_tool_id"];?>");
+    jQuery("#edit-field-parent-tool-und-0-value").val("<?php print $ev_tool["parent_tool_id"];?>");
 
     // add an event to the submit button
-    $('#edit-submit').click(function(){
+    jQuery('#edit-submit').click(function(){
       return EduVis_extract();
     });
     

@@ -111,7 +111,7 @@
 
   // tool buttons
 
-  $("#tool-function-export-image")
+  jQuery("#tool-function-export-image")
     .on("click", function(){
 
       svgToCanvas();

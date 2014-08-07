@@ -8,9 +8,7 @@
 *
 */
 
-$ = $ || jQuery;
-
-var EduVis = (function () {
+var $ev, EduVis = (function () {
 
   "use strict";
 
@@ -91,7 +89,7 @@ var EduVis = (function () {
     if(typeof a.dependsOn !== undefined)
       if(a.dependsOn.length==0) return true;
 
-    $.each(a.dependsOn,function(i,d){
+    jQuery.each(a.dependsOn,function(i,d){
       if(_asset_isLoaded(_asset_findDependencyByName(d,scripts))){
         dependendencies_loaded++;
       } 
@@ -102,7 +100,7 @@ var EduVis = (function () {
 
   _asset_areAssetsLoaded = function(scripts){
     var assets_loaded = true;
-    $.each(scripts, function(a, asset){
+    jQuery.each(scripts, function(a, asset){
       if(!_asset_isLoaded(asset)){
         assets_loaded = false;
       }
@@ -113,7 +111,7 @@ var EduVis = (function () {
   _asset_findDependencyByName = function(name,scripts){
     
     var asset_selected;
-    $.each(scripts, function(z, asset){
+    jQuery.each(scripts, function(z, asset){
 
       if(asset.name == name) asset_selected = asset;
       return ( asset.name !== name);
@@ -157,7 +155,7 @@ var EduVis = (function () {
         }
         
         //ajax request for script
-        $.getScript( asset_path )
+        jQuery.getScript( asset_path )
           
           .done(function( script, textStatus ) {
 
@@ -247,7 +245,7 @@ var EduVis = (function () {
       }
       else{
         // sub sub dependencies are presnet
-        $.each(sao.dependsOn, function(doi, dependencyName){
+        jQuery.each(sao.dependsOn, function(doi, dependencyName){
             
             // do the sub sub dependencies have additional dependencies?
 
@@ -275,7 +273,7 @@ var EduVis = (function () {
     console.log("ASSET QUEUE RESOURCES -> resources", scripts);
 
     // script asset object
-    $.each(scripts, function(si, sao){
+    jQuery.each(scripts, function(si, sao){
       /// does this have dependency?
       // if not, load it
       if(!_asset_hasDependency(sao)){
@@ -292,7 +290,7 @@ var EduVis = (function () {
 
     console.log("ASSET QUEUE STYLESHEETS -> stylesheets", stylesheets);
 
-    $.each(stylesheets, function(i,v){
+    jQuery.each(stylesheets, function(i,v){
 
       console.log(".. load the stylesheet", i, v);
       _asset_load_stylesheet( v, _tool_name );
@@ -319,7 +317,7 @@ var EduVis = (function () {
 }(EduVis));
 
 //inject into a new style via ajax
-// $.ajax({
+// jQuery.ajax({
 //   url:"site/test/style.css",
 //   success:function(data){
 //        $("<style></style>").appendTo("head").html(data);
@@ -646,13 +644,13 @@ var EduVis = (function () {
             else{isEdit = false;}
         }
                         
-        var tool_container_div = $(obj_tool.tool_container_div);
-        //dom_target = $("#" + obj_tool.dom_target);
+        var tool_container_div = jQuery(obj_tool.tool_container_div);
+        //dom_target = jQuery("#" + obj_tool.dom_target);
 
-        var tool_container = $("<div></div>")
+        var tool_container = jQuery("<div></div>")
             .addClass("tool-container")
             .append(
-                $("<div/>").attr("id", obj_tool.dom_target)
+                jQuery("<div/>").attr("id", obj_tool.dom_target)
             )
             .appendTo(
                 tool_container_div
@@ -660,24 +658,24 @@ var EduVis = (function () {
 
         // create loading div
 
-        var loading_div = $("<div/>")
+        var loading_div = jQuery("<div/>")
             .addClass("loading")
             .attr("id", obj_tool.dom_target + "_loading")
             .append(
-                $("<div></div>")
+                jQuery("<div></div>")
                     .html(
                         "<p><em>Loading... " + obj_tool.name + "</em><p>"
                     )
             )
             .append(
-                $('<img src="' + EduVis.Environment.getPathResources() + 'img/loading_small.gif" />')
+                jQuery('<img src="' + EduVis.Environment.getPathResources() + 'img/loading_small.gif" />')
             )
             .appendTo(
                 tool_container_div
             )
 
         // Ajax request for tool javascript source. on success, queue up the tool resources. If an instance id is provided, call Configuraiton.request_instance.
-        $.getScript( EduVis.Environment.getPathTools() + obj_tool.name + "/" + obj_tool.name + '.js', function() {
+        jQuery.getScript( EduVis.Environment.getPathTools() + obj_tool.name + "/" + obj_tool.name + '.js', function() {
             
             //c onsole.log("....tool notify....")
 
@@ -732,7 +730,7 @@ var EduVis = (function () {
             _obj_tool.objDef.onLoadComplete();
         }
         
-        $('#' + div_loading).fadeOut();
+        jQuery('#' + div_loading).fadeOut();
 
     },
 
@@ -832,7 +830,7 @@ var EduVis = (function () {
 
                     if(typeof EduVis.tool.instances[name][instance_id] === "object"){
 
-                        instance_id = instance_id + "_" + ($(EduVis.tool.instances[name]).length + 1);
+                        instance_id = instance_id + "_" + (jQuery(EduVis.tool.instances[name]).length + 1);
 
                         obj_tool.instance_id = instance_id;
 
@@ -852,7 +850,7 @@ var EduVis = (function () {
                 }
 
                 // update instance configuration 
-                $.extend(EduVis.tool.instances[name][instance_id].configuration, obj_tool.instance_config);
+                jQuery.extend(EduVis.tool.instances[name][instance_id].configuration, obj_tool.instance_config);
 
                 // instance
                 // EduVis.tool.instances[name][instance_id]
@@ -904,10 +902,10 @@ var EduVis = (function () {
             divControls,
             el_btn;
 
-            divToolEditor = $("<div></div>")
+            divToolEditor = jQuery("<div></div>")
                 .addClass("ToolEditor");
 
-            divControls = $("<div></div>")
+            divControls = jQuery("<div></div>")
                 .addClass("tool-control")
 
         // create a div and write out all controls for editing a specific tool configuration file
@@ -926,7 +924,7 @@ var EduVis = (function () {
         else{
 
             // Add each control to the specified div
-            $.each(tool.controls, function (index, control) {
+            jQuery.each(tool.controls, function (index, control) {
                 
                 divControls.append(
                     EduVis.controls.create(tool,"config-"+index, control)
@@ -938,7 +936,7 @@ var EduVis = (function () {
             divToolEditor.append(divControls);
 
              // Now draw an update button that will redraw the instance
-            el_btn = $('<button type="button">Redraw Visualization</button>')
+            el_btn = jQuery('<button type="button">Redraw Visualization</button>')
                 .addClass("btn pull-right")
                 .click( function () { _tool_redraw(tool_name, instance_id); })
                 .appendTo(divToolEditor);
@@ -946,7 +944,7 @@ var EduVis = (function () {
                 
         // todo: add instance 
 
-        $("#" + target_div)
+        jQuery("#" + target_div)
             .append(divToolEditor);
 
     },
@@ -1012,41 +1010,41 @@ var EduVis = (function () {
 
         var domTarget = (typeof _target_div === "undefined") ? "body" : "#" + _target_div; 
 
-        $.getJSON( EduVis.Environment.getPathTools() + "tools.json" , function(tools) {
+        jQuery.getJSON( EduVis.Environment.getPathTools() + "tools.json" , function(tools) {
 
             // set up dom element and add title
-            var toolsHeading = $("<div></div>")
+            var toolsHeading = jQuery("<div></div>")
                 .append(
-                    $("<h1></h1>",{
+                    jQuery("<h1></h1>",{
                         "html" : tools.name,
                         "title" : "Tools as of " + tools.date
                     })
                         .append(
-                            $("<small></small>").html(" Version " + tools.version)
+                            jQuery("<small></small>").html(" Version " + tools.version)
                         )
                 )
             
-            var toolsListing = $("<ul></ul>",{"class":"thumbnails"});
+            var toolsListing = jQuery("<ul></ul>",{"class":"thumbnails"});
 
             // add a thumbnail for each tool... classed as thumbnail
-            $.each(tools.tools, function(id, tool){
+            jQuery.each(tools.tools, function(id, tool){
 
                 var toolName = tool.name.replace(/ /g,"_"),
                     
-                    thumb = $("<li></li>",{"class": "thumbnail span3"})
+                    thumb = jQuery("<li></li>",{"class": "thumbnail span3"})
                     .css({"height":"280px"})
                     .append(
 
-                        $("<div></div>", {
+                        jQuery("<div></div>", {
                             "title" : tool.evId + " - " + tool.name
                         })
                             .append(
-                                $("<img />",{
+                                jQuery("<img />",{
                                     "src" : EduVis.Environment.getPathTools() + __image_path__ + tool.thumbnail
                                 })
                             )
                             .append(
-                                $("<h5></h5>",{
+                                jQuery("<h5></h5>",{
                                     "html" : tool.evId + " - " + tool.name
                                 })   
                             )
@@ -1063,7 +1061,7 @@ var EduVis = (function () {
                 toolsListing.append(thumb);
             });
 
-            $(domTarget).attr("class","container-fluid")
+            jQuery(domTarget).attr("class","container-fluid")
                 .append(toolsHeading)
                 .append(toolsListing)
 
@@ -1280,7 +1278,7 @@ var EduVis = (function () {
         //load an svg snippet in the canvas
         canvg(
           document.getElementById('canvas'),
-          $('<div>').append($("#vistool svg").clone()).html(), // hack to pull html contents
+          jQuery('<div>').append(jQuery("#vistool svg").clone()).html(), // hack to pull html contents
           { ignoreMouse: true, ignoreAnimation: true }
         );
     };
