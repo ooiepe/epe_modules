@@ -29,8 +29,11 @@
     <th width="134">Modify date</th>
   </thead>
   <tbody>
-    <tr ng-show="browser.data.length < 1">
-      <td colspan="3" style="text-align:center;">No {{browser.selected_module.type}} Found</td>
+    <tr ng-show="browser.messages.show_messages">
+      <td colspan="3" style="text-align:center;">
+        <img ng-show="browser.messages.show_progress_bar" src="{{browser.assets_path}}/loading_bar.gif" alt="Loading Content" />
+        <p>{{browser.messages.messages}}</p>
+      </td>
     </tr>
     <tr tabular-data ng-repeat="data in browser.data"
       row="data" type="browser.selected_module.api">
