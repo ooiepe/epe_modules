@@ -893,7 +893,10 @@ function epe_llb_theme_file_dataset($dataset) {
     }
   }
 
-  return '<center>' . $output . '</center>';
+  $output = '<div class="clearfix"><center>' . $output . '</center></div>';
+  $output .= '<div class="clearfix"><a href="'. base_path() .'node/'. $dataset->nid .'" class="pull-right">View Resource Page</a></div>';
+
+  return $output;
 }
 
 function epe_llb_reload_dataset($dataset, $assoc_resources) {

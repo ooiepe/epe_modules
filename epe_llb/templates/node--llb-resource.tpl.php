@@ -223,12 +223,14 @@ function giveXMLtoJS(value) {
       <div id="flashcontent"><p>Please update your Flash Player</p></div>
     </div>
     <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
+    <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>
   <?php
     break;
 
     case 'ev_tool_instance':
   ?>
   <iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
+  <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>
   <?php
     break;
 
