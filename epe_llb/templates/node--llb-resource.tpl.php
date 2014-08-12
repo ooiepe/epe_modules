@@ -203,32 +203,42 @@ function giveXMLtoJS(value) {
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
-    <li><!-- <a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');"> -->
+    <li>
       <a href="#exploration">
       Exploration</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
-
+<p>
   <?php
-    if(in_array($dataset->type, $filetypes)) {
-      echo epe_llb_theme_file_dataset($dataset);
-    } elseif($dataset->type == 'cm_resource') {
+  switch($dataset->type) {
+
+    case 'cm_resource':
       $cm_resource = node_load($dataset->nid);
       $field_cm_data_items = field_get_items('node', $cm_resource, 'field_cm_data');
       $field_cm_data = field_view_value('node',$cm_resource,'field_cm_data', $field_cm_data_items[0]);
       $field_out = render($field_cm_data);
   ?>
-<div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
-  <div id="flashcontent"><p>Please update your Flash Player</p></div>
-</div>
+    <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
+      <div id="flashcontent"><p>Please update your Flash Player</p></div>
+    </div>
+    <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
+  <?php
+    break;
 
-<textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
+    case 'ev_tool_instance':
+  ?>
+  <iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
+  <?php
+    break;
 
-  <?php } elseif($dataset->type == 'ev_tool_instance') { ?>
+    default:
+      echo epe_llb_theme_file_dataset($dataset);
+    break;
 
-<iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
-<?php } //end elseif type == ev_tool_instance ?>
+  }
+  ?>
+</p>
 
   <div class="well well-sm">
     <?php echo $dataset->body; ?>
