@@ -458,3 +458,25 @@ function epe_llb_update_7007(&$sandbox) {
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
 }
+
+/**
+ * EPEDEV-426: add investigation level and teaching mode field
+ */
+function epe_llb_update_7008(&$sandbox) {
+  module_load_include('inc','epe_llb','inc/epe_llb.field_base');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance');
+
+  /* recreate the same field base with text data type */
+  foreach (_epe_llb_field_default_field_bases() as $field) {
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  /* recreate the same field instance with text data type */
+  foreach (_epe_llb_field_default_field_instances() as $instance) {
+    if(!field_info_instance('node', $instance['field_name'], 'llb_resource')) {
+      field_create_instance($instance);
+    }
+  }
+}
