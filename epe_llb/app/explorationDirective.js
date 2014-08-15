@@ -105,12 +105,7 @@ epe_llb_directive.directive('ckeditor', function() {
     link: function($scope, elm, attr, ngModel) {
       var ck = CKEDITOR.replace(elm[0], {
         toolbar: [
-          { name: 'document', items: ['Source'] },
-          { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
-          { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
-          '/',
-          { name: 'insert', items:['HorizontalRule'] },
-          { name: 'styles', items:[ 'Styles', 'Format', 'FontSize' ] }
+          { items: ['Bold', 'Italic', 'Underline', 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', 'Source', 'HorizontalRule'] }
         ]
       });
 
