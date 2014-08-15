@@ -34,6 +34,13 @@
     </p>
     <?php endif; ?>
 
+    <?php if(!empty($content['field_resource_keywords'])): ?>
+    <p>
+    <div style="float:left;"><strong>Keywords:&nbsp;</strong></div>
+    <?php echo render($content['field_resource_keywords']); ?>
+    </p>
+    <?php endif; ?>
+
     <?php if(!empty($content['field_instructional_content'])) { ?>
     <p><strong>Instructional Tips</strong></p>
     <?php echo render($content['field_instructional_content']);

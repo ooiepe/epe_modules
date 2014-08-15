@@ -479,9 +479,14 @@
   </div>
 
   <div class="row-fluid">
-    <label class="control-label" for="inputTitle"><strong>Investigation Description</strong></label>
+    <label class="control-label"><strong>Investigation Description</strong></label>
     <p>Please provide a description of your investigation that includes the science concepts it covers and the goal you have for students who complete it.  If you publish your investigation to the public database, this description will help other educators find your activity and determine if it is useful to them.</p>
     <?php echo render($form['body']); ?>
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <label class="control-label"><strong>Investigation Keywords</strong></label>
+    <?php echo render($form['field_resource_keywords']); ?>
   </div>
 </div> <!-- /#setup -->
 

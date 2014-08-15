@@ -55,6 +55,16 @@ function epe_llb_install() {
   variable_set('node_options_llb_resource',array());
   variable_set('node_preview_llb_resource','0');
   variable_set('node_submitted_llb_resource',0);
+
+  if(!taxonomy_vocabulary_machine_name_load('resource_keywords')) {
+    $vocab = (object) array(
+      'name' => 'Resource Keywords',
+      'description' => 'Tagging resources',
+      'machine_name' => 'resource_keywords',
+    );
+
+    taxonomy_vocabulary_save($vocab);
+  }
 }
 
 /*
@@ -478,5 +488,15 @@ function epe_llb_update_7008(&$sandbox) {
     if(!field_info_instance('node', $instance['field_name'], 'llb_resource')) {
       field_create_instance($instance);
     }
+  }
+
+  if(!taxonomy_vocabulary_machine_name_load('resource_keywords')) {
+    $vocab = (object) array(
+      'name' => 'Resource Keywords',
+      'description' => 'Tagging resources',
+      'machine_name' => 'resource_keywords',
+    );
+
+    taxonomy_vocabulary_save($vocab);
   }
 }
