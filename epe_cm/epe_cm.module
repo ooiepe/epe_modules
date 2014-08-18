@@ -2,58 +2,45 @@
 
 
 
-
-
-function callback_for_cancel_button($form, &$form_state) {
-  $url = $_POST['destination'] ? $_POST['destination'] : '';
-  drupal_goto($url);
-}
-
-function epe_cm_form_alter (&$form, &$form_state, $form_id) {
-
-if ($form['#id'] == 'cm-resource-node-form' || $form['#id'] == 'image-resource-node-form' || $form['#id'] == 'audio-resource-node-form' || $form['#id'] == 'video-resource-node-form' || $form['#id'] == 'document-resource-node-form' || $form['#id'] == 'llb-resource-node-form' || $form['#id'] == 'ev-tool-instance-node-form') {
-$form['actions']['cancel'] = array(
-    '#type'   => 'submit',
-    '#value'  => t('Cancel'),
-    '#submit' => array('callback_for_cancel_button'),
-    '#limit_validation_errors' => array(),
-    '#weight'  => 99,
-  );
-  $form['actions']['delete']['#access'] = FALSE;
-  $form['actions']['preview']['#access'] = FALSE;
-
-}
-
-
-}
-
 /*
  * Implement hook_theme
  * This hook is to style edit form, the theme key needs to be the same as the form function name
  */
 function epe_cm_theme() {
+  $tpl_path = drupal_get_path('module','epe_cm') . '/templates/';
   return array(
     'cm_resource_node_form' => array(
+      'path' => $tpl_path,
       'template' => 'epe_cm_node_edit_form',
       'render element' => 'form',
     ),
   );
 }
 
+
+
 /**
-  * Implement hook_permission
-  */
-function epe_cm_permission() {
-  return array(
-    'epe dbpublic approve' => array(
-      'title' => 'EPE DB Public Approval',
-      'description' => 'Allow user to approve items for inclusion in the public db.',
-    ),
-    'epe dbpublic feature' => array(
-      'title' => 'EPE DB Feature Resources',
-      'description' => 'Allow user to feature resources.',
-    ),
-  );
+ * Implements hook_theme_registry_alter()
+**/
+function epe_cm_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_cm') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_cm_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_cm_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
 }
 
 /**
@@ -160,95 +147,6 @@ function epe_cm_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['node/%node/deleteresource'] = array(
-    'title' => t('Delete a resource'),
-    'page callback' => 'epe_cm_node_delete_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/submitpublic'] = array(
-    'title' => t('Submit a resource to public db'),
-    'page callback' => 'epe_cm_node_submit_public_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/unsubmitpublic'] = array(
-    'title' => t('Unsubmit a resource to public db'),
-    'page callback' => 'epe_cm_node_unsubmit_public_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/approvepublic'] = array(
-    'title' => t('Approve a resource to public db'),
-    'page callback' => 'epe_cm_node_approve_public_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => 'user_access',
-    'access arguments' => array('epe dbpublic approve'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/rejectpublic'] = array(
-    'title' => t('Reject a resource to public db'),
-    'page callback' => 'epe_cm_node_reject_public_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => 'user_access',
-    'access arguments' => array('epe dbpublic approve'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/feature'] = array(
-    'title' => t('Feature a resource'),
-    'page callback' => 'epe_cm_node_feature_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => 'user_access',
-    'access arguments' => array('epe dbpublic feature'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/unfeature'] = array(
-    'title' => t('Unfeature a resource'),
-    'page callback' => 'epe_cm_node_unfeature_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => 'user_access',
-    'access arguments' => array('epe dbpublic unfeature'),
-    'type' => MENU_CALLBACK,
-  );
-
-
-
-
-
-  $items['node/%node/share'] = array(
-    'title' => t('Share a resource'),
-    'page callback' => 'epe_cm_node_share_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['node/%node/unshare'] = array(
-    'title' => t('Unshare a resource'),
-    'page callback' => 'epe_cm_node_unshare_function',
-    'page arguments' => array(1),
-    'file' => 'epe_cm.pages.inc',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
   return $items;
 }
 
@@ -273,7 +171,7 @@ function epe_cm_node_insert($node) {
 
           }
         }
-      } 
+      }
     }
 
     foreach ($child_assets as $child_asset) {
@@ -306,7 +204,7 @@ function epe_cm_node_update($node) {
 
           }
         }
-      } 
+      }
     }
 
     foreach ($child_assets as $child_asset) {
@@ -386,7 +284,16 @@ function epe_cm_default_search_api_index() {
           'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
           'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
           'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
-          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>1,'weight'=>0,'settings'=>array(
+                'fields'=>array('search_api_aggregation_1'=>array(
+                  'name'=>'title_main_body_fulltext_search',
+                  'type'=>'fulltext',
+                  'fields'=>array('title','body:value'),
+                  'description'=>'A Fulltext aggregation of the following fields: Title, The main body text \\u00bb Text.',
+                ),
+              ),
+            ),
+          ),
         ),
         'processors' => array(
           'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),
@@ -411,5 +318,68 @@ function epe_cm_default_search_api_index() {
   ));
   return $items;
 }
+
+
+/*
+ * Alter the cancel behavior of the edit forms
+ */
+function epe_cm_form_alter (&$form, &$form_state, $form_id) {
+  
+  if ($form_id == 'cm_resource_node_form') {
+    $form['#submit'] = array('cm_resource_node_form_submit_custom');
+  }
+
+
+}
+
+
+
+function cm_resource_node_form_submit_custom($form, &$form_state) {
+  global $user;
+  //unset($form_state['submit_handlers']);
+  $node = $form_state['node'];
+  entity_form_submit_build_entity('node', $node, $form, $form_state);
+  $insert = empty($node->nid);
+  node_save($node);
+
+  $file_destination = 'private://' . $user->uid . '/' . $form_state['values']['type'];
+  file_prepare_directory($file_destination, FILE_CREATE_DIRECTORY);
+
+  $file = file_save_data(base64_decode($form_state['input']['thumbdata']), $file_destination . "/thumb_" . $node->nid . ".png", FILE_EXISTS_REPLACE);
+
+  $newnode = node_load($node->nid);
+  $newnode->field_instance_thumbnail['und'][0] = (array)$file;
+  node_save($newnode);
+
+
+  $node_link = l(t('view'), 'node/' . $node->nid);
+  $watchdog_args = array(
+    '@type' => $node->type,
+    '%title' => $node->title,
+  );
+  $t_args = array(
+    '@type' => node_type_get_name($node),
+    '%title' => $node->title,
+  );
+
+  if ($insert) {
+    watchdog('content', '@type: added %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been created.', $t_args));
+  }
+  else {
+    watchdog('content', '@type: updated %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been updated.', $t_args));
+  }
+
+  cache_clear_all();
+
+  drupal_goto('node/' . $node->nid);
+
+  return;
+
+}
+
+
+
 
 

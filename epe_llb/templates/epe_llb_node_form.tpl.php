@@ -33,7 +33,7 @@
   ?>
 
   <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="objectives" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#instruction -->
 
 <div class="tab-pane" id="objectives">
@@ -69,7 +69,7 @@
     <?php endif; } ?>
   </div>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="motivation" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#goal -->
 
 <div class="tab-pane" id="motivation">
@@ -132,7 +132,7 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="background" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#intro -->
 
 <div class="tab-pane" id="background">
@@ -201,7 +201,7 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="challenge" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#background -->
 
 <div class="tab-pane" id="challenge">
@@ -258,7 +258,7 @@
     </div>
   </div>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#challenge -->
 
 <div class="tab-pane" id="exploration">
@@ -373,7 +373,7 @@
 
 
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="explanation" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#exploration -->
 
 <div class="tab-pane" id="explanation">
@@ -416,7 +416,7 @@
   </div>
 
   <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(8) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="notes" onclick="jQuery('#llbnav li:eq(8) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#explanation -->
 
 <div class="tab-pane" id="notes">
@@ -438,7 +438,21 @@
   <?php echo render($form['field_resources_content']); ?>
   </div>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Resources File</strong></label>
+  <?php echo render($form['field_resource_file']); ?>
+  </div>
+
+  <div class="control-group">
+  <label class="control-label" for="inputTitle"><strong>Resources File Type</strong></label>
+  <?php echo render($form['field_resource_file_type']); ?>
+  </div>
+
+  <div class="control-group">
+  <?php echo render($form['field_resource_file_note']); ?>
+  </div>
+
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="setup" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#notes -->
 
 <div class="tab-pane" id="setup">
@@ -485,4 +499,6 @@
   echo render($form['form_build_id']);
   echo render($form['form_id']);
   echo render($form['form_token']);
+  echo render($form['revision']);
+  echo render($form['field_source_nid']);
 ?>

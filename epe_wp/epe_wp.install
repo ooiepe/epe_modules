@@ -310,3 +310,59 @@ function epe_wp_update_7000() {
 
   views_save_view($view);
 }
+
+/**
+ * epedev-363: fix view's context filter to accept user id from url when it's available else accept user id from logged in user
+ * bug fix: featured resource also needs to be Public (status)
+ */
+function epe_wp_update_7001(&$sandbox) {
+  $view = views_get_view('user_resources', TRUE);
+  $view->set_display('default');
+
+  $view->display[$view->current_display]->display_options['arguments']['uid']['id'] = 'uid';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['table'] = 'node';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['field'] = 'uid';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['default_action'] = 'default';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['default_argument_type'] = 'php';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['default_argument_options']['code'] = 'global $user;
+  if(arg(0) == \'user\' && arg(1)) {
+    $user_from_url = user_load(arg(1));
+    if($user_from_url) { return $user_from_url->uid; } else {  return $user->uid; }
+  } else {
+    return $user->uid;
+  }';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
+  $view->display[$view->current_display]->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+
+  views_save_view($view);
+
+  $view = views_get_view('featured_resources', TRUE);
+  $view->set_display('all');
+  $view->display[$view->current_display]->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
+  $view->display[$view->current_display]->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
+  $view->display[$view->current_display]->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
+  $view->display[$view->current_display]->display_options['filters']['field_public_status_value']['value'] = array(
+    'Public' => 'Public',
+  );
+  views_save_view($view);
+}
+
+/**
+ * EPEDEV-366: add first name, last name and organization to registration form and make them required
+ * epedev-303: add new display "favorite" to user resource view
+ */
+function epe_wp_update_7002(&$sandbox) {
+  $fields = array('fname','lname','organization');
+  foreach($fields as $field) {
+    $field_instance = field_info_instance('user','field_account_'. $field,'user');
+    $field_instance['required'] = 1;
+    $field_instance['settings']['user_register_form'] = 1;
+    field_update_instance($field_instance);
+  }
+
+  module_load_include('inc','epe_wp','epe_wp.views_default');
+
+  $view_definition = epe_wp_views_default_views();
+  views_save_view($view_definition['user_resources']);
+}

@@ -19,35 +19,12 @@ function epe_dbresource_browser_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['resource-browser/partial/index.html'] = array(
-    'title' => t('Index Page'),
-    'page callback' => 'epe_dbresource_browser_view_partial',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['resource-browser/partial/search.html'] = array(
-    'title' => t('Search Page'),
-    'page callback' => 'epe_dbresource_browser_view_partial',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['resource-browser/partial/search-grid.html'] = array(
-    'title' => t('Search Grid'),
-    'page callback' => 'epe_dbresource_browser_view_partial',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['resource-browser/partial/search-list.html'] = array(
-    'title' => t('Search List'),
-    'page callback' => 'epe_dbresource_browser_view_partial',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
+  $items['api/resource/pager'] = array(
+    'title' => t('Restful Resource Pager Query'),
+    'page callback' => 'epe_dbresource_browser_pager_api',
+    'file' => 'epe_dbresource_browser.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbresource_browser') . '/inc',
+    'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
 
@@ -57,127 +34,101 @@ function epe_dbresource_browser_menu() {
 function epe_dbresource_browser_theme() {
   $path = drupal_get_path( 'module' , 'epe_dbresource_browser' ) . '/app';
   return array(
-    'resource_browser_main'=>array(
-      'path' => "$path",
-      'template'=> "resource_browser_main",
-    ),
-    'resource_browser.index.html'=>array(
-      'path' => "$path/partial",
-      'template'=> "resource_browser.index.html",
-    ),
-    'resource_browser.search.html'=>array(
-      'path' => "$path/partial",
-      'template'=> "resource_browser.search.html",
-    ),
-    'resource_browser.search-grid.html'=>array(
-      'path' => "$path/partial",
-      'template'=> "resource_browser.search-grid.html",
-    ),
-    'resource_browser.search-list.html'=>array(
-      'path' => "$path/partial",
-      'template'=> "resource_browser.search-list.html",
+    'rb_main'=>array(
+      'path'=>"$path",
+      'template'=>'rb.main', //main index file
     ),
   );
 }
 
 function epe_dbresource_browser_dialog_index() {
   module_invoke('admin_menu', 'suppress');
-  $resource_browser_settings = array(
-    'checkbox' => TRUE,
-  );
-  drupal_add_js(array('epe_dbresource_browser_modal' => $resource_browser_settings), 'setting');
-  return epe_dbresource_browser_index();
+  drupal_add_js(libraries_get_path('underscore') . '/underscore-min.js');
+
+  epe_dbresource_browser_preload();
+
+  drupal_add_js('(function($){$(function() {Drupal.settings.resourceBrowser.editmode=true;})})(jQuery);','inline');
+
+  return theme('rb_main');
 }
 
 function epe_dbresource_browser_index() {
-  global $user;
-
-/*  $resource_browser_settings = array(
-    'checkbox' => FALSE,
-  );
-  drupal_add_js(array('epe_dbresource_browser_modal' => $resource_browser_settings), 'setting');*/
-
-  $app_path = drupal_get_path('module', 'epe_dbresource_browser') . '/app';
-
-  drupal_add_js($app_path . '/app.js');
-  drupal_add_js($app_path . '/js/controllers/indexController.js');
-  drupal_add_js($app_path . '/js/controllers/searchController.js');
-  drupal_add_js($app_path . '/js/resourceBrowserServices.js');
-  drupal_add_js($app_path . '/js/resourceBrowserDirectives.js');
-  drupal_add_js($app_path . '/js/resourceBrowserFilters.js');
-  drupal_add_js(libraries_get_path('ngProgress') . '/ngProgress.min.js');
-  drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');
-
-  drupal_add_js(array('theme_path' => base_path() . drupal_get_path('theme','bootstrap')), 'setting');
-
-  //maybe this should be under .install with hook_requirement?  but can't get hook_requirement to work correctly
-  if(!libraries_get_path('angular-ui-bootstrap')):
-    drupal_set_message(t('Library angular-ui-bootstrap not found under /sites/libraries'),'error');
-  endif;
-
-  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
-
-  $resource_browser_tabs = array();
-  foreach($depend_modules as $module) {
-/*    if(isset($module['resource_browser_tab'])) {
-      $resource_browser_tabs[] = $module['resource_browser_tab'];
-    }*/
-    if(isset($module['resource_browser'])) {
-      $tab = array();
-      if(isset($module['resource_browser']['label'])) {
-        $tab['label'] = $module['resource_browser']['label'];
-      } else {
-        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
-        $tab['label'] = $node_type->name;
-      }
-
-      $tab['api'] = $module['resource_browser']['api'];
-      if(isset($module['resource_browser']['default'])) {
-        $tab['default'] = $module['resource_browser']['default'];
-      }
-      if(isset($module['resource_browser']['weight'])) {
-        $tab['weight'] = $module['resource_browser']['weight'];
-      }
-      if(isset($module['resource_browser']['adurl'])) {
-        $tab['adurl'] = $module['resource_browser']['adurl'];
-      }
-      $resource_browser_tabs[] = $tab;
-    }
-  }
-
-  /* angular ui bootstrap */
-  drupal_add_js(libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js');
-  drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
-  drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
-  //drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs,'base_path'=>base_path())),'setting');
-  drupal_add_js(array('epe_dbresource_browser'=>array('userid'=>$user->uid,'modules'=>$resource_browser_tabs)),'setting');
-
-  /* restangular, need to figure out how to use it */
-  /*drupal_add_js('http://cdn.jsdelivr.net/restangular/0.6.1/restangular.js','external'); */
-
-  angularjs_init_application('resourceBrowserApp');
-
-  return theme('resource_browser_main');
+  epe_dbresource_browser_preload();
+  return theme('rb_main');
 }
 
-function epe_dbresource_browser_view_partial($partial) {
-  switch ($partial) {
-    case 'index.html':
-      echo theme('resource_browser.index.html');
-    break;
+function epe_dbresource_browser_preload() {
+  global $user;
+  //setup filter
+  $resource_filter = array(
+    array('filter'=>'','label'=>'All Resources'),
+    array('filter'=>'featured','label'=>'Featured Resources'),
+  );
+  //add filter if not anonymous user
+  if($user->uid > 0) $resource_filter[] = array('filter'=>'author','label'=>'My Resources');
 
-    case 'search.html':
-      echo theme('resource_browser.search.html');
-    break;
+  $epe_modules = variable_get('EPE_CONTENT_MODULES',array());
+  $resource_browser_enabled_modules = array();
+  foreach($epe_modules as $module) {
+    if(isset($module['resource_browser'])) {
+      $enabled_module = array();
+      if(isset($module['resource_browser']['label'])) {
+        $enabled_module['label'] = $module['resource_browser']['label'];
+      } else {
+        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
+        $enabled_module['label'] = $node_type->name;
+      }
 
-    case 'search-grid.html':
-      echo theme('resource_browser.search-grid.html');
-    break;
+      $enabled_module['api'] = $module['resource_browser']['api'];
+      if(isset($module['resource_browser']['default'])) {
+        $enabled_module['default'] = $module['resource_browser']['default'];
+      }
+      if(isset($module['resource_browser']['weight'])) {
+        $enabled_module['weight'] = $module['resource_browser']['weight'];
+      }
+      if(isset($module['resource_browser']['adurl'])) {
+        $enabled_module['adurl'] = base_path() . $module['resource_browser']['adurl'];
+      }
+      $enabled_module['adimagepath'] = base_path() . drupal_get_path('module','epe_dbresource_browser') . '/images/rb-ads-' . $enabled_module['api'] . '.jpg';
+      $enabled_module['page'] = 1;
+      $enabled_module['sort'] = 'title';
 
-    case 'search-list.html':
-      echo theme('resource_browser.search-list.html');
-    break;
+      $resource_browser_enabled_modules[] = $enabled_module;
+    }
   }
+  usort($resource_browser_enabled_modules,"_epe_dbresource_browser_module_sort");
+
+  drupal_add_js(array('jslibraries'=>array(
+    'path'=>array(
+      'angular'=>base_path() . libraries_get_path('angular-1.2.18'),
+      'requirejs'=>base_path() . libraries_get_path('requirejs'),
+      'angularAMD'=>base_path() . libraries_get_path('angularAMD'),
+      'ngProgress'=>base_path() . libraries_get_path('ngProgress'),
+      'angularUi'=>base_path() . libraries_get_path('angular-ui-bootstrap'),
+      'angularWebstorage'=>base_path() . libraries_get_path('angular-webstorage'),
+      'loadingBar'=>base_path() . libraries_get_path('angular-loading-bar'),
+    ),
+  )),'setting');
+  drupal_add_js(array('resourceBrowser'=>array(
+    'appPath'=>base_path() . drupal_get_path('module','epe_dbresource_browser') . '/app',
+    'resource_filter'=>json_encode($resource_filter),
+    'epe_modules'=>json_encode($resource_browser_enabled_modules),
+    'page_size'=>10,
+    'editmode'=>false,
+  )),'setting');
+
+  drupal_add_js(array('theme_path'=>base_path() . drupal_get_path('theme','bootstrap')),'setting');
+
+  drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
+  drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
+  drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');
+}
+
+/**
+ * custom sort function to sort module order by weight
+ */
+function _epe_dbresource_browser_module_sort($mod_a, $mod_b) {
+  return $mod_a['weight'] > $mod_b['weight'];
 }
 
 function epe_dbresource_browser_page_alter(&$page) {
@@ -200,36 +151,19 @@ function epe_dbresource_browser_image_default_styles() {
     'name' => 'resource_browser_thumbnail',
     'effects' => array(
       4 => array(
-        'label' => 'Scale',
-        'help' => 'Scaling will maintain the aspect-ratio of the original image. If only a single dimension is specified, the other dimension will be calculated.',
-        'effect callback' => 'image_scale_effect',
-        'dimensions callback' => 'image_scale_dimensions',
-        'form callback' => 'image_scale_form',
-        'summary theme' => 'image_scale_summary',
-        'module' => 'image',
-        'name' => 'image_scale',
-        'data' => array(
-          'width' => 133,
-          'height' => '',
-          'upscale' => 0,
-        ),
-        'weight' => 1,
-      ),
-      5 => array(
-        'label' => 'Crop',
-        'help' => 'Cropping will remove portions of an image to make it the specified dimensions.',
-        'effect callback' => 'image_crop_effect',
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
         'dimensions callback' => 'image_resize_dimensions',
-        'form callback' => 'image_crop_form',
-        'summary theme' => 'image_crop_summary',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
         'module' => 'image',
-        'name' => 'image_crop',
+        'name' => 'image_scale_and_crop',
         'data' => array(
           'width' => 133,
           'height' => 99,
-          'anchor' => 'center-top',
         ),
-        'weight' => 2,
+        'weight' => 1,
       ),
     ),
   );

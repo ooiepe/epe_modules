@@ -15,6 +15,8 @@ function epe_dbmultimedia_menu() {
   $items['api/resource/multimedia'] = array(
     'title' => t('Restful Multimedia Resource Query'),
     'page callback' => 'epe_dbmultimedia_restful_api',
+    'file' => 'epe_dbmultimedia.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbmultimedia') . '/inc',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
@@ -23,83 +25,13 @@ function epe_dbmultimedia_menu() {
     'title' => t('Restful Single Multimedia Resource Query'),
     'page callback' => 'epe_dbmultimedia_restful_api_node',
     'page arguments' => array(3),
+    'file' => 'epe_dbmultimedia.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_dbmultimedia') . '/inc',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
 
   return $items;
-}
-
-function epe_dbmultimedia_restful_api() {
-  global $user;
-
-  $view = views_get_view('multimedia_resource_index');
-  //set view to the display machine id
-  $view->set_display('all');
-
-  //if log in user, pass in userid to exposed filter
-  if(user_is_logged_in()) {
-    $filter = $view->get_item('all', 'filter', 'author_uid');
-    $filter['value'] = $user->uid;
-    $view->set_item('all', 'filter', 'author_uid', $filter);
-  }
-
-  //if there is search term, pass it in to exposed filter
-  $value = '';
-  if(isset($_GET['search'])): $value = $_GET['search']; endif;
-  if($value) {
-    $filter = $view->get_item('all', 'filter', 'search_api_views_fulltext');
-    $filter['value'] = $value;
-    $view->set_item('all', 'filter', 'search_api_views_fulltext', $filter);
-  }
-
-  $view->execute();
-  echo $view->render();
-}
-
-function epe_dbmultimedia_restful_api_node($nid) {
-  $item = array(
-    'nid' => '',
-    'type' => '',
-    'title' => '',
-    'body' => '',
-    'thumbnail' => '',
-    'uri' => '',
-    'file' => '',
-  );
-
-  $node = node_load($nid);
-  if($node && in_array($node->type, array('audio_resource','video_resource'))) {
-    $wrapper = entity_metadata_wrapper('node',$node);
-    $item['nid'] = $wrapper->getIdentifier();
-    $item['type'] = $wrapper->getBundle();
-    $item['title'] = $wrapper->label();
-    if($wrapper->body->value()) {
-      $item['body'] = $wrapper->body->value->value(array('sanitize' => TRUE));
-    }
-
-    if($item['type'] == 'audio_resource') {
-      $image = $wrapper->field_audio_resource_image->value();
-      if($image) {
-        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $image['uri']);
-        $item['uri'] = $image['uri'];
-      }
-      $file = $wrapper->field_audio_resource_file->value();
-      if($file) {
-        $item['file'] = $file['uri'];
-      }
-    } else {
-
-      $field = field_get_items('node', $node, 'field_video_resource_file');
-      if($field) {
-        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
-        $item['uri'] = $field[0]['thumbnailfile']->uri;
-        $item['file'] = file_create_url($field[0]['uri']);
-      }
-    }
-  }
-
-  echo json_encode($item);
 }
 
 /**
@@ -150,7 +82,16 @@ function epe_dbmultimedia_default_search_api_index() {
           'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
           'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
           'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
-          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>1,'weight'=>0,'settings'=>array(
+                'fields'=>array('search_api_aggregation_1'=>array(
+                  'name'=>'title_main_body_fulltext_search',
+                  'type'=>'fulltext',
+                  'fields'=>array('title','body:value'),
+                  'description'=>'A Fulltext aggregation of the following fields: Title, The main body text \\u00bb Text.',
+                ),
+              ),
+            ),
+          ),
         ),
         'processors' => array(
           'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true, 'author:field_account_fname'=>true,

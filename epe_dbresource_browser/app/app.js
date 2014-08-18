@@ -1,21 +1,25 @@
-'use strict';
+define(['angularAMD','angularRoute','angularWebstorage','ngProgress','underscore'], function(angularAMD) {
+  var app = angular.module("app", ['ngRoute','underscore','webStorageModule','ngProgress']);
+  app.config(['$routeProvider','$locationProvider',
+    function ($routeProvider,$locationProvider) {
+    $routeProvider.
+      when('/search', angularAMD.route({
+        templateUrl: Drupal.settings.resourceBrowser.appPath + '/partial/resource_browser.html',
+        controller: 'SearchCtrl'
+      })).
+      otherwise({redirectTo: '/search'});
+  }]);
 
-angular.module('resourceBrowserApp', ['ui.bootstrap','ngProgress','resourceBrowserService','resourceBrowserFilter','resourceBrowserDirective'])
-  .config(function($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/', {
-        controller:IndexController,
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/index.html'
-      })
-      .when('/search', {
-        controller:SearchController,
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
-      })
-      .when('/search/:term', {
-        controller:SearchController,
-        templateUrl:Drupal.settings.epe.base_path + 'resource-browser/partial/search.html'
-      })
-      .otherwise({redirecTo:'/'});
 
-    //$locationProvider.html5Mode(true);
+  require(['domReady!'], function(document) {
+      try {
+          // Wrap this call to try/catch
+          angularAMD.bootstrap(app);
+      }
+      catch (e) {
+          console.error(e.stack || e.message || e);
+      }
   });
+
+  return app;
+});

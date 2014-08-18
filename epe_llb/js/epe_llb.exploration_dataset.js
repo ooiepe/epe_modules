@@ -2,62 +2,85 @@
 Drupal.behaviors.epe_llb_exploration_dataset = {
   attach: function(context, settings) {*/
 jQuery(document).ready(function($) {
-    $('.btn.add-resources').on("click", function() {
-      bootbox.dialog({
-        message: '<iframe src="' + Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog=' + $(this).data('api') + '" seamless width="779" height="500" class="resource-browser-iframe" />',
-        className: 'resource-browser-modal',
-        buttons: {
-          main: {
-            label: "Add Selected",
-            className: "btn btn-primary pull-left",
-            callback: function(event) {
-            var selected = [];
-            event.preventDefault();
-            var checkboxes = $('.resource-browser-iframe').contents().find('input[name="nid"]');
-            checkboxes.each(function() {
-              if($(this).is(':checked')) {
-                  $.ajax({
-                    url: Drupal.settings.epe.base_path + 'api/resource/' + $(this).data('type') + '/' + $(this).val(),
-                    dataType: 'json',
-                    async: true,
-                    success: function(data) {
-                      window.addDataSetItem(data, true);
-                    }
-                  });
-              }
-            });
-            }
-          },
-          adhoc: {
-            label: "Upload Resource",
-            className: "btn",
-            callback: function(event) {
-              event.preventDefault();
-              bootbox.dialog({
-                message: '<iframe src="' + Drupal.settings.epe.base_path + 'dialog/resource/add/file" seamless width="779" height="500" class="resource-browser-iframe" />',
-                className: 'resource-browser-modal',
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    className: 'btn'
+    $('button.add-selected').bind('click', function(e) {
+        var selected, selected_api = $(this).attr('data-api');
+        e.preventDefault();
+        selected = JSON.parse(jQuery.session.get('selectedResources'));
+        if(selected_api != 'all') {
+          if(typeof selected[selected_api] != 'undefined') {
+            _.each(selected[selected_api], function(val) {
+              $.ajax({
+                url: Drupal.settings.epe.base_path + 'api/resource/' + selected_api + '/' + val,
+                dataType: 'json',
+                async: true,
+                success: function(data) {
+                  if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
+
+                  if($('#rbmodal').attr('data-controller') == 'intro') {
+                    window.parent.addIntroItem(data, true);
+                  } else if($('#rbmodal').attr('data-controller') == 'dataset') {
+                    window.parent.addDataSetItem(data, true);
+                  } else if($('#rbmodal').attr('data-controller') == 'background') {
+                    window.parent.addBackgroundSlideshowItem(data, true);
+                  } else if($('#rbmodal').attr('data-controller') == 'challenge') {
+                    window.parent.addChallengeThumbnailItem(data, true);
                   }
                 }
-              })
-            }
-          },
-          cancel: {
-            label: "Cancel",
-            className: "btn"
+              });
+            });
+            selected[selected_api] = [];
           }
-        }
-      });
-    });
+        } else {
+          _.each(_.keys(selected), function(key_val, key) {
+            _.each(selected[key_val], function(val) {
+              $.ajax({
+                url: Drupal.settings.epe.base_path + 'api/resource/' + key_val + '/' + val,
+                dataType: 'json',
+                async: true,
+                success: function(data) {
+                  if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
 
-    $('button.add-selected').bind('click', function(e) {
-        var selected = [];
-        e.preventDefault();
-        var checkboxes = $('.rbmodal-iframe').contents().find('input[name="nid"]');
-        checkboxes.each(function() {
+                  if($('#rbmodal').attr('data-controller') == 'intro') {
+                    window.parent.addIntroItem(data, true);
+                  } else if($('#rbmodal').attr('data-controller') == 'dataset') {
+                    window.parent.addDataSetItem(data, true);
+                  } else if($('#rbmodal').attr('data-controller') == 'background') {
+                    window.parent.addBackgroundSlideshowItem(data, true);
+                  } else if($('#rbmodal').attr('data-controller') == 'challenge') {
+                    window.parent.addChallengeThumbnailItem(data, true);
+                  }
+                }
+              });
+            });
+            selected[key_val] = [];
+          });
+        }
+        $.session.set('selectedResources',JSON.stringify(selected));
+        /*_.each(_.keys(selected), function(type_val, key) {
+          _.each(selected[type_val], function(nid_val, key) {
+            $.ajax({
+              url: Drupal.settings.epe.base_path + 'api/resource/' + type_val + '/' + nid_val,
+              dataType: 'json',
+              async: true,
+              success: function(data) {
+                if(data.thumbnail == '') data.thumbnail = Drupal.settings.epe.base_path + Drupal.settings.llb.thumbnail_placeholder;
+
+                if($('#rbmodal').attr('data-controller') == 'intro') {
+                  window.parent.addIntroItem(data, true);
+                } else if($('#rbmodal').attr('data-controller') == 'dataset') {
+                  window.parent.addDataSetItem(data, true);
+                } else if($('#rbmodal').attr('data-controller') == 'background') {
+                  window.parent.addBackgroundSlideshowItem(data, true);
+                } else if($('#rbmodal').attr('data-controller') == 'challenge') {
+                  window.parent.addChallengeThumbnailItem(data, true);
+                }
+              }
+            });
+          });
+        });*/
+
+        //var checkboxes = $('.rbmodal-iframe').contents().find('input[name="nid"]');
+/*        checkboxes.each(function() {
           if($(this).is(':checked')) {
             $.ajax({
               url: Drupal.settings.epe.base_path + 'api/resource/' + $(this).data('type') + '/' + $(this).val(),
@@ -78,13 +101,15 @@ jQuery(document).ready(function($) {
               }
             });
           }
-        });
-        $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
+        });*/
+        /*$('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
           $(this).attr('checked', false);
-        });
+        });*/
     });
 
     $('.rbmodal').bind('click', function(e) {
+      var iframe_url = Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?type=' + $(this).data('api');
+      if($(this).data('api') != 'all') iframe_url += '&exclude=true';
       if($(this).data('adhoc') == true) {
         $('.add-adhoc').show().attr('data-api',$(this).data('api')); } else { $('.add-adhoc').hide();
       }
@@ -96,9 +121,12 @@ jQuery(document).ready(function($) {
           $(this).width($(this).find('.rbmodal-iframe').width() + 25).find('.modal-body').css('max-height',$(this).find('.rbmodal-iframe').height());
         })*/
         .find('.rbmodal-iframe')
-        .attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog=' + $(this).data('api'))
+        //.attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&dialog=' + $(this).data('api'))
+        //.attr('src', Drupal.settings.epe.base_path + 'dialog/rb#/search?type=' + $(this).data('api'))
+        .attr('src',iframe_url)
         .height($(window).height() * 0.8);
         $('#adhocmodal').attr('data-controller', $(this).data('controller'));
+      $('#rbmodal').find('button.add-selected').attr('data-api',$(this).data('api'));
       //$('.rbmodal-iframe').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog&type=' + $(this).data('api'));
     });
 
@@ -112,7 +140,14 @@ jQuery(document).ready(function($) {
     });
 
     $('.btn-back').bind('click', function(e) {
-      $('#rbmodal').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?dialog=' + $(this).data('api'));
+      //$('#rbmodal').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/dialog/search?dialogmode=true&dialog=' + $(this).data('api'));
+      $('#rbmodal').attr('src', Drupal.settings.epe.base_path + 'dialog/resource-browser#/search?type=' + $(this).data('api') + '&exclude=true');
+    });
+
+    $('.btn-close').bind('click', function(e) {
+      var selected = JSON.parse(jQuery.session.get('selectedResources'));
+      selected = {};
+      $.session.set('selectedResources',JSON.stringify(selected));
     });
 
     if(Drupal.settings.default_dataset_value != null) {

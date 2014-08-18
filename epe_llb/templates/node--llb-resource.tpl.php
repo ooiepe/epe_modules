@@ -72,7 +72,7 @@
 
   <?php //echo render($content['field_introductory_slideshow']); ?>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="background" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 
 </div> <!-- /#intro -->
 
@@ -96,7 +96,7 @@
   }
   ?>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="challenge" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 
 </div> <!-- /#background -->
 
@@ -111,7 +111,7 @@
   <p>In this activity you will investigate the following challenge ...</p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
-  <button type="button" class="btn btn-success" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div> <!-- /#challenge -->
 
 <div class="tab-pane" id="exploration">
@@ -135,13 +135,14 @@
           }
         ?>
         </div>
-        <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a>
+        <!-- <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a> -->
+        <a href="#dataset<?php echo $key; ?>"><?php echo $dataset->title; ?></a>
       </div>
     </li>
     <?php endforeach; ?>
   </ul>
   <p>When you're done investigating the datasets, continue to the last section.</p>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llbnav a[href=#explanation]').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="explanation" onclick="jQuery('#llbnav a[href=#explanation]').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div>
 
 <?php
@@ -202,14 +203,17 @@ function giveXMLtoJS(value) {
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
-    <li><a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Exploration</a> <span class="divider">/</span></li>
+    <li><!-- <a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');"> -->
+      <a href="#exploration">
+      Exploration</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
 
   <?php
-    if(in_array($dataset->type, $filetypes)) { echo epe_llb_theme_file_dataset($dataset); }
-    elseif($dataset->type == 'cm_resource') {
+    if(in_array($dataset->type, $filetypes)) {
+      echo epe_llb_theme_file_dataset($dataset);
+    } elseif($dataset->type == 'cm_resource') {
       $cm_resource = node_load($dataset->nid);
       $field_cm_data_items = field_get_items('node', $cm_resource, 'field_cm_data');
       $field_cm_data = field_view_value('node',$cm_resource,'field_cm_data', $field_cm_data_items[0]);
@@ -226,7 +230,17 @@ function giveXMLtoJS(value) {
 <iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
 <?php } //end elseif type == ev_tool_instance ?>
 
-  <div class="well well-sm"><?php echo $dataset->body; ?></div>
+  <div class="well well-sm">
+    <?php echo $dataset->body; ?>
+    <?php
+    $credit_output = '';
+    if(isset($dataset->credit) && $dataset->credit): $credit_output = trim($dataset->credit); endif;
+    if(isset($dataset->source_url) && $dataset->source_url && $credit_output):
+    $credit_output = '<a href="' . $dataset->source_url . '" target="_blank">' . $credit_output . '</a>';
+  endif;
+    if($credit_output): echo 'Credit/Source: ' . $credit_output; endif;
+    ?>
+  </div>
   <?php if(!empty($dataset->questions)): ?>
   <div>
     <div>
@@ -239,7 +253,7 @@ function giveXMLtoJS(value) {
     </div>
   </div>
   <?php endif; ?>
-  <button type="button" class="btn btn-success" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button>
+  <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button>
 </div>
 <?php endforeach; ?>
 

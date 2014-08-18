@@ -119,16 +119,49 @@ function _assign_epe_ev_permission() {
 }
 
 function epe_ev_theme() {
+  $tpl_path = drupal_get_path('module','epe_ev') . '/templates/';
   return array(
     'ev_tool_instance_node_form'  => array(
       'render element' => 'form',
+      'path' => $tpl_path,
       'template' => 'epe_ev_tool_instance_edit_form',
     ),
     'ev_tool_node_form'  => array(
       'render element' => 'form',
+      'path' => $tpl_path,
       'template' => 'epe_ev_tool_edit_form'
     )
   );
+}
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_ev_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_ev') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_ev_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_ev_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}
+
+function epe_ev_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'ev_tool_instance_node_form') {
+    $form['field_source_nid']['#type'] = 'hidden';
+  }
 }
 
 /*
@@ -234,7 +267,16 @@ function epe_ev_default_search_api_index() {
           'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
           'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
           'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
-          'search_api_alter_add_aggregation' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
+          'search_api_alter_add_aggregation' => array('status'=>1,'weight'=>0,'settings'=>array(
+                'fields'=>array('search_api_aggregation_1'=>array(
+                  'name'=>'title_main_body_fulltext_search',
+                  'type'=>'fulltext',
+                  'fields'=>array('title','body:value'),
+                  'description'=>'A Fulltext aggregation of the following fields: Title, The main body text \\u00bb Text.',
+                ),
+              ),
+            ),
+          ),
         ),
         'processors' => array(
           'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),

@@ -236,3 +236,63 @@ function epe_ev_update_7002(&$sandbox) {
 
   views_save_view($view);
 }
+
+/**
+ * epedev-230 create field_source_nid field for ev for clone reference
+ */
+function epe_ev_update_7003(&$sandbox) {
+  module_load_include('inc','epe_ev','inc/epe_ev.field_base.update_7003');
+  module_load_include('inc','epe_ev','inc/epe_ev.field_instance.update_7003');
+  // Create all the fields we are adding to our content type.
+  foreach (_ev_tool_instance_installed_fields() as $field) {
+    //in case content type share fields
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  // Create all the instances for our fields.
+  foreach (_ev_tool_instance_installed_instances() as $instance) {
+    if(!field_info_instance('node',$instance['field_name'],'ev_tool_instance')) {
+      field_create_instance($instance);
+    }
+  }
+}
+
+/**
+ * update ev views to support resource browser
+ */
+function epe_ev_update_7004(&$sandbox) {
+  $search_api_index = entity_load_single('search_api_index', 'epe_ev_search_index');
+
+  $search_api_index->options['fields']['search_api_aggregation_1'] = array('type'=>'text');
+
+  $search_api_index->options['data_alter_callbacks']['search_api_alter_add_aggregation'] = array('status'=>1,'weight'=>0,'settings'=>array(
+      'fields'=>array('search_api_aggregation_1'=>array(
+        'name'=>'title_main_body_fulltext_search',
+        'type'=>'fulltext',
+        'fields'=>array('title','body:value'),
+        'description'=>'A Fulltext aggregation of the following fields: Title, The main body text.',
+        ),
+      ),
+    ),
+  );
+
+  $search_api_index->options['processors']['search_api_case_ignore']['settings']['fields']=array('title'=>true, 'body:value'=>true, 'search_api_aggregation_1'=>true);
+  $search_api_index->options['processors']['search_api_html_filter']['settings']['fields']=array('title'=>true, 'body:value'=>true,'search_api_aggregation_1'=>true);
+
+  entity_save('search_api_index', $search_api_index);
+
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['epe_ev_search_view']);
+}
+
+/**
+ * Post 3.3 release fix: fix epe_ev_search_view view's thumbnail field output code that calls the wrong field and the wrong image style type
+ */
+function epe_ev_update_7005(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['epe_ev_search_view']);
+}
