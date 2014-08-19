@@ -213,6 +213,10 @@ function giveXMLtoJS(value) {
   <?php
   switch($dataset->type) {
 
+    case 'text':
+    //do nothing
+    break;
+
     case 'cm_resource':
       $cm_resource = node_load($dataset->nid);
       $field_cm_data_items = field_get_items('node', $cm_resource, 'field_cm_data');
