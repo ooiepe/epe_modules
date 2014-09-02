@@ -175,10 +175,6 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['field_public_status']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['field_public_status']['field'] = 'field_public_status';
   $handler->display->display_options['fields']['field_public_status']['label'] = 'public';
-  /* Sort criterion: Indexed Node: Title */
-  $handler->display->display_options['sorts']['title']['id'] = 'title';
-  $handler->display->display_options['sorts']['title']['table'] = 'search_api_index_llb_resource_index';
-  $handler->display->display_options['sorts']['title']['field'] = 'title';
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',

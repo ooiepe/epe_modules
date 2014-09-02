@@ -37,6 +37,45 @@ function epe_dbmultimedia_restful_api() {
     $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
   }
 
+  $sort_filter = array(
+    'table'=>'search_api_index_multimedia_resource_index',
+    'relationship'=>'none',
+    'group_type'=>'group',
+    'ui_name'=>''
+  );
+
+  $sort_fields = array();
+
+  if(isset($_GET['sort']) && in_array($_GET['sort'],array('title','author','last_updated'))) {
+    switch ($_GET['sort']) {
+      case 'last_updated':
+        $sort_fields[] = 'changed';
+      break;
+
+      case 'author':
+        $sort_fields[] = 'author_field_account_lname';
+        $sort_fields[] = 'author_field_account_fname';
+      break;
+
+      default:
+        $sort_fields[] = $_GET['sort'];
+      break;
+    }
+  } else {
+    $sort_fields[] = 'title';
+  }
+
+  if(isset($_GET['sort_mode']) && in_array($_GET['sort_mode'], array('asc','desc'))) {
+    $sort_filter['order'] = strtoupper($_GET['sort_mode']);
+  } else {
+    $sort_filter['order'] = 'ASC';
+  }
+  foreach($sort_fields as $field) {
+    $sort_filter['id'] = $field;
+    $sort_filter['field'] = $field;
+    $view->set_item($display_name,'sort',$field,$sort_filter);
+  }
+
   if(isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
     $page = $_GET['page'];
   } else {

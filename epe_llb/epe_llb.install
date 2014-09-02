@@ -458,3 +458,19 @@ function epe_llb_update_7007(&$sandbox) {
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
 }
+
+/**
+ * epedev-432: fix title index type to string so it becomes sortable
+ */
+function epe_llb_update_7008(&$sandbox) {
+  $search_api_index = entity_load_single('search_api_index', 'llb_resource_index');
+
+  $search_api_index->options['fields']['title'] = array('type'=>'string');
+  $search_api_index->options['fields']['author:field_account_lname'] = array('type'=>'string');
+  $search_api_index->options['fields']['author:field_account_fname'] = array('type'=>'string');
+  entity_save('llb_resource_index', $search_api_index);
+
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
+}
