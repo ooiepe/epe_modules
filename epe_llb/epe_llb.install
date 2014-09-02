@@ -69,14 +69,14 @@ function epe_llb_enable() {
     ->execute();
 
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lessons','api'=>'llb','adurl'=>'node/add/llb-resource','weight'=>3));
+  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Investigations','api'=>'llb','adurl'=>'node/add/llb-resource','weight'=>3));
   variable_set('EPE_CONTENT_MODULES', $modules);
 
   $epe_menu = variable_get('epe_menu',array());
 
   $node = new stdClass();
   $node->type = "page";
-  $node->title = "Lessons";
+  $node->title = "Investigations";
   $node->language = LANGUAGE_NONE;
   $node->path = array('alias' => 'llb');
   node_object_prepare($node);
@@ -87,7 +87,7 @@ function epe_llb_enable() {
 
   $item = array(
     'link_path' => 'node/' . $node->nid,
-    'link_title' => 'Lessons',
+    'link_title' => 'Investigations',
     'menu_name' => 'main-menu',
     'weight' => 3,
     'expanded' => 0,
@@ -98,7 +98,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'node/' . $node->nid,
-      'link_title' => 'About Lessons',
+      'link_title' => 'About Investigations',
       'menu_name' => 'main-menu',
       'weight' => 1,
       'expanded' => 0,
@@ -108,7 +108,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'node/add/llb-resource',
-      'link_title' => 'Create a Lesson',
+      'link_title' => 'Create a Investigation',
       'menu_name' => 'main-menu',
       'weight' => 2,
       'expanded' => 0,
@@ -118,7 +118,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=' . $modules['epe_llb']['resource_browser']['api'],
-      'link_title' => 'My Lessons',
+      'link_title' => 'My Investigations',
       'menu_name' => 'main-menu',
       'weight' => 3,
       'expanded' => 0,
@@ -128,7 +128,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=' . $modules['epe_llb']['resource_browser']['api'],
-      'link_title' => 'Browse Lessons',
+      'link_title' => 'Browse Investigations',
       'menu_name' => 'main-menu',
       'weight' => 4,
       'expanded' => 0,
@@ -461,6 +461,7 @@ function epe_llb_update_7007(&$sandbox) {
 
 /**
  * epedev-432: fix title index type to string so it becomes sortable
+ * epedev-462: change references from Lessons to Investigations
  */
 function epe_llb_update_7008(&$sandbox) {
   $search_api_index = entity_load_single('search_api_index', 'llb_resource_index');
@@ -473,4 +474,8 @@ function epe_llb_update_7008(&$sandbox) {
   module_load_include('inc','epe_llb','epe_llb.views_default');
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
+
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_llb']['resource_browser']['label'] = 'Investigations';
+  variable_set('EPE_CONTENT_MODULES', $modules);
 }

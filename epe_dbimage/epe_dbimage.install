@@ -236,6 +236,9 @@ function epe_dbimage_update_7004(&$sandbox) {
   views_save_view($view_definition['image_resource_index']);
 }
 
+/**
+ * epedev-432: fix title index type to string so it becomes sortable
+ */
 function epe_dbimage_update_7005(&$sandbox) {
   $search_api_index = entity_load_single('search_api_index', 'image_resource_index');
 

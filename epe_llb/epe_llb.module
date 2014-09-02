@@ -118,18 +118,8 @@ function epe_llb_image_default_styles() {
 function epe_llb_menu() {
   $items = array();
 
-/*  $items['admin/config/epe/llb-form'] = array(
-    'title' => 'Lab Lesson Builder Form Field',
-    'description' => 'Configure lab lesson builder ',
-    'page arguments' => array('epe_llb_admin_config'),
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('epe llb configuration'),
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'file' => 'epe_llb.admin.inc',
-  );*/
-
   $items['api/resource/llb'] = array(
-    'title' => t('Restful Lab Lesson Builder Resource Query'),
+    'title' => t('Restful Data Investigations Resource Query'),
     'page callback' => 'epe_llb_restful_api',
     'file' => 'epe_llb.rest.api.inc',
     'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
@@ -138,7 +128,7 @@ function epe_llb_menu() {
   );
 
   $items['api/resource/llb/%'] = array(
-    'title' => t('Restful Single Lab Lesson Builder Resource Query'),
+    'title' => t('Restful Single Data Investigation Resource Query'),
     'page callback' => 'epe_llb_restful_api_node',
     'page arguments' => array(3),
     'file' => 'epe_llb.rest.api.inc',
@@ -146,29 +136,6 @@ function epe_llb_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-/*
-  $items['resource/add/llb'] = array(
-    'title' => t('Create Lab Lesson Builder Resrouce'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('epe_llb_node_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('create llb content'),
-    'file' => 'epe_llb.form.inc',
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['resource/llb/%/edit'] = array(
-    'title' => t('Edit Lab Lesson Builder Resrouce'),
-    'page callback' => 'epe_llb_node_edit',
-    'page arguments' => array(2),
-    'access callback' => 'user_access',
-    'access arguments' => array('edit own llb content'),
-    'file' => 'epe_llb.form.inc',
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'type' => MENU_CALLBACK,
-  );
-*/
 
   return $items;
 }
@@ -875,7 +842,7 @@ function epe_llb_block_info() {
   );
 
   $blocks['epe_llb_featured'] = array(
-    'info' => t('EPE Featured Lesson Resources'),
+    'info' => t('EPE Featured Investigation Resources'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
