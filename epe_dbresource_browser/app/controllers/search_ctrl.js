@@ -134,7 +134,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
         webStorage.session.add('queryparams',$scope.browser.queryparams);
-      }
+      } //init
 
       //no module type defined, we reload the browser with url of the 1st module
       if(typeof $routeParams['type'] == "undefined" || (
@@ -167,12 +167,6 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         if(typeof $routeParams['filter'] != 'undefined') {
           params['filter'] = $routeParams['filter'];
         }
-        //make sure cached module search criteria reset paging back to first page
-        $scope.browser.queryparams = webStorage.session.get('queryparams');
-        _.each($scope.browser.queryparams, function(queryparam) {
-          queryparam['page'] = 1;
-        });
-        webStorage.session.add('queryparams',$scope.browser.queryparams);
         $location.search(params);
       }
 
@@ -187,8 +181,13 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else {
           params = $scope.browser.queryparams[module.api];
         }
+        if($routeParams['search'] != params['search'] || $routeParams['filter'] != params['filter']) {
+          params['page'] = 1
+        }
         if(typeof $routeParams['search'] != 'undefined') {
           params['search'] = $routeParams['search'];
+        } else {
+          params['search'] = '';
         }
         if(typeof $routeParams['filter'] != 'undefined') {
           params['filter'] = $routeParams['filter'];
