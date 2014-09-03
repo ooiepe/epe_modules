@@ -462,6 +462,7 @@ function epe_llb_update_7007(&$sandbox) {
 /**
  * epedev-432: fix title index type to string so it becomes sortable
  * epedev-462: change references from Lessons to Investigations
+ * epedev-458: update field_resource_file field allow extension to match document resource's allow file type
  */
 function epe_llb_update_7008(&$sandbox) {
   $search_api_index = entity_load_single('search_api_index', 'llb_resource_index');
@@ -478,4 +479,8 @@ function epe_llb_update_7008(&$sandbox) {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
   $modules['epe_llb']['resource_browser']['label'] = 'Investigations';
   variable_set('EPE_CONTENT_MODULES', $modules);
+
+  $field_resource_file = field_info_instance('node', 'field_resource_file', 'llb_resource');
+  $field_resource_file['settings']['file_extensions'] = 'txt, pdf, doc, docx, ppt, pptx, xls, xlsx';
+  field_update_instance($field_resource_file);
 }

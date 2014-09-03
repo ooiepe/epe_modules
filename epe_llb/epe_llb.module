@@ -288,6 +288,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     drupal_set_title('Edit your Data Investigation "' . $form['title']['#default_value'] . '"');
   } else {
     drupal_set_title('Create a new Data Investigation');
+    $form['title']['#default_value'] = 'Untitled Investigation';
   }
   $form['#validate'][] = 'epe_llb_form_llb_resource_node_form_validate';
 
