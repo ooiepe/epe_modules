@@ -133,6 +133,7 @@ jQuery(document).ready(function($) {
     $('.add-adhoc').bind('click', function(e) {
       $('#adhocmodal').height($(window).height() * 0.8)
       .find('.adhocmodal-iframe').height($(window).height() * 0.65);
+      $('#adhocmodal').find('.adhocmodal-iframe').attr('src',Drupal.settings.epe.base_path + 'dialog/resource/add/file');
       $('.btn-back').attr('data-api',$(this).data('api'));
       $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
         $(this).attr('checked', false);
