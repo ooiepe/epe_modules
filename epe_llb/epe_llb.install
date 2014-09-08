@@ -55,6 +55,16 @@ function epe_llb_install() {
   variable_set('node_options_llb_resource',array());
   variable_set('node_preview_llb_resource','0');
   variable_set('node_submitted_llb_resource',0);
+
+  if(!taxonomy_vocabulary_machine_name_load('resource_keywords')) {
+    $vocab = (object) array(
+      'name' => 'Resource Keywords',
+      'description' => 'Tagging resources',
+      'machine_name' => 'resource_keywords',
+    );
+
+    taxonomy_vocabulary_save($vocab);
+  }
 }
 
 /*
@@ -463,6 +473,7 @@ function epe_llb_update_7007(&$sandbox) {
  * epedev-432: fix title index type to string so it becomes sortable
  * epedev-462: change references from Lessons to Investigations
  * epedev-458: update field_resource_file field allow extension to match document resource's allow file type
+ * epedev-426: add investigation level and teaching mode field
  */
 function epe_llb_update_7008(&$sandbox) {
   $search_api_index = entity_load_single('search_api_index', 'llb_resource_index');
@@ -483,4 +494,31 @@ function epe_llb_update_7008(&$sandbox) {
   $field_resource_file = field_info_instance('node', 'field_resource_file', 'llb_resource');
   $field_resource_file['settings']['file_extensions'] = 'txt, pdf, doc, docx, ppt, pptx, xls, xlsx';
   field_update_instance($field_resource_file);
+
+  module_load_include('inc','epe_llb','inc/epe_llb.field_base');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance');
+
+  /* recreate the same field base with text data type */
+  foreach (_epe_llb_field_default_field_bases() as $field) {
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  /* recreate the same field instance with text data type */
+  foreach (_epe_llb_field_default_field_instances() as $instance) {
+    if(!field_info_instance('node', $instance['field_name'], 'llb_resource')) {
+      field_create_instance($instance);
+    }
+  }
+
+  if(!taxonomy_vocabulary_machine_name_load('resource_keywords')) {
+    $vocab = (object) array(
+      'name' => 'Resource Keywords',
+      'description' => 'Tagging resources',
+      'machine_name' => 'resource_keywords',
+    );
+
+    taxonomy_vocabulary_save($vocab);
+  }
 }
