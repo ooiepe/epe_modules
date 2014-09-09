@@ -347,12 +347,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     $form['field_resources_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/instructor/field-resources_content-prefix.html');
   }
 
-/*  $form['field_challenge_thumbnail']['#prefix'] = $form_values['llb_challenge_thumbnail_prefix'];
-  $form['field_challenge_thumbnail']['#suffix'] = $form_values['llb_challenge_thumbnail_suffix'];
-  $form['field_instructional_content']['#prefix'] = $form_values['llb_instructional_content'];
-  $form['field_preconception_content']['#prefix'] = $form_values['llb_preconception_content'];
-  $form['field_resources_content']['#prefix'] = $form_values['llb_resources_content'];*/
-
   $form['block_objectives_info'] = array('#type' => 'container', '#attributes' => array());
   $block_objectives = module_invoke('epe_llb','block_view','epe_llb_objectives_info');
   $form['block_objectives_info'][] = array('#markup'=>$block_objectives['content']);
@@ -412,130 +406,26 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['field_exploration_dataset']['#prefix'] = '<div class="app-main" ng-controller="dataset">';
   $form['field_exploration_dataset']['und'][0]['value']['#default_value'] = '{{items}}';
 
-  //if( file_exists(drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html') ) {
-  //  $form['field_guidance_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html' );
-  //}
-
-  //foreach ($form['field_desired_assessment']['und']['#options'] as $key => &$label) {
-  //  $label = '<a href="#" class="assessment" data-toggle="tooltip" title="' . file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/assessment-' . strtolower($key) . '.html' ) . '">' . $label . '</a>';
-  //}
-
-  //drupal_add_js("jQuery('[rel=tooltip]').tooltip();",'inline');
-
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
   unset($depend_modules['epe_llb']);
-  $resource_browser_btns = array();
-  /*foreach($depend_modules as $module) {
-    if(isset($module['resource_browser'])) {
-      $btn_label = '';
-      if(isset($module['resource_browser']['label'])) {
-        $btn_label = $module['resource_browser']['label'];
-      } else {
-        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
-        $btn_label = $node_type->name;
-      }
-      if(isset($module['resource_browser']['weight'])) {
-        $resource_browser_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
-      } else {
-        $resource_browser_btns[] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
-      }
-    }
-  }
-  ksort($resource_browser_btns);
 
-  $form['resource_browser'] = array(
-    '#markup' => implode('&nbsp;', $resource_browser_btns), //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
-    '#suffix' => '</div>' //end div.app-main
-  );*/
-
-  $resource_browser_add_btns = array();
   $resource_browser_modals = array();
-  foreach($depend_modules as $module) {
-    if(isset($module['resource_browser'])) {
-      $btn_label = '';
-      if(isset($module['resource_browser']['label'])) {
-        $btn_label = $module['resource_browser']['label'];
-      } else {
-        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
-        $btn_label = $node_type->name;
-      }
-
-      $adhoc = false;
-      if(isset($module['resource_browser']) && isset($module['resource_browser']['allowAdHoc'])) {
-        $adhoc = $module['resource_browser']['allowAdHoc'];
-      }
-
-      if(isset($module['resource_browser']['weight'])) {
-    /*    $resource_browser_add_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
-        /*$resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#modal' . $module['resource_browser']['api'] . '" class="btn btn-success" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';*/
-        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-controller="dataset" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
-      } else {
-/*        $resource_browser_add_btns[] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
-        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-controller="dataset" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
-      }
-      //$resource_browser_modals[] = theme('epe_llb_add_resource_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
-    }
-  }
-  ksort($resource_browser_add_btns);
-
-  //$resource_browser_modals[] = '<div id="rbmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body"><iframe src="" seamless width="779" height="500" class="rb-modal-iframe" /></div><div class="modal-footer"><button type="button" class="btn btn-primary pull-left add-selected" data-dismiss="modal" aria-hidden="true">Add Selected</button><a href="#adhocmodal" class="btn btn-success" data-dismiss="modal" aria-hidden="true" data-toggle="modal">Add New Resource</a><button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div></div>';
 
   $resource_browser_modals[] = theme('epe_llb_add_resource_modal_template');
-
-/*  $resource_browser_modals[] = theme('epe_llb_adhoc_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));*/
   $resource_browser_modals[] = theme('epe_llb_adhoc_modal_template');
 
   $form['resource_browser_buttons'] = array(
-    '#markup' => '<div>' . implode('&nbsp;', $resource_browser_add_btns) . '</div>', //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
-    '#suffix' => '</div>' //end div.app-main
+    '#markup' => '<div><a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="true" data-controller="dataset" data-api="all">Add Resources</a>&nbsp;&nbsp;<a class="btn btn-success text_resource" data-controller="dataset" >Add Text Content</a></div>',
+    '#suffix' => '</div>'  //end div.app-main
   );
 
   $form['resource_browser_modal'] = array(
     '#markup' => implode('', $resource_browser_modals),
   );
 
-  // Create our own javascript that will be used to theme a modal.
-  /*
-  $modal_style = array(
-    'rb-modal-style' => array(
-      'modalSize' => array(
-        'type' => 'fixed',
-        'width' => 900,
-        'height' => 800,
-        'addWidth' => 10,
-        'addHeight' => 10,
-        'contentRight' => 0,
-        'contentBottom' => 0,
-      ),
-      'modalOptions' => array(
-        'opacity' => .6,
-        'background-color' => '#684C31',
-      ),
-      'animation' => 'fadeIn',
-      'modalTheme' => 'llb_modal',
-      // Customize the AJAX throbber like so:
-      // This function assumes the images are inside the module directory's "images" directory:
-      // ctools_image_path($image, $module = 'ctools', $dir = 'images')
-      'throbber' => theme('image', array('path' => ctools_image_path('ajax-loader.gif', 'epe_llb', 'images'), 'alt' => t('Loading...'), 'title' => t('Loading'))),
-      'closeImage' => theme('image', array('path' => ctools_image_path('modal-close.png', 'epe_llb', 'images'), 'alt' => t('Close window'), 'title' => t('Close window'))),
-    ),
-  );
-  // Add the settings array defined above to Drupal 7's JS settings:
-  drupal_add_js($modal_style, 'setting');
-  // The function below assumes the happy.js file resides in [module_dir]/js
-  ctools_add_js('rb-modal', 'epe_llb');
-  // The function below assumes the happy.css file resides in [module_dir]/css
-  //ctools_add_css('llb-modal', 'epe_llb');
-*/
-
-
   $form['#attached']['css'] = array(
-    //'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'=>array('type'=>'external'),
     drupal_get_path('module','epe_llb') . '/css/epe_llb.css'=>array('type'=>'file','group'=>CSS_THEME),
   );
-  /*$form['#attached']['js'] = array(
-    'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'=>array('type'=>'external'),
-  );*/
 
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
@@ -543,8 +433,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $app_path = drupal_get_path('module', 'epe_llb') . '/app';
 
   $form['#attached']['js'][] = $app_path . '/app.js';
-  //$form['#attached']['js'][] = $app_path . '/explorationController.js';
-  //$form['#attached']['js'][] = $app_path . '/explorationFactory.js';
   $form['#attached']['js'][] = $app_path . '/explorationDirective.js';
   $form['#attached']['js'][] = libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js';
   $form['#attached']['js'][] = libraries_get_path('ui-sortable') . '/src/sortable.js';
@@ -576,11 +464,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     '#name' => 'revision',
     '#value' => 1
   );
-
-  //$form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/test.js';
-  /*$form['#attached']['css']['http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css'] = array('type'=>'external');*/
-
-  //$form['#after_build'][] = 'epe_llb_field_formatter_rebuild';
 }
 
 function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
@@ -590,7 +473,6 @@ function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
 
   if($context['field']['type'] == 'image') {
     unset($element[0]['#title']);
-    //if(isset($element['#theme'])): unset($element['#file_upload_title']); endif;
   }
 }
 
@@ -649,7 +531,7 @@ function epe_llb_node_insert($node) {
 
 function _compile_associated_resources($datasets,$filtered_datasets=array()) {
   foreach($datasets as $dataset) {
-    if(!array_key_exists($dataset->nid, $filtered_datasets)) {
+    if(!array_key_exists($dataset->nid, $filtered_datasets) && $dataset->nid != 'NULL') {
       $filtered_datasets[$dataset->nid] = $dataset;
     }
   }
@@ -1001,23 +883,32 @@ function epe_llb_theme_file_dataset($dataset) {
         $output = '<video id="video_' . $dataset->nid . '" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="' . image_style_url("llb_detail_view",$dataset->uri) . '"><source src="' . file_create_url($dataset->file) . '" /></video>';
       break;
 
+      case 'llb_resource':
+        $output = '<a href="' . base_path() . 'node/' . $dataset->nid .'/detail">' . $output . '</a>';
+      break;
+
       default:
         $output = '<a href="' . file_create_url($dataset->file) .'">' . $output . '</a>';
       break;
     }
   }
 
-  return '<center>' . $output . '</center>';
+  $output = '<div class="clearfix"><center>' . $output . '</center></div>';
+  $output .= '<div class="clearfix"><a href="'. base_path() .'node/'. $dataset->nid .'" class="pull-right">View Resource Page</a></div>';
+
+  return $output;
 }
 
 function epe_llb_reload_dataset($dataset, $assoc_resources) {
-  $data = $assoc_resources[$dataset->nid];
-  $dataset->thumbnail = '';
-  if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
-  if(isset($data->uri)): $dataset->uri = $data->uri; endif;
-  if(isset($data->file)): $dataset->file = $data->file; endif;
-  if(isset($data->credit)): $dataset->credit = $data->credit; endif;
-  if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
+  if($dataset->nid != 'NULL') {
+    $data = $assoc_resources[$dataset->nid];
+    $dataset->thumbnail = '';
+    if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
+    if(isset($data->uri)): $dataset->uri = $data->uri; endif;
+    if(isset($data->file)): $dataset->file = $data->file; endif;
+    if(isset($data->credit)): $dataset->credit = $data->credit; endif;
+    if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
+  }
 
   return $dataset;
 }
