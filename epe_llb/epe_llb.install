@@ -65,6 +65,11 @@ function epe_llb_install() {
 
     taxonomy_vocabulary_save($vocab);
   }
+
+  module_load_include('inc','epe_llb','epe_llb.textfield_filter');
+  $filter_format = _epe_llb_textfield_filter();
+  $filter_format = (object) $filter_format;
+  filter_format_save($filter_format);
 }
 
 /*
@@ -470,6 +475,7 @@ function epe_llb_update_7007(&$sandbox) {
 }
 
 /**
+  * epedev-418: add new filter format for llb textfields, and modify existing llb textfield to use the new filter format
  * epedev-432: fix title index type to string so it becomes sortable
  * epedev-462: change references from Lessons to Investigations
  * epedev-458: update field_resource_file field allow extension to match document resource's allow file type
@@ -520,5 +526,22 @@ function epe_llb_update_7008(&$sandbox) {
     );
 
     taxonomy_vocabulary_save($vocab);
+  }
+
+  module_load_include('inc','epe_llb','inc/epe_llb.textfield_filter');
+  $filter_format = _epe_llb_textfield_filter();
+  $filter_format = (object) $filter_format;
+  filter_format_save($filter_format);
+
+  $alter_fields = array('body','field_resource_file_note','field_background_content','field_challenge_content','field_explanation_content','field_guidance_content','field_instructional_content','field_introductory_content','field_preconception_content','field_resources_content','field_student_objectives');
+  foreach($alter_fields as $alter_field) {
+    $field_instance = field_info_instance('node', $alter_field, 'llb_resource');
+    $field_instance['settings']['better_formats']['allowed_formats']['filtered_html'] = 0;
+    $field_instance['settings']['better_formats']['allowed_formats']['llb_textfield_filter'] = 'llb_textfield_filter';
+    field_update_instance($field_instance);
+  }
+  //administrator, author, moderator
+  foreach(array(user_role_load_by_name('administrator'),user_role_load_by_name('author'),user_role_load_by_name('moderator')) as $role) {
+    user_role_grant_permissions($role->rid,array('use text format llb_textfield_filter'));
   }
 }

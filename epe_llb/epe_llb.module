@@ -508,6 +508,8 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
 
+  drupal_add_js(libraries_get_path('ckeditor') . '/ckeditor.js');
+
   $app_path = drupal_get_path('module', 'epe_llb') . '/app';
 
   $form['#attached']['js'][] = $app_path . '/app.js';

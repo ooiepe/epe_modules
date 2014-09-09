@@ -314,7 +314,7 @@
         </td>
         <td>
           <div ng-show="fn.inItemEditArray(item.key)">
-            <textarea name="body" cols="70" rows="10" ng-model="currentCopies.items[item.key].body"></textarea>
+            <textarea ckeditor id="body_{{item.key}}" name="body_{{item.key}}" cols="70" rows="10" ng-model="currentCopies.items[item.key].body"></textarea>
           </div>
           <div ng-show="!fn.inItemEditArray(item.key)">
             <div ng-bind-html="item.body" class="item body"></div>
