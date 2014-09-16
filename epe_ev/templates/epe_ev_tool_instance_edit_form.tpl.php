@@ -20,7 +20,8 @@ if(isset($form["#node"]->field_parent_tool)){
   //  the tool name
   $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
-  $ev_tool["parentThumbnailId"] = $parentNode->field_tool_thumbnail["und"][0]["fid"];
+  // base64 encoded hidden value thumbdata will replace parent thumbnail
+  //$ev_tool["parentThumbnailId"] = $parentNode->field_tool_thumbnail["und"][0]["fid"];
   
 }
 //do we have a query string? this indicates a new instance
@@ -61,6 +62,11 @@ $EduVis_Paths = epe_EduVis_Paths();
 // add EduVis framework to page
 drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
+// canvas export resources
+drupal_add_js("http://canvg.googlecode.com/svn/trunk/rgbcolor.js");
+drupal_add_js("http://canvg.googlecode.com/svn/trunk/StackBlur.js");
+drupal_add_js("http://canvg.googlecode.com/svn/trunk/canvg.js");
+
 ?>
 
 <style>
@@ -97,6 +103,8 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
         <!-- tab preview -->
         <p><em>Here is a preview of the custom visualization tool you have made.  This is what others will see when you share it.</em></p>
         <div id="vistool"></div>
+
+        <button class="btn btn-primary" value="Export to Image" id="tool-function-export-thumb">Export Thumbnail</button>
       </div>
       
       <div class="tab-pane" id="ev-instance-save">
@@ -125,6 +133,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
           <div class="field-container" >
             <label for="edit-instance-thumbnail" class="field-label">Thumbnail</label>
+            <div><img style="width:100px" src="" id="thumbdata_display" /></div>
             <div><?php // echo $ev_tool["default_thumb"]; ?></div>
             <?php echo render($form['field_instance_thumbnail']); ?>
           </div>
@@ -151,8 +160,14 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
             echo render($form['form_token']);
           ?>
         
+          <input type="hidden" id="thumbdata" name="thumbdata" value="">
+        
       </div>
       
+    </div>
+
+    <div style="display:none;">
+      <canvas id="canvas"></canvas>
     </div>
       
   <!-- end content -->
@@ -164,17 +179,40 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
   function EduVis_extract(){
 
     // pull the configuration from the default tool instance
-    var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration,
-        thumbnailId = $( "input[name='field_instance_thumbnail[und][0][fid]']" );
-      
+    var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration;
+
+/** 
+    EV Thumbnail Updates - 271
+    
+    *lines to be removed are marked with begin and end
+    
+    I did not want to remove working functionality until thumbnail export was in place (serverside)
+
+    currently, the export is tied to a button click "Export Thumbnail".. 
+    this triggers the svg to canvas.. and canvas to image functions, which saves
+    the base64 encoded data to the thumbnail Image src attribute (on save panel) 
+    as well as the hidden form element "thumbdata".. currnetly no feedback is given to the user on click
+
+    the next step is to add the server side conversion of the base64 image to the field field_instance_thumbnail
+
+**/
+    
+// begin remove
+    var thumbnailId = $( "input[name='field_instance_thumbnail[und][0][fid]']" );
+// end remove
+
     // update the configuration value of the form element
     $("#edit-field-instance-configuration-und-0-value")
       .val(JSON.stringify(config));
+    
+// begin remove
 
     // check for the instance thumbnail.. if nothing is present, use the parent
     if(thumbnailId.val() == "0"){
-      thumbnailId.val(<?php print $ev_tool["parentThumbnailId"];?>)
+     thumbnailId.val(<?php print $ev_tool["parentThumbnailId"];?>)
     }
+
+// end remove
   
     return true;
   }
@@ -209,6 +247,41 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
         "isEdit" : true
       }
     );
+
+    /** Thumbnail export functionality **/
+
+    function svgToCanvas(){
+
+      //load an svg snippet in the canvas
+      canvg(
+        document.getElementById('canvas'),
+        $('<div>').append($("#vistool svg").clone()).html(), // hack to pull html contents
+        { ignoreMouse: true, ignoreAnimation: true }
+      );
+    }
+
+    function canvasToImage(){
+      // save canvas image as data url (png format by default)
+      var canvas = document.getElementById("canvas"),
+        dataURL = canvas.toDataURL();
+      
+      // update the thumbnail img attribute in the save panel
+      $("#thumbdata_display").attr("src", dataURL);
+      
+      // set thumbdata form element to base64 encoded image
+      $("#thumbdata").val(dataURL);
+    }
+
+    $("#tool-function-export-thumb")
+      .on("click", function(evt){
+
+        // prevent submission of form
+        evt.preventDefault();
+
+        svgToCanvas();
+        canvasToImage();
+
+      });
 
   }());
 
