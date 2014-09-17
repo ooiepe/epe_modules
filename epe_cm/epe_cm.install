@@ -43,7 +43,7 @@ function epe_cm_enable() {
  /* $modules['epe_cm'] = array('resource_name' => 'Concept Maps','resource_type' => 'cm_resource', 'resource_browser_tab' => array('label'=>'Concept Maps','api'=>'cm','default'=>FALSE,'order'=>1));
   variable_set('EPE_CONTENT_MODULES', $modules);*/
 
-  $modules['epe_cm'] = array('content_type' => 'cm_resource','resource_browser' => array('api'=>'cm','adurl'=>'node/add/cm-resource','weight'=>1));
+  $modules['epe_cm'] = array('content_type' => 'cm_resource','resource_browser' => array('label'=>'Concept Maps','api'=>'cm','adurl'=>'node/add/cm-resource','weight'=>1));
   variable_set('EPE_CONTENT_MODULES', $modules);
 
 }
@@ -272,4 +272,13 @@ function epe_cm_update_7007(&$sandbox) {
   module_load_include('inc','epe_cm','epe_cm.views_default');
   $view_definition = epe_cm_views_default_views();
   views_save_view($view_definition['epe_cm_search_view']);
+}
+
+/**
+ * updates the cm label
+ */
+function epe_cm_update_7008(&$sandbox) {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_cm']['resource_browser']['label'] = 'Concept Maps';
+  variable_set('EPE_CONTENT_MODULES', $modules);
 }

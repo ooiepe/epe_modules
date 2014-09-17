@@ -10,7 +10,7 @@
 
 <div class="rb-type-selector">
   <ul ng-show="browser.enabled_modules.length > 1" class="clearfix">
-    <li ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
+    <li title="{{module.label}}" ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
   </ul>
 
 <div class="rb-ads" ng-show="!browser.selected_module.editmode">
