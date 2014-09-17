@@ -187,6 +187,11 @@ jQuery(document).ready(function($) {
       window.saveBackgroundItems();
       $('#llb-resource-node-form').submit();
     });
+
+    $('.text_resource').click(function() {
+      var data = {"nid":"NULL","type":"text","title":"Please enter your title","body":"Please enter your description","thumbnail":"","uri":""};
+      window.parent.addDataSetItem(data, true);
+    });
 });
 
 function loadResourceThumbnail(value) {
