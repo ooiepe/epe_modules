@@ -118,18 +118,8 @@ function epe_llb_image_default_styles() {
 function epe_llb_menu() {
   $items = array();
 
-/*  $items['admin/config/epe/llb-form'] = array(
-    'title' => 'Lab Lesson Builder Form Field',
-    'description' => 'Configure lab lesson builder ',
-    'page arguments' => array('epe_llb_admin_config'),
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('epe llb configuration'),
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'file' => 'epe_llb.admin.inc',
-  );*/
-
   $items['api/resource/llb'] = array(
-    'title' => t('Restful Lab Lesson Builder Resource Query'),
+    'title' => t('Restful Data Investigations Resource Query'),
     'page callback' => 'epe_llb_restful_api',
     'file' => 'epe_llb.rest.api.inc',
     'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
@@ -138,7 +128,7 @@ function epe_llb_menu() {
   );
 
   $items['api/resource/llb/%'] = array(
-    'title' => t('Restful Single Lab Lesson Builder Resource Query'),
+    'title' => t('Restful Single Data Investigation Resource Query'),
     'page callback' => 'epe_llb_restful_api_node',
     'page arguments' => array(3),
     'file' => 'epe_llb.rest.api.inc',
@@ -146,29 +136,6 @@ function epe_llb_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-/*
-  $items['resource/add/llb'] = array(
-    'title' => t('Create Lab Lesson Builder Resrouce'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('epe_llb_node_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('create llb content'),
-    'file' => 'epe_llb.form.inc',
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['resource/llb/%/edit'] = array(
-    'title' => t('Edit Lab Lesson Builder Resrouce'),
-    'page callback' => 'epe_llb_node_edit',
-    'page arguments' => array(2),
-    'access callback' => 'user_access',
-    'access arguments' => array('edit own llb content'),
-    'file' => 'epe_llb.form.inc',
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'type' => MENU_CALLBACK,
-  );
-*/
 
   return $items;
 }
@@ -321,6 +288,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     drupal_set_title('Edit your Data Investigation "' . $form['title']['#default_value'] . '"');
   } else {
     drupal_set_title('Create a new Data Investigation');
+    $form['title']['#default_value'] = 'Untitled Investigation';
   }
   $form['#validate'][] = 'epe_llb_form_llb_resource_node_form_validate';
 
@@ -539,6 +507,8 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
+
+  drupal_add_js(libraries_get_path('ckeditor') . '/ckeditor.js');
 
   $app_path = drupal_get_path('module', 'epe_llb') . '/app';
 
@@ -875,7 +845,7 @@ function epe_llb_block_info() {
   );
 
   $blocks['epe_llb_featured'] = array(
-    'info' => t('EPE Featured Lesson Resources'),
+    'info' => t('EPE Featured Investigation Resources'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
@@ -1067,7 +1037,7 @@ function epe_llb_default_search_api_index() {
       'fields' => array(
         'nid' => array('type'=>'integer'),
         'type' => array('type'=>'string'),
-        'title' => array('type'=>'text'),
+        'title' => array('type'=>'string'),
         'url' => array('type'=>'string'),
         'status' => array('type'=>'integer'),
         'promote' => array('type'=>'boolean'),
@@ -1078,8 +1048,8 @@ function epe_llb_default_search_api_index() {
         'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),
         'author:mail' => array('type'=>'string'),
-        'author:field_account_fname' => array('type'=>'text'),
-        'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_fname' => array('type'=>'string'),
+        'author:field_account_lname' => array('type'=>'string'),
         'author:field_account_organization' => array('type'=>'text'),
         'body:value' => array('type'=>'text'),
         'body:summary' => array('type'=>'text'),

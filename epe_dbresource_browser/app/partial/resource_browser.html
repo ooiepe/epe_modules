@@ -24,9 +24,9 @@
 
 <table>
   <thead>
-    <th>Title/Info</th>
-    <th width="134">Author</th>
-    <th width="134">Modify date</th>
+    <th><a ng-click="fn.sortResults('title')" ng-class="fn.selectedClass('title')">Title/Info</a></th>
+    <th width="134"><a ng-click="fn.sortResults('author')" ng-class="fn.selectedClass('author')">Author</a></th>
+    <th width="134"><a ng-click="fn.sortResults('last_updated')" ng-class="fn.selectedClass('last_updated')">Modify Date</a></th>
   </thead>
   <tbody>
     <tr ng-show="browser.data.length < 1">
@@ -39,5 +39,5 @@
 </table>
 
 <div class="paging" ng-show="browser.selected_module.numberofpages > 1">
-  <span ng-repeat="n in [] | range:browser.selected_module.numberofpages"><a ng-click="fn.setCurrentPage(n+1)" ng-class="fn.setActivePage(n+1)">{{n+1}}</a></span>
+  <span ng-repeat="n in [] | range:browser.selected_module.numberofpages"><a ng-click="fn.setCurrentPage(n+1)" ng-class="fn.setPageClass(n+1)">{{n+1}}</a></span>
 </div>

@@ -177,12 +177,6 @@ function epe_cm_views_default_views() {
       ?>';
   $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
-  /* Sort criterion: Indexed Node: Title */
-  $handler->display->display_options['sorts']['title']['id'] = 'title';
-  $handler->display->display_options['sorts']['title']['table'] = 'search_api_index_epe_cm_search_index';
-  $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['title']['expose']['label'] = 'Title';
   /* Contextual filter: Indexed Node: Author */
   $handler->display->display_options['arguments']['author']['id'] = 'author';
   $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_epe_cm_search_index';
