@@ -67,10 +67,12 @@ if ($copies_of_results->rowCount() > 0)
 	    	// load the parent item
 	    	$parent_node = node_load($result->parent);
 
-			print('<tr><td><a href="' . base_path() . 'node/' . $result->parent . '">');
-			print_r($parent_node->title);
-			print('</a></td></tr>');
-
+        if(isset($parent_node->title)) {
+          //print('<tr><td><a href="' . base_path() . 'node/' . $result->parent . '">');
+          print('<tr><td><a href="' . base_path() . 'node/' . $result->parent . '">');
+          print_r($parent_node->title);
+          print('</a></td></tr>');
+        }
 	    }
 
 
@@ -96,10 +98,11 @@ if ($copies_of_results->rowCount() > 0)
         // load the parent item
         $child_node = node_load($result->child);
 
-      print('<tr><td><a href="' . base_path() . 'node/' . $result->child . '">');
-      print_r($child_node->title);
-      print('</a></td></tr>');
-
+        if(isset($child_node->title)) {
+          print('<tr><td><a href="' . base_path() . 'node/' . $result->child . '">');
+          print_r($child_node->title);
+          print('</a></td></tr>');
+        }
       }
 
 
@@ -125,10 +128,11 @@ if ($copies_of_results->rowCount() > 0)
 	    	// load the parent item
 	    	$copied_node = node_load($result->entity_id);
 
-			print('<tr><td><a href="' . base_path() . 'node/' . $result->entity_id . '">');
-			print_r($copied_node->title);
-			print('</a></td></tr>');
-
+        if(isset($copied_node->title)) {
+          print('<tr><td><a href="' . base_path() . 'node/' . $result->entity_id . '">');
+          print_r($copied_node->title);
+          print('</a></td></tr>');
+        }
 	    }
 
 
