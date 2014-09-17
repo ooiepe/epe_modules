@@ -225,6 +225,7 @@ $EduVis_Paths = epe_EduVis_Paths();
 </head>
 <body>
 <div id="vistool"></div>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="__DRUPAL_BASE_URL__/__EPE_EDUVIS_PATH_ROOT__/EduVis.js"></script>
 <script>
 (function(){
