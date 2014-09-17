@@ -18,6 +18,11 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.browser.queryparams = {};
       $scope.browser.data = [];
       $scope.search = {};
+      $scope.browser.assets_path = Drupal.settings.epe.base_path + 'sites/all/modules/epe_modules/epe_dbresource_browser/images';
+      $scope.browser.messages = {};
+      $scope.browser.messages.show_progress_bar = true;
+      $scope.browser.messages.show_messages = true;
+      $scope.browser.messages.messages = "Loading Resources";
 
       //set additional settings for each module view
       angular.forEach($scope.browser.modules, function(module, index) {
@@ -107,6 +112,14 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           angular.forEach(nodes, function(node) {
             $scope.browser.data.push(node.node);
           });
+
+          if($scope.browser.data.length < 1) {
+            $scope.browser.messages.show_progress_bar = false;
+            $scope.browser.messages.messages = "No " + $scope.browser.selected_module.type + " Resources Found";
+          } else {
+            $scope.browser.messages.show_messages = false;
+            $scope.browser.messages.show_progress_bar = false;
+          }
 
           ngProgress.complete();
         });
