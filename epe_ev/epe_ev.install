@@ -300,7 +300,7 @@ function epe_ev_update_7005(&$sandbox) {
 /**
  * updates the ev label
  */
-function epe_ev_update_7006(&$sandbox) {
+function epe_ev_update_7007(&$sandbox) {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
   $modules['epe_ev']['resource_browser']['label'] = 'Visualizations';
   variable_set('EPE_CONTENT_MODULES', $modules);

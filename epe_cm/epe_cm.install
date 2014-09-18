@@ -277,7 +277,7 @@ function epe_cm_update_7007(&$sandbox) {
 /**
  * updates the cm label
  */
-function epe_cm_update_7008(&$sandbox) {
+function epe_cm_update_7009(&$sandbox) {
   $modules = variable_get('EPE_CONTENT_MODULES',array());
   $modules['epe_cm']['resource_browser']['label'] = 'Concept Maps';
   variable_set('EPE_CONTENT_MODULES', $modules);
