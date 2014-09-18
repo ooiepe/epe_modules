@@ -314,7 +314,7 @@
         </td>
         <td>
           <div ng-show="fn.inItemEditArray(item.key)">
-            <textarea name="body" cols="70" rows="10" ng-model="currentCopies.items[item.key].body"></textarea>
+            <textarea ckeditor id="body_{{item.key}}" name="body_{{item.key}}" cols="70" rows="10" ng-model="currentCopies.items[item.key].body"></textarea>
           </div>
           <div ng-show="!fn.inItemEditArray(item.key)">
             <div ng-bind-html="item.body" class="item body"></div>
@@ -424,27 +424,32 @@
   <p>The fields on this page will become part of the Instructor Notes page.  If you do not intend to publish or share your investigation with other instructors than this page is optional.  However, if you do intend to share this investigation, completing this page will greatly assist others in implementing the activity in their classroom.</p>
 
   <div class="control-group">
-  <label class="control-label" for="inputTitle"><strong>Instructional Tips</strong></label>
-  <?php echo render($form['field_instructional_content']); ?>
+  <label class="control-label"><strong>Investigation Level</strong></label>
+  <?php echo render($form['field_investigation_level']); ?>
   </div>
 
   <div class="control-group">
-  <label class="control-label" for="inputTitle"><strong>Preconceptions and Lecture Questions</strong></label>
+  <label class="control-label"><strong>Teaching Mode</strong></label>
+  <?php echo render($form['field_teaching_mode']); ?>
+  </div>
+
+  <div class="control-group">
+  <label class="control-label"><strong>Preconceptions and Lecture Questions</strong></label>
   <?php echo render($form['field_preconception_content']); ?>
   </div>
 
   <div class="control-group">
-  <label class="control-label" for="inputTitle"><strong>Resources</strong></label>
+  <label class="control-label"><strong>Resources</strong></label>
   <?php echo render($form['field_resources_content']); ?>
   </div>
 
   <div class="control-group">
-  <label class="control-label" for="inputTitle"><strong>Resources File</strong></label>
+  <label class="control-label"><strong>Resources File</strong></label>
   <?php echo render($form['field_resource_file']); ?>
   </div>
 
   <div class="control-group">
-  <label class="control-label" for="inputTitle"><strong>Resources File Type</strong></label>
+  <label class="control-label"><strong>Resources File Type</strong></label>
   <?php echo render($form['field_resource_file_type']); ?>
   </div>
 
@@ -474,9 +479,14 @@
   </div>
 
   <div class="row-fluid">
-    <label class="control-label" for="inputTitle"><strong>Investigation Description</strong></label>
+    <label class="control-label"><strong>Investigation Description</strong></label>
     <p>Please provide a description of your investigation that includes the science concepts it covers and the goal you have for students who complete it.  If you publish your investigation to the public database, this description will help other educators find your activity and determine if it is useful to them.</p>
     <?php echo render($form['body']); ?>
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <label class="control-label"><strong>Investigation Keywords</strong></label>
+    <?php echo render($form['field_resource_keywords']); ?>
   </div>
 </div> <!-- /#setup -->
 

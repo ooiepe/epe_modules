@@ -63,7 +63,7 @@ function epe_ev_restful_api(){
 
   $view = views_get_view('epe_ev_search_view');
   //set view to the display machine id
-  if(isset($_GET['filter']) && $_GET['filter'] == 'author') {
+  if(isset($_GET['filter']) && $_GET['filter'] == 'author' && user_is_logged_in()) {
     $display_name = 'author';
   }
   $view->set_display($display_name);
@@ -73,6 +73,10 @@ function epe_ev_restful_api(){
     $filter = $view->get_item($display_name, 'filter', 'author_uid');
     $filter['value'] = $user->uid;
     $view->set_item($display_name, 'filter', 'author_uid', $filter);
+  } else  {
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['author_uid']);
+    $view->display_handler->override_option('filters', $filters);
   }
 
   //if there is search term, pass it in to exposed filter
@@ -92,6 +96,45 @@ function epe_ev_restful_api(){
     $filter = $view->get_item($display_name, 'filter', 'field_featured_status');
     $filter['value'] = $featured_filter;
     $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
+  }
+
+  $sort_filter = array(
+    'table'=>'search_api_index_epe_ev_search_index',
+    'relationship'=>'none',
+    'group_type'=>'group',
+    'ui_name'=>''
+  );
+
+  $sort_fields = array();
+
+  if(isset($_GET['sort']) && in_array($_GET['sort'],array('title','author','last_updated'))) {
+    switch ($_GET['sort']) {
+      case 'last_updated':
+        $sort_fields[] = 'changed';
+      break;
+
+      case 'author':
+        $sort_fields[] = 'author_field_account_lname';
+        $sort_fields[] = 'author_field_account_fname';
+      break;
+
+      default:
+        $sort_fields[] = $_GET['sort'];
+      break;
+    }
+  } else {
+    $sort_fields[] = 'title';
+  }
+
+  if(isset($_GET['sort_mode']) && in_array($_GET['sort_mode'], array('asc','desc'))) {
+    $sort_filter['order'] = strtoupper($_GET['sort_mode']);
+  } else {
+    $sort_filter['order'] = 'ASC';
+  }
+  foreach($sort_fields as $field) {
+    $sort_filter['id'] = $field;
+    $sort_filter['field'] = $field;
+    $view->set_item($display_name,'sort',$field,$sort_filter);
   }
 
   if(isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
@@ -225,6 +268,7 @@ $EduVis_Paths = epe_EduVis_Paths();
 </head>
 <body>
 <div id="vistool"></div>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="__DRUPAL_BASE_URL__/__EPE_EDUVIS_PATH_ROOT__/EduVis.js"></script>
 <script>
 (function(){
@@ -243,6 +287,15 @@ $EduVis_Paths = epe_EduVis_Paths();
 
 }());
 
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
+
+  ga("create", "UA-48897328-1", "oceanobservatories.org");
+  ga("send", "pageview");
 </script>
 </body>
 </html>';

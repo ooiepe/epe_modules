@@ -191,12 +191,6 @@ function epe_dbimage_views_default_views() {
   $handler->display->display_options['fields']['field_source_url']['label'] = 'source_url';
   $handler->display->display_options['fields']['field_source_url']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_source_url']['type'] = 'link_plain';
-  /* Sort criterion: Indexed Node: Title */
-  $handler->display->display_options['sorts']['title']['id'] = 'title';
-  $handler->display->display_options['sorts']['title']['table'] = 'search_api_index_image_resource_index';
-  $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['title']['expose']['label'] = 'Title';
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
     2 => 'AND',

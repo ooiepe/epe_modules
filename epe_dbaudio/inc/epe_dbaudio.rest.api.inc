@@ -8,7 +8,7 @@ function epe_dbaudio_restful_api() {
   $display_name = 'all';
   $view = views_get_view('audio_resource_index');
   //set view to the display machine id
-  if(isset($_GET['filter']) && $_GET['filter'] == 'author') {
+  if(isset($_GET['filter']) && $_GET['filter'] == 'author' && user_is_logged_in()) {
     $display_name = 'author';
   }
   $view->set_display($display_name);
@@ -18,6 +18,10 @@ function epe_dbaudio_restful_api() {
     $filter = $view->get_item($display_name, 'filter', 'author_uid');
     $filter['value'] = $user->uid;
     $view->set_item($display_name, 'filter', 'author_uid', $filter);
+  } else  {
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['author_uid']);
+    $view->display_handler->override_option('filters', $filters);
   }
 
   //if there is search term, pass it in to exposed filter

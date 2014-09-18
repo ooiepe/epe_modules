@@ -18,6 +18,11 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.browser.queryparams = {};
       $scope.browser.data = [];
       $scope.search = {};
+      $scope.browser.assets_path = Drupal.settings.epe.base_path + 'sites/all/modules/epe_modules/epe_dbresource_browser/images';
+      $scope.browser.messages = {};
+      $scope.browser.messages.show_progress_bar = true;
+      $scope.browser.messages.show_messages = true;
+      $scope.browser.messages.messages = "Loading Resources";
 
       //set additional settings for each module view
       angular.forEach($scope.browser.modules, function(module, index) {
@@ -53,6 +58,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
 
       //define init function
       $scope.fn.init = function() {
+        //filter enabled modules and load ony module that's allowed in resource browser
         _.each($scope.browser.enabled_modules, function(module) {
           if(module.api == $routeParams['type']) {
             module.active = true;
@@ -63,6 +69,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
             module.activeClass = '';
           }
         });
+        //loading parameters to pass to data query
         $scope.fn.serviceParams = {};
         $scope.fn.serviceParams['resource_type'] = $scope.browser.selected_module.api;
         if(typeof $routeParams['page'] != 'undefined') {
@@ -78,6 +85,14 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else {
           $scope.browser.resource_filter = $scope.browser.resource_filters[0];
         }
+        if(typeof $routeParams['sort'] == 'undefined') {
+          $routeParams['sort'] = 'title';
+        }
+        if(typeof $routeParams['sort_mode'] == 'undefined') {
+          $routeParams['sort_mode'] = 'asc';
+        }
+        $scope.fn.serviceParams['sort'] = $routeParams['sort'];
+        $scope.fn.serviceParams['sort_mode'] = $routeParams['sort_mode'];
         //query counts very time, counts return minimal data so performance hit should be minimal however still should cache this somehow
         epeDataService.getPager($scope.fn.serviceParams,true).then(function(res) {
           _.each($scope.browser.enabled_modules, function(module, key) {
@@ -99,6 +114,14 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
             $scope.browser.data.push(node.node);
           });
 
+          if($scope.browser.data.length < 1) {
+            $scope.browser.messages.show_progress_bar = false;
+            $scope.browser.messages.messages = "No " + $scope.browser.selected_module.type + " Resources Found";
+          } else {
+            $scope.browser.messages.show_messages = false;
+            $scope.browser.messages.show_progress_bar = false;
+          }
+
           ngProgress.complete();
         });
 
@@ -112,13 +135,20 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         if(typeof $routeParams['filter'] != 'undefined') {
           params['filter'] = $routeParams['filter'];
         }
+        if(typeof $routeParams['sort'] != 'undefined') {
+          params['sort'] = $routeParams['sort'];
+        }
+        if(typeof $routeParams['sort_mode'] != 'undefined') {
+          params['sort_mode'] = $routeParams['sort_mode'];
+        }
+
         $scope.browser.queryparams = webStorage.session.get('queryparams');
         if($scope.browser.queryparams == null) {
           $scope.browser.queryparams = {};
         }
         $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
         webStorage.session.add('queryparams',$scope.browser.queryparams);
-      }
+      } //init
 
       //no module type defined, we reload the browser with url of the 1st module
       if(typeof $routeParams['type'] == "undefined" || (
@@ -139,11 +169,12 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.fn.searchTerm = function() {
         var params = {};
         params['type'] = $scope.browser.selected_module.api;
-        if(typeof $routeParams['page'] != 'undefined' && $routeParams['page'] > 1) {
+/*        if(typeof $routeParams['page'] != 'undefined' && $routeParams['page'] > 1) {
           params['page'] = $routeParams['page'] - 1;
         } else {
           params['page'] = 1;
-        }
+        }*/
+        params['page'] = 1; //turn search should reset all paging back to first page
         if($scope.search.term != '') {
           params['search'] = $scope.search.term;
         }
@@ -161,16 +192,26 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         if(typeof $scope.browser.queryparams[module.api] == 'undefined') {
           params['type'] = module.api;
           params['page'] = 1;
-          if(typeof $routeParams['search'] != 'undefined') {
-            params['search'] = $routeParams['search'];
-          }
         } else {
           params = $scope.browser.queryparams[module.api];
+        }
+        if($routeParams['search'] != params['search'] || $routeParams['filter'] != params['filter']) {
+          params['page'] = 1
+        }
+        if(typeof $routeParams['search'] != 'undefined') {
+          params['search'] = $routeParams['search'];
+        } else {
+          params['search'] = '';
         }
         if(typeof $routeParams['filter'] != 'undefined') {
           params['filter'] = $routeParams['filter'];
         }
-
+        if(typeof $routeParams['sort'] != 'undefined') {
+          params['sort'] = $routeParams['sort'];
+        }
+        if(typeof $routeParams['sort_mode'] != 'undefined') {
+          params['sort_mode'] = $routeParams['sort_mode'];
+        }
         $location.search(params);
       } //end setActiveModule function
 
@@ -202,17 +243,51 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         if(typeof $routeParams['filter'] != 'undefined') {
           params['filter'] = $routeParams['filter'];
         }
+        if(typeof $routeParams['sort'] != 'undefined') {
+          params['sort'] = $routeParams['sort'];
+        }
+        if(typeof $routeParams['sort_mode'] != 'undefined') {
+          params['sort_mode'] = $routeParams['sort_mode'];
+        }
 
         $location.search(params);
       }
 
-      $scope.fn.setActivePage = function(number) {
+      $scope.fn.setPageClass = function(number) {
         if(typeof $routeParams['page'] != 'undefined' && number == $routeParams['page'] ) {
           return 'active';
         } else if(typeof $routeParams['page'] == 'undefined' && number == 1) {
           return 'active';
         } else {
           return 'inactive';
+        }
+      }
+
+      $scope.fn.sortResults = function(column) {
+        var params = {};
+        params['type'] = $scope.browser.selected_module.api;
+        params['page'] = $routeParams['page'];
+        if(typeof $routeParams['search'] != 'undefined') {
+          params['search'] = $routeParams['search'];
+        }
+        if(typeof $routeParams['exclude'] != 'undefined' && $routeParams['exclude'] == 'true') {
+          params['exclude'] = "true";
+        }
+        if(typeof $routeParams['filter'] != 'undefined') {
+          params['filter'] = $routeParams['filter'];
+        }
+        if($routeParams['sort'] == column) {
+          params['sort_mode'] = $routeParams['sort_mode'] == 'asc' ? 'desc' : 'asc';
+        }
+        params['sort'] = column;
+        $location.search(params);
+      }
+
+      $scope.fn.selectedClass = function(column) {
+        if($routeParams['sort'] == column) {
+          return 'sort sort_' + $routeParams['sort_mode'];
+        } else {
+          return 'sort';
         }
       }
     }]); //end controller function

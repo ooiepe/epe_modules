@@ -254,7 +254,7 @@ function epe_cm_default_search_api_index() {
       'fields' => array(
         'nid' => array('type'=>'integer'),
         'type' => array('type'=>'string'),
-        'title' => array('type'=>'text'),
+        'title' => array('type'=>'string'),
         'url' => array('type'=>'string'),
         'status' => array('type'=>'integer'),
         'promote' => array('type'=>'boolean'),
@@ -265,8 +265,8 @@ function epe_cm_default_search_api_index() {
         'author:uid' => array('type'=>'integer'),
         'author:name' => array('type'=>'string'),
         'author:mail' => array('type'=>'string'),
-        'author:field_account_fname' => array('type'=>'text'),
-        'author:field_account_lname' => array('type'=>'text'),
+        'author:field_account_fname' => array('type'=>'string'),
+        'author:field_account_lname' => array('type'=>'string'),
         'author:field_account_organization' => array('type'=>'text'),
         'body:value' => array('type'=>'text'),
         'body:summary' => array('type'=>'text'),
@@ -324,7 +324,7 @@ function epe_cm_default_search_api_index() {
  * Alter the cancel behavior of the edit forms
  */
 function epe_cm_form_alter (&$form, &$form_state, $form_id) {
-  
+
   if ($form_id == 'cm_resource_node_form') {
     $form['#submit'] = array('cm_resource_node_form_submit_custom');
   }

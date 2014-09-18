@@ -244,3 +244,16 @@ function epe_dbaudio_update_7003(&$sandbox) {
   $view_definition = epe_dbaudio_views_default_views();
   views_save_view($view_definition['audio_resource_index']);
 }
+
+function epe_dbaudio_update_7004(&$sandbox) {
+  $search_api_index = entity_load_single('search_api_index', 'audio_resource_index');
+
+  $search_api_index->options['fields']['title'] = array('type'=>'string');
+  $search_api_index->options['fields']['field_account_fname'] = array('type'=>'string');
+  $search_api_index->options['fields']['field_account_lname'] = array('type'=>'string');
+  entity_save('audio_resource_index', $search_api_index);
+
+  module_load_include('inc','epe_dbaudio','epe_dbaudio.views_default');
+  $view_definition = epe_dbaudio_views_default_views();
+  views_save_view($view_definition['audio_resource_index']);
+}
