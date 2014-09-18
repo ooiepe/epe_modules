@@ -31,6 +31,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           data:[],
           active:module.default,
           weight:module.weight,
+          label:module.label,
           api:module.api,
           active: false,
           activeClass: '',

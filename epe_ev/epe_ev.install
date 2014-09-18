@@ -127,7 +127,7 @@ function epe_ev_enable() {
 
   $modules['epe_ev'] = array(
       'content_type' => 'ev_tool_instance',
-      'resource_browser' => array('api'=>'ev','adurl'=>'ev/tools','weight'=>2)
+      'resource_browser' => array('label'=>'Visualizations','api'=>'ev','adurl'=>'ev/tools','weight'=>2)
     );
 
   variable_set('EPE_CONTENT_MODULES', $modules);
@@ -295,6 +295,15 @@ function epe_ev_update_7005(&$sandbox) {
   module_load_include('inc','epe_ev','epe_ev.views_default');
   $view_definition = epe_ev_views_default_views();
   views_save_view($view_definition['epe_ev_search_view']);
+}
+
+/**
+ * updates the ev label
+ */
+function epe_ev_update_7007(&$sandbox) {
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_ev']['resource_browser']['label'] = 'Visualizations';
+  variable_set('EPE_CONTENT_MODULES', $modules);
 }
 
 /**
