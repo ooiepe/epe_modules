@@ -27,6 +27,12 @@ $field_cm_data = field_view_value('node',$node,'field_cm_data', $field_cm_data_i
 
 $field_out = render($field_cm_data);
 
+
+$cm_desc = '';
+if (isset($node -> body['und'][0]['value']))
+  $cm_desc = json_encode($node -> body['und'][0]['value']);
+
+
 ?>
 
 
@@ -51,7 +57,7 @@ function loadFlash() {
   flashvars.OWLPATH = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/owl/ioos/' ?>';
   flashvars.MAPID = '<?php echo $node->nid ?>';
   flashvars.TITLE = <?php echo json_encode($node->title) ?>;
-  flashvars.DESCRIPTION = <?php print json_encode($node -> body['und'][0]['value']) ?>;
+  flashvars.DESCRIPTION = '<?php echo $cm_desc ?>';
   flashvars.SWFLOCATION = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/swf/' ?>';
 
   var params = {};
