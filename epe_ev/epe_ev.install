@@ -321,3 +321,11 @@ function epe_ev_update_7006(&$sandbox) {
   $view_definition = epe_ev_views_default_views();
   views_save_view($view_definition['epe_ev_search_view']);
 }
+
+/**
+ * Release 3.4 bug fix:
+ * Fix search api index view definition, delete existing search api index and allow hook_default_search_api_index function to create the correct search api index
+ */
+function epe_ev_update_7008(&$sandbox) {
+  entity_delete('search_api_index','epe_ev_search_index');
+}

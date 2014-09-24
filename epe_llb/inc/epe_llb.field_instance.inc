@@ -1496,9 +1496,10 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(
-          'filtered_html' => 'filtered_html',
-          'full_html' => 'full_html',
-          'plain_text' => 'plain_text',
+          'filtered_html' => 0,
+          'llb_textfield_filter' => 'llb_textfield_filter',
+          'full_html' => 0,
+          'plain_text' => 0,
         ),
         'allowed_formats_toggle' => 0,
         'default_order_toggle' => 0,

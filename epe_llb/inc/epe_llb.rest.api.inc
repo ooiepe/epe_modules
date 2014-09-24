@@ -79,7 +79,7 @@ function epe_llb_restful_api() {
   foreach($sort_fields as $field) {
     $sort_filter['id'] = $field;
     $sort_filter['field'] = $field;
-    //$view->set_item($display_name,'sort',$field,$sort_filter);
+    $view->set_item($display_name,'sort',$field,$sort_filter);
   }
 
   if(isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {

@@ -203,3 +203,16 @@ function epe_dbmultimedia_update_7006(&$sandbox) {
   $view_definition = epe_dbmultimedia_views_default_views();
   views_save_view($view_definition['multimedia_resource_index']);
 }
+
+/**
+ * Release 3.4 bug fix:
+ * Fix search api index view definition, delete existing search api index and allow hook_default_search_api_index function to create the correct search api index
+ * Fix multimedia_resource_index view that misses author_name field
+ */
+function epe_dbmultimedia_update_7007(&$sandbox) {
+  entity_delete('search_api_index','multimedia_resource_index');
+
+  module_load_include('inc','epe_dbmultimedia','epe_dbmultimedia.views_default');
+  $view_definition = epe_dbmultimedia_views_default_views();
+  views_save_view($view_definition['multimedia_resource_index']);
+}

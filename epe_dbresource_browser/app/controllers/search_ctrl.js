@@ -86,10 +86,10 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           $scope.browser.resource_filter = $scope.browser.resource_filters[0];
         }
         if(typeof $routeParams['sort'] == 'undefined') {
-          $routeParams['sort'] = 'title';
+          $routeParams['sort'] = 'last_updated';
         }
         if(typeof $routeParams['sort_mode'] == 'undefined') {
-          $routeParams['sort_mode'] = 'asc';
+          $routeParams['sort_mode'] = 'desc';
         }
         $scope.fn.serviceParams['sort'] = $routeParams['sort'];
         $scope.fn.serviceParams['sort_mode'] = $routeParams['sort_mode'];
@@ -105,9 +105,6 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         });
 
         //query selected tab's dataset and only selected tab
-        ngProgress.height('10px');
-        var progress = 0;
-        ngProgress.start();
         epeDataService.getData($scope.fn.serviceParams).then(function(res) {
           var nodes = res.data.nodes;
           angular.forEach(nodes, function(node) {
@@ -116,13 +113,11 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
 
           if($scope.browser.data.length < 1) {
             $scope.browser.messages.show_progress_bar = false;
-            $scope.browser.messages.messages = "No " + $scope.browser.selected_module.type + " Resources Found";
+            $scope.browser.messages.messages = "No " + $scope.browser.selected_module.type + " Found";
           } else {
             $scope.browser.messages.show_messages = false;
             $scope.browser.messages.show_progress_bar = false;
           }
-
-          ngProgress.complete();
         });
 
         //cache query param into session
@@ -169,11 +164,6 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.fn.searchTerm = function() {
         var params = {};
         params['type'] = $scope.browser.selected_module.api;
-/*        if(typeof $routeParams['page'] != 'undefined' && $routeParams['page'] > 1) {
-          params['page'] = $routeParams['page'] - 1;
-        } else {
-          params['page'] = 1;
-        }*/
         params['page'] = 1; //turn search should reset all paging back to first page
         if($scope.search.term != '') {
           params['search'] = $scope.search.term;
