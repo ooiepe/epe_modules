@@ -251,3 +251,11 @@ function epe_dbimage_update_7005(&$sandbox) {
   $view_definition = epe_dbimage_views_default_views();
   views_save_view($view_definition['image_resource_index']);
 }
+
+/**
+ * Release 3.4 bug fix:
+ * Fix search api index view definition, delete existing search api index and allow hook_default_search_api_index function to create the correct search api index
+ */
+function epe_dbimage_update_7006(&$sandbox) {
+  entity_delete('search_api_index','image_resource_index');
+}

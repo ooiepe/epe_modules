@@ -164,6 +164,12 @@ function epe_dbmultimedia_views_default_views() {
       ?>';
   $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
+  /* Field: Author: Name (indexed) */
+  $handler->display->display_options['fields']['author_name']['id'] = 'author_name';
+  $handler->display->display_options['fields']['author_name']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['fields']['author_name']['field'] = 'author_name';
+  $handler->display->display_options['fields']['author_name']['label'] = 'author_name';
+  $handler->display->display_options['fields']['author_name']['link_to_entity'] = 0;
   /* Field: Indexed Node: Credit */
   $handler->display->display_options['fields']['field_credit']['id'] = 'field_credit';
   $handler->display->display_options['fields']['field_credit']['table'] = 'search_api_index_multimedia_resource_index';

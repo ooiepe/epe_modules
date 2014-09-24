@@ -434,6 +434,11 @@
   </div>
 
   <div class="control-group">
+  <label class="control-label"><strong>Instructional Tips</strong></label>
+  <?php echo render($form['field_instructional_content']); ?>
+  </div>
+
+  <div class="control-group">
   <label class="control-label"><strong>Preconceptions and Lecture Questions</strong></label>
   <?php echo render($form['field_preconception_content']); ?>
   </div>

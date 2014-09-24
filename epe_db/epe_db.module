@@ -246,7 +246,6 @@ function epe_db_default_search_api_index() {
   return $items;
 }
 
-
 /*
  * Implement hook_menu_local_tasks_alter()
  */

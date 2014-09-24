@@ -545,3 +545,21 @@ function epe_llb_update_7008(&$sandbox) {
     user_role_grant_permissions($role->rid,array('use text format llb_textfield_filter'));
   }
 }
+
+/**
+ * Release 3.4 bug fix:
+ * Fix search api index view definition, delete existing search api index and allow hook_default_search_api_index function to create the correct search api index
+ * Fix resource_file_node field to use llb textfield filter text format
+ */
+function epe_llb_update_7009(&$sandbox) {
+  entity_delete('search_api_index','llb_resource_index');
+
+  $field_resource_file = field_info_instance('node', 'field_resource_file_note', 'llb_resource');
+  $field_resource_file['settings']['better_formats']['allowed_formats'] = array(
+    'filtered_html' => 0,
+    'llb_textfield_filter' => 'llb_textfield_filter',
+    'full_html' => 0,
+    'plain_text' => 0,
+  );
+  field_update_instance($field_resource_file);
+}
