@@ -282,5 +282,5 @@ function epe_dbdocument_update_7006(&$sandbox) {
  * Fix search api index view definition, delete existing search api index and allow hook_default_search_api_index function to create the correct search api index
  */
 function epe_dbdocument_update_7007(&$sandbox) {
-  entity_delete('search_api_index','document_resource_index'););
+  entity_delete('search_api_index','document_resource_index');
 }
