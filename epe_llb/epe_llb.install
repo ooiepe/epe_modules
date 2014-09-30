@@ -123,7 +123,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'node/add/llb-resource',
-      'link_title' => 'Create a Investigation',
+      'link_title' => 'Create an Investigation',
       'menu_name' => 'main-menu',
       'weight' => 2,
       'expanded' => 0,
@@ -562,4 +562,33 @@ function epe_llb_update_7009(&$sandbox) {
     'plain_text' => 0,
   );
   field_update_instance($field_resource_file);
+}
+
+/**
+ * Additional 3.4 release fixes
+ * Fix link title typo
+ */
+function epe_llb_update_7010(&$sandbox) {
+  $results = db_select('menu_links','a')
+            ->fields('a',array('mlid'))
+            ->condition('link_title','Create a Investigation','=')
+            ->execute();
+  foreach ($results as $result) {
+    $menu_item = menu_link_load($result->mlid);
+    $menu_item['link_title'] = 'Create an Investigation';
+    menu_link_save($menu_item);
+  }
+
+  $field_resource_keywords = field_info_instance('node', 'field_resource_keywords', 'llb_resource');
+  $field_resource_keywords['display']['default']['settings']['taxonomy_term_link'] = FALSE;
+  $field_resource_keywords['display']['llb_instructor']['settings']['taxonomy_term_link'] = FALSE;
+  field_update_instance($field_resource_keywords);
+
+  $alter_fields = array('body','field_resource_file_note','field_background_content','field_challenge_content','field_explanation_content','field_guidance_content','field_instructional_content','field_introductory_content','field_preconception_content','field_resources_content','field_student_objectives');
+  foreach($alter_fields as $alter_field) {
+    $field_instance = field_info_instance('node', $alter_field, 'llb_resource');
+    $field_instance['settings']['better_formats']['allowed_formats']['filtered_html'] = 0;
+    $field_instance['settings']['better_formats']['allowed_formats']['llb_textfield_filter'] = 'llb_textfield_filter';
+    field_update_instance($field_instance);
+  }
 }
