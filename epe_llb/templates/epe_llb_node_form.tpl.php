@@ -285,6 +285,14 @@
       </table>
     </div>
 
+    <div ng-show="failed_messages != ''" class="control-group text-error">
+      <table class="table">
+        <tr class="warning"><td>{{failed_messages}}</td></tr>
+      </table>
+    </div>
+
+    <div ng-></div>
+
     <table class="table table-condensed">
       <tr>
         <th width="25%">Dataset</th>
@@ -309,7 +317,9 @@
           <div ng-show="!fn.inItemEditArray(item.key)">
             <p>{{item.title}}</p>
             <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
-                 <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
+                 <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete
+                 <a ng-show="item.type == 'cm_resource' || item.type == 'llb_resource' || item.type == 'ev_tool_instance'" ng-click="copyDataSet($index);" style="cursor:pointer;"><i class="icon-share"></i>&nbsp;Copy
+                 </div>
           </div>
         </td>
         <td>

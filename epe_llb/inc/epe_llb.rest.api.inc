@@ -133,3 +133,55 @@ function epe_llb_restful_api_node($nid) {
 
   echo json_encode($item);
 }
+
+function epe_llb_restful_api_node_clone($nid) {
+  global $user;
+
+  $node = node_load($nid);
+  if($node && in_array($node->type,array('llb_resource','cm_resource','ev_tool_instance'))) {
+    unset($node->nid);
+    unset($node->vid);
+
+    //reset all status field value && author value
+    $node->field_featured_status = array();
+    $node->field_public_status = array();
+    $node->field_source_nid['und'][0]['value'] = $nid;
+    $node->status = 0;
+    $node->uid = $user->uid;
+    $node->revision_uid = $user->uid;
+    unset($node->last_comment_timestamp);
+    unset($node->last_comment_name);
+    unset($node->last_comment_uid);
+    unset($node->comment_count);
+    $node->name = $user->name;
+
+    $node->created = REQUEST_TIME;
+    $node->changed = REQUEST_TIME;
+    $node->revision_timestamp = REQUEST_TIME;
+
+    $account = user_load($user->uid);
+    $fname = field_get_items('user', $account, 'field_account_fname');
+    $lname = field_get_items('user', $account, 'field_account_lname');
+    $fname = field_view_value('user', $account, 'field_account_fname', $fname[0]);
+    $lname = field_view_value('user', $account, 'field_account_lname', $lname[0]);
+    $fullname = trim($fname['#markup'] . ' ' . $lname['#markup']);
+    if(!$fullname) { $fullname = $user->name; }
+    $node->title = "Copy of " . $node->title . " by " . $fullname;
+    node_save($node);
+    switch($node->type) {
+      case "llb_resource":
+        return epe_llb_restful_api_node($node->nid);
+      break;
+      case "cm_resource":
+        module_load_include('inc','epe_cm','inc/epe_cm.rest.api');
+        return epe_cm_data_restful_api($node->nid);
+      break;
+      case "ev_tool_instance":
+        module_load_include('inc','epe_ev','inc/epe_ev.api');
+        return epe_ev_restful_api_node($node->nid);
+      break;
+    }
+  } else {
+    echo json_encode(array('message'=>'Invalid request'));
+  }
+}

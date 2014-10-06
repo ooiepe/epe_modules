@@ -563,3 +563,15 @@ function epe_llb_update_7009(&$sandbox) {
   );
   field_update_instance($field_resource_file);
 }
+
+/**
+ * Release 3.5 task:
+ * EPEDEV-427
+ * update permission to use Data Investigation copy api
+ */
+function epe_llb_update_7011(&$sandbox) {
+  //administrator, author, moderator
+  foreach(array(user_role_load_by_name('administrator'),user_role_load_by_name('author'),user_role_load_by_name('moderator')) as $role) {
+    user_role_grant_permissions($role->rid,array('epe node clone api'));
+  }
+}
