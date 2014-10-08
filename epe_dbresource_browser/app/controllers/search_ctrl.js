@@ -266,9 +266,17 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         if(typeof $routeParams['filter'] != 'undefined') {
           params['filter'] = $routeParams['filter'];
         }
-        if($routeParams['sort'] == column) {
+        if($routeParams['sort'] != column && (column == 'author' || column == 'title')) {
+          params['sort_mode'] = 'asc';
+        } else if($routeParams['sort'] == column) {
           params['sort_mode'] = $routeParams['sort_mode'] == 'asc' ? 'desc' : 'asc';
+        } else {
+          params['sort_mode'] = $routeParams['sort_mode'] == 'desc';
         }
+
+        /*if($routeParams['sort'] == column) {
+          params['sort_mode'] = $routeParams['sort_mode'] == 'asc' ? 'desc' : 'asc';
+        }*/
         params['sort'] = column;
         $location.search(params);
       }
