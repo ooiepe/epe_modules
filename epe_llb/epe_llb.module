@@ -137,6 +137,17 @@ function epe_llb_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['api/resource/clone/%'] = array(
+    'title' => t('Restful Data Investigations Clone Node'),
+    'page callback' => 'epe_llb_restful_api_node_clone',
+    'page arguments' => array(3),
+    'file' => 'epe_llb.rest.api.inc',
+    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe node clone api'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -216,6 +227,18 @@ function _assign_epe_llb_permission() {
   // Clear the user access cache.
   drupal_static_reset('user_access');
   drupal_static_reset('user_role_permissions');
+}
+
+/**
+  * setup the api access permissions
+  */
+function epe_llb_permission() {
+  return array(
+    'epe node clone api' => array(
+      'title' => 'EPE Data Investigation Node Clone',
+      'description' => 'Allow user to copy an existing node to use in Data Investigation.',
+    ),
+  );
 }
 
 /*
