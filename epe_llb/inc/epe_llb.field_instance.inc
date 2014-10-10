@@ -52,6 +52,9 @@ function _epe_llb_field_default_field_instances() {
             'filtered_html' => array(
               'weight' => 0,
             ),
+            'llb_textfield_filter' => array(
+              'weight' => 0,
+            ),
             'full_html' => array(
               'weight' => 1,
             ),
@@ -121,6 +124,9 @@ function _epe_llb_field_default_field_instances() {
         'default_order_wrapper' => array(
           'formats' => array(
             'filtered_html' => array(
+              'weight' => 0,
+            ),
+            'llb_textfield_filter' => array(
               'weight' => 0,
             ),
             'full_html' => array(
@@ -225,9 +231,9 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(
-          'filtered_html' => 'filtered_html',
-          'full_html' => 'full_html',
-          'plain_text' => 'plain_text',
+          'filtered_html' => 0,
+          'full_html' => 0,
+          'plain_text' => 0,
         ),
         'allowed_formats_toggle' => 0,
         'default_order_toggle' => 0,
@@ -303,6 +309,9 @@ function _epe_llb_field_default_field_instances() {
         'default_order_wrapper' => array(
           'formats' => array(
             'filtered_html' => array(
+              'weight' => 0,
+            ),
+            'llb_textfield_filter' => array(
               'weight' => 0,
             ),
             'full_html' => array(
@@ -438,6 +447,9 @@ function _epe_llb_field_default_field_instances() {
         'default_order_wrapper' => array(
           'formats' => array(
             'filtered_html' => array(
+              'weight' => 0,
+            ),
+            'llb_textfield_filter' => array(
               'weight' => 0,
             ),
             'full_html' => array(
@@ -691,6 +703,9 @@ function _epe_llb_field_default_field_instances() {
             'filtered_html' => array(
               'weight' => 0,
             ),
+            'llb_textfield_filter' => array(
+              'weight' => 0,
+            ),
             'full_html' => array(
               'weight' => 1,
             ),
@@ -807,6 +822,9 @@ function _epe_llb_field_default_field_instances() {
             'filtered_html' => array(
               'weight' => 0,
             ),
+            'llb_textfield_filter' => array(
+              'weight' => 0,
+            ),
             'full_html' => array(
               'weight' => 1,
             ),
@@ -874,6 +892,9 @@ function _epe_llb_field_default_field_instances() {
         'default_order_wrapper' => array(
           'formats' => array(
             'filtered_html' => array(
+              'weight' => 0,
+            ),
+            'llb_textfield_filter' => array(
               'weight' => 0,
             ),
             'full_html' => array(
@@ -1013,6 +1034,9 @@ function _epe_llb_field_default_field_instances() {
             'filtered_html' => array(
               'weight' => 0,
             ),
+            'llb_textfield_filter' => array(
+              'weight' => 0,
+            ),
             'full_html' => array(
               'weight' => 1,
             ),
@@ -1083,6 +1107,9 @@ function _epe_llb_field_default_field_instances() {
             'filtered_html' => array(
               'weight' => 0,
             ),
+            'llb_textfield_filter' => array(
+              'weight' => 0,
+            ),
             'full_html' => array(
               'weight' => 1,
             ),
@@ -1150,6 +1177,9 @@ function _epe_llb_field_default_field_instances() {
         'default_order_wrapper' => array(
           'formats' => array(
             'filtered_html' => array(
+              'weight' => 0,
+            ),
+            'llb_textfield_filter' => array(
               'weight' => 0,
             ),
             'full_html' => array(
@@ -1508,6 +1538,9 @@ function _epe_llb_field_default_field_instances() {
             'filtered_html' => array(
               'weight' => 0,
             ),
+            'llb_textfield_filter' => array(
+              'weight' => 0,
+            ),
             'full_html' => array(
               'weight' => 1,
             ),
@@ -1623,7 +1656,7 @@ function _epe_llb_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'ds',
         'settings' => array(
-          'taxonomy_term_link' => TRUE,
+          'taxonomy_term_link' => FALSE,
           'taxonomy_term_separator' => ', ',
         ),
         'type' => 'ds_taxonomy_separator',
@@ -1633,7 +1666,7 @@ function _epe_llb_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'ds',
         'settings' => array(
-          'taxonomy_term_link' => TRUE,
+          'taxonomy_term_link' => FALSE,
           'taxonomy_term_separator' => ', ',
         ),
         'type' => 'ds_taxonomy_separator',
