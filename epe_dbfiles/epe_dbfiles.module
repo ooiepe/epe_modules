@@ -433,7 +433,8 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
 
   node_save($node); //clear cache after file moves
 
-  drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
+  //drupal_set_message("You have upload " . $wrapper->title->value() . " " . $form_state['values']['node_type'] . " resource.");
+  drupal_set_message("<em>" . $wrapper->title->value() . "</em> was uploaded successfully.");
 
   if(arg(0) == 'dialog') {
     drupal_goto("dialog/resource/file/{$entity->nid}/success");
