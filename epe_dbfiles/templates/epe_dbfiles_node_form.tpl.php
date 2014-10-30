@@ -12,10 +12,20 @@
 <?php endif; ?>
 
 
-
+<?php /*
 <div class="field-container">
 <label for="edit-file" class="field-label">Upload file resource:</label>
 <?php echo render($form['file']); ?>
+</div>
+
+<div class="field-container">
+<label for="edit-file" class="field-label">Web Resource URL:</label>
+<?php echo render($form['url']); ?>
+</div>
+*/ ?>
+<div class="field-container">
+<label for="edit-file" class="field-label">* Resource to add:</label>
+<?php echo render($form['resource_field']); ?>
 </div>
 
 <div class="field-container">
@@ -33,10 +43,12 @@
 <?php echo render($form['credit']); ?>
 </div>
 
+<?php if(isset($form['source_url'])): ?>
 <div class="field-container">
 <label for="edit-source-url-value" class="field-label">Source URL:</label>
 <?php echo render($form['source_url']); ?>
 </div>
+<?php endif; ?>
 
 <div class="field-container thumbnail">
 <label for="edit-thumbnail" class="field-label">Thumbnail:</label>
@@ -48,7 +60,7 @@
 <?php //echo render($form['permission']); ?>
 <div class="control-group form-item">
 <div class="controls">
-<input type="checkbox" name="permission" style="float: left;"> <div style="margin-left: 20px;">I hereby certify that this file is either my own work or I have been given permission to use it within an educational context</div>
+<input type="checkbox" name="permission" style="float: left;"> <div style="margin-left: 20px;">I hereby certify that this resource is either my own work or I have been given permission to use it within an educational context</div>
 </div>
 </div>
 </div>

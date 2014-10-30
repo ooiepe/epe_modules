@@ -107,7 +107,7 @@ function epe_dbmultimedia_restful_api_node($nid) {
   );
 
   $node = node_load($nid);
-  if($node && in_array($node->type, array('audio_resource','video_resource'))) {
+  if($node && in_array($node->type, array('audio_resource','video_resource','web_resource'))) {
     $wrapper = entity_metadata_wrapper('node',$node);
     $item['nid'] = $wrapper->getIdentifier();
     $item['type'] = $wrapper->getBundle();
@@ -132,13 +132,32 @@ function epe_dbmultimedia_restful_api_node($nid) {
       if($file) {
         $item['file'] = $file['uri'];
       }
-    } else {
+    }
 
+    if($item['type'] == 'video_resource') {
       $field = field_get_items('node', $node, 'field_video_resource_file');
       if($field) {
         $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
         $item['uri'] = $field[0]['thumbnailfile']->uri;
         $item['file'] = file_create_url($field[0]['uri']);
+      }
+    }
+
+    if($item['type'] == 'web_resource' && in_array($wrapper->field_resource_origin->raw(), array('youtube','vimeo'))) {
+      $item['resource_origin'] = $wrapper->field_resource_origin->raw();
+      $resource_url = $wrapper->field_resource_url->raw();
+      switch($wrapper->field_resource_origin->raw()) {
+        case 'youtube':
+          $response = drupal_http_request('http://www.youtube.com/oembed?url=' . $resource_url['url'] .'&format=json');
+        break;
+        case 'vimeo':
+          $response = drupal_http_request('http://vimeo.com/api/oembed.json?url=' . $resource_url['url']);
+        break;
+      }
+      if($response->code == 200) {
+        $oembed_data = json_decode($response->data);
+        $item['thumbnail'] = $oembed_data->thumbnail_url;
+        $item['html'] = $oembed_data->html;
       }
     }
   }

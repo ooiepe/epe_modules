@@ -878,6 +878,7 @@ function epe_llb_reload_dataset($dataset, $assoc_resources) {
     if(isset($data->file)): $dataset->file = $data->file; endif;
     if(isset($data->credit)): $dataset->credit = $data->credit; endif;
     if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
+    if(isset($data->html)): $dataset->html = $data->html; endif;
   }
 
   return $dataset;

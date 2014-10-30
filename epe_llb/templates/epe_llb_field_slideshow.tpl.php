@@ -11,6 +11,16 @@ if($images):
         <video id="video-<?php echo $slide->nid ?>-video" data-setup="{}" class="video-js vjs-default-skin" width="480" height="320" controls="controls" preload="auto" poster="<?php echo $slide->thumbnail; ?>">
           <source src="<?php echo $slide->file; ?>">
         </video>
+      <?php } elseif($slide->type == 'web_resource') { ?>
+      <?php
+      $height_pattern = "/height=\"[0-9]*\"/";
+      $slide->html = preg_replace($height_pattern, "height='320'", $slide->html);
+      $width_pattern = "/width=\"[0-9]*\"/";
+      $slide->html = preg_replace($width_pattern, "width='480'", $slide->html);
+      $match_pattern = "#<iframe[^>]*>.*?</iframe>#i";
+      preg_match_all($match_pattern, $slide->html, $result);
+      echo $result[0][0];
+      ?>
       <?php } else { ?>
       <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>">
       <?php

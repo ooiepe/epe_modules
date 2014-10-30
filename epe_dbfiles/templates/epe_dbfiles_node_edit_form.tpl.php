@@ -9,11 +9,18 @@
   <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
 <?php endif; ?>
 
-
+<?php if($form['type'] == 'web_resource') { ?>
+<div class="field-container">
+<label for="edit-file" class="field-label">* Web Resource URL:</label>
+<?php echo render($form['resource-url-container']); ?>
+</div>
+<?php echo render($form['field_resource_origin']); ?>
+<?php } else { ?>
 <div class="field-container">
 <label for="edit-file" class="field-label">* Upload file resource:</label>
 <?php echo render($form['file-container']); ?>
 </div>
+<?php } ?>
 
 <div class="field-container">
 <label for="edit-title" class="field-label">* Title:</label>
@@ -30,10 +37,12 @@
 <?php echo render($form['field_credit']); ?>
 </div>
 
+<?php if($form['type'] != 'web_resource'): ?>
 <div class="field-container">
 <label for="edit-source-url" class="field-label">Source URL:</label>
 <?php echo render($form['field_source_url']); ?>
 </div>
+<?php endif; ?>
 
 <?php if(!empty($form['thumb-container']['#attributes'])): ?>
 <div class="field-container thumbnail">
