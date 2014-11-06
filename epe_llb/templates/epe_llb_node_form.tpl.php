@@ -13,13 +13,13 @@
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
   <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ddddcc">Instructions</a></li>
-  <li><a href="#objectives" data-toggle="tab" style="background-color:#ddddcc">Learning Objectives</a></li>
-  <li><a href="#motivation" data-toggle="tab">Motivation</a></li>
+  <li><a href="#objectives" data-toggle="tab" style="background-color:#ddddcc">Learning Objective</a></li>
+  <li><a href="#motivation" data-toggle="tab">Introduction</a></li>
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
   <li><a href="#explanation" data-toggle="tab">Explanation</a></li>
-  <li class="pull-right"><a href="#setup" data-toggle="tab">Setup</a></li>
+  <li class="pull-right"><a href="#setup" data-toggle="tab">Cover</a></li>
   <li class="pull-right"><a href="#notes" data-toggle="tab">Instructor Notes</a></li>
 </ul>
 
@@ -42,18 +42,18 @@
   ?>
 
   <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="objectives" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <!--<button type="button" class="btn btn-success" data-toggle="tab" data-target="objectives" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>-->
 </div> <!-- /#instruction -->
 <div class="tab-pane" id="objectives">
   <?php echo render($form['block_objectives_info']); ?>
-  <h3>Establish your Learning Objectives</h3>
+  <h3>Establish your Learning Objective</h3>
   <div class="row-fluid">
     <div class="span7">
-      <p>The first step to creating an effective investigation is to develop a Student Learning Objectives (SLO). The learning objective is essentially the goal of your activity.  SLOs typically answers the following questions:</p>
+      <p>The first step to creating an effective investigation is to develop a student learning objective or SLO. The learning objective is essentially the goal of your activity, and typically answers the following questions:</p>
       <ul>
         <li>What science concept do you want your students to learn about?</li>
-        <li>What content, context or dataset will they use to study this concept?</li>
-        <li>What outcome do you hope they will achieve, that is, how will you assess their learning?</li>
+        <li>What content, context, and/or dataset will they use to study this concept?</li>
+        <li>What outcome do you hope they will accomplish, that is, how will you assess their learning?</li>
       </ul>
 
       <p>By specifying your learning objective up front, you will be able to focus your investigation on those elements that students need to accomplish your specific goal.</p>
@@ -63,7 +63,7 @@
 
       <p>Don't worry about perfecting this right away, you can always come back and adjust it later.</p>
 
-      <p>As you develop your investigation, the datasets and questions you include should support the goal(s) you identified.  If they don't, you probably don't need to include them in this exercise (otherwise, you should rewrite your objective).  If you find that you have additional content you would like students to investigate that goes beyond your specified goal, you could consider creating another activity with a more advanced objective.</p>
+      <p>As you develop your investigation, the datasets and questions you include should support the objective you identified.  If they don't, you probably shouldn't include them in this activity (otherwise, you should rewrite your objective).  If you find that you have additional content you would like students to investigate that goes beyond your specified goal, you can consider creating additional investigations with another objective.</p>
     </div>
 
     <?php
@@ -82,11 +82,11 @@
 
 <div class="tab-pane" id="motivation">
   <?php echo render($form['block_introduction_info']); ?>
-  <h3>Provide a Motivating Context</h3>
+  <h3>Introduction: Provide a Motivating Context</h3>
   <div class="row-fluid">
     <div class="span6">
       <p>Why should students care about this investigation?  Why is this topic important?  How is this investigation relevant to students' lives?</p>
-      <p>Students learn best when they are engaged in a topic.  It's important to start your activity with a motivating context or story that spurs their interest in the content or helps them understand its relevance toward a larger societal goal.  You can use the slideshow and text on this page to tell a "story" behind the investigation.</p>
+      <p>Students learn best when they are engaged in a topic.  It's important to start your activity with a motivating context or story that spurs their interest in the content and helps them understand its relevance.  You can use the slideshow and text on this page to tell the &quot;story&quot; behind the investigation.</p>
       <div class="control-group">
         <label class="control-label" for="inputTitle"><strong>Enter the text you would like to appear on this page.</strong></label>
         <div class="controls">
@@ -106,7 +106,7 @@
 
     <div class="span6 intro-slideshow">
       <p><strong>Introductory Slideshow</strong></p>
-      <p>Choose one or more images that help explain the story behind this investigation.  You can provide a caption for each image.</p>
+      <p>Choose one or more resources that help explain the story behind this investigation.  You should provide a caption for each image.</p>
       <?php echo render($form['field_introductory_slideshow']); ?>
 
       <div ng-show="currentCopies.keys.length > 0" class="control-group text-warning">
@@ -145,29 +145,30 @@
 
 <div class="tab-pane" id="background">
   <?php echo render($form['block_background_info']); ?>
-  <h3>Provide Background Content</h3>
+  <h3>Add Background Content</h3>
   <div class="row-fluid">
     <div class="span6">
-      <p>Before beginning this investigation, what information should students know about or review?  Use the following box to provide any background information you would like students to know.
+      <p>What information should students know about or review before they start analyzing data?  Use this page to provide any background information you would like students to review before diving into the data.
       <div class="control-group">
-        <label class="control-label" for="inputTitle"><em>Enter the text you would like to appear on this page.</em></label>
+        <label class="control-label" for="inputTitle">Background Information</label>
         <div class="controls">
           <?php echo render($form['field_background_content']); ?>
         </div>
       </div>
 
-      <p>You may include html links in your text, if you wish to provide students with supplementary information.</p>
-      <p>Some suggested topics include:</p>
+      <p>You may include links to other sites if you wish to provide students with supplementary information.</p>
+      <p>Possible ideas to include in the background text:</p>
       <ul>
-        <li>Information about a scientific concept or process</li>
-        <li>Details on where or how a dataset was collected or how an instrument collects and processes data</li>
-        <li>Background information about an event, study area or phenomena students will be studying</li>
+        <li>Facts about a scientific concept or process</li>
+        <li>Details on where or how a dataset was collected </li>
+        <li>How an instrument collects and processes data</li>
+        <li>Background information about the event, study area, or phenomena students will investigate</li>
       </ul>
     </div>
 
     <div class="span6 background-slideshow">
-      <p><strong>Slideshow</strong></p>
-      <p>Choose one or more images that will help provide background information on this investigation.  You can provide a caption for each image.</p>
+      <p><strong>Background Slideshow</strong></p>
+      <p>Choose one or more resources that help provide background information or context on this investigation.  You should provide a caption for each image.</p>
       <?php echo render($form['field_background_slideshow']); ?>
       <table class="table table-condensed">
         <tbody ng-model="items">
@@ -196,7 +197,7 @@
   <div class="row-fluid">
     <div class="span7">
       <p><strong>Background Questions</strong></p>
-      <p>Before beginning an investigation, students should reflect on their current knowledge.  Generally, information that students need to know to complete an investigation should be provided in the investigation or via prior activities or lectures.  The questions you ask here should &quot;wet their appetite&quot; for the subject at hand, helping them understand the relevance of the topic to other subjects they may have already studied or know about.</p>
+      <p>On this page, you can include one or more questions to check that students have read through the background materials, or to have students reflect on their current knowledge.</p>
 
       <p>Enter one or more questions you would like students to think about before starting the investigation.</p>
       <div class="control-group">
@@ -204,8 +205,9 @@
       </div>
     </div>
     <div class="span5 well">
-    <p><strong>Question Tips</strong></p>
-    <p>The view in contemporary learning theory is that people construct new knowledge and understanding based on what they already know and believe.  This is why it is a good idea to ask students up front about content they should already know about to check their knowledge level.  These questions can also be used to establish the current thought processes students use, which can then be compared with any gains or changes in their knowledge after they complete an exercise.  Identifying changes in student thought processes can help you distinguish between the concepts they understand and those they need more guidance on.</p>
+    <p><strong>Instructional Tips</strong></p>
+    <p>Generally, information that students need to know to complete an investigation should be reviewed during prior activities or lectures.  It can also be included in the investigation itself.  Information should be included in the Background step if it provides basic contextual information.  Otherwise, if the information is crucial to students' understanding of the investigation, it can be included as a piece of evidence in the Exploration step.</p>
+    <!--<p>The view in contemporary learning theory is that people construct new knowledge and understanding based on what they already know and believe.  This is why it is helpful to ask students up front about content they should already know about to check their knowledge level.  These questions can also be used to establish the current thought processes students use, which can then be compared with any gains or changes in their knowledge after they complete an investigation.  Identifying changes in student thought processes can help you distinguish between the concepts they understand and those they need more guidance on.</p>-->
     </div>
   </div>
 
@@ -217,15 +219,15 @@
   <h3>Create a Challenge</h3>
   <div class="row-fluid">
     <div class="span6">
-      <p>Before this step, hopefully you drafted your learning objective and identified some key datasets you would like students to use in this investigation.  With those ideas in mind, you can now identify the research challenge you wish your students to pursue.</p>
-      <p><em>Choose one of the following scientific practices you would like students to practice:</em></p>
+      <p>Before this step, you should draft your learning objective and identify some key datasets you would like students to use in this investigation.  With those ideas in mind, you can now identify the research challenge you wish your students to pursue.</p>
+      <p>First, choose one of the following scientific practices you would like students to work on in this investigation:</p>
       <div class="control-group">
         <?php echo render($form['field_desired_assessment']); ?>
       </div>
     </div>
     <div class="span6">
       <p><strong>Challenge Image</strong></p>
-      <p>Choose an image that you feel represents this investigation.  Note, this image will also be used as the thumbnail for your investigation.</p>
+      <p>Choose an image that you feel represents this investigation.  This image will also be used as the thumbnail for your investigation.</p>
 
       <?php echo render($form['field_challenge_thumbnail']); ?>
       <table class="table table-condensed">
@@ -246,17 +248,17 @@
   <hr>
   <div class="row-fluid">
     <div class="span7">
-      <p><strong>Challenge Question</strong></p>
-      <p><em>Based on your selection above, construct a challenge question for students to investigate and enter it here:</em></p>
+      <!--<p><strong>Challenge Question</strong></p>-->
+      <p>Second, based on your selection above, construct a research challenge or question that students should investigate in this activity.</p>
       <div class="control-group">
         <?php echo render($form['field_challenge_content']); ?>
       </div>
-      <p>The challenge question should ask students to analyze the provided datasets to meet the goal you selected above.  For a more straightforward task, the challenge could be a specific research question.  Or for a more complex exercise, it could ask students to develop and investigate their own question or identify and explain a relationship they see in the data.</p>
-      <p>The challenge question should connect your learning objective with the applied skills you hope wish your students to develop.</p>
+      <p>The challenge should encourage students to analyze the provided datasets following the practice you selected above.  For a more straightforward task, the challenge could be a specific research question.  For a more complex task, the challenge could ask students to develop and investigate their own question or identify and explain a relationship they see in the data.</p>
+      <p>The challenge should connect your learning objective with the applied scientific practices you wish your students to develop.</p>
     </div>
     <div class="span5 well">
       <p><strong>Example Challenge Questions</strong></p>
-      <p>We suggest construction your question based on one of the following templates, which are based on typical science practices:</p>
+      <p>We suggest constructing your challenge based on one of the following templates.  These are based on common scientific practices.</p>
       <ul>
         <li>Develop a conceptual model to explain...</li>
         <li>Analyze data from... to identify or explain...</li>
@@ -274,13 +276,13 @@
   <h3>Identify Datasets to Explore</h3>
   <div class="row-fluid">
     <div class="span6">
-      <p>Use the interface below to add one or more datasets to your investigation.  Datasets can include visualizations, concept maps, images, videos or documents like PDF or Excel files.</p>
-      <p>For each dataset, add a short description and a few questions that will spur students to investigate important details.  The description might include background information on the dataset, where it came from, or how to understand what is being shown.  The questions should guide students in interpreting what is shown, and how it is relevant to the larger question.  Each dataset should assist students in addressing the challenge question, and can be considered as one step in a larger investigative procedure. </p>
+      <p>In this section, you can add one or more datasets, or pieces of evidence, to your investigation.  Datasets can include visualizations, concept maps, images, videos or documents like papers or spreadsheets.</p>
+      <p>For each dataset, add a short description and a few questions that will spur students to investigate important details in the data.  The description might include background information on the dataset, where it came from, or how to understand what is being shown.  The questions should guide students in analyzing and interpreting what is shown.  Each dataset should assist students in addressing the larger research challenge, and individually they can each be considered as one step in a larger investigative process. </p>
     </div>
     <div class="span6 well">
       <p><strong>How do I prepare each dataset?</strong></p>
-      <p>This tool is designed to create exercises that are inquiry driven.  By presenting students with a challenge question and a number of datasets to investigate, they are in effect building their science skills by analyzing and interpreting data, constructing explanations or building models.</p>
-      <p>Students will use the provided datasets to help them investigate the challenge question you pose to them.  Each dataset can be considered a piece of evidence that can be pieced together to address the larger challenge question they are researching.</p>
+      <p>The Investigation Builder is designed to create investigations that are inquiry driven.  Students are presented with a research challenge and a number of datasets or other pieces of evidence to investigate.  In this way, students can be guided through the scientific process, in which they can practice building their science skills.  This can include building models, analyzing and interpreting data, constructing explanations, or developing new questions.</p>
+      <p>Students will use the provided datasets to help them investigate the larger challenge you pose to them.  Each dataset can be considered a piece of evidence that can be pieced together to address the larger challenge question they are researching.</p>
     </div>
   </div>
 
@@ -396,14 +398,14 @@
 
 <div class="tab-pane" id="explanation">
   <?php echo render($form['block_explanation_info']); ?>
-  <h3>Explanation Guidance</h3>
+  <h3>Guide Students Towards an Explanation</h3>
   <div class="row-fluid">
     <div class="span7">
-      <p>This page is where the entire investigation comes together.  Students are asked to answer the Challenge Question by summarizing or synthesizing the datasets they have investigated.</p>
-      <p>Note, the challenge question will automatically be displayed on this page, so you do not need to include it again.</p>
+      <p>This page is where the entire investigation comes together.  Students are asked to answer the research challnege by summarizing or synthesizing the datasets they have investigated.</p>
+      <p>Note, your challenge will automatically be displayed on this page, so you do not need to include it again.</p>
 
       <p><strong>Summary Questions</strong></p>
-      <p>Add one or more summary questions that guide students towards answering the challenge question using the datasets provided.</p>
+      <p>Add one or more summary questions to guide students towards answering the challenge question using the datasets provided.</p>
       <div class="control-group">
         <?php echo render($form['field_inference_question']); ?>
       </div>
@@ -439,7 +441,7 @@
 
 <div class="tab-pane" id="notes">
   <h3>Instructor Notes</h3>
-  <p>The fields on this page will become part of the Instructor Notes page.  If you do not intend to publish or share your investigation with other instructors than this page is optional.  However, if you do intend to share this investigation, completing this page will greatly assist others in implementing the activity in their classroom.</p>
+  <p>The fields on this page will become part of the Instructor Notes page.  If you do not intend to publish or share your investigation with other instructors than this page is optional.  However, if you do intend to share this investigation, completing this page will greatly assist others as they implement the investigation in their classroom.</p>
 
   <div class="control-group">
   <label class="control-label"><strong>Investigation Level</strong></label>
@@ -462,21 +464,24 @@
   </div>
 
   <div class="control-group">
-  <label class="control-label"><strong>Resources</strong></label>
+  <label class="control-label"><strong>Additional Resources</strong></label>
   <?php echo render($form['field_resources_content']); ?>
   </div>
 
   <div class="control-group">
-  <label class="control-label"><strong>Resources File</strong></label>
+  <label class="control-label"><strong>Supporting Documents</strong></label>
+  <p>If you have any additional documents that would help other professors implement this investigation in their classroom, please add them here.  This might include worksheets, answer keys, or additional readings. </p>
   <?php echo render($form['field_resource_file']); ?>
   </div>
 
   <div class="control-group">
-  <label class="control-label"><strong>Resources File Type</strong></label>
+  <label class="control-label"><strong>Supporting Documents</strong></label>
+  <p>Please choose which type of supporting document you are adding</p>
   <?php echo render($form['field_resource_file_type']); ?>
   </div>
 
   <div class="control-group">
+  <p>Please include a short description that describes what's included in the supporting document.</p>
   <?php echo render($form['field_resource_file_note']); ?>
   </div>
 
@@ -484,7 +489,7 @@
 </div> <!-- /#notes -->
 
 <div class="tab-pane" id="setup">
-  <h3>Setup</h3>
+  <h3>Cover Page</h3>
   <div class="row-fluid">
   <div class="span8">
     <label class="control-label" for="inputTitle"><strong>Investigation Title</strong></label>
@@ -503,7 +508,7 @@
 
   <div class="row-fluid">
     <label class="control-label"><strong>Investigation Description</strong></label>
-    <p>Please provide a description of your investigation that includes the science concepts it covers and the goal you have for students who complete it.  If you publish your investigation to the public database, this description will help other educators find your activity and determine if it is useful to them.</p>
+    <p>Please provide a description of your investigation that includes the science concepts it covers and the goal you have for students who complete it.  If you publish your investigation to the public database, this description will help other educators find your investigation.</p>
     <?php echo render($form['body']); ?>
   </div>
   <hr>

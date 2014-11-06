@@ -63,7 +63,7 @@
 <div class="tab-content">
 
 <div class="tab-pane active" id="intro">
-  <h3>Activity Introduction</h3>
+  <h3>Introduction</h3>
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
   <?php if(!empty($content['field_introductory_slideshow'])) {
@@ -109,7 +109,7 @@
     } ?>
     <?php /* echo render($content['field_challenge_thumbnail']); */ ?>
   </div>
-  <p>In this activity you will investigate the following challenge ...</p>
+  <p>In this activity you will investigate the following research challenge...</p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
   <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
@@ -142,7 +142,7 @@
     </li>
     <?php endforeach; ?>
   </ul>
-  <p>When you're done investigating the datasets, continue to the last section.</p>
+  <p>When you're done investigating each dataset, continue to the last section.</p>
   <button type="button" class="btn btn-success" data-toggle="tab" data-target="explanation" onclick="jQuery('#llbnav a[href=#explanation]').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div>
 
@@ -280,7 +280,7 @@ function giveXMLtoJS(value) {
   <div class="row-fluid control-group">
     <div class="span6">
       <?php if(!empty($content['field_challenge_content'])): ?>
-      <p>Recall that the research question you are trying to address is:</p>
+      <p>Recall that the research challenge you are trying to address is:</p>
       <div class="control-group">
       <blockquote>
       <?php echo render($content['field_challenge_content']); ?>
@@ -313,7 +313,7 @@ function giveXMLtoJS(value) {
       </div>
       <?php endif; ?>
       <?php if(!empty($content['field_explanation_content'])): ?>
-      <p><strong>Instructions</strong></p>
+      <p><strong>Additional Instructions</strong></p>
       <div class="control-group">
       <?php echo render($content['field_explanation_content']); ?>
       </div>
