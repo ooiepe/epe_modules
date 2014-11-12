@@ -159,6 +159,6 @@ function epe_dbdocument_block_view_alter(&$data, $block) {
 function epe_dbdocument_default_search_api_index() {
   module_load_include('inc','epe_db','inc/epe_db.search_api_index_base_definition');
   $items = array();
-  $items['document_resource_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('document resource search index','document_resource_index',array('document_resource')));
+  $items['document_resource_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('document resource search index','document_resource_index',array('document_resource','web_resource'),array(array('field'=>'field_resource_url:url','type'=>'string'),array('field'=>'field_resource_origin','type'=>'string'))));
   return $items;
 }

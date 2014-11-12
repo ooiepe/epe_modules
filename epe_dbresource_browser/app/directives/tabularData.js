@@ -16,8 +16,12 @@ define(['app'], function(app) {
           link_target = '_blank';
         }
 
-        if (scope.row.thumbnail == '')
+        if (typeof scope.row.oembed_thumbnail != 'undefined' && scope.row.oembed_thumbnail != '') {
+          scope.row.thumbnail = scope.row.oembed_thumbnail;
+        }
+        if(scope.row.thumbnail == '') {
           scope.row.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+        }
 
         if(scope.row.status == 'Published') row_status += '<span class="btn btn-default btn-sm disabled">Shared</span>&nbsp;';
         if(scope.row.public == 'Public') row_status += '<span class="btn btn-info btn-sm disabled">Public</span>&nbsp;';

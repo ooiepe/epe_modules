@@ -3,6 +3,11 @@
  * declare restful api menu callback
  */
 function epe_cm_data_restful_api($nid) {
+  print epe_cm_data_restful_api_build($nid);
+  drupal_exit();
+}
+
+function epe_cm_data_restful_api_build($nid) {
   $item = array(
     'nid' => '',
     'type' => '',
@@ -31,7 +36,8 @@ function epe_cm_data_restful_api($nid) {
     }
   }
 
-  echo json_encode($item);
+  //echo json_encode($item);
+  return json_encode($item);
 }
 
 /*

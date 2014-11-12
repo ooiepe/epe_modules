@@ -47,7 +47,7 @@ function epe_dbfiles_enable() {
   menu_link_save($item);
 
   $item = array(
-      'link_path' => 'resource/add/file',
+      'link_path' => 'resource/add',
       'link_title' => 'Upload a Resource',
       'menu_name' => 'main-menu',
       'weight' => 2,
@@ -207,7 +207,15 @@ function epe_dbfiles_update_7000(&$sandbox) {
       'plid' => $dbMenu,
       );
   menu_link_save($item);
+}
 
-
-
+/**
+ * epedev-292-293-302: update menu link to reflect new upload resource url
+ */
+function epe_dbfiles_update_7001(&$sandbox) {
+  $updated = db_update('menu_links')
+            ->fields(array('link_path'=>'resource/add'))
+            ->condition('menu_name', 'main-menu','=')
+            ->condition('link_title', 'Upload a Resource','=')
+            ->execute();
 }

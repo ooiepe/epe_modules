@@ -38,7 +38,6 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['style_options']['plaintext_output'] = 1;
   $handler->display->display_options['style_options']['remove_newlines'] = 0;
   $handler->display->display_options['style_options']['jsonp_prefix'] = '';
-  $handler->display->display_options['style_options']['content_type'] = 'text/json';
   $handler->display->display_options['style_options']['using_views_api_mode'] = 0;
   $handler->display->display_options['style_options']['object_arrays'] = 0;
   $handler->display->display_options['style_options']['numeric_strings'] = 0;
@@ -47,6 +46,13 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['style_options']['unescaped_slashes'] = 0;
   $handler->display->display_options['style_options']['unescaped_unicode'] = 0;
   $handler->display->display_options['style_options']['char_encoding'] = array();
+  /* Field: Indexed Node: Content type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = 'content_type';
+  $handler->display->display_options['fields']['type']['link_to_entity'] = 0;
+  $handler->display->display_options['fields']['type']['format_name'] = 0;
   /* Field: Indexed Node: Node ID */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_document_resource_index';
@@ -90,7 +96,6 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['changed']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['fields']['changed']['field'] = 'changed';
   $handler->display->display_options['fields']['changed']['label'] = 'last_updated';
-  $handler->display->display_options['fields']['changed']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['changed']['date_format'] = 'custom';
   $handler->display->display_options['fields']['changed']['custom_date_format'] = 'M j, Y';
   $handler->display->display_options['fields']['changed']['link_to_entity'] = 0;
@@ -98,11 +103,7 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['author_field_account_fname']['id'] = 'author_field_account_fname';
   $handler->display->display_options['fields']['author_field_account_fname']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['fields']['author_field_account_fname']['field'] = 'author_field_account_fname';
-  $handler->display->display_options['fields']['author_field_account_fname']['label'] = '';
   $handler->display->display_options['fields']['author_field_account_fname']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['author_field_account_fname']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['author_field_account_fname']['hide_alter_empty'] = FALSE;
-  $handler->display->display_options['fields']['author_field_account_fname']['type'] = 'text_plain';
   /* Field: Author: Last Name (indexed) */
   $handler->display->display_options['fields']['author_field_account_lname']['id'] = 'author_field_account_lname';
   $handler->display->display_options['fields']['author_field_account_lname']['table'] = 'search_api_index_document_resource_index';
@@ -110,13 +111,12 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['author_field_account_lname']['label'] = '';
   $handler->display->display_options['fields']['author_field_account_lname']['exclude'] = TRUE;
   $handler->display->display_options['fields']['author_field_account_lname']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['author_field_account_lname']['hide_alter_empty'] = FALSE;
-  $handler->display->display_options['fields']['author_field_account_lname']['type'] = 'text_plain';
   /* Field: Author: User ID (indexed) */
   $handler->display->display_options['fields']['author_uid']['id'] = 'author_uid';
   $handler->display->display_options['fields']['author_uid']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['fields']['author_uid']['field'] = 'author_uid';
   $handler->display->display_options['fields']['author_uid']['label'] = 'userid';
+  $handler->display->display_options['fields']['author_uid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['author_uid']['separator'] = '';
   $handler->display->display_options['fields']['author_uid']['link_to_entity'] = 0;
   /* Field: Indexed Node: Status */
@@ -124,6 +124,7 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['status']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['fields']['status']['field'] = 'status';
   $handler->display->display_options['fields']['status']['label'] = 'status';
+  $handler->display->display_options['fields']['status']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['status']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['status']['format_name'] = 1;
   /* Field: Indexed Node: URL */
@@ -195,9 +196,50 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['field_source_url']['label'] = 'source_url';
   $handler->display->display_options['fields']['field_source_url']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_source_url']['type'] = 'link_plain';
+  /* Field: Indexed Node: Resource URL */
+  $handler->display->display_options['fields']['field_resource_url']['id'] = 'field_resource_url';
+  $handler->display->display_options['fields']['field_resource_url']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['fields']['field_resource_url']['field'] = 'field_resource_url';
+  $handler->display->display_options['fields']['field_resource_url']['label'] = 'resource_url';
+  $handler->display->display_options['fields']['field_resource_url']['click_sort_column'] = 'url';
+  $handler->display->display_options['fields']['field_resource_url']['type'] = 'link_plain';
+  /* Field: Indexed Node: Resource Origin */
+  $handler->display->display_options['fields']['field_resource_origin']['id'] = 'field_resource_origin';
+  $handler->display->display_options['fields']['field_resource_origin']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['fields']['field_resource_origin']['field'] = 'field_resource_origin';
+  $handler->display->display_options['fields']['field_resource_origin']['label'] = 'resource_origin';
+  $handler->display->display_options['fields']['field_resource_origin']['type'] = 'list_key';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_2']['id'] = 'php_2';
+  $handler->display->display_options['fields']['php_2']['table'] = 'views';
+  $handler->display->display_options['fields']['php_2']['field'] = 'php';
+  $handler->display->display_options['fields']['php_2']['label'] = 'oembed_thumbnail';
+  $handler->display->display_options['fields']['php_2']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_2']['php_output'] = '<?php
+  $output = \'\';
+  if($data->_entity_properties[\'type\']==\'web_resource\') {
+    $wrapper = entity_metadata_wrapper(\'node\', node_load($data->entity));
+    $resource_url = $wrapper->field_resource_url->raw();
+    switch($wrapper->field_resource_origin->raw()) {
+      case \'slideshare\':
+        $response = drupal_http_request(\'http://www.slideshare.net/api/oembed/2?url=\' . $resource_url[\'url\'] .\'&format=json\');
+        if($response->code == 200) {
+          $oembed_data = json_decode($response->data);
+          $output = $oembed_data->thumbnail;
+        }
+      break;
+    }
+  }
+  echo $output;
+  ?>';
+  $handler->display->display_options['fields']['php_2']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_2']['php_click_sortable'] = '';
+  $handler->display->display_options['filter_groups']['operator'] = 'OR';
   $handler->display->display_options['filter_groups']['groups'] = array(
-    1 => 'OR',
+    1 => 'AND',
     2 => 'AND',
+    3 => 'AND',
+    4 => 'AND',
   );
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid']['id'] = 'author_uid';
@@ -215,25 +257,50 @@ function epe_dbdocument_views_default_views() {
     3 => 0,
     4 => 0,
   );
-  /* Filter criterion: Indexed Node: Public Status */
-  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
-  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_document_resource_index';
-  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
-  $handler->display->display_options['filters']['field_public_status']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status']['group'] = 1;
   /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
   $handler->display->display_options['filters']['search_api_aggregation_1']['id'] = 'search_api_aggregation_1';
   $handler->display->display_options['filters']['search_api_aggregation_1']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['filters']['search_api_aggregation_1']['field'] = 'search_api_aggregation_1';
-  $handler->display->display_options['filters']['search_api_aggregation_1']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_aggregation_1']['group'] = 1;
   $handler->display->display_options['filters']['search_api_aggregation_1']['exposed'] = TRUE;
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['operator_id'] = 'search_api_aggregation_1_op';
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['label'] = 'title_main_body_fulltext_search';
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['operator'] = 'search_api_aggregation_1_op';
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['identifier'] = 'search_api_aggregation_1';
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'document_resource' => 'document_resource',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+    /* Filter criterion: Indexed Node: Public Status */
+    $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+    $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_document_resource_index';
+    $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+    $handler->display->display_options['filters']['field_public_status']['value'] = array(
+      'Public' => 'Public',
+    );
+  $handler->display->display_options['filters']['field_public_status']['group'] = 2;
+  /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['id'] = 'search_api_aggregation_1_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['field'] = 'search_api_aggregation_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['operator_id'] = 'search_api_aggregation_1_1_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['label'] = 'title_main_body_fulltext_search';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['operator'] = 'search_api_aggregation_1_1_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['identifier'] = 'search_api_aggregation_1_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
@@ -261,14 +328,120 @@ function epe_dbdocument_views_default_views() {
     5 => 0,
   );
   $handler->display->display_options['filters']['field_featured_status']['expose']['reduce'] = 0;
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type_2']['id'] = 'type_2';
+  $handler->display->display_options['filters']['type_2']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type_2']['field'] = 'type';
+  $handler->display->display_options['filters']['type_2']['value'] = array(
+    'document_resource' => 'document_resource',
+  );
+  $handler->display->display_options['filters']['type_2']['group'] = 2;
+  /* Filter criterion: Author: User ID (indexed) */
+  $handler->display->display_options['filters']['author_uid_1']['id'] = 'author_uid_1';
+  $handler->display->display_options['filters']['author_uid_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['author_uid_1']['field'] = 'author_uid';
+  $handler->display->display_options['filters']['author_uid_1']['group'] = 3;
+  $handler->display->display_options['filters']['author_uid_1']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['author_uid_1']['expose']['operator_id'] = 'author_uid_1_op';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['label'] = 'User ID (indexed)';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['operator'] = 'author_uid_1_op';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['identifier'] = 'author_uid_1';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['id'] = 'search_api_aggregation_1_2';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['field'] = 'search_api_aggregation_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['group'] = 3;
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['expose']['operator_id'] = 'search_api_aggregation_1_2_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['expose']['label'] = 'title_main_body_fulltext_search';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['expose']['operator'] = 'search_api_aggregation_1_2_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['expose']['identifier'] = 'search_api_aggregation_1_2';
+  $handler->display->display_options['filters']['search_api_aggregation_1_2']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
+  $handler->display->display_options['filters']['type_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type_1']['field'] = 'type';
+  $handler->display->display_options['filters']['type_1']['value'] = array(
+    'web_resource' => 'web_resource',
+  );
+  $handler->display->display_options['filters']['type_1']['group'] = 3;
+  /* Filter criterion: Indexed Node: Resource Origin */
+  $handler->display->display_options['filters']['field_resource_origin']['id'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_resource_origin']['field'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin']['value'] = array(
+    'slideshare' => 'slideshare',
+  );
+  $handler->display->display_options['filters']['field_resource_origin']['group'] = 3;
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_public_status_1']['id'] = 'field_public_status_1';
+  $handler->display->display_options['filters']['field_public_status_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_public_status_1']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status_1']['value'] = array(
+    'Public' => 'Public',
+  );
+  $handler->display->display_options['filters']['field_public_status_1']['group'] = 4;
+  /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['id'] = 'search_api_aggregation_1_3';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['field'] = 'search_api_aggregation_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['group'] = 4;
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['expose']['operator_id'] = 'search_api_aggregation_1_3_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['expose']['label'] = 'title_main_body_fulltext_search';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['expose']['operator'] = 'search_api_aggregation_1_3_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['expose']['identifier'] = 'search_api_aggregation_1_3';
+  $handler->display->display_options['filters']['search_api_aggregation_1_3']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: Featured Status */
+  $handler->display->display_options['filters']['field_featured_status_1']['id'] = 'field_featured_status_1';
+  $handler->display->display_options['filters']['field_featured_status_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_featured_status_1']['field'] = 'field_featured_status';
+  $handler->display->display_options['filters']['field_featured_status_1']['value'] = array(
+    'Not-Featured' => 'Not-Featured',
+    'Featured' => 'Featured',
+  );
+  $handler->display->display_options['filters']['field_featured_status_1']['group'] = 4;
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type_3']['id'] = 'type_3';
+  $handler->display->display_options['filters']['type_3']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type_3']['field'] = 'type';
+  $handler->display->display_options['filters']['type_3']['value'] = array(
+    'web_resource' => 'web_resource',
+  );
+  $handler->display->display_options['filters']['type_3']['group'] = 4;
+  /* Filter criterion: Indexed Node: Resource Origin */
+  $handler->display->display_options['filters']['field_resource_origin_1']['id'] = 'field_resource_origin_1';
+  $handler->display->display_options['filters']['field_resource_origin_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_resource_origin_1']['field'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin_1']['value'] = array(
+    'slideshare' => 'slideshare',
+  );
+  $handler->display->display_options['filters']['field_resource_origin_1']['group'] = 4;
 
   /* Display: Rest API Block */
   $handler = $view->new_display('block', 'Rest API Block', 'all');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
 
   /* Display: Rest API Pager */
   $handler = $view->new_display('block', 'Rest API Pager', 'pager');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Indexed Node: Node ID */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
@@ -281,10 +454,10 @@ function epe_dbdocument_views_default_views() {
 
   /* Display: Author API */
   $handler = $view->new_display('block', 'Author API', 'author');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['filter_groups']['operator'] = 'OR';
   $handler->display->display_options['filter_groups']['groups'] = array(
-    1 => 'OR',
+    1 => 'AND',
     2 => 'AND',
   );
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -305,11 +478,19 @@ function epe_dbdocument_views_default_views() {
     4 => 0,
     5 => 0,
   );
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'document_resource' => 'document_resource',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
   /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
   $handler->display->display_options['filters']['search_api_aggregation_1']['id'] = 'search_api_aggregation_1';
   $handler->display->display_options['filters']['search_api_aggregation_1']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['filters']['search_api_aggregation_1']['field'] = 'search_api_aggregation_1';
-  $handler->display->display_options['filters']['search_api_aggregation_1']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_aggregation_1']['group'] = 1;
   $handler->display->display_options['filters']['search_api_aggregation_1']['exposed'] = TRUE;
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['operator_id'] = 'search_api_aggregation_1_op';
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['label'] = 'title_main_body_fulltext_search';
@@ -322,10 +503,59 @@ function epe_dbdocument_views_default_views() {
     4 => 0,
     5 => 0,
   );
+  /* Filter criterion: Author: User ID (indexed) */
+  $handler->display->display_options['filters']['author_uid_1']['id'] = 'author_uid_1';
+  $handler->display->display_options['filters']['author_uid_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['author_uid_1']['field'] = 'author_uid';
+  $handler->display->display_options['filters']['author_uid_1']['group'] = 2;
+  $handler->display->display_options['filters']['author_uid_1']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['author_uid_1']['expose']['operator_id'] = 'author_uid_1_op';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['label'] = 'User ID (indexed)';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['operator'] = 'author_uid_1_op';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['identifier'] = 'author_uid_1';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['id'] = 'search_api_aggregation_1_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['field'] = 'search_api_aggregation_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['operator_id'] = 'search_api_aggregation_1_1_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['label'] = 'title_main_body_fulltext_search';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['operator'] = 'search_api_aggregation_1_1_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['identifier'] = 'search_api_aggregation_1_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: Resource Origin */
+  $handler->display->display_options['filters']['field_resource_origin']['id'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_resource_origin']['field'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin']['value'] = array(
+    'slideshare' => 'slideshare',
+  );
+  $handler->display->display_options['filters']['field_resource_origin']['group'] = 2;
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
+  $handler->display->display_options['filters']['type_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type_1']['field'] = 'type';
+  $handler->display->display_options['filters']['type_1']['value'] = array(
+    'web_resource' => 'web_resource',
+  );
+  $handler->display->display_options['filters']['type_1']['group'] = 2;
 
   /* Display: Author API Pager */
   $handler = $view->new_display('block', 'Author API Pager', 'author_pager');
-  $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Indexed Node: Node ID */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
@@ -336,8 +566,9 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['fields']['nid']['separator'] = '';
   $handler->display->display_options['fields']['nid']['link_to_entity'] = 0;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['filter_groups']['operator'] = 'OR';
   $handler->display->display_options['filter_groups']['groups'] = array(
-    1 => 'OR',
+    1 => 'AND',
     2 => 'AND',
   );
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -361,7 +592,7 @@ function epe_dbdocument_views_default_views() {
   $handler->display->display_options['filters']['search_api_aggregation_1']['id'] = 'search_api_aggregation_1';
   $handler->display->display_options['filters']['search_api_aggregation_1']['table'] = 'search_api_index_document_resource_index';
   $handler->display->display_options['filters']['search_api_aggregation_1']['field'] = 'search_api_aggregation_1';
-  $handler->display->display_options['filters']['search_api_aggregation_1']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_aggregation_1']['group'] = 1;
   $handler->display->display_options['filters']['search_api_aggregation_1']['exposed'] = TRUE;
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['operator_id'] = 'search_api_aggregation_1_op';
   $handler->display->display_options['filters']['search_api_aggregation_1']['expose']['label'] = 'title_main_body_fulltext_search';
@@ -374,6 +605,64 @@ function epe_dbdocument_views_default_views() {
     4 => 0,
     5 => 0,
   );
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'document_resource' => 'document_resource',
+  );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Author: User ID (indexed) */
+  $handler->display->display_options['filters']['author_uid_1']['id'] = 'author_uid_1';
+  $handler->display->display_options['filters']['author_uid_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['author_uid_1']['field'] = 'author_uid';
+  $handler->display->display_options['filters']['author_uid_1']['group'] = 2;
+  $handler->display->display_options['filters']['author_uid_1']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['author_uid_1']['expose']['operator_id'] = 'author_uid_1_op';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['label'] = 'User ID (indexed)';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['operator'] = 'author_uid_1_op';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['identifier'] = 'author_uid_1';
+  $handler->display->display_options['filters']['author_uid_1']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['id'] = 'search_api_aggregation_1_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['field'] = 'search_api_aggregation_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['group'] = 2;
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['operator_id'] = 'search_api_aggregation_1_1_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['label'] = 'title_main_body_fulltext_search';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['operator'] = 'search_api_aggregation_1_1_op';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['identifier'] = 'search_api_aggregation_1_1';
+  $handler->display->display_options['filters']['search_api_aggregation_1_1']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  /* Filter criterion: Indexed Node: Content type */
+  $handler->display->display_options['filters']['type_1']['id'] = 'type_1';
+  $handler->display->display_options['filters']['type_1']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['type_1']['field'] = 'type';
+  $handler->display->display_options['filters']['type_1']['value'] = array(
+    'web_resource' => 'web_resource',
+  );
+  $handler->display->display_options['filters']['type_1']['group'] = 2;
+  /* Filter criterion: Indexed Node: Resource Origin */
+  $handler->display->display_options['filters']['field_resource_origin']['id'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin']['table'] = 'search_api_index_document_resource_index';
+  $handler->display->display_options['filters']['field_resource_origin']['field'] = 'field_resource_origin';
+  $handler->display->display_options['filters']['field_resource_origin']['value'] = array(
+    'slideshare' => 'slideshare',
+  );
+  $handler->display->display_options['filters']['field_resource_origin']['group'] = 2;
 
   $export['document_resource_index'] = $view;
 
