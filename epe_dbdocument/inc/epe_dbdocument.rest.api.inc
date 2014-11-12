@@ -127,6 +127,11 @@ function epe_dbdocument_restful_api() {
 }
 
 function epe_dbdocument_restful_api_node($nid) {
+  print epe_dbdocument_restful_api_node_build($nid);
+  drupal_exit();
+}
+
+function epe_dbdocument_restful_api_node_build($nid) {
   $item = array(
     'nid' => '',
     'type' => '',
@@ -179,5 +184,6 @@ function epe_dbdocument_restful_api_node($nid) {
     }
   }
 
-  echo json_encode($item);
+  //echo json_encode($item);
+  return json_encode($item);
 }

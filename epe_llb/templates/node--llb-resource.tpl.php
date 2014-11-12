@@ -49,7 +49,7 @@
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li id="llb2" class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Exploration <b class="caret"></b></a>
+    <a href="#" class="dropdown-toggle" id="exploration_tab" data-toggle="dropdown">Exploration <b class="caret"></b></a>
     <ul class="dropdown-menu">
       <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
       <?php foreach($datasets as $key => $dataset): ?>

@@ -12,14 +12,17 @@ if($images):
           <source src="<?php echo $slide->file; ?>">
         </video>
       <?php } elseif($slide->type == 'web_resource') { ?>
+      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>">
+        <img src="<?php print $slide->thumbnail; ?>" alt="<?php print $slide->title; ?>" style="width:480px;">
+      </a>
       <?php
-      $height_pattern = "/height=\"[0-9]*\"/";
+/*      $height_pattern = "/height=\"[0-9]*\"/";
       $slide->html = preg_replace($height_pattern, "height='320'", $slide->html);
       $width_pattern = "/width=\"[0-9]*\"/";
       $slide->html = preg_replace($width_pattern, "width='480'", $slide->html);
       $match_pattern = "#<iframe[^>]*>.*?</iframe>#i";
       preg_match_all($match_pattern, $slide->html, $result);
-      echo $result[0][0];
+      echo $result[0][0];*/
       ?>
       <?php } else { ?>
       <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>">
