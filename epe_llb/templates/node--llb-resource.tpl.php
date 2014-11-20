@@ -127,6 +127,7 @@
     <li class="<?php echo implode(' ', $li_classes); ?>">
       <div class="thumbnail">
         <div class="image">
+        <a href="#dataset<?php echo $key; ?>">
         <?php
           if(isset($dataset->uri) && !empty($dataset->uri)) {
             $thumbnail_image = array('style_name' => 'llb_dataset_teaser', 'path' => $dataset->uri, 'alt' => $dataset->title, 'title' => $dataset->title);
@@ -135,6 +136,7 @@
             echo '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
           }
         ?>
+        </a>
         </div>
         <!-- <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a> -->
         <a href="#dataset<?php echo $key; ?>"><?php echo $dataset->title; ?></a>
