@@ -172,6 +172,13 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
       $scope.currentCopies.items = [];
       $scope.$digest();
     }
+
+    $scope.fn.rearrangeItems = function(from, to) {
+      var target = $scope.items[from];
+      //remove
+      $scope.items.splice(from, 1);
+      $scope.items.splice(to, 0, target);
+    }
 });
 
 app.controller('intro', function($window, $scope, intro_data, $http) {

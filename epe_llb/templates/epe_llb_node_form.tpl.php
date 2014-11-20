@@ -315,7 +315,7 @@
       </tr>
       <tr ng-repeat="item in items">
         <td>
-          <img ng-src="{{item.thumbnail}}" style="cursor: move;">
+          <img ng-src="{{item.thumbnail}}">
           <div ng-show="fn.inItemEditArray(item.key)">
             <textarea name="title" ng-model="currentCopies.items[item.key].title" cols="35" rows="2"></textarea>
             <br/>
@@ -324,10 +324,15 @@
           </div>
           <div ng-show="!fn.inItemEditArray(item.key)">
             <p>{{item.title}}</p>
-            <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
-                 <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete
-                 <a ng-show="item.type == 'cm_resource' || item.type == 'llb_resource' || item.type == 'ev_tool_instance'" ng-click="copyDataSet($index);" style="cursor:pointer;"><i class="icon-share"></i>&nbsp;Copy
-                 </div>
+            <div>
+              <a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
+              <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</a>
+              <a ng-show="item.type == 'cm_resource' || item.type == 'llb_resource' || item.type == 'ev_tool_instance'" ng-click="copyDataSet($index);" style="cursor:pointer;"><i class="icon-share"></i>&nbsp;Copy</a>
+              <div ng-show="currentCopies.items.length < 1"><br/>
+              <a ng-show="$index < items.length-1" ng-click="fn.rearrangeItems($index, $index+1);" style="cursor:pointer;"><i class="icon-arrow-down"></i>&nbsp;Move down</a>
+              <a ng-show="$index > 0" ng-click="fn.rearrangeItems($index, $index-1);" style="cursor:pointer;"><i class="icon-arrow-up"></i>&nbsp;Move up</a>
+              </div>
+            </div>
           </div>
         </td>
         <td>
