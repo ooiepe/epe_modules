@@ -96,6 +96,11 @@ function epe_llb_restful_api() {
 }
 
 function epe_llb_restful_api_node($nid) {
+  print epe_llb_restful_api_node_build($nid);
+  drupal_exit();
+}
+
+function epe_llb_restful_api_node_build($nid) {
   $item = array(
     'nid' => '',
     'type' => '',
@@ -131,7 +136,8 @@ function epe_llb_restful_api_node($nid) {
     }
   }
 
-  echo json_encode($item);
+  //echo json_encode($item);
+  return json_encode($item);
 }
 
 function epe_llb_restful_api_node_clone($nid) {

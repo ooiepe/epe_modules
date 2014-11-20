@@ -284,3 +284,20 @@ function epe_dbdocument_update_7006(&$sandbox) {
 function epe_dbdocument_update_7007(&$sandbox) {
   entity_delete('search_api_index','document_resource_index');
 }
+
+/**
+ * epedev-292-293-302:
+ * delete and regenerate search api that includes new content type (web resource) and fields
+ * update view with new fields and filter condition
+ * update ad url in resource browser
+ */
+function epe_dbdocument_update_7008(&$sandbox) {
+  entity_delete('search_api_index','document_resource_index');
+  module_load_include('inc','epe_dbdocument','epe_dbdocument.views_default');
+  $view_definition = epe_dbdocument_views_default_views();
+  views_save_view($view_definition['document_resource_index']);
+
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_dbmultimedia']['resource_browser']['adurl'] = 'resource/add/file';
+  variable_set('EPE_CONTENT_MODULES', $modules);
+}

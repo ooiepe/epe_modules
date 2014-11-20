@@ -2,11 +2,15 @@
 /**
  * Since all resource types all use a similar search api index, we define default search api index definition under a common dependent module for ease of maintenance.
  */
-function _epe_db_search_api_index_base_definition($name, $machine_name, $bundles=array()) {
+function _epe_db_search_api_index_base_definition($name, $machine_name, $bundles=array(), $extra_fields=array()) {
   foreach($bundles as &$bundle) {
     $bundle = '"' . $bundle . '":"' . $bundle .  '"';
   }
-  return '{
+  foreach($extra_fields as &$extra_field) {
+    $extra_field = '"' . $extra_field['field'] . '" : { "type" : "'. $extra_field['type'] .'" }';
+  }
+
+  $search_index = '{
     "name" : "' . $name . '",
     "machine_name" : "' . $machine_name . '",
     "description" : null,
@@ -35,8 +39,11 @@ function _epe_db_search_api_index_base_definition($name, $machine_name, $bundles
         "author:field_account_fname" : { "type" : "string" },
         "author:field_account_lname" : { "type" : "string" },
         "author:field_account_organization" : { "type" : "text" },
-        "body:value" : { "type" : "text" },
-        "body:summary" : { "type" : "text" }
+        "body:value" : { "type" : "text" },';
+  if($extra_fields) {
+    $search_index .= implode(',', $extra_fields) . ',';
+  }
+  $search_index .= '"body:summary" : { "type" : "text" }
       },
       "data_alter_callbacks" : {
         "search_api_alter_bundle_filter" : {
@@ -126,4 +133,6 @@ function _epe_db_search_api_index_base_definition($name, $machine_name, $bundles
     "read_only" : "0",
     "rdf_mapping" : []
   }';
+
+  return $search_index;
 }

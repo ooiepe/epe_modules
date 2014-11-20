@@ -119,7 +119,7 @@
         <tbody ng-model="items">
         <tr ng-repeat="item in items">
           <td>
-            <img ng-src="{{item.thumbnail}}" style="cursor: move;">
+            <img ng-src="{{item.thumbnail}}" style="cursor: move;" width="133">
             <div ng-show="fn.inItemEditArray(item.key)">
               <textarea name="title" ng-model="currentCopies.items[item.key].title" cols="35" rows="2"></textarea>
               <br/>

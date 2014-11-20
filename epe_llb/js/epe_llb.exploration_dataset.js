@@ -198,7 +198,7 @@ function loadResourceThumbnail(value) {
   jQuery.map(Drupal.settings.epe_dbresource_browser.modules, function(obj) {
     if(obj.content_type === value.type) {
       var apiurl = Drupal.settings.epe.base_path + 'api/resource/';
-      if(obj.content_type === 'video_resource' || obj.content_type === 'audio_resource') {
+      if(obj.content_type === 'video_resource' || obj.content_type === 'audio_resource' || obj.content_type == 'web_resource') {
         apiurl += 'multimedia';
       } else {
         apiurl += obj.resource_browser.api;

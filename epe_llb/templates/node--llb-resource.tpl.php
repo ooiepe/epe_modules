@@ -49,7 +49,7 @@
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li id="llb2" class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Exploration <b class="caret"></b></a>
+    <a href="#" class="dropdown-toggle" id="exploration_tab" data-toggle="dropdown">Exploration <b class="caret"></b></a>
     <ul class="dropdown-menu">
       <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
       <?php foreach($datasets as $key => $dataset): ?>
@@ -132,6 +132,9 @@
           if(isset($dataset->uri) && !empty($dataset->uri)) {
             $thumbnail_image = array('style_name' => 'llb_dataset_teaser', 'path' => $dataset->uri, 'alt' => $dataset->title, 'title' => $dataset->title);
             echo theme('image_style', $thumbnail_image);
+          }
+          elseif(isset($dataset->thumbnail) && !empty($dataset->thumbnail)) {
+            echo '<img src="' . $dataset->thumbnail . '" width="270" height="116" alt="' . $dataset->title . '">';
           } else {
             echo '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
           }
@@ -239,6 +242,16 @@ function giveXMLtoJS(value) {
   <iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
   <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>
   <?php
+    break;
+
+    case 'web_resource':
+      $height_pattern = "/height=\"[0-9]*\"/";
+      $dataset->html = preg_replace($height_pattern, "height='360'", $dataset->html);
+      $width_pattern = "/width=\"[0-9]*\"/";
+      $dataset->html = preg_replace($width_pattern, "width='886'", $dataset->html);
+      $match_pattern = "#<iframe[^>]*>.*?</iframe>#i";
+      preg_match_all($match_pattern, $dataset->html, $result);
+      echo $result[0][0];
     break;
 
     default:

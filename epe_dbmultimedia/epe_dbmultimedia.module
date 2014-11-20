@@ -40,6 +40,6 @@ function epe_dbmultimedia_menu() {
 function epe_dbmultimedia_default_search_api_index() {
   module_load_include('inc','epe_db','inc/epe_db.search_api_index_base_definition');
   $items = array();
-  $items['multimedia_resource_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('multimedia resource search index','multimedia_resource_index',array('audio_resource','video_resource')));
+  $items['multimedia_resource_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('multimedia resource search index','multimedia_resource_index',array('audio_resource','video_resource','web_resource'),array(array('field'=>'field_resource_url:url','type'=>'string'),array('field'=>'field_resource_origin','type'=>'string'))));
   return $items;
 }

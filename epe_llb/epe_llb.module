@@ -378,7 +378,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['field_background_slideshow']['#prefix'] = '<div class="app-main" ng-controller="background">';
   $form['field_background_slideshow']['und'][0]['value']['#default_value'] = '{{items}}';
   $form['background_slideshow_button'] = array(
-    '#markup' => '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="true" data-controller="background" data-api="image">Add Image</a>',
+    '#markup' => '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="true" data-controller="background" data-api="all">Add Resources</a>',
     '#suffix' => '</div>', /* /controler=background */
   );
 
@@ -812,10 +812,10 @@ function epe_llb_block_view($delta = '') {
 }
 
 function epe_llb_dataset_query($dataset) {
-  global $base_root;
+/*  global $base_root;
 
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
-  unset($depend_modules['epe_llb']);
+  //unset($depend_modules['epe_llb']);
   $apiurl = $base_root . base_path() . 'api/resource/';
 
   foreach($depend_modules as $key=>$module) {
@@ -834,7 +834,43 @@ function epe_llb_dataset_query($dataset) {
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
   $data = json_decode(curl_exec($ch));
-  curl_close($ch);
+  curl_close($ch);*/
+
+  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+
+  $current_module = '';
+  foreach($depend_modules as $key=>$module) {
+    if(isset($module['content_type']) && $module['content_type'] === $dataset->type) {
+      $current_module = $key;
+      break;
+    }
+  }
+
+  if(in_array($dataset->type,array('video_resource','audio_resource','web_resource'))) {
+    $current_module = 'epe_dbmultimedia';
+    $wrapper = entity_metadata_wrapper('node', node_load($dataset->nid));
+    if($dataset->type == 'web_resource' && $wrapper->field_resource_origin->value() == 'slideshare') { $current_module = 'epe_dbdocument'; }
+  }
+
+  switch($dataset->type) {
+    case 'cm_resource':
+      module_load_include('inc',$current_module,"inc/{$current_module}.rest.api");
+      $function = $current_module . '_data_restful_api_build';
+      $data = $function($dataset->nid);
+    break;
+
+    case 'ev_tool_instance':
+      module_load_include('inc',$current_module,"inc/{$current_module}.api");
+      $function = $current_module . '_restful_api_node_build';
+      $data = $function($dataset->nid);
+    break;
+
+    default:
+      module_load_include('inc',$current_module,"inc/{$current_module}.rest.api");
+      $function = $current_module . '_restful_api_node_build';
+      $data = $function($dataset->nid);
+    break;
+  }
 
   return $data;
 }
@@ -893,13 +929,15 @@ function epe_llb_theme_file_dataset($dataset) {
 
 function epe_llb_reload_dataset($dataset, $assoc_resources) {
   if($dataset->nid != 'NULL') {
-    $data = $assoc_resources[$dataset->nid];
+    $data = json_decode($assoc_resources[$dataset->nid]);
+
     $dataset->thumbnail = '';
     if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
     if(isset($data->uri)): $dataset->uri = $data->uri; endif;
     if(isset($data->file)): $dataset->file = $data->file; endif;
     if(isset($data->credit)): $dataset->credit = $data->credit; endif;
     if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
+    if(isset($data->html)): $dataset->html = $data->html; endif;
   }
 
   return $dataset;
