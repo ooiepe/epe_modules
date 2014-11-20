@@ -329,3 +329,12 @@ function epe_ev_update_7006(&$sandbox) {
 function epe_ev_update_7008(&$sandbox) {
   entity_delete('search_api_index','epe_ev_search_index');
 }
+
+/**
+ * epedev-436: Clean up layout of Vis Tools list
+ */
+function epe_ev_update_7009(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['ev_tools']);
+}
