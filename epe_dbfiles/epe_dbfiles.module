@@ -20,8 +20,8 @@ function epe_dbfiles_menu() {
   //$parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','db','=')->execute()->fetchAssoc();
   $epe_menu = variable_get('epe_menu',array());
 
-  $items['resource/add'] = array(
-    'title' => t('Upload a Resource'),
+  $items['resource/add/new'] = array(
+    'title' => t('Add a New Resource'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_dbfiles_type_select_form'),
     'access callback' => 'user_access',
@@ -30,7 +30,7 @@ function epe_dbfiles_menu() {
   );
 
   $items['resource/add/file'] = array(
-    'title' => t('Upload a Resource'),
+    'title' => t('Upload a New Resource'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_dbfiles_node_form'),
     'access callback' => 'user_access',
