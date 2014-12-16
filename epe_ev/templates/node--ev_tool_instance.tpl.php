@@ -76,7 +76,7 @@
     //load an svg snippet in the canvas
     canvg(
       document.getElementById('canvas'),
-      $('<div>').append($("#vistool svg").clone()).html(), // hack to pull html contents
+      $('<div>').append($("#vistool .svg_export").clone()).html(), // hack to pull html contents
       { ignoreMouse: true, ignoreAnimation: true }
     );
   }
