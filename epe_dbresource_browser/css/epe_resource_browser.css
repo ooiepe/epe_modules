@@ -111,10 +111,10 @@ table.ng-scope td .thumb {
 }
 
 .rb-type-selector ul li.cm {
-    width: 49px;
     background-image: url(../images/rb_buttons_cm.png);
 }
 .rb-type-selector ul li.ev {
+    width: 49px;
     background-image: url(../images/rb_buttons_ev.png);
 }
 .rb-type-selector ul li.llb {
@@ -135,10 +135,10 @@ table.ng-scope td .thumb {
 }
 
 .rb-type-selector ul li.cm.active {
-    width: 49px;
     background-image: url(../images/rb_buttons_cm_sel.png);
 }
 .rb-type-selector ul li.ev.active {
+    width: 49px;
     background-image: url(../images/rb_buttons_ev_sel.png);
 }
 .rb-type-selector ul li.llb.active {
