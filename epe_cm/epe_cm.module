@@ -14,6 +14,11 @@ function epe_cm_theme() {
       'template' => 'epe_cm_node_edit_form',
       'render element' => 'form',
     ),
+    'epe_cm_embed' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_cm_embed',
+      'render element' => 'form',
+    ),
   );
 }
 
@@ -147,9 +152,22 @@ function epe_cm_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['node/%/cmembed'] = array(
+    'title' => t('Embed CM'),
+    'page callback' => 'epe_cm_embed',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  
+
   return $items;
 }
 
+function epe_cm_embed($nid) {
+  return theme('epe_cm_embed', array('nid'=>$nid));
+}
 
 
 function epe_cm_node_insert($node) {
