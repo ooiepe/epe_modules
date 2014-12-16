@@ -33,3 +33,36 @@ function epe_dbresource_browser_update_7000() {
  }
  variable_set('EPE_CONTENT_MODULES', $modules);
 }
+
+
+function epe_dbresource_browser_update_7001() {
+ $modules = variable_get('EPE_CONTENT_MODULES',array());
+ foreach($modules as $key=>&$module) {
+  switch($key) {
+    case 'epe_dbimage':
+      $module['resource_browser']['adurl'] = 'resource/add/file';
+    break;
+    case 'epe_dbdocument':
+      $module['resource_browser']['adurl'] = 'resource/add/file';
+      $module['resource_browser']['weight'] = 6;
+    break;
+    case 'epe_dbmultimedia':
+      $module['resource_browser']['adurl'] = 'resource/add/file';
+      $module['resource_browser']['weight'] = 5;
+    break;
+    case 'epe_cm':
+      $module['resource_browser']['adurl'] = 'node/add/cm-resource';
+      $module['resource_browser']['weight'] = 2;
+    break;
+    case 'epe_ev':
+      $module['resource_browser']['adurl'] = 'ev/tools';
+      $module['resource_browser']['weight'] = 1;
+    break;
+    case 'epe_llb':
+      $module['resource_browser']['adurl'] = 'node/add/llb-resource';
+    break;
+  }
+ }
+ variable_set('EPE_CONTENT_MODULES', $modules);
+}
+
