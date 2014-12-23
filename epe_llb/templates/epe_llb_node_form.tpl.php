@@ -31,7 +31,7 @@
       $content = file_get_contents(drupal_get_path('module','epe_llb') . '/contents/instruction/instruction.html');
       if($content) {
         $dom = new domDocument;
-        $dom->loadHTML($content);
+        @$dom->loadHTML($content);
         $images = $dom->getElementsByTagName('img');
         foreach($images as $img) {
           $content = str_replace($img->getAttribute('src'), base_path() . drupal_get_path('module','epe_llb') . '/contents/instruction/' . basename($img->getAttribute('src')), $content);

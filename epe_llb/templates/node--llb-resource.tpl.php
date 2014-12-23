@@ -160,7 +160,9 @@
     }
   }
 ?>
+
 <!-- cm specific js -->
+<!--
 <script type="text/javascript">
 function loadFlash() {
   // from the microwave science website
@@ -205,6 +207,7 @@ function giveXMLtoJS(value) {
   return;
 }
 </script>
+-->
 
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
@@ -230,7 +233,8 @@ function giveXMLtoJS(value) {
       $field_out = render($field_cm_data);
   ?>
     <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
-      <div id="flashcontent"><p>Please update your Flash Player</p></div>
+      <!-- <div id="flashcontent"><p>Please update your Flash Player</p></div> -->
+       <iframe width="100%" height="424" src="<?php echo base_path(); ?>/node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
     </div>
     <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
     <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>

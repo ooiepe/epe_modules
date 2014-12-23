@@ -604,3 +604,15 @@ function epe_llb_update_7011(&$sandbox) {
     user_role_grant_permissions($role->rid,array('epe node clone api'));
   }
 }
+
+/**
+ * epedev release-3.4 fixes
+ * fix resource file field allowable file extension
+ */
+function epe_llb_update_7012(&$sandbox) {
+  $field_resource_file = field_info_instance('node', 'field_resource_file', 'llb_resource');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance');
+  $field_instances = _epe_llb_field_default_field_instances();
+  $field_resource_file['settings']['file_extensions'] = $field_instances['node-llb_resource-field_resource_file']['settings']['file_extensions'];
+  field_update_instance($field_resource_file);
+}

@@ -1372,7 +1372,7 @@ function _epe_llb_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'file_directory' => '',
-      'file_extensions' => 'doc docx pdf',
+      'file_extensions' => 'txt pdf doc docx ppt pptx xls xlsx',
       'filefield_paths' => array(
         'active_updating' => 0,
         'file_name' => array(

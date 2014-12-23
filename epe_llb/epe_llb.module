@@ -931,8 +931,8 @@ function epe_llb_reload_dataset($dataset, $assoc_resources) {
   if($dataset->nid != 'NULL') {
     $data = json_decode($assoc_resources[$dataset->nid]);
 
-    $dataset->thumbnail = '';
-    if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
+    $dataset->thumbnail = base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg';
+    if(isset($data->thumbnail) && $data->thumbnail != ''): $dataset->thumbnail = $data->thumbnail; endif;
     if(isset($data->uri)): $dataset->uri = $data->uri; endif;
     if(isset($data->file)): $dataset->file = $data->file; endif;
     if(isset($data->credit)): $dataset->credit = $data->credit; endif;

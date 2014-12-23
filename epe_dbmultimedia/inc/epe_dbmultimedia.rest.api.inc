@@ -16,6 +16,10 @@ function epe_dbmultimedia_restful_api() {
     $filter = $view->get_item($display_name, 'filter', 'author_uid');
     $filter['value'] = $user->uid;
     $view->set_item($display_name, 'filter', 'author_uid', $filter);
+
+    $filter = $view->get_item($display_name, 'filter', 'author_uid_1');
+    $filter['value'] = $user->uid;
+    $view->set_item($display_name, 'filter', 'author_uid_1', $filter);
   } else  {
     $filters = $view->display_handler->get_option('filters');
     unset($filters['author_uid']);
