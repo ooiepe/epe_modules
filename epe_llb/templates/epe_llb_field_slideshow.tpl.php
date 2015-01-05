@@ -12,7 +12,7 @@ if($images):
           <source src="<?php echo $slide->file; ?>">
         </video>
       <?php } elseif($slide->type == 'web_resource') { ?>
-      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>">
+      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>" target="_blank">
         <img src="<?php print $slide->thumbnail; ?>" alt="<?php print $slide->title; ?>" style="width:480px;">
       </a>
       <?php
@@ -25,7 +25,7 @@ if($images):
       echo $result[0][0];*/
       ?>
       <?php } else { ?>
-      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>">
+      <a href="<?php echo base_path(); ?>node/<?php echo $slide->nid; ?>" target="_blank">
       <?php
       if($slide->uri != '') {
         $slide_image = array('style_name' => 'llb_detail_view', 'path' => $slide->uri, 'alt' => '', 'title' => '');
