@@ -45,14 +45,14 @@ function epe_dbdocument_restful_api() {
   if($value) {
     $filter = $view->get_item($display_name, 'filter', 'search_api_aggregation_1');
     if($filter) {
-    $filter['value'] = $value;
-    $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
+      $filter['value'] = $value;
+      $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
     }
     for($i=1;$i<=3;$i++) {
       $filter = $view->get_item($display_name, 'filter', 'search_api_aggregation_1_' . $i);
       if($filter) {
-      $filter['value'] = $value;
-      $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
+        $filter['value'] = $value;
+        $view->set_item($display_name, 'filter', 'search_api_aggregation_1_' . $i, $filter);
       }
     }
   }

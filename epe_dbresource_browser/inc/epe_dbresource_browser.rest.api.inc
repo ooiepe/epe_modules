@@ -52,9 +52,24 @@ function epe_dbresource_browser_pager_api() {
           $view->set_item($display_name, 'filter', 'author_uid_1', $filter);
         }
       } else {
-        $filters = $view->display_handler->get_option('filters');
-        unset($filters['author_uid']);
-        $view->display_handler->override_option('filters', $filters);
+        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
+          $filters = $view->display_handler->get_option('filters');
+          $filter_groups = $view->display_handler->get_option('filter_groups');
+          unset($filter_groups['groups'][1]);
+          unset($filter_groups['groups'][3]);
+
+          foreach($filters as $key=>$filter) {
+            if($filter['group'] == 1 ||$filter['group'] == 3) {
+              unset($filters[$key]);
+            }
+          }
+          $view->display_handler->override_option('filters', $filters);
+          $view->display_handler->override_option('filter_groups', $filter_groups);
+        } else {
+          $filters = $view->display_handler->get_option('filters');
+          unset($filters['author_uid']);
+          $view->display_handler->override_option('filters', $filters);
+        }
       }
 
       //if there is search term, pass it in to exposed filter
@@ -64,6 +79,16 @@ function epe_dbresource_browser_pager_api() {
         $filter = $view->get_item($display_name, 'filter', 'search_api_aggregation_1');
         $filter['value'] = $value;
         $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
+
+        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
+          for($i=1;$i<=3;$i++) {
+            $filter = $view->get_item($display_name, 'filter', 'search_api_aggregation_1_' . $i);
+            if($filter) {
+              $filter['value'] = $value;
+              $view->set_item($display_name, 'filter', 'search_api_aggregation_1_' . $i, $filter);
+            }
+          }
+        }
       }
 
       if($display_name != 'author_pager') {
@@ -74,6 +99,12 @@ function epe_dbresource_browser_pager_api() {
         $filter = $view->get_item($display_name, 'filter', 'field_featured_status');
         $filter['value'] = $featured_filter;
         $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
+
+        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
+          $filter = $view->get_item($display_name, 'filter', 'field_featured_status_1');
+          $filter['value'] = $featured_filter;
+          $view->set_item($display_name, 'filter', 'field_featured_status_1', $filter);
+        }
       }
 
       $view->pre_execute();

@@ -1,3 +1,6 @@
+<?php
+  drupal_add_css('#edit-resource-field-upload-button, #edit-thumbnail-upload-button { display: none; }','inline');
+?>
 
 <div class="form-help"><a href="<?php echo base_path() . "node/171" ?>" target="_blank">Help with this form</a></div>
 <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">

@@ -229,14 +229,14 @@ function epe_dbmultimedia_views_default_views() {
         $response = drupal_http_request(\'http://www.youtube.com/oembed?url=\' . $resource_url[\'url\'] .\'&format=json\');
         if($response->code == 200) {
           $oembed_data = json_decode($response->data);
-          $output = $oembed_data->thumbnail;
+          $output = $oembed_data->thumbnail_url;
         }
       break;
       case \'vimeo\':
         $response = drupal_http_request(\'http://vimeo.com/api/oembed.json?url=\' . $resource_url[\'url\']);
         if($response->code == 200) {
           $oembed_data = json_decode($response->data);
-          $output = $oembed_data->thumbnail;
+          $output = $oembed_data->thumbnail_url;
         }
       break;
     }

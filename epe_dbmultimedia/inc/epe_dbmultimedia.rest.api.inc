@@ -21,9 +21,20 @@ function epe_dbmultimedia_restful_api() {
     $filter['value'] = $user->uid;
     $view->set_item($display_name, 'filter', 'author_uid_1', $filter);
   } else  {
+    //$filters = $view->display_handler->get_option('filters');
+    //unset($filters['author_uid']);
     $filters = $view->display_handler->get_option('filters');
-    unset($filters['author_uid']);
+    $filter_groups = $view->display_handler->get_option('filter_groups');
+    unset($filter_groups['groups'][1]);
+    unset($filter_groups['groups'][3]);
+
+    foreach($filters as $key=>$filter) {
+      if($filter['group'] == 1 ||$filter['group'] == 3) {
+        unset($filters[$key]);
+      }
+    }
     $view->display_handler->override_option('filters', $filters);
+    $view->display_handler->override_option('filter_groups', $filter_groups);
   }
 
   //if there is search term, pass it in to exposed filter
@@ -31,8 +42,17 @@ function epe_dbmultimedia_restful_api() {
   if(isset($_GET['search'])): $value = $_GET['search']; endif;
   if($value) {
     $filter = $view->get_item($display_name, 'filter', 'search_api_aggregation_1');
-    $filter['value'] = $value;
-    $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
+    if($filter) {
+      $filter['value'] = $value;
+      $view->set_item($display_name, 'filter', 'search_api_aggregation_1', $filter);
+    }
+    for($i=1;$i<=3;$i++) {
+      $filter = $view->get_item($display_name, 'filter', 'search_api_aggregation_1_' . $i);
+      if($filter) {
+        $filter['value'] = $value;
+        $view->set_item($display_name, 'filter', 'search_api_aggregation_1_' . $i, $filter);
+      }
+    }
   }
 
   if($display_name != 'author') {
@@ -41,8 +61,15 @@ function epe_dbmultimedia_restful_api() {
       unset($featured_filter['Not-Featured']);
     }
     $filter = $view->get_item($display_name, 'filter', 'field_featured_status');
-    $filter['value'] = $featured_filter;
-    $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
+    if($filter) {
+      $filter['value'] = $featured_filter;
+      $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
+    }
+    $filter = $view->get_item($display_name, 'filter', 'field_featured_status_1');
+    if($filter) {
+      $filter['value'] = $featured_filter;
+      $view->set_item($display_name, 'filter', 'field_featured_status_1', $filter);
+    }
   }
 
   $sort_filter = array(
@@ -146,9 +173,14 @@ function epe_dbmultimedia_restful_api_node_build($nid) {
     if($item['type'] == 'video_resource') {
       $field = field_get_items('node', $node, 'field_video_resource_file');
       if($field) {
-        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
-        $item['uri'] = $field[0]['thumbnailfile']->uri;
-        $item['file'] = file_create_url($field[0]['uri']);
+        $item['thumbnail'] = base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg';
+        $item['uri'] = '';
+        $item['file'] = '';
+        if($field[0]['thumbnailfile']) {
+          $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
+          $item['uri'] = $field[0]['thumbnailfile']->uri;
+          $item['file'] = file_create_url($field[0]['uri']);
+        }
       }
     }
 
