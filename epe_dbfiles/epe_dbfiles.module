@@ -20,13 +20,15 @@ function epe_dbfiles_menu() {
   //$parent = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','db','=')->execute()->fetchAssoc();
   $epe_menu = variable_get('epe_menu',array());
 
-  $items['resource/add/new'] = array(
+  $items['resource/add'] = array(
     'title' => t('Add a New Resource'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('epe_dbfiles_type_select_form'),
     'access callback' => 'user_access',
     'access arguments' => array('epe dbfiles interface'),
     'type' => MENU_CALLBACK,
+    'weight' => 2,
+    'plid' => $epe_menu['db']['mlid'],
   );
 
   $items['resource/add/file'] = array(
@@ -138,7 +140,7 @@ function epe_dbfiles_node_form($node, &$form_state) {
         }
       }
     }
-    $file_field_desc = 'Upload a file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions are:<br/>' . $file_field_extensions;
+    $file_field_desc = 'Upload a file resource <em>(' . implode(',', $file_field_modules) . ')</em>, allowed extensions are:<br/>' . $file_field_extensions . 'Maximum file upload size is ' . ini_get("upload_max_filesize");
 
       $resource_field = array(
         '#type' => 'managed_file',
@@ -428,7 +430,6 @@ function epe_dbfiles_form_web_resource_node_form_alter(&$form, &$form_state, $fo
  */
 function epe_dbfiles_node_form_submit($form, &$form_state) {
   global $user;
-
   //$file = file_load($form_state['values']['file']);
 
   //create corresponding node with entity api
@@ -470,7 +471,7 @@ function epe_dbfiles_node_form_submit($form, &$form_state) {
     $wrapper->{$entity_file_field}->file->set(file_load($form_state['values']['resource_field']));
     endif;
 
-    if($form_state['values']['thumbnail']) {
+    if(isset($form_state['values']['thumbnail']) && $form_state['values']['thumbnail'] > 0) {
       $entity_thumb_field = 'field_' . $form_state['values']['node_type'] . '_image';
       $wrapper->{$entity_thumb_field}->file->set(file_load($form_state['values']['thumbnail']));
     }

@@ -2,7 +2,7 @@
 
 <?php
   /* a hack to deal with existing LLB's unassign text format selector field */
-  drupal_add_css('.form-type-select { display: none; }','inline');
+  //drupal_add_css('.form-type-select { display: none; }','inline');
   $alter_fields = array('body','field_resource_file_note','field_background_content','field_challenge_content','field_explanation_content','field_guidance_content','field_instructional_content','field_introductory_content','field_preconception_content','field_resources_content','field_student_objectives');
   foreach($alter_fields as $field) {
     $form[$field]['und'][0]['format']['format']['#options'] = array('llb_textfield_filter'=>'Investigation Textfield Filter');

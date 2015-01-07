@@ -46,14 +46,14 @@ function epe_dbfiles_enable() {
 
   menu_link_save($item);
 
-  $item = array(
-      'link_path' => 'resource/add/new',
+/*  $item = array(
+      'link_path' => 'resource/add',
       'link_title' => 'Upload a Resource',
       'menu_name' => 'main-menu',
       'weight' => 2,
       'plid' => $epe_menu['db']['mlid'],
       );
-  menu_link_save($item);
+  menu_link_save($item);*/
 
   $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=image',
@@ -231,5 +231,19 @@ function epe_dbfiles_update_7002(&$sandbox) {
               ))
             ->condition('menu_name', 'main-menu','=')
             ->condition('link_title', 'Upload a Resource','=')
+            ->execute();
+}
+
+/**
+ * epedev-302: update menu title as upload resource operation has changed
+ */
+function epe_dbfiles_update_7003(&$sandbox) {
+  $updated = db_update('menu_links')
+            ->fields(array(
+              'link_path'=>'resource/add',
+              'router_path'=>'resource/add'
+              ))
+            ->condition('menu_name', 'main-menu','=')
+            ->condition('link_title', 'Add a New Resource','=')
             ->execute();
 }
