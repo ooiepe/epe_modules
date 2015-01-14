@@ -3,6 +3,7 @@
 <?php
   $hideActionButtons = 0;
   $showContent = false;
+  $custom_node_detail_url = $GLOBALS['base_url'] . "/node/" . $node->nid . '/detail';
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
@@ -18,6 +19,27 @@
   <div class=".row-fluid">
     <?php if(isset($content['body'])): ?>
     <?php echo render($content['body']); ?>
+    <?php endif; ?>
+
+    <?php if(!empty($content['field_investigation_level'])): ?>
+    <p>
+    <div style="float:left;"><strong>Investigation Level:&nbsp;</strong></div>
+    <?php echo render($content['field_investigation_level']); ?>
+    </p>
+    <?php endif; ?>
+
+    <?php if(!empty($content['field_teaching_mode'])): ?>
+    <p>
+    <div style="float:left;"><strong>Teaching Mode:&nbsp;</strong></div>
+    <?php echo render($content['field_teaching_mode']); ?>
+    </p>
+    <?php endif; ?>
+
+    <?php if(!empty($content['field_resource_keywords'])): ?>
+    <p>
+    <div style="float:left;"><strong>Keywords:&nbsp;</strong></div>
+    <?php echo render($content['field_resource_keywords']); ?>
+    </p>
     <?php endif; ?>
 
     <?php if(!empty($content['field_instructional_content'])) { ?>

@@ -222,8 +222,6 @@ function epe_wp_theme() {
   );
 }
 
-
-
 function epe_wp_form_user_register_form_alter(&$form, $form_state) {
   // Insert our handler BEFORE user_register_submit().
   // This allows us to add the role before the new user is saved.

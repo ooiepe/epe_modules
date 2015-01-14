@@ -5,6 +5,7 @@
 <?php
   $hideActionButtons = 0;
   $showContent = false;
+  $custom_node_detail_url = $GLOBALS['base_url'] . "/node/" . $node->nid . '/detail';
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
@@ -48,7 +49,7 @@
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li id="llb2" class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Exploration <b class="caret"></b></a>
+    <a href="#" class="dropdown-toggle" id="exploration_tab" data-toggle="dropdown">Exploration <b class="caret"></b></a>
     <ul class="dropdown-menu">
       <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
       <?php foreach($datasets as $key => $dataset): ?>
@@ -62,7 +63,7 @@
 <div class="tab-content">
 
 <div class="tab-pane active" id="intro">
-  <h3>Activity Introduction</h3>
+  <h3>Introduction</h3>
 <!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
   <?php if(!empty($content['field_introductory_slideshow'])) {
@@ -108,7 +109,7 @@
     } ?>
     <?php /* echo render($content['field_challenge_thumbnail']); */ ?>
   </div>
-  <p>In this activity you will investigate the following challenge ...</p>
+  <p>In this activity you will investigate the following research challenge...</p>
   <blockquote><?php echo render($content['field_challenge_content']); ?></blockquote>
 
   <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
@@ -126,14 +127,19 @@
     <li class="<?php echo implode(' ', $li_classes); ?>">
       <div class="thumbnail">
         <div class="image">
+        <a href="#dataset<?php echo $key; ?>">
         <?php
           if(isset($dataset->uri) && !empty($dataset->uri)) {
             $thumbnail_image = array('style_name' => 'llb_dataset_teaser', 'path' => $dataset->uri, 'alt' => $dataset->title, 'title' => $dataset->title);
             echo theme('image_style', $thumbnail_image);
+          }
+          elseif(isset($dataset->thumbnail) && !empty($dataset->thumbnail)) {
+            echo '<img src="' . $dataset->thumbnail . '" width="270" height="116" alt="' . $dataset->title . '">';
           } else {
             echo '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
           }
         ?>
+        </a>
         </div>
         <!-- <a href="#" onclick="jQuery('#llb2 li:eq(<?php echo ($key + 1); ?>) a').tab('show');"><?php echo $dataset->title; ?></a> -->
         <a href="#dataset<?php echo $key; ?>"><?php echo $dataset->title; ?></a>
@@ -141,7 +147,7 @@
     </li>
     <?php endforeach; ?>
   </ul>
-  <p>When you're done investigating the datasets, continue to the last section.</p>
+  <p>When you're done investigating each dataset, continue to the last section.</p>
   <button type="button" class="btn btn-success" data-toggle="tab" data-target="explanation" onclick="jQuery('#llbnav a[href=#explanation]').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
 </div>
 
@@ -154,7 +160,9 @@
     }
   }
 ?>
+
 <!-- cm specific js -->
+<!--
 <script type="text/javascript">
 function loadFlash() {
   // from the microwave science website
@@ -199,36 +207,64 @@ function giveXMLtoJS(value) {
   return;
 }
 </script>
+-->
 
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
-    <li><!-- <a href="#" onclick="jQuery('#llb2 li:eq(0) a').tab('show');"> -->
+    <li>
       <a href="#exploration">
       Exploration</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $dataset->title; ?></li>
   </ul>
   <h3><?php echo $dataset->title; ?></h3>
-
+<p>
   <?php
-    if(in_array($dataset->type, $filetypes)) {
-      echo epe_llb_theme_file_dataset($dataset);
-    } elseif($dataset->type == 'cm_resource') {
+  switch($dataset->type) {
+
+    case 'text':
+    //do nothing
+    break;
+
+    case 'cm_resource':
       $cm_resource = node_load($dataset->nid);
       $field_cm_data_items = field_get_items('node', $cm_resource, 'field_cm_data');
       $field_cm_data = field_view_value('node',$cm_resource,'field_cm_data', $field_cm_data_items[0]);
       $field_out = render($field_cm_data);
   ?>
-<div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
-  <div id="flashcontent"><p>Please update your Flash Player</p></div>
-</div>
+    <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
+      <!-- <div id="flashcontent"><p>Please update your Flash Player</p></div> -->
+       <iframe width="100%" height="424" src="<?php echo base_path(); ?>/node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
+    <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>
+  <?php
+    break;
 
-<textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
+    case 'ev_tool_instance':
+  ?>
+  <iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
+  <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>
+  <?php
+    break;
 
-  <?php } elseif($dataset->type == 'ev_tool_instance') { ?>
+    case 'web_resource':
+      $height_pattern = "/height=\"[0-9]*\"/";
+      $dataset->html = preg_replace($height_pattern, "height='360'", $dataset->html);
+      $width_pattern = "/width=\"[0-9]*\"/";
+      $dataset->html = preg_replace($width_pattern, "width='886'", $dataset->html);
+      $match_pattern = "#<iframe[^>]*>.*?</iframe>#i";
+      preg_match_all($match_pattern, $dataset->html, $result);
+      echo $result[0][0];
+    break;
 
-<iframe class="ev_tool_instance" frameborder="0" width="100%" height="500" src="<?php echo base_path(); ?>ev/embed/id/<?php echo $dataset->nid ?>"></iframe>
-<?php } //end elseif type == ev_tool_instance ?>
+    default:
+      echo epe_llb_theme_file_dataset($dataset);
+    break;
+
+  }
+  ?>
+</p>
 
   <div class="well well-sm">
     <?php echo $dataset->body; ?>
@@ -263,7 +299,7 @@ function giveXMLtoJS(value) {
   <div class="row-fluid control-group">
     <div class="span6">
       <?php if(!empty($content['field_challenge_content'])): ?>
-      <p>Recall that the research question you are trying to address is:</p>
+      <p>Recall that the research challenge you are trying to address is:</p>
       <div class="control-group">
       <blockquote>
       <?php echo render($content['field_challenge_content']); ?>
@@ -296,7 +332,7 @@ function giveXMLtoJS(value) {
       </div>
       <?php endif; ?>
       <?php if(!empty($content['field_explanation_content'])): ?>
-      <p><strong>Instructions</strong></p>
+      <p><strong>Additional Instructions</strong></p>
       <div class="control-group">
       <?php echo render($content['field_explanation_content']); ?>
       </div>

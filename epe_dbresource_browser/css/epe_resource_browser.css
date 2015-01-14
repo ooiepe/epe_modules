@@ -111,10 +111,10 @@ table.ng-scope td .thumb {
 }
 
 .rb-type-selector ul li.cm {
-    width: 49px;
     background-image: url(../images/rb_buttons_cm.png);
 }
 .rb-type-selector ul li.ev {
+    width: 49px;
     background-image: url(../images/rb_buttons_ev.png);
 }
 .rb-type-selector ul li.llb {
@@ -135,10 +135,10 @@ table.ng-scope td .thumb {
 }
 
 .rb-type-selector ul li.cm.active {
-    width: 49px;
     background-image: url(../images/rb_buttons_cm_sel.png);
 }
 .rb-type-selector ul li.ev.active {
+    width: 49px;
     background-image: url(../images/rb_buttons_ev_sel.png);
 }
 .rb-type-selector ul li.llb.active {
@@ -183,3 +183,18 @@ table.ng-scope td .thumb {
 .paging a { padding-right: 10px; cursor: pointer; }
 .paging a:hover { font-weight: bold; }
 .paging a.active { font-weight: bold; }
+
+a.sort {
+  cursor: pointer;
+  padding-right: 15px;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 10px;
+}
+table.ng-scope th a.sort_desc {
+  background-image: url('../images/arrow_up.png');
+
+}
+table.ng-scope th a.sort_asc {
+  background-image: url('../images/arrow_down.png');
+}

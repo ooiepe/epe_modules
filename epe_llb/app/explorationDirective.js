@@ -99,42 +99,25 @@ epe_llb_directive.directive('inlineEdit', function($compile) {
   }
 });
 
-epe_llb_directive.directive('ckEditor', function($compile) {
+epe_llb_directive.directive('ckeditor', function() {
   return {
     require: '?ngModel',
-    link: function(scope, elm, attr, ngModel) {
-      var editor = CKEDITOR.instances[elm[0]];
-      if(editor) {
-        editor.destroy(true); console.log(elm[0]);
-      }
-      /*if (CKEDITOR.instances[elm[0]]) {
-        CKEDITOR.instances[elm[0]].destroy(true);
-        }*/
-      var ck = CKEDITOR.replace(elm[0],{
-            toolbar :
-                [
-                  { name: 'basicstyles', items : [ 'Bold','Italic','Underline' ] },
-                  { name: 'paragraph', items : [ 'NumberedList','BulletedList' ] }
-                ]
-          });
-
-      if (!ngModel) return;
-
-      //loaded didn't seem to work, but instanceReady did
-      //I added this because sometimes $render would call setData before the ckeditor was ready
-      ck.on('instanceReady', function() {
-        ck.setData(ngModel.$viewValue);
+    link: function($scope, elm, attr, ngModel) {
+      var ck = CKEDITOR.replace(elm[0], {
+        toolbar: [
+          { items: ['Bold', 'Italic', 'Underline', 'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', 'Source', 'HorizontalRule'] }
+        ]
       });
 
       ck.on('pasteState', function() {
-        scope.$apply(function() {
+        $scope.$apply(function() {
           ngModel.$setViewValue(ck.getData());
         });
       });
 
       ngModel.$render = function(value) {
-        ck.setData(ngModel.$viewValue);
-      };
+        ck.setData(ngModel.$modelValue);
+      }
     }
-  };
+  }
 });

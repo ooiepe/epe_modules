@@ -33,17 +33,17 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'semanticviews_default';
   $handler->display->display_options['style_options']['group']['element_type'] = '';
   $handler->display->display_options['style_options']['group']['class'] = '';
-  $handler->display->display_options['style_options']['list']['class'] = 'span4';
   $handler->display->display_options['style_options']['row']['element_type'] = '';
   $handler->display->display_options['style_options']['row']['first_class'] = '';
   $handler->display->display_options['style_options']['row']['last_class'] = '';
   $handler->display->display_options['style_options']['row']['last_every_nth'] = '';
+  $handler->display->display_options['style_options']['row']['striping_classes'] = '';
   $handler->display->display_options['row_plugin'] = 'semanticviews_fields';
   $handler->display->display_options['row_options']['skip_blank'] = 0;
   $handler->display->display_options['row_options']['semantic_html'] = array(
     'nid' => array(
-      'element_type' => 'div',
-      'class' => 'span6 thumbnail',
+      'element_type' => '',
+      'class' => '',
     ),
   );
   /* Field: Content: Tool Thumbnail */
@@ -57,7 +57,7 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['field_tool_thumbnail']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_tool_thumbnail']['settings'] = array(
     'image_style' => 'medium',
-    'image_link' => '',
+    'image_link' => 'content',
   );
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -68,14 +68,25 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* Field: Content: Tool Author */
+  $handler->display->display_options['fields']['field_tool_author']['id'] = 'field_tool_author';
+  $handler->display->display_options['fields']['field_tool_author']['table'] = 'field_data_field_tool_author';
+  $handler->display->display_options['fields']['field_tool_author']['field'] = 'field_tool_author';
+  $handler->display->display_options['fields']['field_tool_author']['label'] = '';
+  $handler->display->display_options['fields']['field_tool_author']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_tool_author']['element_label_colon'] = FALSE;
   /* Field: Content: Description */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['body']['alter']['max_length'] = '150';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['body']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['body']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['body']['type'] = 'text_summary_or_trimmed';
   $handler->display->display_options['fields']['body']['settings'] = array(
     'trim_length' => '200',
@@ -86,29 +97,35 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['nid']['alter']['text'] = '<div class="container-fluid">
+  $handler->display->display_options['fields']['nid']['alter']['text'] = '<div class="container-fluid thumbnail">
     <div class="row-fluid">
-      <div class="span5">
+      <div class="span9"><h3>[title]</h3></div>
+      <div class="span3">[field_tool_author]</div>
+    </div>
+    <div class="row-fluid">
+      <div class="span3 offset1">
         [field_tool_thumbnail]
       </div>
-      <div class="span7">
-        <div><b>[title]</b></div>
-        <div>
+      <div class="span6">
+        <p>
           [body]
-        </div>
-        <div>
-          <a class="btn" href="../node/[nid]">Preview <i class="icon-chevron-right"></i></a> &nbsp;&nbsp; <a class="btn" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Customize <i class="icon-chevron-right"></i></a>
-        </div>
+        </p>
+        <p class="pull-right">
+          <a class="btn" href="../node/[nid]">Preview <i class="icon-chevron-right"></i></a> &nbsp;&nbsp;
+          <a class="btn" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Customize <i class="icon-chevron-right"></i></a>
+        </p>
       </div>
     </div>
+
   </div>
-  ';
+
+  <div>&nbsp;</div>';
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Sort criterion: Content: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'node';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  $handler->display->display_options['fields']['nid']['element_default_classes'] = FALSE;
+  /* Sort criterion: Content: Tool Name (field_tool_name) */
+  $handler->display->display_options['sorts']['field_tool_name_value']['id'] = 'field_tool_name_value';
+  $handler->display->display_options['sorts']['field_tool_name_value']['table'] = 'field_data_field_tool_name';
+  $handler->display->display_options['sorts']['field_tool_name_value']['field'] = 'field_tool_name_value';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -295,12 +312,6 @@ function epe_ev_views_default_views() {
       ?>';
   $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
-  /* Sort criterion: Indexed Node: Title */
-  $handler->display->display_options['sorts']['title']['id'] = 'title';
-  $handler->display->display_options['sorts']['title']['table'] = 'search_api_index_epe_ev_search_index';
-  $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['exposed'] = TRUE;
-  $handler->display->display_options['sorts']['title']['expose']['label'] = 'Title';
   /* Contextual filter: Indexed Node: Author */
   $handler->display->display_options['arguments']['author']['id'] = 'author';
   $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_epe_ev_search_index';

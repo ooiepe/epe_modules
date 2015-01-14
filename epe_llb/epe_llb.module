@@ -118,18 +118,8 @@ function epe_llb_image_default_styles() {
 function epe_llb_menu() {
   $items = array();
 
-/*  $items['admin/config/epe/llb-form'] = array(
-    'title' => 'Lab Lesson Builder Form Field',
-    'description' => 'Configure lab lesson builder ',
-    'page arguments' => array('epe_llb_admin_config'),
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('epe llb configuration'),
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'file' => 'epe_llb.admin.inc',
-  );*/
-
   $items['api/resource/llb'] = array(
-    'title' => t('Restful Lab Lesson Builder Resource Query'),
+    'title' => t('Restful Data Investigations Resource Query'),
     'page callback' => 'epe_llb_restful_api',
     'file' => 'epe_llb.rest.api.inc',
     'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
@@ -138,7 +128,7 @@ function epe_llb_menu() {
   );
 
   $items['api/resource/llb/%'] = array(
-    'title' => t('Restful Single Lab Lesson Builder Resource Query'),
+    'title' => t('Restful Single Data Investigation Resource Query'),
     'page callback' => 'epe_llb_restful_api_node',
     'page arguments' => array(3),
     'file' => 'epe_llb.rest.api.inc',
@@ -146,29 +136,17 @@ function epe_llb_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-/*
-  $items['resource/add/llb'] = array(
-    'title' => t('Create Lab Lesson Builder Resrouce'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('epe_llb_node_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('create llb content'),
-    'file' => 'epe_llb.form.inc',
-    'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
-    'type' => MENU_CALLBACK,
-  );
 
-  $items['resource/llb/%/edit'] = array(
-    'title' => t('Edit Lab Lesson Builder Resrouce'),
-    'page callback' => 'epe_llb_node_edit',
-    'page arguments' => array(2),
-    'access callback' => 'user_access',
-    'access arguments' => array('edit own llb content'),
-    'file' => 'epe_llb.form.inc',
+  $items['api/resource/clone/%'] = array(
+    'title' => t('Restful Data Investigations Clone Node'),
+    'page callback' => 'epe_llb_restful_api_node_clone',
+    'page arguments' => array(3),
+    'file' => 'epe_llb.rest.api.inc',
     'file path' => drupal_get_path('module', 'epe_llb') . '/inc',
+    'access callback' => 'user_access',
+    'access arguments' => array('epe node clone api'),
     'type' => MENU_CALLBACK,
   );
-*/
 
   return $items;
 }
@@ -251,6 +229,18 @@ function _assign_epe_llb_permission() {
   drupal_static_reset('user_role_permissions');
 }
 
+/**
+  * setup the api access permissions
+  */
+function epe_llb_permission() {
+  return array(
+    'epe node clone api' => array(
+      'title' => 'EPE Data Investigation Node Clone',
+      'description' => 'Allow user to copy an existing node to use in Data Investigation.',
+    ),
+  );
+}
+
 /*
  * Implement hook_theme
  * This hook is to style edit form, the theme key needs to be the same as the form function name
@@ -316,11 +306,11 @@ function epe_llb_homepage_render() {
  */
 function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_id) {
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.tab-history.js');
-
   if(isset($form_state['node']->nid)) {
     drupal_set_title('Edit your Data Investigation "' . $form['title']['#default_value'] . '"');
   } else {
     drupal_set_title('Create a new Data Investigation');
+    $form['title']['#default_value'] = 'Untitled Investigation';
   }
   $form['#validate'][] = 'epe_llb_form_llb_resource_node_form_validate';
 
@@ -346,12 +336,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   if( file_exists(drupal_get_path('module','epe_llb') . '/contents/instructor/field-resources_content-prefix.html') ) {
     $form['field_resources_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/instructor/field-resources_content-prefix.html');
   }
-
-/*  $form['field_challenge_thumbnail']['#prefix'] = $form_values['llb_challenge_thumbnail_prefix'];
-  $form['field_challenge_thumbnail']['#suffix'] = $form_values['llb_challenge_thumbnail_suffix'];
-  $form['field_instructional_content']['#prefix'] = $form_values['llb_instructional_content'];
-  $form['field_preconception_content']['#prefix'] = $form_values['llb_preconception_content'];
-  $form['field_resources_content']['#prefix'] = $form_values['llb_resources_content'];*/
 
   $form['block_objectives_info'] = array('#type' => 'container', '#attributes' => array());
   $block_objectives = module_invoke('epe_llb','block_view','epe_llb_objectives_info');
@@ -394,7 +378,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['field_background_slideshow']['#prefix'] = '<div class="app-main" ng-controller="background">';
   $form['field_background_slideshow']['und'][0]['value']['#default_value'] = '{{items}}';
   $form['background_slideshow_button'] = array(
-    '#markup' => '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="true" data-controller="background" data-api="image">Add Image</a>',
+    '#markup' => '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="true" data-controller="background" data-api="all">Add Resources</a>',
     '#suffix' => '</div>', /* /controler=background */
   );
 
@@ -412,139 +396,35 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   $form['field_exploration_dataset']['#prefix'] = '<div class="app-main" ng-controller="dataset">';
   $form['field_exploration_dataset']['und'][0]['value']['#default_value'] = '{{items}}';
 
-  //if( file_exists(drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html') ) {
-  //  $form['field_guidance_content']['#prefix'] = file_get_contents( drupal_get_path('module','epe_llb') . '/contents/exploration/field-guidance_content-prefix.html' );
-  //}
-
-  //foreach ($form['field_desired_assessment']['und']['#options'] as $key => &$label) {
-  //  $label = '<a href="#" class="assessment" data-toggle="tooltip" title="' . file_get_contents( drupal_get_path('module','epe_llb') . '/contents/challenge/assessment-' . strtolower($key) . '.html' ) . '">' . $label . '</a>';
-  //}
-
-  //drupal_add_js("jQuery('[rel=tooltip]').tooltip();",'inline');
-
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
   unset($depend_modules['epe_llb']);
-  $resource_browser_btns = array();
-  /*foreach($depend_modules as $module) {
-    if(isset($module['resource_browser'])) {
-      $btn_label = '';
-      if(isset($module['resource_browser']['label'])) {
-        $btn_label = $module['resource_browser']['label'];
-      } else {
-        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
-        $btn_label = $node_type->name;
-      }
-      if(isset($module['resource_browser']['weight'])) {
-        $resource_browser_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
-      } else {
-        $resource_browser_btns[] = '<button type="button" class="btn btn-success add-resources" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';
-      }
-    }
-  }
-  ksort($resource_browser_btns);
 
-  $form['resource_browser'] = array(
-    '#markup' => implode('&nbsp;', $resource_browser_btns), //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
-    '#suffix' => '</div>' //end div.app-main
-  );*/
-
-  $resource_browser_add_btns = array();
   $resource_browser_modals = array();
-  foreach($depend_modules as $module) {
-    if(isset($module['resource_browser'])) {
-      $btn_label = '';
-      if(isset($module['resource_browser']['label'])) {
-        $btn_label = $module['resource_browser']['label'];
-      } else {
-        $node_type = node_type_load(str_replace('_','-',$module['content_type']));
-        $btn_label = $node_type->name;
-      }
-
-      $adhoc = false;
-      if(isset($module['resource_browser']) && isset($module['resource_browser']['allowAdHoc'])) {
-        $adhoc = $module['resource_browser']['allowAdHoc'];
-      }
-
-      if(isset($module['resource_browser']['weight'])) {
-    /*    $resource_browser_add_btns[$module['resource_browser']['weight']] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
-        /*$resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#modal' . $module['resource_browser']['api'] . '" class="btn btn-success" data-toggle="modal" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';*/
-        $resource_browser_add_btns[$module['resource_browser']['weight']] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-controller="dataset" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
-      } else {
-/*        $resource_browser_add_btns[] = '<button type="button" class="btn btn-success" data-toggle="modal" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</button>';*/
-        $resource_browser_add_btns[] = '<a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-controller="dataset" data-adhoc="' . $adhoc . '" data-api="' . $module['resource_browser']['api'] . '">Add ' . $btn_label . '</a>';
-      }
-      //$resource_browser_modals[] = theme('epe_llb_add_resource_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));
-    }
-  }
-  ksort($resource_browser_add_btns);
-
-  //$resource_browser_modals[] = '<div id="rbmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body"><iframe src="" seamless width="779" height="500" class="rb-modal-iframe" /></div><div class="modal-footer"><button type="button" class="btn btn-primary pull-left add-selected" data-dismiss="modal" aria-hidden="true">Add Selected</button><a href="#adhocmodal" class="btn btn-success" data-dismiss="modal" aria-hidden="true" data-toggle="modal">Add New Resource</a><button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div></div>';
 
   $resource_browser_modals[] = theme('epe_llb_add_resource_modal_template');
-
-/*  $resource_browser_modals[] = theme('epe_llb_adhoc_modal_template', array('templateid'=>$module['resource_browser']['api'], 'label'=>$btn_label));*/
   $resource_browser_modals[] = theme('epe_llb_adhoc_modal_template');
 
   $form['resource_browser_buttons'] = array(
-    '#markup' => '<div>' . implode('&nbsp;', $resource_browser_add_btns) . '</div>', //'<button type="button" class="btn btn-success add-resources">Add Resources</button>',
-    '#suffix' => '</div>' //end div.app-main
+    '#markup' => '<div><a href="#rbmodal" class="btn btn-success rbmodal" data-toggle="modal" data-toggle="modal" data-adhoc="true" data-controller="dataset" data-api="all">Add Resources</a>&nbsp;&nbsp;<a class="btn btn-success text_resource" data-controller="dataset" >Add Text Content</a></div>',
+    '#suffix' => '</div>'  //end div.app-main
   );
 
   $form['resource_browser_modal'] = array(
     '#markup' => implode('', $resource_browser_modals),
   );
 
-  // Create our own javascript that will be used to theme a modal.
-  /*
-  $modal_style = array(
-    'rb-modal-style' => array(
-      'modalSize' => array(
-        'type' => 'fixed',
-        'width' => 900,
-        'height' => 800,
-        'addWidth' => 10,
-        'addHeight' => 10,
-        'contentRight' => 0,
-        'contentBottom' => 0,
-      ),
-      'modalOptions' => array(
-        'opacity' => .6,
-        'background-color' => '#684C31',
-      ),
-      'animation' => 'fadeIn',
-      'modalTheme' => 'llb_modal',
-      // Customize the AJAX throbber like so:
-      // This function assumes the images are inside the module directory's "images" directory:
-      // ctools_image_path($image, $module = 'ctools', $dir = 'images')
-      'throbber' => theme('image', array('path' => ctools_image_path('ajax-loader.gif', 'epe_llb', 'images'), 'alt' => t('Loading...'), 'title' => t('Loading'))),
-      'closeImage' => theme('image', array('path' => ctools_image_path('modal-close.png', 'epe_llb', 'images'), 'alt' => t('Close window'), 'title' => t('Close window'))),
-    ),
-  );
-  // Add the settings array defined above to Drupal 7's JS settings:
-  drupal_add_js($modal_style, 'setting');
-  // The function below assumes the happy.js file resides in [module_dir]/js
-  ctools_add_js('rb-modal', 'epe_llb');
-  // The function below assumes the happy.css file resides in [module_dir]/css
-  //ctools_add_css('llb-modal', 'epe_llb');
-*/
-
-
   $form['#attached']['css'] = array(
-    //'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css'=>array('type'=>'external'),
     drupal_get_path('module','epe_llb') . '/css/epe_llb.css'=>array('type'=>'file','group'=>CSS_THEME),
   );
-  /*$form['#attached']['js'] = array(
-    'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js'=>array('type'=>'external'),
-  );*/
 
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery-ui.js');
   drupal_add_js(libraries_get_path('jquery-ui') . '/ui/jquery.ui.sortable.js');
 
+  drupal_add_js(libraries_get_path('ckeditor') . '/ckeditor.js');
+
   $app_path = drupal_get_path('module', 'epe_llb') . '/app';
 
   $form['#attached']['js'][] = $app_path . '/app.js';
-  //$form['#attached']['js'][] = $app_path . '/explorationController.js';
-  //$form['#attached']['js'][] = $app_path . '/explorationFactory.js';
   $form['#attached']['js'][] = $app_path . '/explorationDirective.js';
   $form['#attached']['js'][] = libraries_get_path('angular-ui-bootstrap') . '/ui-bootstrap-tpls-0.6.0.min.js';
   $form['#attached']['js'][] = libraries_get_path('ui-sortable') . '/src/sortable.js';
@@ -576,11 +456,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     '#name' => 'revision',
     '#value' => 1
   );
-
-  //$form['#attached']['js'][] = drupal_get_path('module', 'epe_llb') . '/js/test.js';
-  /*$form['#attached']['css']['http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css'] = array('type'=>'external');*/
-
-  //$form['#after_build'][] = 'epe_llb_field_formatter_rebuild';
 }
 
 function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
@@ -590,7 +465,6 @@ function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
 
   if($context['field']['type'] == 'image') {
     unset($element[0]['#title']);
-    //if(isset($element['#theme'])): unset($element['#file_upload_title']); endif;
   }
 }
 
@@ -649,7 +523,7 @@ function epe_llb_node_insert($node) {
 
 function _compile_associated_resources($datasets,$filtered_datasets=array()) {
   foreach($datasets as $dataset) {
-    if(!array_key_exists($dataset->nid, $filtered_datasets)) {
+    if(!array_key_exists($dataset->nid, $filtered_datasets) && $dataset->nid != 'NULL') {
       $filtered_datasets[$dataset->nid] = $dataset;
     }
   }
@@ -875,7 +749,7 @@ function epe_llb_block_info() {
   );
 
   $blocks['epe_llb_featured'] = array(
-    'info' => t('EPE Featured Lesson Resources'),
+    'info' => t('EPE Featured Investigation Resources'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
@@ -938,10 +812,10 @@ function epe_llb_block_view($delta = '') {
 }
 
 function epe_llb_dataset_query($dataset) {
-  global $base_root;
+/*  global $base_root;
 
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
-  unset($depend_modules['epe_llb']);
+  //unset($depend_modules['epe_llb']);
   $apiurl = $base_root . base_path() . 'api/resource/';
 
   foreach($depend_modules as $key=>$module) {
@@ -960,7 +834,43 @@ function epe_llb_dataset_query($dataset) {
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
   $data = json_decode(curl_exec($ch));
-  curl_close($ch);
+  curl_close($ch);*/
+
+  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
+
+  $current_module = '';
+  foreach($depend_modules as $key=>$module) {
+    if(isset($module['content_type']) && $module['content_type'] === $dataset->type) {
+      $current_module = $key;
+      break;
+    }
+  }
+
+  if(in_array($dataset->type,array('video_resource','audio_resource','web_resource'))) {
+    $current_module = 'epe_dbmultimedia';
+    $wrapper = entity_metadata_wrapper('node', node_load($dataset->nid));
+    if($dataset->type == 'web_resource' && $wrapper->field_resource_origin->value() == 'slideshare') { $current_module = 'epe_dbdocument'; }
+  }
+
+  switch($dataset->type) {
+    case 'cm_resource':
+      module_load_include('inc',$current_module,"inc/{$current_module}.rest.api");
+      $function = $current_module . '_data_restful_api_build';
+      $data = $function($dataset->nid);
+    break;
+
+    case 'ev_tool_instance':
+      module_load_include('inc',$current_module,"inc/{$current_module}.api");
+      $function = $current_module . '_restful_api_node_build';
+      $data = $function($dataset->nid);
+    break;
+
+    default:
+      module_load_include('inc',$current_module,"inc/{$current_module}.rest.api");
+      $function = $current_module . '_restful_api_node_build';
+      $data = $function($dataset->nid);
+    break;
+  }
 
   return $data;
 }
@@ -1001,23 +911,34 @@ function epe_llb_theme_file_dataset($dataset) {
         $output = '<video id="video_' . $dataset->nid . '" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="' . image_style_url("llb_detail_view",$dataset->uri) . '"><source src="' . file_create_url($dataset->file) . '" /></video>';
       break;
 
+      case 'llb_resource':
+        $output = '<a href="' . base_path() . 'node/' . $dataset->nid .'/detail">' . $output . '</a>';
+      break;
+
       default:
         $output = '<a href="' . file_create_url($dataset->file) .'">' . $output . '</a>';
       break;
     }
   }
 
-  return '<center>' . $output . '</center>';
+  $output = '<div class="clearfix"><center>' . $output . '</center></div>';
+  $output .= '<div class="clearfix"><a href="'. base_path() .'node/'. $dataset->nid .'" class="pull-right">View Resource Page</a></div>';
+
+  return $output;
 }
 
 function epe_llb_reload_dataset($dataset, $assoc_resources) {
-  $data = $assoc_resources[$dataset->nid];
-  $dataset->thumbnail = '';
-  if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
-  if(isset($data->uri)): $dataset->uri = $data->uri; endif;
-  if(isset($data->file)): $dataset->file = $data->file; endif;
-  if(isset($data->credit)): $dataset->credit = $data->credit; endif;
-  if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
+  if($dataset->nid != 'NULL') {
+    $data = json_decode($assoc_resources[$dataset->nid]);
+
+    $dataset->thumbnail = base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg';
+    if(isset($data->thumbnail) && $data->thumbnail != ''): $dataset->thumbnail = $data->thumbnail; endif;
+    if(isset($data->uri)): $dataset->uri = $data->uri; endif;
+    if(isset($data->file)): $dataset->file = $data->file; endif;
+    if(isset($data->credit)): $dataset->credit = $data->credit; endif;
+    if(isset($data->source_url)): $dataset->source_url = $data->source_url; endif;
+    if(isset($data->html)): $dataset->html = $data->html; endif;
+  }
 
   return $dataset;
 }
@@ -1054,81 +975,9 @@ function epe_llb_default_rules_configuration() {
  *
  */
 function epe_llb_default_search_api_index() {
+  module_load_include('inc','epe_db','inc/epe_db.search_api_index_base_definition');
   $items = array();
-  $items['llb_resource_index'] = entity_create('search_api_index', array(
-    'name' => 'llb resource index',
-    'machine_name' => 'llb_resource_index',
-    'description' => null,
-    'server' => 'database_service',
-    'item_type' => 'node',
-    'options' => array(
-      'index_directly' => 1,
-      'cron_limit' => '50',
-      'fields' => array(
-        'nid' => array('type'=>'integer'),
-        'type' => array('type'=>'string'),
-        'title' => array('type'=>'text'),
-        'url' => array('type'=>'string'),
-        'status' => array('type'=>'integer'),
-        'promote' => array('type'=>'boolean'),
-        'created' => array('type'=>'date'),
-        'changed' => array('type'=>'date'),
-        'author' => array('type'=>'integer', 'entity_type'=>'user'),
-        'search_api_language' => array('type'=>'string'),
-        'author:uid' => array('type'=>'integer'),
-        'author:name' => array('type'=>'string'),
-        'author:mail' => array('type'=>'string'),
-        'author:field_account_fname' => array('type'=>'text'),
-        'author:field_account_lname' => array('type'=>'text'),
-        'author:field_account_organization' => array('type'=>'text'),
-        'body:value' => array('type'=>'text'),
-        'body:summary' => array('type'=>'text'),
-      ),
-      'data_alter_callbacks' => array(
-        'search_api_alter_bundle_filter' => array(
-          'status' => 1,
-          'weight' => '-10',
-          'settings' => array(
-            'default' => 0,
-            'bundles' => array('llb_resource'=>'llb_resource'),
-          ),
-          'search_api_alter_node_access' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
-          'search_api_alter_node_status' => array('status'=>0, 'weight'=>'0', 'settings'=>array()),
-          'search_api_alter_add_hierarchy' => array('status'=>0, 'weight'=>'0', 'settings'=>array('fields'=>array())),
-          'search_api_alter_add_viewed_entity' => array('status'=>0, 'weight'=>'0', 'settings'=>array('mode'=>'full')),
-          'search_api_alter_add_url' => array('status'=>0, 'weight'=>0, 'settings'=>array()),
-          'search_api_alter_add_aggregation' => array('status'=>1,'weight'=>0,'settings'=>array(
-                'fields'=>array('search_api_aggregation_1'=>array(
-                  'name'=>'title_main_body_fulltext_search',
-                  'type'=>'fulltext',
-                  'fields'=>array('title','body:value'),
-                  'description'=>'A Fulltext aggregation of the following fields: Title, The main body text \\u00bb Text.',
-                ),
-              ),
-            ),
-          ),
-        ),
-        'processors' => array(
-          'search_api_case_ignore' => array('status'=>0, 'weight'=>0, 'settings'=>array('fields'=>array('title'=>true, 'body:value'=>true))),
-          'search_api_html_filter' => array('status'=>0, 'weight'=>'10',
-            'settings'=>array(
-              'fields'=>array('title'=>true, 'body:value'=>true),
-              'title'=>0, 'alt'=>1, 'tags'=>array('h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5'),
-            ),
-          ),
-          'search_api_tokenizer' => array('status'=>0, 'weight'=>'20',
-            'fields'=>array('title'=>true, 'body:value'=>true),
-            'spaces'=>'[^[:alnum:]]','ignorable'=>'[\\u0027]',
-          ),
-          'search_api_stopwords' => array('status'=>0, 'weight'=>'30', 'fields'=>array('title'=>true, 'body:value'=>true),'file'=>'','stopwords'=>'but\\r\\ndid\\r\\nthe this that those\\r\\netc',
-          )
-        ),
-      ),
-    ),
-    'enabled' => '1',
-    'read_only' => '0',
-    'rdf_mapping' => array(),
-  ));
+  $items['llb_resource_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('llb resource search index','llb_resource_index',array('llb_resource')));
   return $items;
 }
 

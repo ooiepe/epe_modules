@@ -79,6 +79,7 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
   $scope.currentCopies = {};
   $scope.currentCopies.keys = [];
   $scope.currentCopies.items = [];
+  $scope.failed_messages = "";
 
   $scope.items = dataset_data.items;
 
@@ -137,6 +138,23 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
       $scope.currentCopies.items[hashkey].questions.splice(index, 1);
     }
 
+    $scope.copyDataSet = function(index) {
+      var apiurl = Drupal.settings.epe.base_path + 'api/resource/clone/' + $scope.items[index].nid;
+      $http({
+        method: 'GET',
+        url: apiurl
+      }).then(function(data) {
+        if(data.data.message != 'undefined') {
+          data.data.questions = [];
+          var timestamp = new Date().getTime();
+          data.data.key = '' + $scope.items.length + 1 + data.data.nid + timestamp;
+          $scope.items.push(data.data);
+        } else {
+          $scope.failed_messages = "Error cloning resource.  Please contact EPE team for further assistant.";
+        }
+      });
+    }
+
     $window.saveDatasets = function() {
       angular.forEach($scope.currentCopies.keys, function(key, index) {
         //$scope.fn.saveEditItem(key);
@@ -153,6 +171,13 @@ app.controller('dataset', function($window, $scope, dataset_data, $http) {
       $scope.currentCopies.keys = [];
       $scope.currentCopies.items = [];
       $scope.$digest();
+    }
+
+    $scope.fn.rearrangeItems = function(from, to) {
+      var target = $scope.items[from];
+      //remove
+      $scope.items.splice(from, 1);
+      $scope.items.splice(to, 0, target);
     }
 });
 

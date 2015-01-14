@@ -1,0 +1,16 @@
+name = EPE Web Resource
+description = EPE Web resource content type package
+core = 7.x
+package = EPE
+version = 7.x-0.1-alpha
+project = epe_web_resource
+
+dependencies[] = epe_db
+dependencies[] = epe_dbfiles
+dependencies[] = entity
+dependencies[] = context
+dependencies[] = semanticviews
+dependencies[] = views_php
+dependencies[] = views_json
+dependencies[] = token
+dependencies[] = link

@@ -1,0 +1,104 @@
+<?php
+/**
+ * Implements hook_node_info().
+ */
+function epe_web_resource_node_info() {
+  $items = array(
+    'web_resource' => array(
+      'name' => t('Web resource'),
+      'base' => 'node_content',
+      'description' => t('Use <em>web resource</em> when creating web/internet resource object'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_web_resource_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_web_resource') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('node');
+  foreach ($hooks as $h) {
+    _epe_web_resource_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_web_resource_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}
+
+/**
+ * Implements hook_node_type_insert().
+ */
+function epe_web_resource_node_type_insert($content_type) {
+  if ($content_type->type == 'web_resource') {
+    module_load_include('inc','epe_web_resource','inc/epe_web_resource.field_base');
+    module_load_include('inc','epe_web_resource','inc/epe_web_resource.field_instance');
+
+    // Create all the fields we are adding to our content type.
+    foreach (_web_resource_installed_fields() as $field) {
+      //in case content type share fields
+      if(!field_info_field($field['field_name'])) {
+        field_create_field($field);
+      }
+    }
+
+    // Create all the instances for our fields.
+    foreach (_web_resource_installed_instances() as $instance) {
+      field_create_instance($instance);
+    }
+
+    //assign custom content type permission
+    _assign_web_resource_object_permission();
+  }
+}
+
+/*
+ * assign custom content type permission base on epe supported author roles
+ * the epe supported author roles is added from epe_wp module
+ */
+function _assign_web_resource_object_permission() {
+  foreach(variable_get('EPE_SUPPORTED_AUTHOR_ROLES',array()) as $role_name) {
+    $role = user_role_load_by_name($role_name);
+    $role_perm = user_role_permissions(array($role->rid=>$role_name)); //get permission for role
+    $author_permissions = array(
+      'epe dbfiles interface' => array('grant' => TRUE, 'module' => 'epe_dbfiles'),
+      'create web_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'delete any web_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'delete own web_resource content' => array('grant' => TRUE, 'module' => 'node'),
+      'edit any web_resource content' => array('grant' => FALSE, 'module' => 'node'),
+      'edit own web_resource content' => array('grant' => TRUE, 'module' => 'node'),
+    );
+    //I am not sure what hook I should use to invoke user_role_grant_permissions function
+    //with the current implementation, hook_node_type_insert has not create the associated permission at this stage
+    foreach($author_permissions as $key=>$assignment) {
+      if($assignment['grant'] && !array_key_exists($key, $role_perm[$role->rid])) {
+        db_insert('role_permission')
+          ->fields(array(
+            'rid' => $role->rid,
+            'permission' => $key,
+            'module' => $assignment['module'],
+          ))
+          ->execute();
+      }
+    }
+  }
+
+  // Clear the user access cache.
+  drupal_static_reset('user_access');
+  drupal_static_reset('user_role_permissions');
+}

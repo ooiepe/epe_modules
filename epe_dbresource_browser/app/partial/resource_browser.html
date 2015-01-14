@@ -10,7 +10,7 @@
 
 <div class="rb-type-selector">
   <ul ng-show="browser.enabled_modules.length > 1" class="clearfix">
-    <li ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
+    <li title="{{module.label}}" ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
   </ul>
 
 <div class="rb-ads" ng-show="!browser.selected_module.editmode">
@@ -24,13 +24,16 @@
 
 <table>
   <thead>
-    <th>Title/Info</th>
-    <th width="134">Author</th>
-    <th width="134">Modify date</th>
+    <th><a ng-click="fn.sortResults('title')" ng-class="fn.selectedClass('title')">Title/Info</a></th>
+    <th width="134"><a ng-click="fn.sortResults('author')" ng-class="fn.selectedClass('author')">Author</a></th>
+    <th width="134"><a ng-click="fn.sortResults('last_updated')" ng-class="fn.selectedClass('last_updated')">Modify Date</a></th>
   </thead>
   <tbody>
-    <tr ng-show="browser.data.length < 1">
-      <td colspan="3" style="text-align:center;">No {{browser.selected_module.type}} Found</td>
+    <tr ng-show="browser.messages.show_messages">
+      <td colspan="3" style="text-align:center;">
+        <img ng-show="browser.messages.show_progress_bar" src="{{browser.assets_path}}/loading_bar.gif" alt="Loading Content" />
+        <p>{{browser.messages.messages}}</p>
+      </td>
     </tr>
     <tr tabular-data ng-repeat="data in browser.data"
       row="data" type="browser.selected_module.api">
@@ -39,5 +42,5 @@
 </table>
 
 <div class="paging" ng-show="browser.selected_module.numberofpages > 1">
-  <span ng-repeat="n in [] | range:browser.selected_module.numberofpages"><a ng-click="fn.setCurrentPage(n+1)" ng-class="fn.setActivePage(n+1)">{{n+1}}</a></span>
+  <span ng-repeat="n in [] | range:browser.selected_module.numberofpages"><a ng-click="fn.setCurrentPage(n+1)" ng-class="fn.setPageClass(n+1)">{{n+1}}</a></span>
 </div>

@@ -55,6 +55,21 @@ function epe_llb_install() {
   variable_set('node_options_llb_resource',array());
   variable_set('node_preview_llb_resource','0');
   variable_set('node_submitted_llb_resource',0);
+
+  if(!taxonomy_vocabulary_machine_name_load('resource_keywords')) {
+    $vocab = (object) array(
+      'name' => 'Resource Keywords',
+      'description' => 'Tagging resources',
+      'machine_name' => 'resource_keywords',
+    );
+
+    taxonomy_vocabulary_save($vocab);
+  }
+
+  module_load_include('inc','epe_llb','epe_llb.textfield_filter');
+  $filter_format = _epe_llb_textfield_filter();
+  $filter_format = (object) $filter_format;
+  filter_format_save($filter_format);
 }
 
 /*
@@ -69,14 +84,14 @@ function epe_llb_enable() {
     ->execute();
 
   $modules = variable_get('EPE_CONTENT_MODULES',array());
-  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Lessons','api'=>'llb','adurl'=>'node/add/llb-resource','weight'=>3));
+  $modules['epe_llb'] = array('content_type' => 'llb_resource', 'resource_browser' => array('label'=>'Investigations','api'=>'llb','adurl'=>'node/add/llb-resource','weight'=>3));
   variable_set('EPE_CONTENT_MODULES', $modules);
 
   $epe_menu = variable_get('epe_menu',array());
 
   $node = new stdClass();
   $node->type = "page";
-  $node->title = "Lessons";
+  $node->title = "Investigations";
   $node->language = LANGUAGE_NONE;
   $node->path = array('alias' => 'llb');
   node_object_prepare($node);
@@ -87,7 +102,7 @@ function epe_llb_enable() {
 
   $item = array(
     'link_path' => 'node/' . $node->nid,
-    'link_title' => 'Lessons',
+    'link_title' => 'Investigations',
     'menu_name' => 'main-menu',
     'weight' => 3,
     'expanded' => 0,
@@ -98,7 +113,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'node/' . $node->nid,
-      'link_title' => 'About Lessons',
+      'link_title' => 'About Investigations',
       'menu_name' => 'main-menu',
       'weight' => 1,
       'expanded' => 0,
@@ -108,7 +123,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'node/add/llb-resource',
-      'link_title' => 'Create a Lesson',
+      'link_title' => 'Create an Investigation',
       'menu_name' => 'main-menu',
       'weight' => 2,
       'expanded' => 0,
@@ -118,7 +133,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?filter=author&type=' . $modules['epe_llb']['resource_browser']['api'],
-      'link_title' => 'My Lessons',
+      'link_title' => 'My Investigations',
       'menu_name' => 'main-menu',
       'weight' => 3,
       'expanded' => 0,
@@ -128,7 +143,7 @@ function epe_llb_enable() {
 
   $item = array(
       'link_path' => 'http://' . $_SERVER['HTTP_HOST'] . base_path() . 'resource-browser#/search?type=' . $modules['epe_llb']['resource_browser']['api'],
-      'link_title' => 'Browse Lessons',
+      'link_title' => 'Browse Investigations',
       'menu_name' => 'main-menu',
       'weight' => 4,
       'expanded' => 0,
@@ -457,4 +472,147 @@ function epe_llb_update_7007(&$sandbox) {
   module_load_include('inc','epe_llb','epe_llb.views_default');
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
+}
+
+/**
+  * epedev-418: add new filter format for llb textfields, and modify existing llb textfield to use the new filter format
+ * epedev-432: fix title index type to string so it becomes sortable
+ * epedev-462: change references from Lessons to Investigations
+ * epedev-458: update field_resource_file field allow extension to match document resource's allow file type
+ * epedev-426: add investigation level and teaching mode field
+ */
+function epe_llb_update_7008(&$sandbox) {
+  $search_api_index = entity_load_single('search_api_index', 'llb_resource_index');
+
+  $search_api_index->options['fields']['title'] = array('type'=>'string');
+  $search_api_index->options['fields']['author:field_account_lname'] = array('type'=>'string');
+  $search_api_index->options['fields']['author:field_account_fname'] = array('type'=>'string');
+  entity_save('llb_resource_index', $search_api_index);
+
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
+
+  $modules = variable_get('EPE_CONTENT_MODULES',array());
+  $modules['epe_llb']['resource_browser']['label'] = 'Investigations';
+  variable_set('EPE_CONTENT_MODULES', $modules);
+
+  $field_resource_file = field_info_instance('node', 'field_resource_file', 'llb_resource');
+  $field_resource_file['settings']['file_extensions'] = 'txt, pdf, doc, docx, ppt, pptx, xls, xlsx';
+  field_update_instance($field_resource_file);
+
+  module_load_include('inc','epe_llb','inc/epe_llb.field_base');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance');
+
+  /* recreate the same field base with text data type */
+  foreach (_epe_llb_field_default_field_bases() as $field) {
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  /* recreate the same field instance with text data type */
+  foreach (_epe_llb_field_default_field_instances() as $instance) {
+    if(!field_info_instance('node', $instance['field_name'], 'llb_resource')) {
+      field_create_instance($instance);
+    }
+  }
+
+  if(!taxonomy_vocabulary_machine_name_load('resource_keywords')) {
+    $vocab = (object) array(
+      'name' => 'Resource Keywords',
+      'description' => 'Tagging resources',
+      'machine_name' => 'resource_keywords',
+    );
+
+    taxonomy_vocabulary_save($vocab);
+  }
+
+  module_load_include('inc','epe_llb','inc/epe_llb.textfield_filter');
+  $filter_format = _epe_llb_textfield_filter();
+  $filter_format = (object) $filter_format;
+  filter_format_save($filter_format);
+
+  $alter_fields = array('body','field_resource_file_note','field_background_content','field_challenge_content','field_explanation_content','field_guidance_content','field_instructional_content','field_introductory_content','field_preconception_content','field_resources_content','field_student_objectives');
+  foreach($alter_fields as $alter_field) {
+    $field_instance = field_info_instance('node', $alter_field, 'llb_resource');
+    $field_instance['settings']['better_formats']['allowed_formats']['filtered_html'] = 0;
+    $field_instance['settings']['better_formats']['allowed_formats']['llb_textfield_filter'] = 'llb_textfield_filter';
+    field_update_instance($field_instance);
+  }
+  //administrator, author, moderator
+  foreach(array(user_role_load_by_name('administrator'),user_role_load_by_name('author'),user_role_load_by_name('moderator')) as $role) {
+    user_role_grant_permissions($role->rid,array('use text format llb_textfield_filter'));
+  }
+}
+
+/**
+ * Release 3.4 bug fix:
+ * Fix search api index view definition, delete existing search api index and allow hook_default_search_api_index function to create the correct search api index
+ * Fix resource_file_node field to use llb textfield filter text format
+ */
+function epe_llb_update_7009(&$sandbox) {
+  entity_delete('search_api_index','llb_resource_index');
+
+  $field_resource_file = field_info_instance('node', 'field_resource_file_note', 'llb_resource');
+  $field_resource_file['settings']['better_formats']['allowed_formats'] = array(
+    'filtered_html' => 0,
+    'llb_textfield_filter' => 'llb_textfield_filter',
+    'full_html' => 0,
+    'plain_text' => 0,
+  );
+  field_update_instance($field_resource_file);
+}
+
+/**
+ * Additional 3.4 release fixes
+ * Fix link title typo
+ */
+function epe_llb_update_7010(&$sandbox) {
+  $results = db_select('menu_links','a')
+            ->fields('a',array('mlid'))
+            ->condition('link_title','Create a Investigation','=')
+            ->execute();
+  foreach ($results as $result) {
+    $menu_item = menu_link_load($result->mlid);
+    $menu_item['link_title'] = 'Create an Investigation';
+    menu_link_save($menu_item);
+  }
+
+  $field_resource_keywords = field_info_instance('node', 'field_resource_keywords', 'llb_resource');
+  $field_resource_keywords['display']['default']['settings']['taxonomy_term_link'] = FALSE;
+  $field_resource_keywords['display']['llb_instructor']['settings']['taxonomy_term_link'] = FALSE;
+  field_update_instance($field_resource_keywords);
+
+  $alter_fields = array('body','field_resource_file_note','field_background_content','field_challenge_content','field_explanation_content','field_guidance_content','field_instructional_content','field_introductory_content','field_preconception_content','field_resources_content','field_student_objectives');
+  foreach($alter_fields as $alter_field) {
+    $field_instance = field_info_instance('node', $alter_field, 'llb_resource');
+    $field_instance['settings']['better_formats']['allowed_formats']['filtered_html'] = 0;
+    $field_instance['settings']['better_formats']['allowed_formats']['llb_textfield_filter'] = 'llb_textfield_filter';
+    field_update_instance($field_instance);
+  }
+}
+
+/**
+ * Release 3.5 task:
+ * EPEDEV-427
+ * update permission to use Data Investigation copy api
+ */
+function epe_llb_update_7011(&$sandbox) {
+  //administrator, author, moderator
+  foreach(array(user_role_load_by_name('administrator'),user_role_load_by_name('author'),user_role_load_by_name('moderator')) as $role) {
+    user_role_grant_permissions($role->rid,array('epe node clone api'));
+  }
+}
+
+/**
+ * epedev release-3.4 fixes
+ * fix resource file field allowable file extension
+ */
+function epe_llb_update_7012(&$sandbox) {
+  $field_resource_file = field_info_instance('node', 'field_resource_file', 'llb_resource');
+  module_load_include('inc','epe_llb','inc/epe_llb.field_instance');
+  $field_instances = _epe_llb_field_default_field_instances();
+  $field_resource_file['settings']['file_extensions'] = $field_instances['node-llb_resource-field_resource_file']['settings']['file_extensions'];
+  field_update_instance($field_resource_file);
 }

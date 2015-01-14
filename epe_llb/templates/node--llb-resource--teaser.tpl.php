@@ -17,6 +17,7 @@
 -->
 <?php
   $showContent = false;
+  $custom_node_detail_url = $GLOBALS['base_url'] . "/node/" . $node->nid . '/detail';
   include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
 ?>
 
@@ -44,8 +45,8 @@
               try{
                 $thumbnail_node_info = json_decode($content['field_challenge_thumbnail']['#items'][0]['value']);
                 foreach($thumbnail_node_info as $info) {
-                  $node_info = epe_llb_dataset_query($info);
-                  $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $node_info->uri, 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
+                  //$node_info = epe_llb_dataset_query($info);
+                  $thumbnail = array('style_name' => 'llb_teaser_view', 'path' => $thumbnail_node_info[0]->uri, 'alt' => '', 'title' => '', 'attributes' => array('class'=>'img-polaroid'));
                   echo theme('image_style', $thumbnail);
                 }
               } catch (exception $e) {
