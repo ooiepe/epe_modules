@@ -306,9 +306,46 @@ function epe_db_permission() {
   );
 }
 
+/**
+ * Implements hook_bean_types_api_info().
+ */
+function epe_db_bean_types_api_info() {
+  return array('api' => 4);
+}
+
+/**
+ * Implements hook_bean_types().
+ */
+function epe_db_bean_types() {
+  $plugins = array();
+  $plugins['content_rotator'] = array(
+    'label' => t('Content Rotator'),
+    'description' => t('Use this &lt;em&gt;Content Rotator&lt;/em&gt; to create an embeddable carousel block'),
+  );
+  return $plugins;
+}
 
 
+/**
+ * Implements hook_theme_registry_alter()
+**/
+function epe_db_theme_registry_alter(&$theme_registry) {
+  $template_path = drupal_get_path('module', 'epe_db') . '/templates';
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $template_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('bean');
+  foreach ($hooks as $h) {
+    _epe_db_insert_after_first_element($theme_registry[$h]['theme paths'], $template_path);
+  }
+}
 
-
-
-
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _epe_db_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
+}

@@ -809,3 +809,20 @@ function epe_db_update_7000(&$sandbox) {
 
 }
 
+/**
+ * epedev-417: create custom field for bean content rotator
+ */
+function epe_db_update_7001(&$sandbox) {
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_base');
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_instance');
+
+  // Create all the fields we are adding to our content type.
+  foreach (_epe_db_content_rotator_field_default_field_bases() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  foreach (_epe_db_content_rotator_field_default_field_instances() as $instance) {
+    field_create_instance($instance);
+  }
+}
