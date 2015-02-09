@@ -1119,6 +1119,11 @@ function epe_db_views_default_views() {
   $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
   $handler->display->display_options['fields']['count']['field'] = 'count';
   $handler->display->display_options['fields']['count']['label'] = 'Page View Past Month';
+  /* Field: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['fields']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['fields']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['fields']['count_2']['field'] = 'count';
+  $handler->display->display_options['fields']['count_2']['label'] = 'Page View All Time';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Nid */
