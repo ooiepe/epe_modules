@@ -156,8 +156,7 @@ function giveXMLtoJS(value) {
 
   <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
-
-
+  <?php echo views_embed_view('resource_statistics', 'node_stats', array($node->nid)); ?>
 
   <?php print render($content['comments']); ?>
 

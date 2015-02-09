@@ -78,6 +78,8 @@
 </div>
 </div>
 
+<?php echo views_embed_view('resource_statistics', 'node_stats', array($node->nid)); ?>
+
 <?php print render($content['comments']); ?>
 
 </article> <!-- /.node -->
