@@ -826,3 +826,13 @@ function epe_db_update_7001(&$sandbox) {
     field_create_instance($instance);
   }
 }
+
+/**
+ * epedev-417 create content rotator instance programmatically
+ */
+function epe_db_update_7002(&$sandbox) {
+  $bean = bean_create(array('type' => 'content_rotator'));
+  $bean->label = 'Homepage Content Rotator';
+  $bean->delta = 'homepage-rotator';
+  $bean->save();
+}
