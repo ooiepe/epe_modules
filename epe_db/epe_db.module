@@ -103,6 +103,17 @@ function epe_db_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $result = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','review','=')->execute()->fetchAssoc();
+
+  $items['review/resources/stats'] = array(
+    'title' => t('Resources Page View Stats'),
+    'page callback' => 'epe_db_stats_view',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 2,
+    'plid' => $result['mlid'],
+  );
 
   return $items;
 }
@@ -141,8 +152,17 @@ function epe_db_theme() {
         'tag' => array(),
       ),
     ),
+    'epe_db_stats_view' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_db_stats_view',
+    ),
   );
 }
+
+function epe_db_stats_view() {
+  return theme('epe_db_stats_view');
+}
+
 
 function epe_db_help_content_render($content, $element) {
   $theme_key = 'epe_help_index_content';
