@@ -596,439 +596,55 @@ function epe_db_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Statistics: Page Views in the past 31 days */
+  $handler->display->display_options['fields']['count']['id'] = 'count';
+  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
+  $handler->display->display_options['fields']['count']['field'] = 'count';
+  $handler->display->display_options['fields']['count']['label'] = 'Page Views: Month';
   /* Field: Statistics: Page Views in the past 365 days */
   $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
   $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
   $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Past Year';
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'image_resource' => 'image_resource',
-  );
-
-  /* Display: Viz Monthly */
-  $handler = $view->new_display('block', 'Viz Monthly', 'vizmonth');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Visualization This Month';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Views Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'ev_tool_instance' => 'ev_tool_instance',
-  );
-
-  /* Display: Viz Yearly */
-  $handler = $view->new_display('block', 'Viz Yearly', 'vizyear');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Visualization This Year';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Past Year';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'ev_tool_instance' => 'ev_tool_instance',
-  );
-
-  /* Display: Image Yearly */
-  $handler = $view->new_display('block', 'Image Yearly', 'imgyear');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Images This Year';
-
-  /* Display: Image Monthly */
-  $handler = $view->new_display('block', 'Image Monthly', 'imgmonth');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Images This Month';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'image_resource' => 'image_resource',
-  );
-
-  /* Display: Doc Monthly */
-  $handler = $view->new_display('block', 'Doc Monthly', 'docmonth');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Documents This Month';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'document_resource' => 'document_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: Doc Yearly */
-  $handler = $view->new_display('block', 'Doc Yearly', 'docyear');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Documents This Year';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Past Year';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'document_resource' => 'document_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: Multimedia Monthly */
-  $handler = $view->new_display('block', 'Multimedia Monthly', 'multimonth');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Multimedia This Month';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'audio_resource' => 'audio_resource',
-    'video_resource' => 'video_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: Multimedia Yearly */
-  $handler = $view->new_display('block', 'Multimedia Yearly', 'multiyear');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Multimedia This Year';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'audio_resource' => 'audio_resource',
-    'video_resource' => 'video_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: CM Monthly */
-  $handler = $view->new_display('block', 'CM Monthly', 'cmonth');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Concept Maps This Month';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'cm_resource' => 'cm_resource',
-  );
-
-  /* Display: CM Yearly */
-  $handler = $view->new_display('block', 'CM Yearly', 'cmyear');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Concept Maps This Year';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Past Year';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'cm_resource' => 'cm_resource',
-  );
-
-  /* Display: Resource stats */
-  $handler = $view->new_display('block', 'Resource stats', 'node_stats');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = '<none>';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Page View Past Year';
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Page View Past Month';
+  $handler->display->display_options['fields']['count_1']['label'] = 'Page Views: Year';
   /* Field: Statistics: Page Views since 2005 began */
   $handler->display->display_options['fields']['count_2']['id'] = 'count_2';
   $handler->display->display_options['fields']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
   $handler->display->display_options['fields']['count_2']['field'] = 'count';
-  $handler->display->display_options['fields']['count_2']['label'] = 'Page View All Time';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Nid */
-  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
-  $handler->display->display_options['arguments']['nid']['table'] = 'node';
-  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
-  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
-  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  $handler->display->display_options['block_description'] = 'Resource statistics';
+  $handler->display->display_options['fields']['count_2']['label'] = 'Page Views: All Time';
+  /* Sort criterion: Statistics: Page Views in the past 31 days */
+  $handler->display->display_options['sorts']['count']['id'] = 'count';
+  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
+  $handler->display->display_options['sorts']['count']['field'] = 'count';
+  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views in the past 365 days */
+  $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
+  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_year';
+  $handler->display->display_options['sorts']['count_1']['field'] = 'count';
+  $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['sorts']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['sorts']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count_2']['field'] = 'count';
+  $handler->display->display_options['sorts']['count_2']['order'] = 'DESC';
+  /* Filter criterion: Content: Public Status (field_public_status) */
+  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
+  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
+    'Public' => 'Public',
+  );
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'cm_resource' => 'cm_resource',
+  );
 
-  /* Display: Viz All Time */
-  $handler = $view->new_display('block', 'Viz All Time', 'vizall');
+  /* Display: Viz Views */
+  $handler = $view->new_display('block', 'Viz Views', 'vizviews');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Visualization All Time';
+  $handler->display->display_options['title'] = '<none>';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -1036,17 +652,37 @@ function epe_db_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views since 2005 began */
+  /* Field: Statistics: Page Views in the past 31 days */
+  $handler->display->display_options['fields']['count']['id'] = 'count';
+  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
+  $handler->display->display_options['fields']['count']['field'] = 'count';
+  $handler->display->display_options['fields']['count']['label'] = 'Page Views: Month';
+  /* Field: Statistics: Page Views in the past 365 days */
   $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
   $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Page Views All Time';
+  $handler->display->display_options['fields']['count_1']['label'] = 'Page Views: Year';
+  /* Field: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['fields']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['fields']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['fields']['count_2']['field'] = 'count';
+  $handler->display->display_options['fields']['count_2']['label'] = 'Page Views: All Time';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
+  /* Sort criterion: Statistics: Page Views in the past 31 days */
   $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
   $handler->display->display_options['sorts']['count']['field'] = 'count';
   $handler->display->display_options['sorts']['count']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views in the past 365 days */
+  $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
+  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_year';
+  $handler->display->display_options['sorts']['count_1']['field'] = 'count';
+  $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['sorts']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['sorts']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count_2']['field'] = 'count';
+  $handler->display->display_options['sorts']['count_2']['order'] = 'DESC';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Public Status (field_public_status) */
@@ -1064,10 +700,10 @@ function epe_db_views_default_views() {
     'ev_tool_instance' => 'ev_tool_instance',
   );
 
-  /* Display: Image All Time */
-  $handler = $view->new_display('block', 'Image All Time', 'imgall');
+  /* Display: File Views */
+  $handler = $view->new_display('block', 'File Views', 'fileviews');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Images All Time';
+  $handler->display->display_options['title'] = '<none>';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -1075,16 +711,41 @@ function epe_db_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views since 2005 began */
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  /* Field: Statistics: Page Views in the past 31 days */
+  $handler->display->display_options['fields']['count']['id'] = 'count';
+  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
+  $handler->display->display_options['fields']['count']['field'] = 'count';
+  $handler->display->display_options['fields']['count']['label'] = 'Page Views: Month';
+  /* Field: Statistics: Page Views in the past 365 days */
   $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
   $handler->display->display_options['fields']['count_1']['field'] = 'count';
+  $handler->display->display_options['fields']['count_1']['label'] = 'Page Views: Year';
+  /* Field: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['fields']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['fields']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['fields']['count_2']['field'] = 'count';
+  $handler->display->display_options['fields']['count_2']['label'] = 'Page Views: All Time';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
+  /* Sort criterion: Statistics: Page Views in the past 31 days */
+  $handler->display->display_options['sorts']['count']['id'] = 'count';
+  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
+  $handler->display->display_options['sorts']['count']['field'] = 'count';
+  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views in the past 365 days */
   $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_year';
   $handler->display->display_options['sorts']['count_1']['field'] = 'count';
   $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['sorts']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['sorts']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count_2']['field'] = 'count';
+  $handler->display->display_options['sorts']['count_2']['order'] = 'DESC';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Public Status (field_public_status) */
@@ -1094,177 +755,27 @@ function epe_db_views_default_views() {
   $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
     'Public' => 'Public',
   );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'image_resource' => 'image_resource',
-  );
-
-  /* Display: Doc All Time */
-  $handler = $view->new_display('block', 'Doc All Time', 'docall');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Documents All Time';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['sorts']['count_1']['field'] = 'count';
-  $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'document_resource' => 'document_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: Multimedia All Time */
-  $handler = $view->new_display('block', 'Multimedia All Time', 'multiall');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Multimedia All Time';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['sorts']['count_1']['field'] = 'count';
-  $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'audio_resource' => 'audio_resource',
+    'document_resource' => 'document_resource',
+    'image_resource' => 'image_resource',
     'video_resource' => 'video_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: CM All Time */
-  $handler = $view->new_display('block', 'CM All Time', 'cmall');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Concept Maps All Time';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['sorts']['count_1']['field'] = 'count';
-  $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'cm_resource' => 'cm_resource',
+    'web_resource' => 'web_resource',
   );
 
-  /* Display: DIS All Time */
-  $handler = $view->new_display('block', 'DIS All Time', 'disall');
+  /* Display: CM Views */
+  $handler = $view->new_display('block', 'CM Views', 'cmviews');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Data Investigation All Time';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['sorts']['count_1']['field'] = 'count';
-  $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'llb_resource' => 'llb_resource',
-  );
+  $handler->display->display_options['title'] = '<none>';
 
-  /* Display: DIS Monthly */
-  $handler = $view->new_display('block', 'DIS Monthly', 'dismonth');
+  /* Display: LLB Views */
+  $handler = $view->new_display('block', 'LLB Views', 'llbviews');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Data Investigation This Month';
+  $handler->display->display_options['title'] = '<none>';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -1276,173 +787,33 @@ function epe_db_views_default_views() {
   $handler->display->display_options['fields']['count']['id'] = 'count';
   $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
   $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Views Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'llb_resource' => 'llb_resource',
-  );
-
-  /* Display: DIS Yearly */
-  $handler = $view->new_display('block', 'DIS Yearly', 'disyear');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Data Investigation This Year';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['count']['label'] = 'Page Views: Month';
   /* Field: Statistics: Page Views in the past 365 days */
   $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
   $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
   $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Past Year';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'llb_resource' => 'llb_resource',
-  );
-
-  /* Display: Web Monthly */
-  $handler = $view->new_display('block', 'Web Monthly', 'block_1');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Web Resource This Month';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['fields']['count']['id'] = 'count';
-  $handler->display->display_options['fields']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['fields']['count']['field'] = 'count';
-  $handler->display->display_options['fields']['count']['label'] = 'Past Month';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 31 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'web_resource' => 'web_resource',
-  );
-
-  /* Display: Web Yearly */
-  $handler = $view->new_display('block', 'Web Yearly', 'block_2');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Web ResourcesThis Year';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
-  $handler->display->display_options['fields']['count_1']['label'] = 'Past Year';
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views in the past 365 days */
-  $handler->display->display_options['sorts']['count']['id'] = 'count';
-  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_year';
-  $handler->display->display_options['sorts']['count']['field'] = 'count';
-  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['filter_groups']['operator'] = 'OR';
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Public Status (field_public_status) */
-  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
-  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
-  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
-    'Public' => 'Public',
-  );
-  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'web_resource' => 'web_resource',
-  );
-  $handler->display->display_options['filters']['type']['group'] = 1;
-
-  /* Display: Web All Time */
-  $handler = $view->new_display('block', 'Web All Time', 'block_3');
-  $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Top 25 Web Resources All Time';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['count_1']['label'] = 'Page Views: Year';
   /* Field: Statistics: Page Views since 2005 began */
-  $handler->display->display_options['fields']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['fields']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
-  $handler->display->display_options['fields']['count_1']['field'] = 'count';
+  $handler->display->display_options['fields']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['fields']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['fields']['count_2']['field'] = 'count';
+  $handler->display->display_options['fields']['count_2']['label'] = 'Page Views: All Time';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Statistics: Page Views since 2005 began */
+  /* Sort criterion: Statistics: Page Views in the past 31 days */
+  $handler->display->display_options['sorts']['count']['id'] = 'count';
+  $handler->display->display_options['sorts']['count']['table'] = 'ga_stats_count_pageviews_month';
+  $handler->display->display_options['sorts']['count']['field'] = 'count';
+  $handler->display->display_options['sorts']['count']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views in the past 365 days */
   $handler->display->display_options['sorts']['count_1']['id'] = 'count_1';
-  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count_1']['table'] = 'ga_stats_count_pageviews_year';
   $handler->display->display_options['sorts']['count_1']['field'] = 'count';
   $handler->display->display_options['sorts']['count_1']['order'] = 'DESC';
+  /* Sort criterion: Statistics: Page Views since 2005 began */
+  $handler->display->display_options['sorts']['count_2']['id'] = 'count_2';
+  $handler->display->display_options['sorts']['count_2']['table'] = 'ga_stats_count_pageviews_forever';
+  $handler->display->display_options['sorts']['count_2']['field'] = 'count';
+  $handler->display->display_options['sorts']['count_2']['order'] = 'DESC';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Public Status (field_public_status) */
@@ -1457,7 +828,7 @@ function epe_db_views_default_views() {
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
-    'web_resource' => 'web_resource',
+    'llb_resource' => 'llb_resource',
   );
 
   $export['resource_statistics'] = $view;

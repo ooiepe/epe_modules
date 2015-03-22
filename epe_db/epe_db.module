@@ -155,12 +155,63 @@ function epe_db_theme() {
     'epe_db_stats_view' => array(
       'path' => $tpl_path,
       'template' => 'epe_db_stats_view',
+      'variables' => array(
+        'output' => '',
+        'params' => array(),
+      ),
     ),
   );
 }
 
 function epe_db_stats_view() {
-  return theme('epe_db_stats_view');
+  $params = drupal_get_query_parameters();
+  $output = '';
+  if(isset($params['type']) && isset($params['frequency'])) {
+    $view = views_get_view('resource_statistics');
+    $view->set_display($params['type'] . 'views');
+
+    if($params['frequency'] == 'month') {
+      $fields = $view->display_handler->get_option('fields');
+      unset($fields['count_1']);
+      unset($fields['count_2']);
+      $view->display_handler->override_option('fields', $fields);
+
+      $sort = $view->display_handler->get_option('sort');
+      unset($sort['count_1']);
+      unset($sort['count_2']);
+      $view->display_handler->override_option('sort', $sort);
+    }
+    if($params['frequency'] == 'year') {
+      $fields = $view->display_handler->get_option('fields');
+      unset($fields['count']);
+      unset($fields['count_2']);
+      $view->display_handler->override_option('fields', $fields);
+
+      $sort = $view->display_handler->get_option('sort');
+      unset($sort['count']);
+      unset($sort['count_2']);
+      $view->display_handler->override_option('sort', $sort);      
+    }
+    if($params['frequency'] == 'all') {
+      $fields = $view->display_handler->get_option('fields');
+      unset($fields['count']);
+      unset($fields['count_1']);
+      $view->display_handler->override_option('fields', $fields);
+
+      $sort = $view->display_handler->get_option('sort');
+      unset($sort['count']);
+      unset($sort['count_1']);
+      $view->display_handler->override_option('sort', $sort);      
+    }
+    $view->pre_execute();
+    $view->execute();
+
+    $output = $view->render();    
+  }
+
+  if(!$output) drupal_set_message(t("Plesae use the filter to view page stats."), 'warning');
+
+  return theme('epe_db_stats_view',array('output'=>$output,'params'=>$params));
 }
 
 
