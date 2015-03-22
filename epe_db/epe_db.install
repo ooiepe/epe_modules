@@ -836,3 +836,28 @@ function epe_db_update_7002(&$sandbox) {
   $bean->delta = 'homepage-rotator';
   $bean->save();
 }
+
+/**
+ * epedev-417 create additional rotator instances programmatically
+ */
+function epe_db_update_7003(&$sandbox) {
+  $bean = bean_create(array('type' => 'content_rotator'));
+  $bean->label = 'Visualizations Content Rotator';
+  $bean->delta = 'visualizations-rotator';
+  $bean->save();
+
+  $bean = bean_create(array('type' => 'content_rotator'));
+  $bean->label = 'Concept Maps Rotator';
+  $bean->delta = 'concept-maps-rotator';
+  $bean->save();
+
+  $bean = bean_create(array('type' => 'content_rotator'));
+  $bean->label = 'Investigations Rotator';
+  $bean->delta = 'investigations-rotator';
+  $bean->save();
+
+  $bean = bean_create(array('type' => 'content_rotator'));
+  $bean->label = 'File Resources Rotator';
+  $bean->delta = 'file-resources-rotator';
+  $bean->save();
+}
