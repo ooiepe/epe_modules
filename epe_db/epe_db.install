@@ -809,3 +809,12 @@ function epe_db_update_7000(&$sandbox) {
 
 }
 
+/**
+ * add missing update function to update resource_statistics view
+ */
+function epe_db_update_7001(&$sandbox) {
+  module_load_include('inc','epe_db','epe_db.views_default');
+  $view_definition = epe_db_views_default_views();
+  views_save_view($view_definition['resource_statistics']);
+}
+
