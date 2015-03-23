@@ -207,7 +207,8 @@ function epe_ev_views_default_views() {
            \'image_style\' => \'resource_browser_thumbnail\',
         ),
       ));
-      echo render($output);
+      //echo render($output);
+      echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
       ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';

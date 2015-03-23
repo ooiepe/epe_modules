@@ -306,3 +306,12 @@ function epe_cm_update_7008(&$sandbox) {
 function epe_cm_update_7010(&$sandbox) {
   entity_delete('search_api_index','epe_cm_search_index');
 }
+
+/**
+ * patches a problem with the cm thumbnail in the json output
+ */
+function epe_cm_update_7011(&$sandbox) {
+  module_load_include('inc','epe_cm','epe_cm.views_default');
+  $view_definition = epe_cm_views_default_views();
+  views_save_view($view_definition['epe_cm_search_view']);
+}
