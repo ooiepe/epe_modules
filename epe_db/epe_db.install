@@ -818,12 +818,16 @@ function epe_db_update_7001(&$sandbox) {
 
   // Create all the fields we are adding to our content type.
   foreach (_epe_db_content_rotator_field_default_field_bases() as $field) {
-    field_create_field($field);
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
   }
 
   // Create all the instances for our fields.
   foreach (_epe_db_content_rotator_field_default_field_instances() as $instance) {
-    field_create_instance($instance);
+    if(!field_info_instance('field_collection_item',$instance['field_name'],'field_rotator_content_fields')) {
+      field_create_instance($instance);
+    }    
   }
 }
 
@@ -831,33 +835,58 @@ function epe_db_update_7001(&$sandbox) {
  * epedev-417 create content rotator instance programmatically
  */
 function epe_db_update_7002(&$sandbox) {
-  $bean = bean_create(array('type' => 'content_rotator'));
-  $bean->label = 'Homepage Content Rotator';
-  $bean->delta = 'homepage-rotator';
-  $bean->save();
+  if(!bean_load_delta('homepage-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Homepage Content Rotator';
+    $bean->delta = 'homepage-rotator';
+    $bean->save();
+  }
 }
 
 /**
  * epedev-417 create additional rotator instances programmatically
  */
 function epe_db_update_7003(&$sandbox) {
-  $bean = bean_create(array('type' => 'content_rotator'));
-  $bean->label = 'Visualizations Content Rotator';
-  $bean->delta = 'visualizations-rotator';
-  $bean->save();
+  if(!bean_load_delta('visualizations-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Visualizations Content Rotator';
+    $bean->delta = 'visualizations-rotator';
+    $bean->save();
+  }
 
-  $bean = bean_create(array('type' => 'content_rotator'));
-  $bean->label = 'Concept Maps Rotator';
-  $bean->delta = 'concept-maps-rotator';
-  $bean->save();
+  if(!bean_load_delta('concept-maps-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Concept Maps Rotator';
+    $bean->delta = 'concept-maps-rotator';
+    $bean->save();
+  }
 
-  $bean = bean_create(array('type' => 'content_rotator'));
-  $bean->label = 'Investigations Rotator';
-  $bean->delta = 'investigations-rotator';
-  $bean->save();
+  if(!bean_load_delta('investigations-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Investigations Rotator';
+    $bean->delta = 'investigations-rotator';
+    $bean->save();
+  }
 
-  $bean = bean_create(array('type' => 'content_rotator'));
-  $bean->label = 'File Resources Rotator';
-  $bean->delta = 'file-resources-rotator';
-  $bean->save();
+  if(!bean_load_delta('file-resources-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'File Resources Rotator';
+    $bean->delta = 'file-resources-rotator';
+    $bean->save();
+  }
+}
+
+/**
+ * epedev-417 create additional rotator url field
+ */
+function epe_db_update_7004(&$sandbox) {
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_base');
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_instance');
+
+  $fields = _epe_db_content_rotator_field_default_field_bases();
+  $instances = _epe_db_content_rotator_field_default_field_instances();
+  // Create all the fields we are adding to our content type.
+  field_create_field($fields['field_rotator_content_url']);
+  // Create all the instances for our fields.
+  field_create_instance($instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']);
 }

@@ -40,11 +40,16 @@
             $collection = entity_metadata_wrapper('field_collection_item', $raw_collection);
             $rotator_image = $collection->field_rotator_content_image->value();
             $rotator_caption = $collection->field_rotator_content_caption->value();
+            $rotator_url = $collection->field_rotator_content_url->value();
             $classes = array('item');
             if($key == 0) $classes[] = 'active';
         ?>
         <div class="<?php echo implode(' ', $classes); ?>">
+          <?php if($rotator_url) { ?>
+          <?php echo l('<img src="' . file_create_url($rotator_image['uri']) . '" alt="' . $rotator_image['alt'] . '">', $rotator_url, array('html'=>true)); ?>
+          <?php } else { ?>          
           <img src="<?php echo file_create_url($rotator_image['uri']); ?>" alt="<?php echo $rotator_image['alt']; ?>">
+          <?php } ?>
           <div class="carousel-caption">
             <?php echo $rotator_caption; ?>
           </div>
