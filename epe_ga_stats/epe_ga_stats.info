@@ -1,0 +1,9 @@
+name = EPE Google Analytics View
+description = Integrate EPE with google analytics
+core = 7.x
+package = EPE
+version = 7.x-1.0
+project = epe_ga_stats
+
+dependencies[] = ga_stats
+
