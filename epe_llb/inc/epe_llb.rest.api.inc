@@ -13,17 +13,6 @@ function epe_llb_restful_api() {
   }
   $view->set_display($display_name);
 
-  //if log in user, pass in userid to exposed filter
-  if(user_is_logged_in()) {
-    $filter = $view->get_item($display_name, 'filter', 'author_uid');
-    $filter['value'] = $user->uid;
-    $view->set_item($display_name, 'filter', 'author_uid', $filter);
-  } else  {
-    $filters = $view->display_handler->get_option('filters');
-    unset($filters['author_uid']);
-    $view->display_handler->override_option('filters', $filters);
-  }
-
   //if there is search term, pass it in to exposed filter
   $value = '';
   if(isset($_GET['search'])): $value = $_GET['search']; endif;
@@ -41,6 +30,17 @@ function epe_llb_restful_api() {
     $filter = $view->get_item($display_name, 'filter', 'field_featured_status');
     $filter['value'] = $featured_filter;
     $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
+  }
+
+  //if log in user, pass in userid to exposed filter
+  if(user_is_logged_in()) {
+    $filter = $view->get_item($display_name, 'filter', 'author_uid');
+    $filter['value'] = $user->uid;
+    $view->set_item($display_name, 'filter', 'author_uid', $filter);
+  } else  {
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['author_uid']);
+    $view->display_handler->override_option('filters', $filters);
   }
 
   $sort_filter = array(

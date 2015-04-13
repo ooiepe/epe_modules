@@ -40,38 +40,6 @@ function epe_dbresource_browser_pager_api() {
       }
       $view->set_display($display_name);
 
-      //if log in user, pass in userid to exposed filter
-      if(user_is_logged_in()) {
-        $filter = $view->get_item($display_name, 'filter', 'author_uid');
-        $filter['value'] = $user->uid;
-        $view->set_item($display_name, 'filter', 'author_uid', $filter);
-
-        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
-          $filter = $view->get_item($display_name, 'filter', 'author_uid_1');
-          $filter['value'] = $user->uid;
-          $view->set_item($display_name, 'filter', 'author_uid_1', $filter);
-        }
-      } else {
-        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
-          $filters = $view->display_handler->get_option('filters');
-          $filter_groups = $view->display_handler->get_option('filter_groups');
-          unset($filter_groups['groups'][1]);
-          unset($filter_groups['groups'][3]);
-
-          foreach($filters as $key=>$filter) {
-            if($filter['group'] == 1 ||$filter['group'] == 3) {
-              unset($filters[$key]);
-            }
-          }
-          $view->display_handler->override_option('filters', $filters);
-          $view->display_handler->override_option('filter_groups', $filter_groups);
-        } else {
-          $filters = $view->display_handler->get_option('filters');
-          unset($filters['author_uid']);
-          $view->display_handler->override_option('filters', $filters);
-        }
-      }
-
       //if there is search term, pass it in to exposed filter
       $value = '';
       if(isset($_GET['search'])): $value = $_GET['search']; endif;
@@ -104,6 +72,38 @@ function epe_dbresource_browser_pager_api() {
           $filter = $view->get_item($display_name, 'filter', 'field_featured_status_1');
           $filter['value'] = $featured_filter;
           $view->set_item($display_name, 'filter', 'field_featured_status_1', $filter);
+        }
+      }
+
+      //if log in user, pass in userid to exposed filter
+      if(user_is_logged_in()) {
+        $filter = $view->get_item($display_name, 'filter', 'author_uid');
+        $filter['value'] = $user->uid;
+        $view->set_item($display_name, 'filter', 'author_uid', $filter);
+
+        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
+          $filter = $view->get_item($display_name, 'filter', 'author_uid_1');
+          $filter['value'] = $user->uid;
+          $view->set_item($display_name, 'filter', 'author_uid_1', $filter);
+        }
+      } else {
+        if($key == 'epe_dbmultimedia' || $key == 'epe_dbdocument') {
+          $filters = $view->display_handler->get_option('filters');
+          $filter_groups = $view->display_handler->get_option('filter_groups');
+          unset($filter_groups['groups'][1]);
+          unset($filter_groups['groups'][3]);
+
+          foreach($filters as $key=>$filter) {
+            if($filter['group'] == 1 ||$filter['group'] == 3) {
+              unset($filters[$key]);
+            }
+          }
+          $view->display_handler->override_option('filters', $filters);
+          $view->display_handler->override_option('filter_groups', $filter_groups);
+        } else {
+          $filters = $view->display_handler->get_option('filters');
+          unset($filters['author_uid']);
+          $view->display_handler->override_option('filters', $filters);
         }
       }
 

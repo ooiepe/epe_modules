@@ -88,7 +88,7 @@ function _document_resource_installed_instances() {
       'settings' => array(
         'description_field' => 1,
         'file_directory' => '[current-user:uid]/document_resource',
-        'file_extensions' => 'txt pdf doc docx ppt pptx xls xlsx',
+        'file_extensions' => 'txt pdf doc docx ppt pptx xls xlsx csv',
         'max_filesize' => '',
         'user_register_form' => FALSE,
       ),
