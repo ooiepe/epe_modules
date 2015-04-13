@@ -45,10 +45,19 @@
             if($key == 0) $classes[] = 'active';
         ?>
         <div class="<?php echo implode(' ', $classes); ?>">
+          <?php 
+            if(drupal_is_front_page()) {
+              $style_name = 'homepage_content_rotator_image';
+            } else {
+              $style_name = 'content_rotator_image';
+            }
+            $rotator_image = array('style_name' => $style_name, 'path' => $rotator_image['uri'], 'alt' => $rotator_image['alt'], 'title' => $rotator_image['title']);
+            $rotator_image_output = theme('image_style', $rotator_image);
+          ?>    
           <?php if($rotator_url) { ?>
-          <?php echo l('<img src="' . file_create_url($rotator_image['uri']) . '" alt="' . $rotator_image['alt'] . '">', $rotator_url, array('html'=>true)); ?>
+          <?php echo l($rotator_image_output, $rotator_url, array('html'=>true)); ?>
           <?php } else { ?>          
-          <img src="<?php echo file_create_url($rotator_image['uri']); ?>" alt="<?php echo $rotator_image['alt']; ?>">
+          <?php echo $rotator_image_output; ?>
           <?php } ?>
           <div class="carousel-caption">
             <?php echo $rotator_caption; ?>

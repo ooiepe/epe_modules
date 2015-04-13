@@ -261,5 +261,47 @@ function epe_wp_image_default_styles() {
     ),
   );
 
+  $styles['homepage_content_rotator_image'] = array(
+    'name' => 'homepage_content_rotator_image',
+    'effects' => array(
+      4 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 487,
+          'height' => 322,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  $styles['content_rotator_image'] = array(
+    'name' => 'content_rotator_image',
+    'effects' => array(
+      4 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 356,
+          'height' => 237,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
   return $styles;
 }
