@@ -67,7 +67,8 @@ function epe_llb_views_default_views() {
 
       $output = \'\';
       if($field_value) {
-        $output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' =>$field_value[0][\'uri\']));
+        //$output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' =>$field_value[0][\'uri\']));
+        $output = image_style_url(\'resource_browser_thumbnail\', $field_value[0][\'uri\']);
       }
       echo render($output);
     ?>';

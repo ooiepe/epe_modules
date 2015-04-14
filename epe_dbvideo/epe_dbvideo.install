@@ -255,3 +255,12 @@ function epe_dbvideo_update_7004(&$sandbox) {
 function epe_dbvideo_update_7005(&$sandbox) {
   entity_delete('search_api_index','video_resource_index');
 }
+
+/**
+ * patch a problem with resource thumbnail in json output
+ */
+function epe_dbvideo_update_7006(&$sandbox) {
+  module_load_include('inc','epe_dbvideo','epe_dbvideo.views_default');
+  $view_definition = epe_dbvideo_views_default_views();
+  views_save_view($view_definition['video_resource_index']);
+}
