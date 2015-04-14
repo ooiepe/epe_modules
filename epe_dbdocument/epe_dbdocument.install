@@ -301,3 +301,18 @@ function epe_dbdocument_update_7008(&$sandbox) {
   $modules['epe_dbmultimedia']['resource_browser']['adurl'] = 'resource/add/file';
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
+
+/**
+ * add cvs as supported document extension
+ */
+function epe_dbdocument_update_7009(&$sandbox) {
+  module_load_include('inc','epe_dbdocument','inc/epe_dbdocument.field_instance');
+
+  foreach (_document_resource_installed_instances() as $instance) {
+    if($instance['field_name'] == 'field_document_resource_file') {
+      $field_instance = field_info_instance('node',$instance['field_name'],'document_resource');      
+      $field_instance['settings']['file_extensions'] = $instance['settings']['file_extensions'];
+      field_update_instance($field_instance);  
+    }
+  }
+}
