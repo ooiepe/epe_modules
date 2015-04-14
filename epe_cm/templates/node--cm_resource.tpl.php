@@ -70,7 +70,15 @@ function loadFlash() {
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
   
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20150414_0619.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20150414_0619.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes, 
+      function(e) {
+        if (!e.success) {
+          document.getElementById('flashcontent').innerHTML = '<iframe width="885" height="700" frameBorder="0" src="<?php echo $embedPath ?>js"></iframe>';
+          console.log(e)
+
+        }
+        return;
+      } );
   
   return;
 }
@@ -129,7 +137,7 @@ function giveXMLtoJS(value) {
 <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
 
 <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
-  <div id="flashcontent"><p>Please update your Flash Player</p></div>
+  <div id="flashcontent"></div>
 </div>
 
 
