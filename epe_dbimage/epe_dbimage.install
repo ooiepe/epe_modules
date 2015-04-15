@@ -259,3 +259,12 @@ function epe_dbimage_update_7005(&$sandbox) {
 function epe_dbimage_update_7006(&$sandbox) {
   entity_delete('search_api_index','image_resource_index');
 }
+
+/**
+ * patch a problem with resource thumbnail in json output
+ */
+function epe_dbimage_update_7007(&$sandbox) {
+  module_load_include('inc','epe_dbimage','epe_dbimage.views_default');
+  $view_definition = epe_dbimage_views_default_views();
+  views_save_view($view_definition['image_resource_index']);
+}

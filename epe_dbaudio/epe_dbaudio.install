@@ -265,3 +265,12 @@ function epe_dbaudio_update_7004(&$sandbox) {
 function epe_dbaudio_update_7005(&$sandbox) {
   entity_delete('search_api_index','audio_resource_index');
 }
+
+/**
+ * patch a problem with resource thumbnail in json output
+ */
+function epe_dbaudio_update_7006(&$sandbox) {
+  module_load_include('inc','epe_dbaudio','epe_dbaudio.views_default');
+  $view_definition = epe_dbaudio_views_default_views();
+  views_save_view($view_definition['audio_resource_index']);
+}

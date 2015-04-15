@@ -19,8 +19,18 @@ function epe_cm_theme() {
       'template' => 'epe_cm_embed',
       'render element' => 'form',
     ),
+    'epe_cm_embed_js' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_cm_embed_js',
+      'render element' => 'form',
+    ),
+    'epe_cm_vocab' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_cm_vocab',
+    ),
   );
 }
+
 
 
 
@@ -160,6 +170,25 @@ function epe_cm_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['node/%/cmembedjs'] = array(
+    'title' => t('Embed CM JS'),
+    'page callback' => 'epe_cm_embed_js',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['vocab'] = array(
+    'title' => t('Vocabulary'),
+    'page callback' => 'epe_cm_vocab',
+    'file' => 'epe_cm.pages.inc',
+    'file path' => drupal_get_path('module', 'epe_cm') . '/inc',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+    'type' => MENU_CALLBACK,
+  );
+
   
 
   return $items;
@@ -167,6 +196,10 @@ function epe_cm_menu() {
 
 function epe_cm_embed($nid) {
   return theme('epe_cm_embed', array('nid'=>$nid));
+}
+
+function epe_cm_embed_js($nid) {
+  return theme('epe_cm_embed_js', array('nid'=>$nid));
 }
 
 
