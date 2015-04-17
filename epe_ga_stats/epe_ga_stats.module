@@ -29,7 +29,7 @@ function epe_ga_stats_menu() {
  * This hook is to style edit form, the theme key needs to be the same as the form function name
  */
 function epe_ga_stats_theme() {
-  $tpl_path = drupal_get_path('module','epe_db') . '/templates';
+  $tpl_path = drupal_get_path('module','epe_ga_stats') . '/templates';
   return array(
     'epe_ga_stats_view' => array(
       'path' => $tpl_path,
