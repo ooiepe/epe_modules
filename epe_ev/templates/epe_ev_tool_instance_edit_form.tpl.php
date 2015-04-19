@@ -134,6 +134,12 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
             <?php echo render($form['body']); ?>
           </div>
 
+          <div class="control-group">
+            <div class="controls">
+              <?php echo render($form['field_instance_questions']); ?>
+            </div>
+          </div>
+
         </div>
          
          <?php if (empty($form['nid']['#value'])): ?>
