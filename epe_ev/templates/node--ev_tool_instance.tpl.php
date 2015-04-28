@@ -63,6 +63,8 @@
 <!-- display any places this item is included and any items copied from this item -->
 <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
+<?php print render($content['field_instance_questions']); ?>
+
 <?php print render($content['comments']); ?>
 
 </article>

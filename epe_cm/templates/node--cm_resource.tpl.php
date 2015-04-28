@@ -70,7 +70,7 @@ function loadFlash() {
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
   
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20150414_0619.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes, 
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20150415_1232.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes, 
       function(e) {
         if (!e.success) {
           document.getElementById('flashcontent').innerHTML = '<iframe width="885" height="700" frameBorder="0" src="<?php echo $embedPath ?>js"></iframe>';
