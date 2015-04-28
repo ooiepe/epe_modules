@@ -52,8 +52,12 @@
       if($thumbnail_field) {
         $thumbnail_node_info = json_decode($thumbnail_field);
         foreach($thumbnail_node_info as $info) {
-          $node_info = epe_llb_dataset_query($info);
-          $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $node_info->uri) . '">';
+          $node_info = epe_llb_dataset_query($info);          
+          if(!isset($node_info->uri) || (isset($node_info->uri) &&!$node_info->uri)) {
+            $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
+          } else {
+            $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $node_info->uri) . '">';
+          }          
         }
       }
       break;
