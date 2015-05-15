@@ -67,6 +67,8 @@ else
 //var paper, $map, cmx, cmy, xoffset, yoffset;
 var paper, blockPaper, $map, cmx, cmy, xoffset, yoffset;
 
+var assetLookupUrl = '<?php echo base_path() ?>api/resource/lookup';
+
 function loadMap() {
   console.log('load map called');
 

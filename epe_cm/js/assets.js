@@ -11,7 +11,7 @@ function showAssets(xml) {
 
 	$.ajax({
 		type: "GET",
-		url: "http://localhost:8888/ooiepe_34/api/resource/lookup",
+		url: assetLookupUrl,
 		data: { xml: xml },
 		success: function(data) {
 
