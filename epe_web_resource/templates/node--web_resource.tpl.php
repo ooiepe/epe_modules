@@ -17,6 +17,20 @@ $isDBFiles = 1;
 .field-label {
   display: none;
 }
+.multimedia.embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 35px;
+  height: 0;
+  overflow: hidden;  
+}
+.multimedia.embed iframe {
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>
 
 <?php
@@ -39,7 +53,7 @@ if($response->code == 200) {
   $oembed_data->html = preg_replace($height_pattern, "height='390'", $oembed_data->html);
   $width_pattern = "/width=\"[0-9]*\"/";
   $oembed_data->html = preg_replace($width_pattern, "width='886'", $oembed_data->html);
-  echo $oembed_data->html;
+  echo '<div class="multimedia embed">' . $oembed_data->html . '</div>';
 } else {
   echo '<div class="well error text-center">Embeddable resource not found.  Please contact the OOI EPE Team.</div>';
 }
