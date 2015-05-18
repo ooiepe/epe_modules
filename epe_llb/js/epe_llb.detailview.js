@@ -17,6 +17,10 @@ Drupal.behaviors.epe_llb_detailview = {
           });
         }
       });
+
+      $("button[data-toggle='tab']").click(function(e) {
+        window.scrollTo(0,0);
+      });
   }
 };
 })(jQuery);

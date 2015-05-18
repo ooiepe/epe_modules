@@ -285,7 +285,10 @@ function epe_db_form_alter (&$form, &$form_state, $form_id) {
   }
 }
 function callback_for_cancel_button($form, &$form_state) {
-  $url = $_POST['destination'] ? $_POST['destination'] : '';
+  $url = '';
+  if(isset($_POST['destination'])) {
+    $_POST['destination'] ? $_POST['destination'] : '';
+  }
   drupal_goto($url);
 }
 
