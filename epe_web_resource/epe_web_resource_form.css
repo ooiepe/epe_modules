@@ -1,0 +1,9 @@
+#web-resource-node-form .field-name-body fieldset,
+#web-resource-node-form .field-name-body label span,
+#web-resource-node-form .vertical-tabs,
+.field-name-field-resource-origin,
+.node-tabs  { display: none; }
+
+label.control-label { float:left; width:168px; }
+.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }
+.form-item-permission label { width: 100%; }

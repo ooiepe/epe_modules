@@ -1,0 +1,7 @@
+#document-resource-node-form .field-name-body fieldset { display: none; }
+#document-resource-node-form .field-name-body label span { display: none; }
+#document-resource-node-form .vertical-tabs, .node-tabs { display: none; }
+
+label.control-label { float:left; width:168px; }
+.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }
+.form-item-permission label { width: 100%; }
