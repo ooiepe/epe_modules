@@ -890,3 +890,21 @@ function epe_db_update_7004(&$sandbox) {
   // Create all the instances for our fields.
   field_create_instance($instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']);
 }
+
+/**
+ * EPEDEV-417 give all user view permission to bean, remove url requirement
+ */
+function epe_db_update_7005(&$sandbox) {
+  $anonymous = user_role_load_by_name('anonymous user');
+  $authenticated = user_role_load_by_name('authenticated user');
+  user_role_grant_permissions($anonymous->rid,array('view any content_rotator bean'));
+  user_role_grant_permissions($authenticated->rid,array('view any content_rotator bean'));
+
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_instance');
+  $instances = _epe_db_content_rotator_field_default_field_instances();
+
+  $url_field = field_info_instance('field_collection_item',$instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']['field_name'],'field_rotator_content_fields');
+  
+  $url_field['required'] = 0;
+  field_update_instance($url_field); 
+}
