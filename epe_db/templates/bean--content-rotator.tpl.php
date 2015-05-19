@@ -55,7 +55,11 @@
             $rotator_image_output = theme('image_style', $rotator_image);
           ?>    
           <?php if($rotator_url) { ?>
-          <?php echo l($rotator_image_output, $rotator_url, array('html'=>true)); ?>
+          <?php //echo l('<img src="' . file_create_url($rotator_image['uri']) . '" alt="' . $rotator_image['alt'] . '">', $rotator_url, array('html'=>true)); ?>
+          <?php 
+            if($rotator_url) $rotator_image_output = '<a href="' . $rotator_url . '">' . $rotator_image_output . '</a>';
+            echo $rotator_image_output;
+          ?>
           <?php } else { ?>          
           <?php echo $rotator_image_output; ?>
           <?php } ?>
