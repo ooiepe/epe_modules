@@ -93,6 +93,44 @@ function epe_dbvideo_node_type_insert($content_type) {
   }
 }
 
+function epe_dbvideo_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'video_resource_node_form') {
+    if(is_numeric(arg(1)) && arg(2) == 'edit') {
+    $form['header'] = array(
+      '#type'=>'container',
+      '#prefix'=>'<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;"><div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">',
+      '#weight'=>-20,
+    );
+
+    $form['footer'] = array(
+      '#type'=>'container',
+      '#suffix'=>'</div></div>',
+      '#weight'=>30,
+    );
+    }
+
+    if(is_numeric(arg(1))) {
+      $destination = 'node/' . arg(1);
+    } else {
+      $destination = 'db/';
+    }
+
+    $form['destination'] = array(
+      '#type'=>'hidden',
+      '#value'=>$destination,
+    );
+
+    $form['field_featured_status']['#type'] = 'hidden';
+    $form['field_public_status']['#type'] = 'hidden';
+    $form['field_video_resource_file']['#weight'] = -10;
+    $form['field_video_resource_file']['und'][0]['#title'] = 'Video Resource File';    
+    
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'epe_dbvideo') . '/epe_dbvideo_form.css',
+    );    
+  }
+}
+
 /*
  * assign custom content type permission base on epe supported author roles
  * the epe supported author roles is added from epe_wp module
