@@ -130,6 +130,10 @@
               <p>{{item.title}}</p>
               <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
                    <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
+              <div ng-show="currentCopies.items.length < 1"><br/>
+              <a ng-show="$index < items.length-1" ng-click="fn.rearrangeItems($index, $index+1);" style="cursor:pointer;"><i class="icon-arrow-down"></i>&nbsp;Move down</a>
+              <a ng-show="$index > 0" ng-click="fn.rearrangeItems($index, $index-1);" style="cursor:pointer;"><i class="icon-arrow-up"></i>&nbsp;Move up</a>
+              </div>
             </div>
           </td>
         </tr>
@@ -185,6 +189,10 @@
               <p>{{item.title}}</p>
               <div><a ng-click="fn.editItem($index);" style="cursor:pointer;"><i class="icon-edit"></i>&nbsp;Edit</a>
                    <a ng-click="removeDataSet($index);" style="cursor:pointer;"><i class="icon-trash"></i>&nbsp;Delete</div>
+              <div ng-show="currentCopies.items.length < 1"><br/>
+              <a ng-show="$index < items.length-1" ng-click="fn.rearrangeItems($index, $index+1);" style="cursor:pointer;"><i class="icon-arrow-down"></i>&nbsp;Move down</a>
+              <a ng-show="$index > 0" ng-click="fn.rearrangeItems($index, $index-1);" style="cursor:pointer;"><i class="icon-arrow-up"></i>&nbsp;Move up</a>
+              </div>
             </div>
           </td>
         </tr>
