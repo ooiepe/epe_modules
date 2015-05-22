@@ -247,3 +247,30 @@ function epe_dbfiles_update_7003(&$sandbox) {
             ->condition('link_title', 'Add a New Resource','=')
             ->execute();
 }
+
+/**
+ * epedev-235/epedev-515 update/add themekey properties for the new add resource form path
+ */
+function epe_dbfiles_update_7004(&$sandbox) {
+  $update = db_update('themekey_properties')
+    ->fields(array(
+        'value'=>'dialog/resource/add'
+      ))
+    ->condition('value','dialog/resource/add/file','=')
+    ->execute();
+
+  $wildcards = new stdClass();
+  $insert = db_insert('themekey_properties')
+    ->fields(array(
+      'property'=>'drupal:path',
+      'operator'=>'=',
+      'value'=>'dialog/resource/add/%',
+      'weight'=>4,
+      'theme'=>'blank',
+      'enabled'=>1,
+      'wildcards'=>serialize($wildcards),
+      'parent'=>0,
+      'module'=>'themekey',
+    ))
+    ->execute();
+}
