@@ -93,10 +93,14 @@ function epe_cm_restful_api() {
 
   $sort_fields = array();
 
-  if(isset($_GET['sort']) && in_array($_GET['sort'],array('title','author','last_updated'))) {
+  if(isset($_GET['sort']) && in_array($_GET['sort'],array('title','author','last_updated','created'))) {
     switch ($_GET['sort']) {
       case 'last_updated':
         $sort_fields[] = 'changed';
+      break;
+
+      case 'created':
+        $sort_fields[] = 'created';
       break;
 
       case 'author':

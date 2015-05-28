@@ -625,3 +625,12 @@ function epe_llb_update_7013(&$sandbox) {
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
 }
+
+/**
+ * add created to view output
+ */
+function epe_llb_update_7014(&$sandbox) {
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
+}

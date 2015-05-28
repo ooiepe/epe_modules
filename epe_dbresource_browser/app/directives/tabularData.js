@@ -7,10 +7,11 @@ define(['app'], function(app) {
       scope: {
         row: '=',
         type: '=',
+        dateSort: '=',
         updateSelect: '&'
       },
       link: function (scope, elem, attrs) {
-        var template = '', element_ck = '', link_target = '_self', row_status = '';
+        var template = '', element_ck = '', link_target = '_self', row_status = '', date_sort_data = scope.row.last_updated;
         if(Drupal.settings.resourceBrowser.editmode) {
           element_ck = '<div style="float:left;"><input type="checkbox" style="margin-right:0;position:absolute;" name="nid" ng-click="updateResourceSelection('+ scope.row.id +')" ng-checked="isChecked()" data-type="' + scope.type + '" value="' + scope.row.id + '"></div>';
           link_target = '_blank';
@@ -53,8 +54,11 @@ define(['app'], function(app) {
 
         // end the author cell
         template += '</div></td>';
-
-        template += '<td>' + scope.row.last_updated + '</td>';
+        console.log(scope.row.title);
+console.log(scope.dateSort);
+console.log(date_sort_data);
+        if(scope.dateSort == 'created') date_sort_data = scope.row.created;
+        template += '<td>' +  date_sort_data + '</td>';
 
         elem.html(template).show();
 

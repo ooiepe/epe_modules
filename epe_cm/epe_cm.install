@@ -315,3 +315,12 @@ function epe_cm_update_7011(&$sandbox) {
   $view_definition = epe_cm_views_default_views();
   views_save_view($view_definition['epe_cm_search_view']);
 }
+
+/**
+ * add created field to view output
+ */
+function epe_cm_update_7012(&$sandbox) {
+  module_load_include('inc','epe_cm','epe_cm.views_default');
+  $view_definition = epe_cm_views_default_views();
+  views_save_view($view_definition['epe_cm_search_view']);
+}
