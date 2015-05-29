@@ -1,6 +1,6 @@
 define(['app','ngload!services/dataServices','directives/tabularData','ngload!filters/range','ngProgress'], function(app) {
-  app.controller('SearchCtrl', ['$scope','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
-    function($scope,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {
+  app.controller('SearchCtrl', ['$scope','$window','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
+    function($scope,$window,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {      
       //init scope params
       $scope.fn = {};
       $scope.resources = {};
@@ -157,7 +157,11 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         params['page'] = 1;
         $location.search(params);
       } else {
-        $scope.fn.init();
+        if(!Drupal.settings.user.is_logged_in && typeof $routeParams['filter'] != 'undefined' && $routeParams['filter'] == 'author') {
+          $window.location.href=Drupal.settings.epe.base_path + 'user';
+        } else {
+          $scope.fn.init();
+        }        
       }
 
       $scope.search.term = $routeParams['search'];
