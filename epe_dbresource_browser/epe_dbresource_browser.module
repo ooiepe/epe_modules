@@ -116,6 +116,9 @@ function epe_dbresource_browser_preload() {
     'page_size'=>10,
     'editmode'=>false,
   )),'setting');
+  drupal_add_js(array('user'=>array(
+    'is_logged_in'=>user_is_logged_in(),
+  )),'setting');
 
   drupal_add_js(array('theme_path'=>base_path() . drupal_get_path('theme','bootstrap')),'setting');
 
