@@ -189,7 +189,7 @@ jQuery(document).ready(function($) {
     });
 
     $('.text_resource').click(function() {
-      var data = {"nid":"NULL","type":"text","title":"Please enter your title","body":"Please enter your description","thumbnail":"","uri":""};
+      var data = {"nid":"NULL","type":"text","title":"Please enter your title","body":"Please enter your description","thumbnail":Drupal.settings.epe.theme_path+'/images/no_thumb_small.jpg',"uri":""};
       window.parent.addDataSetItem(data, true);
     });
 });
@@ -208,7 +208,7 @@ function loadResourceThumbnail(value) {
         var result = JSON.parse(result);
         value.thumbnail = result.thumbnail;
       }).fail(function() {
-        value.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+        value.thumbnail = Drupal.settings.epe.theme_path + '/images/no_thumb_small.jpg';
       });
     }
   });
