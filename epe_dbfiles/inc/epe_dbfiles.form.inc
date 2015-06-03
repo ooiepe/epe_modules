@@ -46,5 +46,5 @@ function epe_dbfiles_adhoc_response($nid) {
     ),
     'setting');
 
-  return 'Your new resource has been added to the lesson.  To add another one, please click ' . l('here', 'dialog/resource/add/file');
+  return 'Your new resource has been added to the lesson.  To add another one, please click ' . l('here', 'dialog/resource/add');
 }

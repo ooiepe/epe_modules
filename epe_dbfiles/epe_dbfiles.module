@@ -30,6 +30,15 @@ function epe_dbfiles_menu() {
     'plid' => $epe_menu['db']['mlid'],
   );
 
+  $items['resource/add/%'] = array(
+    'title' => t('Create EPE File Resource'),
+    'page callback' => 'epe_dbfiles_dynamic_resource_form',
+    'page arguments' => array(2),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbfiles interface'),
+    'type' => MENU_CALLBACK,
+  );
+
   $items['dialog/resource/add'] = array(
     'title' => t('Create EPE File Resource'),
     'page callback' => 'epe_dbfiles_dynamic_resource_form',
@@ -37,6 +46,15 @@ function epe_dbfiles_menu() {
     'access arguments' => array('epe dbfiles interface'),
     'type' => MENU_CALLBACK,
   );
+
+  $items['dialog/resource/add/%'] = array(
+    'title' => t('Create EPE File Resource'),
+    'page callback' => 'epe_dbfiles_dynamic_resource_form',
+    'page arguments' => array(3),
+    'access callback' => 'user_access',
+    'access arguments' => array('epe dbfiles interface'),
+    'type' => MENU_CALLBACK,
+  );  
 
   $items['dialog/resource/file/%/success'] = array(
     'title' => t('File Resource Added'),
@@ -52,10 +70,18 @@ function epe_dbfiles_menu() {
   return $items;
 }
 
-function epe_dbfiles_dynamic_resource_form() {
+function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
   global $user;
 
   $form = array();
+
+  $form['mode'] = array(
+    '#type'=>'hidden',
+    '#attributes'=>array(
+      'class'=>array('form-mode'),
+    ),
+    '#value'=>arg(0),
+  );
 
   $type_options = array(
     'NULL'=>t('Select a resource type'),
@@ -76,13 +102,16 @@ function epe_dbfiles_dynamic_resource_form() {
   $form['dynamic_form'] = array();
 
   drupal_add_js(drupal_get_path('module','epe_dbfiles') . '/js/epe_dbfiles.addresource.js');
+
+  if($form_name != NULL) {    
+  $node_type = $form_name;
+  $form['type_select']['#value'] = "{$form_name}";
   drupal_add_css('.form-item .help-block { clear: both; }','inline');
   drupal_add_css('label.control-label { float:left; width:168px; }','inline');
   drupal_add_css('.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }','inline');
   drupal_add_css('.form-item-permission label { width:100%; }','inline');  
-
   module_load_include('inc', 'node', 'node.pages');
-  foreach(array('image_resource','document_resource','audio_resource','video_resource','web_resource') as $node_type) {
+  //foreach(array('image_resource','document_resource','audio_resource','video_resource','web_resource') as $node_type) {
     $resource_form_id = $node_type . '_node_form';
 
     $node = new stdClass();
@@ -93,15 +122,14 @@ function epe_dbfiles_dynamic_resource_form() {
     $resource_form['actions']['submit']['#attributes']['disabled']='disabled';
     $resource_form['author']['name']['#value'] = $user->name;
     $resource_form['author']['date']['#value'] = format_date(time(), 'custom', 'Y-m-d');
-
     unset($resource_form['actions']['cancel']);
 
-    if (!isset($resource_form['#attributes']['class'])) {
+    /*if (!isset($resource_form['#attributes']['class'])) {
       $resource_form['#attributes'] = array('class' => array('hidden'));
     }
     else {
       $resource_form['#attributes']['class'][] = 'hidden';
-    }
+    }*/
 
     $resource_form['resource_permission'] = array(
       '#type'=>'checkbox',
@@ -113,18 +141,31 @@ function epe_dbfiles_dynamic_resource_form() {
       ),
     );
 
-    form_load_include($form_state, 'inc', 'node', 'node.pages');
+    //form_load_include($form_state, 'inc', 'node', 'node.pages');
     $form['dynamic_form'][$resource_form_id] = $resource_form;
+  //}
+
   }
 
   return theme('epe_dbfiles_dynamic_resource_form',array('form'=>$form));
 }
 
-function epe_dbfiles_node_insert($node) {
+function epe_dbfiles_node_insert($node) {  
   if(arg(0) == 'dialog') {
     drupal_goto("dialog/resource/file/{$node->nid}/success");
   }
 }
+
+/*
+ * implement hook_menu_alter
+ * this is to ensure our custom edit form's file field knows how to detail with it's own ajax action
+ * without this, add/remove file/thumbnail will break
+ */
+function epe_dbfiles_menu_alter(&$items) {
+  $items['file/ajax']['file'] = 'node.pages.inc';
+  $items['file/ajax']['file path'] = drupal_get_path('module', 'node');
+}
+
 
 function epe_dbfiles_requirements_validation() {
   $messages = array();
