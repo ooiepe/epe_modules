@@ -234,7 +234,7 @@ function giveXMLtoJS(value) {
   ?>
     <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
       <!-- <div id="flashcontent"><p>Please update your Flash Player</p></div> -->
-       <iframe width="100%" height="424" src="<?php echo base_path(); ?>/node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
+       <iframe class="cmembed" width="100%" height="424" src="<?php echo base_path(); ?>/node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
     </div>
     <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
     <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>
