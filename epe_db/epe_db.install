@@ -885,10 +885,19 @@ function epe_db_update_7004(&$sandbox) {
 
   $fields = _epe_db_content_rotator_field_default_field_bases();
   $instances = _epe_db_content_rotator_field_default_field_instances();
-  // Create all the fields we are adding to our content type.
-  field_create_field($fields['field_rotator_content_url']);
-  // Create all the instances for our fields.
-  field_create_instance($instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']);
+  try {
+    // Create all the fields we are adding to our content type.
+    field_create_field($fields['field_rotator_content_url']);
+  } catch (Exception $e) {
+    watchdog('Update Error','epedb 7006: ' . $e->getMessage());
+  }
+  
+  try {
+    // Create all the instances for our fields.
+    field_create_instance($instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']);
+  } catch (Exception $e) {
+    watchdog('Update Error','epedb 7006: ' . $e->getMessage());
+  }
 }
 
 /**
