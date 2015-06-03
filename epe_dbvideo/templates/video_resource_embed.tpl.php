@@ -8,7 +8,7 @@
 
 <div class="wrapper">
 <div class="videocontent">
-  <video id="myvideo" class="video-js vjs-default-skin" controls preload="auto" width="auto" height="auto" <?php if($poster): echo 'poster="' . $poster . '"'; endif; ?> data-setup="{}">
+  <video id="myvideo" class="video-js vjs-default-skin vjs-fullscreen" controls preload="auto" width="auto" height="auto" <?php if($poster): echo 'poster="' . $poster . '"'; endif; ?> data-setup="{}">
     <source src="<?php echo $video_path; ?>" type='video/mp4'>
   </video>
 </div>

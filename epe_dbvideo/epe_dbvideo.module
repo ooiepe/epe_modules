@@ -21,7 +21,7 @@ function epe_dbvideo_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['node/%/embed'] = array(
+  $items['node/%/videoembed'] = array(
     'title' => t('Embed Video Resource'),
     'page callback' => 'epe_dbvideo_embed',
     'page arguments' => array(1),
