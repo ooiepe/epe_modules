@@ -23,6 +23,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.browser.messages.show_progress_bar = true;
       $scope.browser.messages.show_messages = true;
       $scope.browser.messages.messages = "Loading Resources";
+      $scope.browser.date_sort = 'last_updated';
 
       //set additional settings for each module view
       angular.forEach($scope.browser.modules, function(module, index) {
@@ -87,7 +88,10 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         if(typeof $routeParams['sort'] == 'undefined') {
           $routeParams['sort'] = 'last_updated';
+        } else {
+          $scope.browser.date_sort = $routeParams['sort'];
         }
+        $scope.fn.selectedClass($routeParams['sort']);
         if(typeof $routeParams['sort_mode'] == 'undefined') {
           $routeParams['sort_mode'] = 'desc';
         }
@@ -143,22 +147,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
         webStorage.session.add('queryparams',$scope.browser.queryparams);
-      } //init
-
-      //no module type defined, we reload the browser with url of the 1st module
-      if(typeof $routeParams['type'] == "undefined" || (
-        typeof $routeParams['type'] != "undefined" && (
-          $routeParams['type'] == '' ||
-          !_.find($scope.browser.enabled_modules, function(module) { return module['api'] == $routeParams['type']; })
-        )
-        )) {
-        var params = {};
-        params['type'] = $scope.browser.enabled_modules[0].api;
-        params['page'] = 1;
-        $location.search(params);
-      } else {
-        $scope.fn.init();
-      }
+      } //init      
 
       $scope.search.term = $routeParams['search'];
       $scope.fn.searchTerm = function() {
@@ -255,6 +244,9 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
 
       $scope.fn.sortResults = function(column) {
         var params = {};
+        if(_.contains(['last_updated','created'],column)) {
+          $scope.browser.date_sort = column;
+        }
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = $routeParams['page'];
         if(typeof $routeParams['search'] != 'undefined') {
@@ -271,7 +263,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else if($routeParams['sort'] == column) {
           params['sort_mode'] = $routeParams['sort_mode'] == 'asc' ? 'desc' : 'asc';
         } else {
-          params['sort_mode'] = $routeParams['sort_mode'] == 'desc';
+          params['sort_mode'] = $routeParams['sort_mode'] = 'desc';
         }
 
         /*if($routeParams['sort'] == column) {
@@ -288,5 +280,20 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           return 'sort';
         }
       }
+
+      //no module type defined, we reload the browser with url of the 1st module
+      if(typeof $routeParams['type'] == "undefined" || (
+        typeof $routeParams['type'] != "undefined" && (
+          $routeParams['type'] == '' ||
+          !_.find($scope.browser.enabled_modules, function(module) { return module['api'] == $routeParams['type']; })
+        )
+        )) {
+        var params = {};
+        params['type'] = $scope.browser.enabled_modules[0].api;
+        params['page'] = 1;
+        $location.search(params);
+      } else {
+        $scope.fn.init();
+      }      
     }]); //end controller function
 }); //end define

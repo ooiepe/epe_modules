@@ -325,3 +325,12 @@ function epe_dbdocument_update_7010(&$sandbox) {
   $view_definition = epe_dbdocument_views_default_views();
   views_save_view($view_definition['document_resource_index']);
 }
+
+/**
+ * add created field to view output
+ */
+function epe_dbdocument_update_7011(&$sandbox) {
+  module_load_include('inc','epe_dbdocument','epe_dbdocument.views_default');
+  $view_definition = epe_dbdocument_views_default_views();
+  views_save_view($view_definition['document_resource_index']);
+}
