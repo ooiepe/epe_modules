@@ -115,9 +115,7 @@ function epe_dbresource_browser_preload() {
     'epe_modules'=>json_encode($resource_browser_enabled_modules),
     'page_size'=>10,
     'editmode'=>false,
-  )),'setting');
-
-  drupal_add_js(array('theme_path'=>base_path() . drupal_get_path('theme','bootstrap')),'setting');
+  )),'setting');  
 
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
   drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
