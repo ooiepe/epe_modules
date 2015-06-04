@@ -456,6 +456,15 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     '#name' => 'revision',
     '#value' => 1
   );
+
+  $form['actions']['submit']['#submit'][] = 'epe_llb_custom_submission_handler';
+}
+
+function epe_llb_custom_submission_handler($form, &$form_state) {
+  unset($_GET['destination']);
+  if($form_state['clicked_button']['#id'] == 'edit-submit') {
+    $form_state['redirect'] = 'node/' . $form_state['nid'] . '/detail';
+  }  
 }
 
 function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
@@ -946,7 +955,7 @@ function epe_llb_reload_dataset($dataset, $assoc_resources) {
 /**
  * Implements hook_default_rules_configuration().
  */
-function epe_llb_default_rules_configuration() {
+/*function epe_llb_default_rules_configuration() {
   $items = array();
   $items['rules_llb_resource_redirect_on_save'] = entity_import('rules_config', '{ "rules_llb_resource_redirect_on_save" : {
       "LABEL" : "LLB resource redirect on save",
@@ -962,7 +971,7 @@ function epe_llb_default_rules_configuration() {
     }
   }');
   return $items;
-}
+}*/
 
 /**
  * Implements hook_default_search_api_index().

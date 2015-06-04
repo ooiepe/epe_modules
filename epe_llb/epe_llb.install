@@ -634,3 +634,12 @@ function epe_llb_update_7014(&$sandbox) {
   $view_definition = epe_llb_views_default_views();
   views_save_view($view_definition['llb_resource_index']);
 }
+
+/**
+ * disable llb save redirect rule
+ */
+function epe_llb_update_7015(&$sandbox) {
+  $rules_config = rules_config_load('rules_llb_resource_redirect_on_save');
+  $rules_config->active = FALSE;
+  $rules_config->save();
+}
