@@ -1,6 +1,6 @@
 define(['app','ngload!services/dataServices','directives/tabularData','ngload!filters/range','ngProgress'], function(app) {
-  app.controller('SearchCtrl', ['$scope','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
-    function($scope,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {
+  app.controller('SearchCtrl', ['$scope','$window','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
+    function($scope,$window,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {      
       //init scope params
       $scope.fn = {};
       $scope.resources = {};
@@ -147,7 +147,26 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
         webStorage.session.add('queryparams',$scope.browser.queryparams);
-      } //init      
+      } //init
+
+      //no module type defined, we reload the browser with url of the 1st module
+      if(typeof $routeParams['type'] == "undefined" || (
+        typeof $routeParams['type'] != "undefined" && (
+          $routeParams['type'] == '' ||
+          !_.find($scope.browser.enabled_modules, function(module) { return module['api'] == $routeParams['type']; })
+        )
+        )) {
+        var params = {};
+        params['type'] = $scope.browser.enabled_modules[0].api;
+        params['page'] = 1;
+        $location.search(params);
+      } else {
+        if(!Drupal.settings.user.is_logged_in && typeof $routeParams['filter'] != 'undefined' && $routeParams['filter'] == 'author') {
+          $window.location.href=Drupal.settings.epe.base_path + 'user';
+        } else {
+          $scope.fn.init();
+        }        
+      }   
 
       $scope.search.term = $routeParams['search'];
       $scope.fn.searchTerm = function() {

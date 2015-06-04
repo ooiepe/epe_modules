@@ -57,7 +57,7 @@
           <?php if($rotator_url) { ?>
           <?php //echo l('<img src="' . file_create_url($rotator_image['uri']) . '" alt="' . $rotator_image['alt'] . '">', $rotator_url, array('html'=>true)); ?>
           <?php 
-            if($rotator_url) $rotator_image_output = '<a href="' . $rotator_url . '">' . $rotator_image_output . '</a>';
+            if($rotator_url) $rotator_image_output = '<a href="' . $rotator_url['url'] . '" title="' . $rotator_url['title'] . '">' . $rotator_image_output . '</a>';
             echo $rotator_image_output;
           ?>
           <?php } else { ?>          
