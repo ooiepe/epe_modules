@@ -366,3 +366,14 @@ function epe_wp_update_7002(&$sandbox) {
   $view_definition = epe_wp_views_default_views();
   views_save_view($view_definition['user_resources']);
 }
+
+function epe_wp_update_7003(&$sandbox) {
+  $profiles = variable_get('imce_profiles');
+  $profiles[1]['thumbnails'][] = array(
+    'name'=>'',
+    'dimensions'=>'120x120',
+    'prefix'=>'',
+    'suffix'=>''
+  );
+  variable_set('imce_profiles',$profiles);
+}
