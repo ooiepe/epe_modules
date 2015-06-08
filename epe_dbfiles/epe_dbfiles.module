@@ -108,8 +108,7 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
   $form['type_select']['#value'] = "{$form_name}";
   drupal_add_css('.form-item .help-block { clear: both; }','inline');
   drupal_add_css('label.control-label { float:left; width:168px; }','inline');
-  drupal_add_css('.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }','inline');
-  drupal_add_css('.form-item-permission label { width:100%; }','inline');  
+  drupal_add_css('.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }','inline');  
   module_load_include('inc', 'node', 'node.pages');
   //foreach(array('image_resource','document_resource','audio_resource','video_resource','web_resource') as $node_type) {
     $resource_form_id = $node_type . '_node_form';
@@ -131,6 +130,7 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
       $resource_form['#attributes']['class'][] = 'hidden';
     }*/
 
+    drupal_add_css('.form-item-permission label { width:100%; }','inline');
     $resource_form['resource_permission'] = array(
       '#type'=>'checkbox',
       '#name'=>'permission',
@@ -143,6 +143,9 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
 
     //form_load_include($form_state, 'inc', 'node', 'node.pages');
     $form['dynamic_form'][$resource_form_id] = $resource_form;
+print_r('<pre>');
+    print_r($resource_form['actions']);
+    print_r('</pre>');
   //}
 
   }
