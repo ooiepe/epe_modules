@@ -91,7 +91,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else {
           $scope.browser.date_sort = $routeParams['sort'];
         }
-        $scope.fn.selectedClass($routeParams['sort']);
+        
         if(typeof $routeParams['sort_mode'] == 'undefined') {
           $routeParams['sort_mode'] = 'desc';
         }
