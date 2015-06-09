@@ -305,6 +305,7 @@ function epe_cm_default_search_api_index() {
 function epe_cm_form_alter (&$form, &$form_state, $form_id) {
 
   if ($form_id == 'cm_resource_node_form') {
+    $form['options']['status']['#type'] = 'hidden';
     $form['#submit'] = array('cm_resource_node_form_submit_custom');
     $form['#attached']['js'][] = libraries_get_path('formSavior') . '/jquery.formSavior.min.js';
     $form['#attached']['js']['jQuery(document).ready(function($) { $("form#cm-resource-node-form").formSavior(); });'] = array( 'type' => 'inline');

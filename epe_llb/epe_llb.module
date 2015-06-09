@@ -458,6 +458,8 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     '#value' => 1
   );
 
+  $form['options']['status']['#type'] = 'hidden';
+
   //additional settings
   $form['fragment'] = array(
     '#type'=>'hidden',
