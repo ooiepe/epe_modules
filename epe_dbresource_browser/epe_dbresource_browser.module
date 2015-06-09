@@ -120,8 +120,6 @@ function epe_dbresource_browser_preload() {
     'is_logged_in'=>user_is_logged_in(),
   )),'setting');
 
-  drupal_add_js(array('theme_path'=>base_path() . drupal_get_path('theme','bootstrap')),'setting');
-
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
   drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
   drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');

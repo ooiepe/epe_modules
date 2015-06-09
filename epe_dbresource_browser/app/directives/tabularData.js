@@ -21,7 +21,7 @@ define(['app'], function(app) {
           scope.row.thumbnail = scope.row.oembed_thumbnail;
         }
         if(scope.row.thumbnail == '') {
-          scope.row.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+          scope.row.thumbnail = Drupal.settings.epe.theme_path + '/images/no_thumb_small.jpg';
         }
 
         if(scope.row.status == 'Published') row_status += '<span class="btn btn-default btn-sm disabled">Shared</span>&nbsp;';
@@ -54,9 +54,7 @@ define(['app'], function(app) {
 
         // end the author cell
         template += '</div></td>';
-        console.log(scope.row.title);
-console.log(scope.dateSort);
-console.log(date_sort_data);
+
         if(scope.dateSort == 'created') date_sort_data = scope.row.created;
         template += '<td>' +  date_sort_data + '</td>';
 
