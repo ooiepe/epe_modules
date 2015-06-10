@@ -147,6 +147,8 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
         webStorage.session.add('queryparams',$scope.browser.queryparams);
+
+        setPageHeader(params['type']);
       } //init
 
       //no module type defined, we reload the browser with url of the 1st module
@@ -211,6 +213,8 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           params['sort_mode'] = $routeParams['sort_mode'];
         }
         $location.search(params);
+
+        setPageHeader(params['type']);
       } //end setActiveModule function
 
       //swich filter type
@@ -300,19 +304,14 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
       }
 
-      //no module type defined, we reload the browser with url of the 1st module
-      if(typeof $routeParams['type'] == "undefined" || (
-        typeof $routeParams['type'] != "undefined" && (
-          $routeParams['type'] == '' ||
-          !_.find($scope.browser.enabled_modules, function(module) { return module['api'] == $routeParams['type']; })
-        )
-        )) {
-        var params = {};
-        params['type'] = $scope.browser.enabled_modules[0].api;
-        params['page'] = 1;
-        $location.search(params);
-      } else {
-        $scope.fn.init();
-      }      
+      function setPageHeader(type) {
+        var pageheader = type;
+        if(pageheader == 'ev') { pageheader = 'Visualization'; }
+        else if(pageheader == 'cm') { pageheader = 'Concept Map'; }
+        else if(pageheader == 'llb') { pageheader = 'Investigation'; }
+        else { pageheader = pageheader.toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase(); }); }
+
+        angular.element('.page-header').html('Browse ' + pageheader + 's');        
+      }
     }]); //end controller function
 }); //end define
