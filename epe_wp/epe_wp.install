@@ -367,13 +367,16 @@ function epe_wp_update_7002(&$sandbox) {
   views_save_view($view_definition['user_resources']);
 }
 
+/**
+ * EPEDEV-521 add custom imce resize size
+ */
 function epe_wp_update_7003(&$sandbox) {
   $profiles = variable_get('imce_profiles');
   $profiles[1]['thumbnails'][] = array(
-    'name'=>'',
-    'dimensions'=>'120x120',
+    'name'=>'custom_190w_140h',
+    'dimensions'=>'190x140',
     'prefix'=>'',
-    'suffix'=>''
+    'suffix'=>'_190x140'
   );
   variable_set('imce_profiles',$profiles);
 }
