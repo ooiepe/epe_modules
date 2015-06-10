@@ -543,6 +543,8 @@
 
 <?php echo render($form['resource_browser_modal']); ?>
 
+<?php echo render($form['options']['status']); ?>
+
 <?php echo render($form['actions']); ?>
 
 <?php

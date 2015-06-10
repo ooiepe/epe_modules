@@ -309,6 +309,8 @@ function launchResourceBrowser() {
 
 <input type="hidden" name="thumbdata" id="thumbdata" value="cm/">
 
+<?php echo render($form['options']['status']); ?>
+
 <?php echo render($form['actions']); ?>
 
 <?php

@@ -148,6 +148,8 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
             <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
           <?php endif; ?>
 
+          <?php echo render($form['options']['status']); ?>
+
           <?php echo render($form['actions']); ?>
 
           <?php
