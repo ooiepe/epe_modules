@@ -168,6 +168,11 @@ function epe_wp_block_info() {
     'cache' => DRUPAL_NO_CACHE,
   );
 
+  $blocks['epe_wp_social_share'] = array(
+    'info' => t('EPE Resource Social Share'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
   return $blocks;
 
 }
@@ -196,6 +201,16 @@ function epe_wp_block_view($delta = '') {
       $block['title'] = t('Featured Resources');
       $block['content'] = theme('epe_featured_block');
     break;
+
+    case 'epe_wp_social_share':
+      if(arg(0) == 'node' && is_numeric(arg(1))) {
+        $node = node_load(arg(1));
+        if($node) {
+          drupal_add_js('!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');',array('type'=>'inline','scope'=>'header'));
+          $block['content'] = theme('epe_wp_social_share',array('url'=>$_SERVER['HTTP_HOST'] . request_uri(),'title'=>$node->title));
+        }
+      }
+    break;
   }
 
   return $block;
@@ -217,6 +232,14 @@ function epe_wp_theme() {
       'template' => 'epe_featured_block',
       'variables' => array(
         'type' => array(),
+      ),
+    ),
+    'epe_wp_social_share' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_wp_social_share',
+      'variables' => array(
+        'url' => '',
+        'title' => '',
       ),
     ),
   );
