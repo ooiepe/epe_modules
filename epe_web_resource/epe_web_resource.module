@@ -106,7 +106,31 @@ function epe_web_resource_form_alter(&$form, &$form_state, $form_id) {
     $form['#attached']['js'] = array(
       drupal_get_path('module', 'epe_web_resource') . '/epe_web_resource_form.js',
     );
+
+    if(is_numeric(arg(1))) {
+      $form['actions']['saveas'] = array(
+        '#type'=>'submit',
+        '#access'=>1,
+        '#value'=>t('Save As'),
+        '#weight'=>2,
+        '#submit'=>array(      
+          'epe_web_resource_save_as_submit',
+          'node_form_submit',
+        ),
+      );
+    }
   }
+}
+
+function epe_web_resource_save_as_submit($form, &$form_state) {
+  $form_state['node']->vid = '';
+  $form_state['node']->nid = '';
+  $form_state['node']->status = 0;
+  $form_state['node']->created = '';
+  $form_state['node']->changed = '';
+  $form_state['node']->is_new = 1;
+  $form_state['values']['nid'] = '';
+  $form_state['values']['vid'] = '';
 }
 
 function epe_web_resource_origin_validate($form, &$form_state) {
