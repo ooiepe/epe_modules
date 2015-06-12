@@ -917,3 +917,17 @@ function epe_db_update_7005(&$sandbox) {
   $url_field['required'] = 0;
   field_update_instance($url_field); 
 }
+
+/**
+ * EPEDEV-307 add getting started tag, add new knowledge base view
+ */
+function epe_db_update_7006(&$sandbox) {
+  $term = new stdClass();
+  $term->name = "getting started";
+  $term->vid = 1; // ??1?? is a vocabulary id you wish this term to assign to
+  taxonomy_term_save($term); // Finally, save our term
+
+  module_load_include('inc','epe_db','epe_db.views_default');
+  $view_definition = epe_db_views_default_views();
+  views_save_view($view_definition['knowledge_base_view']);
+}
