@@ -39,7 +39,7 @@
 
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-<?php include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php'; ?>
+<?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
 
   <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
     <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
