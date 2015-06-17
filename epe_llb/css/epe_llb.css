@@ -29,3 +29,141 @@ blockquote p { font-size: 14px; }
 .pull-right { margin-left: 10px; }
 .modal.fade.in { top: 5%; }
 .assessment { color: #000; font-weight: normal; }
+
+
+
+
+.llb-bb {
+	padding-left: 15px;
+	position: relative;
+}
+
+
+.llb-bb-header h3 {
+	position: relative;
+	float: left;
+	font-size: 18px;
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+.llb-bb-header span {
+	padding: 5px 10px 0px 20px;
+	display: block;
+	float: left;
+	font-size: 12px;
+}
+
+
+.llb-bb h4 {
+	font-size: 14px;
+	padding: 0px 18px;
+	margin-top: 0px;
+}
+
+.llb-bb p {
+	padding: 0px 18px 30px 18px;
+}
+
+.llb-bb-previous p, .llb-bb-next p, .llb-bb-previous h4, .llb-bb-next h4, .step-next strong, .step-previous strong {
+	color: #06698e;
+}
+.llb-bb-this p {
+	color: #000;
+}
+.llb-bb-this h4, .step-this strong {
+	color: #ac7f25;
+}
+
+.step-previous, .step-next, .step-this {
+	font-weight: bold;
+}
+
+.llb-bb-previous, .llb-bb-this, .llb-bb-next {
+	hheight: auto;
+}
+
+
+
+
+
+.llb-bb-previous {
+	float: left;
+	width: 261px;
+	background-image: url(../images/llb_bluebox_wave_left.png);
+	background-repeat: no-repeat;
+    background-position: top; 
+   	background-color: #e6eff2;
+   	padding: 76px 0px 10px 0px;
+    position: relative;
+}
+
+.llb-bb-this {
+	float: left;
+	width: 351px;
+	margin-left: 6px;
+	background-image: url(../images/llb_bluebox_wave_center.png);
+	background-repeat: no-repeat;
+    background-position: top; 
+   	background-color: #f3f3f3;
+   	padding: 76px 0px 10px 0px;
+    position: relative;
+}
+
+.llb-bb-next {
+	float: left;
+	width: 261px;
+	background-color: #e6eff2;
+	margin-left: 6px;
+	background-image: url(../images/llb_bluebox_wave_right.png);
+	background-repeat: no-repeat;
+    background-position: top; 
+   	background-color: #e6eff2;
+   	padding: 76px 0px 10px 0px;
+    position: relative;
+}
+
+
+
+
+.llb-bb .step-this {
+	position: absolute;
+	bottom: 0;
+	width: 351px;
+	border-top: 1px solid #fff;
+	text-align: left;
+    padding: 10px 10px 10px 10px;
+	font-size: 14px;
+}
+
+.llb-bb .step-next {
+	position: absolute;
+	bottom: 0;
+	width: 217px;
+	border-top: 1px solid #fff;
+	text-align: right;
+	background-image: url(../images/llb_bluebox_arrow_next.png);
+	background-repeat: no-repeat;
+    background-position: 233px; 
+    padding: 10px 34px 10px 10px;
+	font-size: 12px;
+
+
+}
+
+.llb-bb .step-previous {
+	position: absolute;
+	bottom: 0;
+	width: 217px;
+	border-top: 1px solid #fff;
+	text-align: left;
+	background-image: url(../images/llb_bluebox_arrow_prev.png);
+	background-repeat: no-repeat;
+    background-position: 18px; 
+    padding: 10px 10px 10px 34px;
+	font-size: 12px;
+
+
+}
+
+
