@@ -356,3 +356,13 @@ function epe_ev_update_7011(&$sandbox) {
   $view_definition = epe_ev_views_default_views();
   views_save_view($view_definition['ev_tools']);
 }
+
+/**
+ * epedev-499: updating view details
+ */
+function epe_ev_update_7012(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['ev_tools']);
+}
+
