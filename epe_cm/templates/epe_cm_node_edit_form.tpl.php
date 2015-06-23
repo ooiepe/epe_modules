@@ -14,14 +14,16 @@
 
 .resource-browser-modal { width: 829px; height: 500px; }
 
+
+.form-textarea {
+  height: 150px;
+}
+
 </style>
 
 
 
-<div class="form-help"><a href="<?php echo base_path() . "node/178" ?>" target="_blank">Help with this form</a></div>
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
-
+<div class="form-help"><a href="<?php echo base_path() . "node/178" ?>" target="_blank">Help with this tool</a></div>
 
 <div class="field-container">
 <label for="edit-title" class="field-label">* Title:</label>
@@ -319,7 +321,3 @@ function launchResourceBrowser() {
   echo render($form['form_id']);
   echo render($form['form_token']);
 ?>
-
-</div>
-</div>
-

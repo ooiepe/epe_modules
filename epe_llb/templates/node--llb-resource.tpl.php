@@ -6,7 +6,7 @@
   $hideActionButtons = 0;
   $showContent = false;
   $custom_node_detail_url = $GLOBALS['base_url'] . "/node/" . $node->nid . '/detail';
-  include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
+  include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php';
 ?>
 
   <!-- <header>

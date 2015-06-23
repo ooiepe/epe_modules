@@ -307,6 +307,7 @@ function epe_llb_homepage_render() {
 function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_id) {
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.tab-history.js');
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.form.js');
+  drupal_add_js(drupal_get_path('module','epe_llb') . '/js/jquery.actual.js');
   if(isset($form_state['node']->nid)) {
     drupal_set_title('Edit your Data Investigation "' . $form['title']['#default_value'] . '"');
   } else {

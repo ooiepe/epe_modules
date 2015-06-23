@@ -22,7 +22,7 @@ function epe_ev_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'EV Tools';
+  $handler->display->display_options['title'] = 'Customizable Visualization Tools';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -97,29 +97,19 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['nid']['alter']['text'] = '<div class="container-fluid thumbnail">
-    <div class="row-fluid">
-      <div class="span9"><h3>[title]</h3></div>
-      <div class="span3">[field_tool_author]</div>
-    </div>
-    <div class="row-fluid">
-      <div class="span3 offset1">
-        [field_tool_thumbnail]
+  $handler->display->display_options['fields']['nid']['alter']['text'] = '<div class="ev-tool-list-item">
+    <div class="thumb">[field_tool_thumbnail]</div>
+    <div class="content">
+      <h3>[title]</h3>
+      [body]
+      <div class="buttons">
+        <a class="btn btn-small btn-info" href="../node/[nid]">Preview</a> &nbsp;&nbsp;
+        <a class="btn btn-small btn-info" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Customize</a>
       </div>
-      <div class="span6">
-        <p>
-          [body]
-        </p>
-        <p class="pull-right">
-          <a class="btn" href="../node/[nid]">Preview <i class="icon-chevron-right"></i></a> &nbsp;&nbsp;
-          <a class="btn" href="../node/add/ev-tool-instance/?ev_toolid=[nid]">Customize <i class="icon-chevron-right"></i></a>
-        </p>
-      </div>
+      <br clear="all">
     </div>
-
-  </div>
-
-  <div>&nbsp;</div>';
+    <br clear="all">
+  </div>';
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nid']['element_default_classes'] = FALSE;
   /* Sort criterion: Content: Tool Name (field_tool_name) */
@@ -140,9 +130,19 @@ function epe_ev_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'ev_tool' => 'ev_tool',
   );
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['label'] = 'Description';
+  $handler->display->display_options['header']['area']['content'] = 'Interactive data visualizations are a great way to delve into rich datasets, like those from the OOI. Each of the visualization tools below was designed to provide easy access to a specific dataset, like glider profiles or mooring time series, with an educational goal in mind. To support your learning objectives, you can create and save customized versions of each tool, focusing on the datasets and timeframes you want to highlight.
+
+  To get started, first check out each tool’s preview to see what the end result will look like. Then, try customizing a tool with various datasets and settings. For example, you can create custom tool instances that explore seasonal changes in oceanic conditions over the course of a year, or investigate the environmental impacts of specific events like storms or hurricanes. ';
+  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
+  /* Header: Global: Text area */
   $handler->display->display_options['path'] = 'ev/tools';
 
   $export['ev_tools'] = $view;

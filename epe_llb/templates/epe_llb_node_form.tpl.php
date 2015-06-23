@@ -9,18 +9,81 @@
   }
 ?>
 
+
+
+<script>
+    jQuery(document).ready(function() {
+      jQuery('.llb-bb').each(function() {
+        var height = Math.max(jQuery(this).find('.llb-bb-this').actual('height'), jQuery(this).find('.llb-bb-next').actual('height'), jQuery(this).find('.llb-bb-previous').actual('height'))
+        jQuery(this).find('.llb-bb-this').height(height);
+        jQuery(this).find('.llb-bb-next').height(height);
+        jQuery(this).find('.llb-bb-previous').height(height);
+      });
+
+    });
+</script>
+
+<style>
+.nav-tabs > li > a, .nav-pills > li > a {
+
+  padding-right: 8px;
+  padding-left: 8px;
+  font-weight: bold;
+}
+
+.nav-tabs > li > a {
+  line-height: 16px;
+  background-color: #e1edf1;
+  color: #06698e;
+  font-size: 13px;
+  border-bottom: 1px solid #2094bf;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #2094bf;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+  color: #06698e;
+  background-color: #fff;
+  border-color: #2094bf #2094bf transparent #2094bf;
+}
+
+.nav-tabs .pull-right {
+  margin-left: 5px;
+}
+
+
+.top .form-actions {
+    float: right;
+    padding: 0;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    background-color: none;
+    border-top: none;
+}
+
+
+</style>
+
+
 <div class="form-help"><a href="<?php echo base_path() . "node/214" ?>" target="_blank">Help with this form</a></div>
+
+<div class="top">
+<?php echo render($form['actions']); ?>
+</div><br clear="all">
+
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
-  <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ddddcc">Instructions</a></li>
-  <li><a href="#objectives" data-toggle="tab" style="background-color:#ddddcc">Learning Objective</a></li>
+  <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ececec;color:#606060;">Instructions</a></li>
+  <li><a href="#objectives" data-toggle="tab" style="background-color:#ececec;color:#606060;">Learning Objective</a></li>
   <li><a href="#motivation" data-toggle="tab">Introduction</a></li>
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
   <li><a href="#explanation" data-toggle="tab">Explanation</a></li>
-  <li class="pull-right"><a href="#setup" data-toggle="tab">Cover</a></li>
-  <li class="pull-right"><a href="#notes" data-toggle="tab">Instructor Notes</a></li>
+  <li class="pull-right"><a href="#setup" data-toggle="tab" style="background-color:#ececec;color:#606060;">Cover</a></li>
+  <li class="pull-right"><a href="#notes" data-toggle="tab" style="background-color:#ececec;color:#606060;">Instructor Notes</a></li>
 </ul>
 
 <div class="tab-content">
@@ -45,7 +108,6 @@
   <!--<button type="button" class="btn btn-success" data-toggle="tab" data-target="objectives" onclick="jQuery('#llbnav li:eq(1) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>-->
 </div> <!-- /#instruction -->
 <div class="tab-pane" id="objectives">
-  <?php echo render($form['block_objectives_info']); ?>
   <h3>Establish your Learning Objective</h3>
   <div class="row-fluid">
     <div class="span7">
@@ -76,12 +138,12 @@
     </div>
     <?php endif; } ?>
   </div>
+  <?php echo render($form['block_objectives_info']); ?>
 
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="motivation" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="motivation" onclick="jQuery('#llbnav li:eq(2) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#goal -->
 
 <div class="tab-pane" id="motivation">
-  <?php echo render($form['block_introduction_info']); ?>
   <h3>Introduction: Provide a Motivating Context</h3>
   <div class="row-fluid">
     <div class="span6">
@@ -143,12 +205,12 @@
       <?php echo render($form['intro_slideshow_button']); ?>
     </div>
   </div>
+  <?php echo render($form['block_introduction_info']); ?>
 
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="background" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="background" onclick="jQuery('#llbnav li:eq(3) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#intro -->
 
 <div class="tab-pane" id="background">
-  <?php echo render($form['block_background_info']); ?>
   <h3>Add Background Content</h3>
   <div class="row-fluid">
     <div class="span6">
@@ -218,12 +280,12 @@
     <!--<p>The view in contemporary learning theory is that people construct new knowledge and understanding based on what they already know and believe.  This is why it is helpful to ask students up front about content they should already know about to check their knowledge level.  These questions can also be used to establish the current thought processes students use, which can then be compared with any gains or changes in their knowledge after they complete an investigation.  Identifying changes in student thought processes can help you distinguish between the concepts they understand and those they need more guidance on.</p>-->
     </div>
   </div>
+  <?php echo render($form['block_background_info']); ?>
 
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="challenge" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="challenge" onclick="jQuery('#llbnav li:eq(4) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#background -->
 
 <div class="tab-pane" id="challenge">
-  <?php echo render($form['block_challenge_info']); ?>
   <h3>Create a Challenge</h3>
   <div class="row-fluid">
     <div class="span6">
@@ -275,12 +337,12 @@
       </ul>
     </div>
   </div>
+  <?php echo render($form['block_challenge_info']); ?>
 
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llbnav li:eq(5) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#challenge -->
 
 <div class="tab-pane" id="exploration">
-  <?php echo render($form['block_exploration_info']); ?>
   <h3>Identify Datasets to Explore</h3>
   <div class="row-fluid">
     <div class="span6">
@@ -405,12 +467,12 @@
   </div>
 
 
+  <?php echo render($form['block_exploration_info']); ?>
 
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="explanation" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="explanation" onclick="jQuery('#llbnav li:eq(6) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#exploration -->
 
 <div class="tab-pane" id="explanation">
-  <?php echo render($form['block_explanation_info']); ?>
   <h3>Guide Students Towards an Explanation</h3>
   <div class="row-fluid">
     <div class="span7">
@@ -449,7 +511,8 @@
   </div>
 
   <div class="clearfix"></div>
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="notes" onclick="jQuery('#llbnav li:eq(8) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+  <?php echo render($form['block_explanation_info']); ?>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="notes" onclick="jQuery('#llbnav li:eq(8) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#explanation -->
 
 <div class="tab-pane" id="notes">
@@ -498,7 +561,7 @@
   <?php echo render($form['field_resource_file_note']); ?>
   </div>
 
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="setup" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button>
+<!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="setup" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->
 </div> <!-- /#notes -->
 
 <div class="tab-pane" id="setup">
@@ -544,8 +607,6 @@
 <?php echo render($form['resource_browser_modal']); ?>
 
 <?php echo render($form['options']['status']); ?>
-
-<?php echo render($form['actions']); ?>
 
 <?php
   /* form identifier */
