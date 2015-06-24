@@ -143,9 +143,6 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
 
     //form_load_include($form_state, 'inc', 'node', 'node.pages');
     $form['dynamic_form'][$resource_form_id] = $resource_form;
-print_r('<pre>');
-    print_r($resource_form['actions']);
-    print_r('</pre>');
   //}
 
   }
