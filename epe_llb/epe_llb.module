@@ -613,10 +613,6 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
       $view_mode = 'teaser';
     } elseif ( arg(2) && arg(2) == 'detail') {
       drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css',array('group'=>CSS_THEME));
-      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
-      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
-
-      drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
       if(libraries_get_path('video-js')) {
         drupal_add_css(libraries_get_path('video-js') . '/video-js.css');
