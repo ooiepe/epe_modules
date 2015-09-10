@@ -150,6 +150,14 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
   return theme('epe_dbfiles_dynamic_resource_form',array('form'=>$form));
 }
 
+function epe_dbfiles_node_presave($node) {
+  global $user;  
+
+  if($node->uid == drupal_anonymous_user()->uid && user_is_logged_in()) {
+    $node->uid = $user->uid;
+  }
+}
+
 function epe_dbfiles_node_insert($node) {  
   if(arg(0) == 'dialog') {
     drupal_goto("dialog/resource/file/{$node->nid}/success");
