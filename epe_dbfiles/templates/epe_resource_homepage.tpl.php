@@ -37,7 +37,16 @@
 
   <div class="span5">
     <div class="control-group featured-image">
-      <img src="<?php echo base_path() . drupal_get_path('module','epe_dbfiles'); ?>/content/homepage/homepage.jpg" />
+    <?php  
+      $block = module_invoke('bean', 'block_view', 'file-resources-rotator');
+      if(!empty($block['content']['bean']['file-resources-rotator']['field_rotator_content_fields']['#items'])) {
+        print render($block['content']);  
+      } else {  
+    ?>
+    <img src="<?php echo base_path() . drupal_get_path('module','epe_dbfiles'); ?>/content/homepage/homepage.jpg" />
+    <?php 
+      } //end if bean has item
+    ?>
     </div>
   </div>
 </div>

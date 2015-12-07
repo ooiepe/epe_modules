@@ -338,3 +338,31 @@ function epe_ev_update_7009(&$sandbox) {
   $view_definition = epe_ev_views_default_views();
   views_save_view($view_definition['ev_tools']);
 }
+
+/**
+ * patch a problem with resource thumbnail in json output
+ */
+function epe_ev_update_7010(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['ev_tools']);
+}
+
+/**
+ * add created field to view output
+ */
+function epe_ev_update_7011(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['ev_tools']);
+}
+
+/**
+ * epedev-499: updating view details
+ */
+function epe_ev_update_7012(&$sandbox) {
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['ev_tools']);
+}
+

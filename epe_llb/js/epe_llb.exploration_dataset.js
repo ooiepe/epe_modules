@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
     $('.add-adhoc').bind('click', function(e) {
       $('#adhocmodal').height($(window).height() * 0.8)
       .find('.adhocmodal-iframe').height($(window).height() * 0.65);
-      $('#adhocmodal').find('.adhocmodal-iframe').attr('src',Drupal.settings.epe.base_path + 'dialog/resource/add/file');
+      $('#adhocmodal').find('.adhocmodal-iframe').attr('src',Drupal.settings.epe.base_path + 'dialog/resource/add');
       $('.btn-back').attr('data-api',$(this).data('api'));
       $('.rbmodal-iframe').contents().find('input[name="nid"]:checked').each(function() {
         $(this).attr('checked', false);
@@ -189,7 +189,7 @@ jQuery(document).ready(function($) {
     });
 
     $('.text_resource').click(function() {
-      var data = {"nid":"NULL","type":"text","title":"Please enter your title","body":"Please enter your description","thumbnail":"","uri":""};
+      var data = {"nid":"NULL","type":"text","title":"Please enter your title","body":"Please enter your description","thumbnail":Drupal.settings.epe.theme_path+'/images/no_thumb_small.jpg',"uri":""};
       window.parent.addDataSetItem(data, true);
     });
 });
@@ -208,7 +208,7 @@ function loadResourceThumbnail(value) {
         var result = JSON.parse(result);
         value.thumbnail = result.thumbnail;
       }).fail(function() {
-        value.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+        value.thumbnail = Drupal.settings.epe.theme_path + '/images/no_thumb_small.jpg';
       });
     }
   });

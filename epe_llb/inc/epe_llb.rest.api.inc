@@ -13,17 +13,6 @@ function epe_llb_restful_api() {
   }
   $view->set_display($display_name);
 
-  //if log in user, pass in userid to exposed filter
-  if(user_is_logged_in()) {
-    $filter = $view->get_item($display_name, 'filter', 'author_uid');
-    $filter['value'] = $user->uid;
-    $view->set_item($display_name, 'filter', 'author_uid', $filter);
-  } else  {
-    $filters = $view->display_handler->get_option('filters');
-    unset($filters['author_uid']);
-    $view->display_handler->override_option('filters', $filters);
-  }
-
   //if there is search term, pass it in to exposed filter
   $value = '';
   if(isset($_GET['search'])): $value = $_GET['search']; endif;
@@ -43,6 +32,17 @@ function epe_llb_restful_api() {
     $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
   }
 
+  //if log in user, pass in userid to exposed filter
+  if(user_is_logged_in()) {
+    $filter = $view->get_item($display_name, 'filter', 'author_uid');
+    $filter['value'] = $user->uid;
+    $view->set_item($display_name, 'filter', 'author_uid', $filter);
+  } else  {
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['author_uid']);
+    $view->display_handler->override_option('filters', $filters);
+  }
+
   $sort_filter = array(
     'table'=>'search_api_index_llb_resource_index',
     'relationship'=>'none',
@@ -52,10 +52,14 @@ function epe_llb_restful_api() {
 
   $sort_fields = array();
 
-  if(isset($_GET['sort']) && in_array($_GET['sort'],array('title','author','last_updated'))) {
+  if(isset($_GET['sort']) && in_array($_GET['sort'],array('title','author','last_updated','created'))) {
     switch ($_GET['sort']) {
       case 'last_updated':
         $sort_fields[] = 'changed';
+      break;
+
+      case 'created':
+        $sort_fields[] = 'created';
       break;
 
       case 'author':

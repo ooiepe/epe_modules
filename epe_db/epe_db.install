@@ -809,3 +809,125 @@ function epe_db_update_7000(&$sandbox) {
 
 }
 
+/**
+ * epedev-417: create custom field for bean content rotator
+ */
+function epe_db_update_7001(&$sandbox) {
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_base');
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_instance');
+
+  // Create all the fields we are adding to our content type.
+  foreach (_epe_db_content_rotator_field_default_field_bases() as $field) {
+    if(!field_info_field($field['field_name'])) {
+      field_create_field($field);
+    }
+  }
+
+  // Create all the instances for our fields.
+  foreach (_epe_db_content_rotator_field_default_field_instances() as $instance) {
+    if(!field_info_instance('field_collection_item',$instance['field_name'],'field_rotator_content_fields')) {
+      field_create_instance($instance);
+    }    
+  }
+}
+
+/**
+ * epedev-417 create content rotator instance programmatically
+ */
+function epe_db_update_7002(&$sandbox) {
+  if(!bean_load_delta('homepage-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Homepage Content Rotator';
+    $bean->delta = 'homepage-rotator';
+    $bean->save();
+  }
+}
+
+/**
+ * epedev-417 create additional rotator instances programmatically
+ */
+function epe_db_update_7003(&$sandbox) {
+  if(!bean_load_delta('visualizations-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Visualizations Content Rotator';
+    $bean->delta = 'visualizations-rotator';
+    $bean->save();
+  }
+
+  if(!bean_load_delta('concept-maps-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Concept Maps Rotator';
+    $bean->delta = 'concept-maps-rotator';
+    $bean->save();
+  }
+
+  if(!bean_load_delta('investigations-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'Investigations Rotator';
+    $bean->delta = 'investigations-rotator';
+    $bean->save();
+  }
+
+  if(!bean_load_delta('file-resources-rotator')) {
+    $bean = bean_create(array('type' => 'content_rotator'));
+    $bean->label = 'File Resources Rotator';
+    $bean->delta = 'file-resources-rotator';
+    $bean->save();
+  }
+}
+
+/**
+ * epedev-417 create additional rotator url field
+ */
+function epe_db_update_7004(&$sandbox) {
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_base');
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_instance');
+
+  $fields = _epe_db_content_rotator_field_default_field_bases();
+  $instances = _epe_db_content_rotator_field_default_field_instances();
+  try {
+    // Create all the fields we are adding to our content type.
+    field_create_field($fields['field_rotator_content_url']);
+  } catch (Exception $e) {
+    watchdog('Update Error','epedb 7006: ' . $e->getMessage());
+  }
+  
+  try {
+    // Create all the instances for our fields.
+    field_create_instance($instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']);
+  } catch (Exception $e) {
+    watchdog('Update Error','epedb 7006: ' . $e->getMessage());
+  }
+}
+
+/**
+ * EPEDEV-417 give all user view permission to bean, remove url requirement
+ */
+function epe_db_update_7005(&$sandbox) {
+  $anonymous = user_role_load_by_name('anonymous user');
+  $authenticated = user_role_load_by_name('authenticated user');
+  user_role_grant_permissions($anonymous->rid,array('view any content_rotator bean'));
+  user_role_grant_permissions($authenticated->rid,array('view any content_rotator bean'));
+
+  module_load_include('inc','epe_db','inc/epe_db.content_rotator.field_instance');
+  $instances = _epe_db_content_rotator_field_default_field_instances();
+
+  $url_field = field_info_instance('field_collection_item',$instances['field_collection_item-field_rotator_content_fields-field_rotator_content_url']['field_name'],'field_rotator_content_fields');
+  
+  $url_field['required'] = 0;
+  field_update_instance($url_field); 
+}
+
+/**
+ * EPEDEV-307 add getting started tag, add new knowledge base view
+ */
+function epe_db_update_7006(&$sandbox) {
+  $term = new stdClass();
+  $term->name = "getting started";
+  $term->vid = 1; // ??1?? is a vocabulary id you wish this term to assign to
+  taxonomy_term_save($term); // Finally, save our term
+
+  module_load_include('inc','epe_db','epe_db.views_default');
+  $view_definition = epe_db_views_default_views();
+  views_save_view($view_definition['knowledge_base_view']);
+}

@@ -71,7 +71,8 @@ function epe_dbmultimedia_views_default_views() {
               $node = node_load($data->entity);
               if($node->type == \'video_resource\') {
                 $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
-                if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
+                //if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
+                if(!empty($image[0][\'thumbnailfile\'])) echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'thumbnailfile\']->uri);
               } else {
                 $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
                 $output = \'\';
@@ -83,7 +84,8 @@ function epe_dbmultimedia_views_default_views() {
                   ),
                 ));
                 }
-                echo render($output);
+                //echo render($output);
+                echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
               }
             ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
@@ -95,6 +97,15 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'title';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_entity'] = 0;
+  /* Field: Indexed Node: Date created */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['label'] = 'created';
+  $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['created']['date_format'] = 'custom';
+  $handler->display->display_options['fields']['created']['custom_date_format'] = 'M j, Y';
+  $handler->display->display_options['fields']['created']['link_to_entity'] = 0;
   /* Field: Indexed Node: Date changed */
   $handler->display->display_options['fields']['changed']['id'] = 'changed';
   $handler->display->display_options['fields']['changed']['table'] = 'search_api_index_multimedia_resource_index';

@@ -1,6 +1,6 @@
 define(['app','ngload!services/dataServices','directives/tabularData','ngload!filters/range','ngProgress'], function(app) {
-  app.controller('SearchCtrl', ['$scope','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
-    function($scope,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {
+  app.controller('SearchCtrl', ['$scope','$window','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
+    function($scope,$window,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {      
       //init scope params
       $scope.fn = {};
       $scope.resources = {};
@@ -23,6 +23,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.browser.messages.show_progress_bar = true;
       $scope.browser.messages.show_messages = true;
       $scope.browser.messages.messages = "Loading Resources";
+      $scope.browser.date_sort = 'last_updated';
 
       //set additional settings for each module view
       angular.forEach($scope.browser.modules, function(module, index) {
@@ -87,7 +88,10 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         if(typeof $routeParams['sort'] == 'undefined') {
           $routeParams['sort'] = 'last_updated';
+        } else {
+          $scope.browser.date_sort = $routeParams['sort'];
         }
+        
         if(typeof $routeParams['sort_mode'] == 'undefined') {
           $routeParams['sort_mode'] = 'desc';
         }
@@ -143,6 +147,8 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         $scope.browser.queryparams[$scope.browser.selected_module.api] = params;
         webStorage.session.add('queryparams',$scope.browser.queryparams);
+
+        setPageHeader(params['type']);
       } //init
 
       //no module type defined, we reload the browser with url of the 1st module
@@ -157,8 +163,12 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         params['page'] = 1;
         $location.search(params);
       } else {
-        $scope.fn.init();
-      }
+        if(!Drupal.settings.user.is_logged_in && typeof $routeParams['filter'] != 'undefined' && $routeParams['filter'] == 'author') {
+          $window.location.href=Drupal.settings.epe.base_path + 'user';
+        } else {
+          $scope.fn.init();
+        }        
+      }   
 
       $scope.search.term = $routeParams['search'];
       $scope.fn.searchTerm = function() {
@@ -203,6 +213,8 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           params['sort_mode'] = $routeParams['sort_mode'];
         }
         $location.search(params);
+
+        setPageHeader(params['type']);
       } //end setActiveModule function
 
       //swich filter type
@@ -255,6 +267,9 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
 
       $scope.fn.sortResults = function(column) {
         var params = {};
+        if(_.contains(['last_updated','created'],column)) {
+          $scope.browser.date_sort = column;
+        }
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = $routeParams['page'];
         if(typeof $routeParams['search'] != 'undefined') {
@@ -271,7 +286,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else if($routeParams['sort'] == column) {
           params['sort_mode'] = $routeParams['sort_mode'] == 'asc' ? 'desc' : 'asc';
         } else {
-          params['sort_mode'] = $routeParams['sort_mode'] == 'desc';
+          params['sort_mode'] = $routeParams['sort_mode'] = 'desc';
         }
 
         /*if($routeParams['sort'] == column) {
@@ -287,6 +302,16 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else {
           return 'sort';
         }
+      }
+
+      function setPageHeader(type) {
+        var pageheader = type;
+        if(pageheader == 'ev') { pageheader = 'Visualization'; }
+        else if(pageheader == 'cm') { pageheader = 'Concept Map'; }
+        else if(pageheader == 'llb') { pageheader = 'Investigation'; }
+        else { pageheader = pageheader.toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase(); }); }
+
+        angular.element('.page-header').html('Browse ' + pageheader + 's');        
       }
     }]); //end controller function
 }); //end define

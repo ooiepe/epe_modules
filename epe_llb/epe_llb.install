@@ -616,3 +616,21 @@ function epe_llb_update_7012(&$sandbox) {
   $field_resource_file['settings']['file_extensions'] = $field_instances['node-llb_resource-field_resource_file']['settings']['file_extensions'];
   field_update_instance($field_resource_file);
 }
+
+/**
+ * patch a problem with resource thumbnail in json output
+ */
+function epe_llb_update_7013(&$sandbox) {
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
+}
+
+/**
+ * add created to view output
+ */
+function epe_llb_update_7014(&$sandbox) {
+  module_load_include('inc','epe_llb','epe_llb.views_default');
+  $view_definition = epe_llb_views_default_views();
+  views_save_view($view_definition['llb_resource_index']);
+}

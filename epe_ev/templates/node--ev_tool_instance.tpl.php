@@ -39,7 +39,7 @@
 
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-<?php include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php'; ?>
+<?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
 
   <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
     <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
@@ -63,6 +63,8 @@
 <!-- display any places this item is included and any items copied from this item -->
 <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
+<?php print render($content['field_instance_questions']); ?>
+
 <?php print render($content['comments']); ?>
 
 </article>
@@ -72,7 +74,6 @@
 (function(){
 
   function svgToCanvas(){
-
     //load an svg snippet in the canvas
     canvg(
       document.getElementById('canvas'),
@@ -83,9 +84,20 @@
 
   function canvasToImage(){
     // save canvas image as data url (png format by default)
-      var canvas = document.getElementById("canvas"),
-        dataURL = canvas.toDataURL();
-        window.open(dataURL,"Tool Image","location=0");
+    var canvas = document.getElementById("canvas"),
+    w = canvas.width,
+    h = canvas.height;
+    
+    //create a rectangle with the desired background color
+    var destCtx = canvas.getContext('2d');
+    destCtx.globalCompositeOperation = "destination-over";
+    destCtx.fillStyle = "#FFFFFF";
+    destCtx.fillRect(0,0,w,h);
+    
+    dataURL = canvas.toDataURL('image/png');
+    dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+    
+    window.open(dataURL,"Visualization Image","location=0");
   }
 
   // set EduVis environment paths
@@ -113,10 +125,8 @@
 
   $("#tool-function-export-image")
     .on("click", function(){
-
       svgToCanvas();
       canvasToImage();
-
     });
 
 }());

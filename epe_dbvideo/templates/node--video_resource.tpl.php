@@ -6,7 +6,7 @@
 <?php 
 $isDBFiles = 1;
 ?>
-<?php include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php'; ?>
+<?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
 
 
 
@@ -21,10 +21,20 @@ $isDBFiles = 1;
 
 <?php print render($content['field_video_resource_file']) ?>
 
+<legend>
+  <label class="embed-toggle">Embed link</label>
+  <div class="embed-wrapper hidden">
+    &lt;iframe width="560" height="315" src="<?php echo base_path() . 'node/' . arg(1) . '/embed'; ?>" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+  </div>
+</legend>
 
-
-
-
+<script type="text/javascript">
+(function($){
+  $('.embed-toggle').click(function() { 
+    $('.embed-wrapper').toggleClass('hidden'); 
+  });
+})(jQuery);
+</script>
 
 
 

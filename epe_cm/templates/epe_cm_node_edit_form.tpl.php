@@ -14,14 +14,16 @@
 
 .resource-browser-modal { width: 829px; height: 500px; }
 
+
+.form-textarea {
+  height: 150px;
+}
+
 </style>
 
 
 
-<div class="form-help"><a href="<?php echo base_path() . "node/178" ?>" target="_blank">Help with this form</a></div>
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
-
+<div class="form-help"><a href="<?php echo base_path() . "node/178" ?>" target="_blank">Help with this tool</a></div>
 
 <div class="field-container">
 <label for="edit-title" class="field-label">* Title:</label>
@@ -85,7 +87,7 @@ function loadFlash() {
   var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
 
   // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20141218_1054.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
+  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20150501_0839.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
   
   return;
 }
@@ -309,6 +311,8 @@ function launchResourceBrowser() {
 
 <input type="hidden" name="thumbdata" id="thumbdata" value="cm/">
 
+<?php echo render($form['options']['status']); ?>
+
 <?php echo render($form['actions']); ?>
 
 <?php
@@ -317,7 +321,3 @@ function launchResourceBrowser() {
   echo render($form['form_id']);
   echo render($form['form_token']);
 ?>
-
-</div>
-</div>
-

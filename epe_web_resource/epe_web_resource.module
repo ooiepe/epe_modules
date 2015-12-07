@@ -67,6 +67,88 @@ function epe_web_resource_node_type_insert($content_type) {
   }
 }
 
+function epe_web_resource_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'web_resource_node_form') {
+    if(is_numeric(arg(1)) && arg(2) == 'edit') {
+    $form['header'] = array(
+      '#type'=>'container',
+      '#prefix'=>'<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;"><div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">',
+      '#weight'=>-20,
+    );
+
+    $form['footer'] = array(
+      '#type'=>'container',
+      '#suffix'=>'</div></div>',
+      '#weight'=>30,
+    );
+    }
+
+    if(is_numeric(arg(1))) {
+      $destination = 'node/' . arg(1);
+    } else {
+      $destination = 'db/';
+    }
+
+    $form['destination'] = array(
+      '#type'=>'hidden',
+      '#value'=>$destination,
+    );
+
+    $form['field_featured_status']['#type'] = 'hidden';
+    $form['field_public_status']['#type'] = 'hidden';
+    $form['field_resource_url']['#weight'] = -10;    
+    
+    $form['#validate'][] = 'epe_web_resource_origin_validate';
+    
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'epe_web_resource') . '/epe_web_resource_form.css',
+    );
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'epe_web_resource') . '/epe_web_resource_form.js',
+    );
+
+    if(is_numeric(arg(1))) {
+      $form['actions']['saveas'] = array(
+        '#type'=>'submit',
+        '#access'=>1,
+        '#value'=>t('Save As'),
+        '#weight'=>2,
+        '#submit'=>array(      
+          'epe_web_resource_save_as_submit',
+          'node_form_submit',
+        ),
+      );
+    }
+  }
+}
+
+function epe_web_resource_save_as_submit($form, &$form_state) {
+  $form_state['node']->vid = '';
+  $form_state['node']->nid = '';
+  $form_state['node']->status = 0;
+  $form_state['node']->created = '';
+  $form_state['node']->changed = '';
+  $form_state['node']->is_new = 1;
+  $form_state['values']['nid'] = '';
+  $form_state['values']['vid'] = '';
+}
+
+function epe_web_resource_origin_validate($form, &$form_state) {
+  if(preg_match('/(http|https):\/\/(?:www.)?(youtube.com|youtu\.?be)\/(?:watch\?v=)?(.*?)(?:\z|&)/', $form_state['values']['field_resource_url']['und'][0]['url'],$matches)) {
+    $form_state['values']['field_resource_origin']['und'][0]['value'] = 'youtube';
+  }
+  if(preg_match('/(http|https):\/\/(?:www.)?(vimeo.com)\/?(.*?)(?:\z|&)/', $form_state['values']['field_resource_url']['und'][0]['url'],$matches)) {
+    $form_state['values']['field_resource_origin']['und'][0]['value'] = 'vimeo';
+  }
+  if(preg_match('/(http|https):\/\/(?:www.)?((slideshare)\.net)\/?(.*?)(?:\z|&)/', $form_state['values']['field_resource_url']['und'][0]['url'],$matches)) {
+    $form_state['values']['field_resource_origin']['und'][0]['value'] = 'slideshare';
+  }
+
+  if($form_state['values']['field_resource_origin']['und'][0]['value'] == '') {
+    form_set_error('url',t('Please provide embeddable url of supported webistes'));
+  }  
+}
+
 /*
  * assign custom content type permission base on epe supported author roles
  * the epe supported author roles is added from epe_wp module

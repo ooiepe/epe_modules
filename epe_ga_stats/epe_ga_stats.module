@@ -1,0 +1,94 @@
+<?php
+/**
+ * Implements hook_views_api().
+ */
+function epe_ga_stats_views_api() {
+  return array("api" => "3.0");
+}
+
+function epe_ga_stats_menu() {
+  $items = array();
+
+  $result = db_select('menu_links', 'a')->fields('a',array('mlid'))->condition('link_path','review','=')->execute()->fetchAssoc();
+
+  $items['review/resources/stats'] = array(
+    'title' => t('Resources Page View Stats'),
+    'page callback' => 'epe_ga_stats_view',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 2,
+    'plid' => $result['mlid'],
+  );
+
+  return $items;
+}
+
+/*
+ * Implement hook_theme
+ * This hook is to style edit form, the theme key needs to be the same as the form function name
+ */
+function epe_ga_stats_theme() {
+  $tpl_path = drupal_get_path('module','epe_ga_stats') . '/templates';
+  return array(
+    'epe_ga_stats_view' => array(
+      'path' => $tpl_path,
+      'template' => 'epe_ga_stats_view',
+      'variables' => array(
+        'output' => '',
+        'params' => array(),
+      ),
+    ),
+  );
+}
+
+function epe_ga_stats_view() {
+  $params = drupal_get_query_parameters();
+  $output = '';
+  if(isset($params['type']) && isset($params['frequency'])) {
+    $view = views_get_view('resource_statistics');
+    $view->set_display($params['type'] . 'views');
+
+    if($params['frequency'] == 'month') {
+      $fields = $view->display_handler->get_option('fields');
+      unset($fields['count_1']);
+      unset($fields['count_2']);
+      $view->display_handler->override_option('fields', $fields);
+
+      $sort = $view->display_handler->get_option('sort');
+      unset($sort['count_1']);
+      unset($sort['count_2']);
+      $view->display_handler->override_option('sort', $sort);
+    }
+    if($params['frequency'] == 'year') {
+      $fields = $view->display_handler->get_option('fields');
+      unset($fields['count']);
+      unset($fields['count_2']);
+      $view->display_handler->override_option('fields', $fields);
+
+      $sort = $view->display_handler->get_option('sort');
+      unset($sort['count']);
+      unset($sort['count_2']);
+      $view->display_handler->override_option('sort', $sort);      
+    }
+    if($params['frequency'] == 'all') {
+      $fields = $view->display_handler->get_option('fields');
+      unset($fields['count']);
+      unset($fields['count_1']);
+      $view->display_handler->override_option('fields', $fields);
+
+      $sort = $view->display_handler->get_option('sort');
+      unset($sort['count']);
+      unset($sort['count_1']);
+      $view->display_handler->override_option('sort', $sort);      
+    }
+    $view->pre_execute();
+    $view->execute();
+
+    $output = $view->render();    
+  }
+
+  if(!$output) drupal_set_message(t("Plesae use the filter to view page stats."), 'warning');
+
+  return theme('epe_ga_stats_view',array('output'=>$output,'params'=>$params));
+}

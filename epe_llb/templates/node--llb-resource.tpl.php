@@ -6,7 +6,7 @@
   $hideActionButtons = 0;
   $showContent = false;
   $custom_node_detail_url = $GLOBALS['base_url'] . "/node/" . $node->nid . '/detail';
-  include realpath(drupal_get_path('theme','bootstrap')) . '/templates/viewpage.tpl.php';
+  include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php';
 ?>
 
   <!-- <header>
@@ -161,54 +161,6 @@
   }
 ?>
 
-<!-- cm specific js -->
-<!--
-<script type="text/javascript">
-function loadFlash() {
-  // from the microwave science website
-  var flashvars = {};
-  flashvars.USERNAME = 'sgraham';
-  flashvars.USERID = '4';
-  flashvars.USERSTATUS = '1';
-  flashvars.OOI = 'true';
-  flashvars.BUILDER = 'false';
-  flashvars.RESOURCEDETAILSURL = '<?php echo base_path() ?>api/resource/lookup?xml=';
-  flashvars.PHPPROXY = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/php/RetrieveOWL.php' ?>';
-  flashvars.OWLPATH = '<?php echo base_path() . drupal_get_path('module', 'epe_cm') . '/owl/ioos/' ?>';
-  var params = {};
-  var attributes = { id: 'conceptMapBuilderViewer', name: 'conceptMapBuilderViewer' };
-  // this line is unchanged from the mwsci website
-  swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20140114_1156.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
-  return;
-}
-
-function getXMLfromJS() {
-  // get the contents of the text area
-  var xml = document.getElementById('conceptMapContents').value;
-  // get a reference to the flash object
-  var swf = document.getElementById('conceptMapBuilderViewer');
-  // call the load concept map function
-  swf.jsToFlashImportMapData(xml);
-  //swf.jsToFlashImportMapData('hello');
-  return;
-}
-
-function doSave() {
-  // get a reference to the flash object
-  var swf = document.getElementById('conceptMapBuilderViewer');
-  // get the contents of the map
-  swf.getMapContents();
-  return;
-}
-
-function giveXMLtoJS(value) {
-  // put those contents into the text field
-  document.getElementById('conceptMapContents').value = value;
-  return;
-}
-</script>
--->
-
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
   <ul class="breadcrumb">
@@ -234,7 +186,7 @@ function giveXMLtoJS(value) {
   ?>
     <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
       <!-- <div id="flashcontent"><p>Please update your Flash Player</p></div> -->
-       <iframe width="100%" height="424" src="<?php echo base_path(); ?>/node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
+       <iframe class="cmembed" width="100%" height="424" src="<?php echo base_path(); ?>node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
     </div>
     <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
     <div class="clearfix"><a href="<?php echo base_path() ?>node/<?php echo $dataset->nid; ?>" class="pull-right">View Resource Page</a></div>

@@ -233,3 +233,21 @@ function epe_dbmultimedia_update_7008(&$sandbox) {
   $modules['epe_dbmultimedia']['resource_browser']['adurl'] = 'resource/add/file';
   variable_set('EPE_CONTENT_MODULES', $modules);
 }
+
+/**
+ * patch a problem with resource thumbnail in json output
+ */
+function epe_dbmultimedia_update_7009(&$sandbox) {
+  module_load_include('inc','epe_dbmultimedia','epe_dbmultimedia.views_default');
+  $view_definition = epe_dbmultimedia_views_default_views();
+  views_save_view($view_definition['multimedia_resource_index']);
+}
+
+/**
+ * add created field to views output
+ */
+function epe_dbmultimedia_update_7010(&$sandbox) {
+  module_load_include('inc','epe_dbmultimedia','epe_dbmultimedia.views_default');
+  $view_definition = epe_dbmultimedia_views_default_views();
+  views_save_view($view_definition['multimedia_resource_index']);
+}

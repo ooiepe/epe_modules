@@ -7,10 +7,11 @@ define(['app'], function(app) {
       scope: {
         row: '=',
         type: '=',
+        dateSort: '=',
         updateSelect: '&'
       },
       link: function (scope, elem, attrs) {
-        var template = '', element_ck = '', link_target = '_self', row_status = '';
+        var template = '', element_ck = '', link_target = '_self', row_status = '', date_sort_data = scope.row.last_updated;
         if(Drupal.settings.resourceBrowser.editmode) {
           element_ck = '<div style="float:left;"><input type="checkbox" style="margin-right:0;position:absolute;" name="nid" ng-click="updateResourceSelection('+ scope.row.id +')" ng-checked="isChecked()" data-type="' + scope.type + '" value="' + scope.row.id + '"></div>';
           link_target = '_blank';
@@ -20,7 +21,7 @@ define(['app'], function(app) {
           scope.row.thumbnail = scope.row.oembed_thumbnail;
         }
         if(scope.row.thumbnail == '') {
-          scope.row.thumbnail = Drupal.settings.theme_path + '/images/no_thumb_small.jpg';
+          scope.row.thumbnail = Drupal.settings.epe.theme_path + '/images/no_thumb_small.jpg';
         }
 
         if(scope.row.status == 'Published') row_status += '<span class="btn btn-default btn-sm disabled">Shared</span>&nbsp;';
@@ -54,7 +55,8 @@ define(['app'], function(app) {
         // end the author cell
         template += '</div></td>';
 
-        template += '<td>' + scope.row.last_updated + '</td>';
+        if(scope.dateSort == 'created') date_sort_data = scope.row.created;
+        template += '<td>' +  date_sort_data + '</td>';
 
         elem.html(template).show();
 

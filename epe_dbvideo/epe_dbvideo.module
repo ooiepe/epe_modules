@@ -21,6 +21,14 @@ function epe_dbvideo_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['node/%/videoembed'] = array(
+    'title' => t('Embed Video Resource'),
+    'page callback' => 'epe_dbvideo_embed',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,    
+  );
+
   return $items;
 }
 
@@ -93,6 +101,68 @@ function epe_dbvideo_node_type_insert($content_type) {
   }
 }
 
+function epe_dbvideo_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == 'video_resource_node_form') {
+    if(is_numeric(arg(1)) && arg(2) == 'edit') {
+    $form['header'] = array(
+      '#type'=>'container',
+      '#prefix'=>'<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;"><div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">',
+      '#weight'=>-20,
+    );
+
+    $form['footer'] = array(
+      '#type'=>'container',
+      '#suffix'=>'</div></div>',
+      '#weight'=>30,
+    );
+    }
+
+    if(is_numeric(arg(1))) {
+      $destination = 'node/' . arg(1);
+    } else {
+      $destination = 'db/';
+    }
+
+    $form['destination'] = array(
+      '#type'=>'hidden',
+      '#value'=>$destination,
+    );
+
+    $form['field_featured_status']['#type'] = 'hidden';
+    $form['field_public_status']['#type'] = 'hidden';
+    $form['field_video_resource_file']['#weight'] = -10;
+    $form['field_video_resource_file']['und'][0]['#title'] = 'Video Resource File';    
+    
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'epe_dbvideo') . '/epe_dbvideo_form.css',
+    );
+
+    if(is_numeric(arg(1))) {
+      $form['actions']['saveas'] = array(
+        '#type'=>'submit',
+        '#access'=>1,
+        '#value'=>t('Save As'),
+        '#weight'=>2,
+        '#submit'=>array(      
+          'epe_dbvideo_save_as_submit',
+          'node_form_submit',
+        ),
+      );
+    }
+  }
+}
+
+function epe_dbvideo_save_as_submit($form, &$form_state) {
+  $form_state['node']->vid = '';
+  $form_state['node']->nid = '';
+  $form_state['node']->status = 0;
+  $form_state['node']->created = '';
+  $form_state['node']->changed = '';
+  $form_state['node']->is_new = 1;
+  $form_state['values']['nid'] = '';
+  $form_state['values']['vid'] = '';
+}
+
 /*
  * assign custom content type permission base on epe supported author roles
  * the epe supported author roles is added from epe_wp module
@@ -127,6 +197,41 @@ function _assign_epe_dbvideo_permission() {
   // Clear the user access cache.
   drupal_static_reset('user_access');
   drupal_static_reset('user_role_permissions');
+}
+
+function epe_dbvideo_embed($nid) {
+  $node = node_load($nid);
+  if($node && $node->type == 'video_resource') {
+    $field = field_get_items('node', $node, 'field_video_resource_file');
+    $variables = array('video_path'=>'','poster'=>'');
+    if($field) {
+      $variables['video_path'] = $field[0]['uri'];
+      if($field[0]['thumbnailfile']) {
+        $variables['poster'] = $field[0]['thumbnailfile']->uri;
+      }
+      /*$item['uri'] = '';
+      $item['file'] = '';
+      if($field[0]['thumbnailfile']) {
+        $item['thumbnail'] = image_style_url('resource_browser_thumbnail', $field[0]['thumbnailfile']->uri);
+        $item['uri'] = $field[0]['thumbnailfile']->uri;
+        $item['file'] = file_create_url($field[0]['uri']);
+      }*/
+    }    
+    return theme('video_resource_embed',array('video_path'=>file_create_url($variables['video_path']),'poster'=>file_create_url($variables['poster'])));
+  } else {
+    return '';
+  }
+}
+
+function epe_dbvideo_theme() {
+  $tpl_path = drupal_get_path('module','epe_dbvideo') . '/templates/';
+  return array(
+    'video_resource_embed' => array(
+      'path' => $tpl_path,
+      'template' => 'video_resource_embed',
+      'variables' => array('video_path'=>'','poster'=>''),
+    ),
+  );
 }
 
 /**

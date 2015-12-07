@@ -306,6 +306,8 @@ function epe_llb_homepage_render() {
  */
 function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_id) {
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.tab-history.js');
+  drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.form.js');
+  drupal_add_js(drupal_get_path('module','epe_llb') . '/js/jquery.actual.js');
   if(isset($form_state['node']->nid)) {
     drupal_set_title('Edit your Data Investigation "' . $form['title']['#default_value'] . '"');
   } else {
@@ -456,6 +458,49 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
     '#name' => 'revision',
     '#value' => 1
   );
+
+  $form['options']['status']['#type'] = 'hidden';
+
+  if(is_numeric(arg(1))) {
+    $form['actions']['saveas'] = array(
+      '#type'=>'submit',
+      '#access'=>1,
+      '#value'=>t('Save As'),
+      '#weight'=>2,
+      '#submit'=>array(      
+        'epe_llb_save_as_submit',
+        'node_form_submit',
+        'epe_llb_custom_submission_handler',
+      ),
+    );
+  }
+
+  //additional settings
+  $form['fragment'] = array(
+    '#type'=>'hidden',
+    '#name' => 'fragment',
+    '#value' => '',
+  );
+
+  $form['actions']['submit']['#submit'][] = 'epe_llb_custom_submission_handler';
+}
+
+function epe_llb_save_as_submit($form, &$form_state) {
+  $form_state['node']->vid = '';
+  $form_state['node']->nid = '';
+  $form_state['node']->status = 0;
+  $form_state['node']->created = '';
+  $form_state['node']->changed = '';
+  $form_state['node']->is_new = 1;
+  $form_state['values']['nid'] = '';
+  $form_state['values']['vid'] = '';
+}
+
+function epe_llb_custom_submission_handler($form, &$form_state) {
+  unset($_GET['destination']);
+  if($form_state['clicked_button']['#id'] == 'edit-submit' || $form_state['clicked_button']['#id'] == 'edit-saveas') {
+    $form_state['redirect'] = 'node/' . $form_state['nid'] . '/detail';
+  }  
 }
 
 function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
@@ -568,10 +613,6 @@ function epe_llb_entity_view_mode_alter(&$view_mode, $context) {
       $view_mode = 'teaser';
     } elseif ( arg(2) && arg(2) == 'detail') {
       drupal_add_css(drupal_get_path('module','epe_llb') . '/css/epe_llb.css',array('group'=>CSS_THEME));
-      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfobject.js');
-      drupal_add_js(drupal_get_path('module', 'epe_cm') . '/swf/swfaddress/swfaddress.js');
-
-      drupal_add_js('jQuery(document).ready(function () { loadFlash(); });', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
       if(libraries_get_path('video-js')) {
         drupal_add_css(libraries_get_path('video-js') . '/video-js.css');
@@ -640,13 +681,6 @@ function epe_llb_node_view_alter(&$build) {
     $datasets = json_decode($build['field_exploration_dataset']['#items'][0]['value']);
     if($datasets) {
       foreach($datasets as &$dataset) {
-        /*$data = $assoc_resources[$dataset->nid];
-        $dataset->thumbnail = '';
-        if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
-        if(isset($data->uri)): $dataset->uri = $data->uri; endif;
-        if(isset($data->file)): $dataset->file = $data->file; endif;
-        $dataset->credit = $data->credit;
-        $dataset->source_url = $data->source_url;*/
         $dataset = epe_llb_reload_dataset($dataset, $assoc_resources);
       }
     }
@@ -656,13 +690,6 @@ function epe_llb_node_view_alter(&$build) {
     $intro_slideshow = json_decode($build['field_introductory_slideshow']['#items'][0]['value']);
     if($intro_slideshow) {
       foreach($intro_slideshow as &$dataset) {
-        /*$data = $assoc_resources[$dataset->nid];
-        $dataset->thumbnail = '';
-        if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
-        if(isset($data->uri)): $dataset->uri = $data->uri; endif;
-        if(isset($data->file)): $dataset->file = $data->file; endif;
-        $dataset->credit = $data->credit;
-        $dataset->source_url = $data->source_url;*/
         $dataset = epe_llb_reload_dataset($dataset, $assoc_resources);
       }
     }
@@ -672,13 +699,6 @@ function epe_llb_node_view_alter(&$build) {
     $background_slideshow = json_decode($build['field_background_slideshow']['#items'][0]['value']);
     if($background_slideshow) {
       foreach($background_slideshow as &$dataset) {
-/*        $data = $assoc_resources[$dataset->nid];
-        $dataset->thumbnail = '';
-        if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
-        if(isset($data->uri)): $dataset->uri = $data->uri; endif;
-        if(isset($data->file)): $dataset->file = $data->file; endif;
-        $dataset->credit = $data->credit;
-        $dataset->source_url = $data->source_url;*/
         $dataset = epe_llb_reload_dataset($dataset, $assoc_resources);
       }
     }
@@ -688,34 +708,12 @@ function epe_llb_node_view_alter(&$build) {
     $challenge_thumbnail = json_decode($build['field_challenge_thumbnail']['#items'][0]['value']);
     if($challenge_thumbnail) {
       foreach($challenge_thumbnail as &$dataset) {
-        /*$data = $assoc_resources[$dataset->nid];
-        $dataset->thumbnail = '';
-        if(isset($data->thumbnail)): $dataset->thumbnail = $data->thumbnail; endif;
-        if(isset($data->uri)): $dataset->uri = $data->uri; endif;
-        if(isset($data->file)): $dataset->file = $data->file; endif;
-        $dataset->credit = $data->credit;
-        $dataset->source_url = $data->source_url;*/
         $dataset = epe_llb_reload_dataset($dataset, $assoc_resources);
       }
     }
     $build['field_challenge_thumbnail']['#items'][0]['value'] = json_encode($challenge_thumbnail);
   }
 }
-
-/*
-function epe_llb_field_formatter_rebuild($form, &$form_state) {
-  //$form['field']['#prefix'] = 'This text will rule them all!';
-  //drupal_add_css('hello.css'); //This line works even after validation fails.
-
-  $form['field_background_question']['#title_display'] = 'invisible';
-  $form['field_background_question']['und']['#title_display'] = 'invisible';
-  $form['field_background_question']['und'][0]['value']['#title_display'] = 'invisible';
-  echo '<pre>';
-  print_r($form['field_background_question']);
-  echo '</pre>';
-  return $form;
-}
-*/
 
 function epe_llb_block_info() {
   $blocks['epe_llb_objectives_info'] = array(
@@ -812,30 +810,6 @@ function epe_llb_block_view($delta = '') {
 }
 
 function epe_llb_dataset_query($dataset) {
-/*  global $base_root;
-
-  $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
-  //unset($depend_modules['epe_llb']);
-  $apiurl = $base_root . base_path() . 'api/resource/';
-
-  foreach($depend_modules as $key=>$module) {
-    if(isset($module['resource_browser'])) {
-      if( (isset($module['content_type']) && $module['content_type'] === $dataset->type) || (in_array($dataset->type, array('video_resource','audio_resource')) && $key === 'epe_dbmultimedia')) {
-        $apiurl .= $module['resource_browser']['api'] . '/';
-        break;
-      }
-    }
-  }
-  $apiurl .= $dataset->nid;
-
-  $ch = curl_init();
-  $timeout = 5;
-  curl_setopt($ch, CURLOPT_URL, $apiurl);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-  $data = json_decode(curl_exec($ch));
-  curl_close($ch);*/
-
   $depend_modules = variable_get('EPE_CONTENT_MODULES',array());
 
   $current_module = '';
@@ -946,7 +920,7 @@ function epe_llb_reload_dataset($dataset, $assoc_resources) {
 /**
  * Implements hook_default_rules_configuration().
  */
-function epe_llb_default_rules_configuration() {
+/*function epe_llb_default_rules_configuration() {
   $items = array();
   $items['rules_llb_resource_redirect_on_save'] = entity_import('rules_config', '{ "rules_llb_resource_redirect_on_save" : {
       "LABEL" : "LLB resource redirect on save",
@@ -962,7 +936,7 @@ function epe_llb_default_rules_configuration() {
     }
   }');
   return $items;
-}
+}*/
 
 /**
  * Implements hook_default_search_api_index().

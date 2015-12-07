@@ -93,6 +93,8 @@ function epe_db_node_reject_public_function($node) {
 function epe_db_node_share_function($node) {
 	// update the published status to pending
 	$node->status = 1;
+	// resetting the public status to private if they chose to share again
+	$node->field_public_status[$node->language][0]['value'] = 'Private';
 	// save the node
 	node_save($node);
 

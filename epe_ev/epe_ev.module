@@ -160,8 +160,39 @@ function _epe_ev_insert_after_first_element(&$a, $element) {
 
 function epe_ev_form_alter(&$form, &$form_state, $form_id) {
   if($form_id == 'ev_tool_instance_node_form') {
+    $form['options']['status']['#type'] = 'hidden';
     $form['field_source_nid']['#type'] = 'hidden';
+    $form['#attached']['js'][] = libraries_get_path('formSavior') . '/jquery.formSavior.min.js';
+    $form['#attached']['js']['jQuery(document).ready(function($) { $("form#ev-tool-instance-node-form").formSavior(); });'] = array( 'type' => 'inline');
+
+    if(is_numeric(arg(1))) {
+      $form['actions']['saveas'] = array(
+        '#type'=>'submit',
+        '#access'=>1,
+        '#value'=>t('Save As'),
+        '#weight'=>2,
+        '#submit'=>array(
+          'epe_ev_save_as_submit',
+          'node_form_submit',
+        ),
+      );
+    }
   }
+
+  if($form_id == 'ev_tool_node_form') {
+    $form['options']['status']['#type'] = 'hidden';
+  }
+}
+
+function epe_ev_save_as_submit($form, &$form_state) {
+  $form_state['node']->vid = '';
+  $form_state['node']->nid = '';
+  $form_state['node']->status = 0;
+  $form_state['node']->created = '';
+  $form_state['node']->changed = '';
+  $form_state['node']->is_new = 1;
+  $form_state['values']['nid'] = '';
+  $form_state['values']['vid'] = '';
 }
 
 /*

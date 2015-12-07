@@ -10,12 +10,17 @@ Drupal.behaviors.epe_llb_detailview = {
 
         if($(this).attr('id') != 'exploration_tab') {
           $('.tabbable iframe').each(function() {
-            //$(this).contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-            var iframe_source = $(this).attr('src');
-            //remove source then add it back
-            $(this).attr('src', iframe_source);
+            if(!$(this).hasClass('ev_tool_instance') && !$(this).hasClass('cmembed')) {
+              var iframe_source = $(this).attr('src');
+              //remove source then add it back
+              $(this).attr('src', iframe_source);
+            }  
           });
         }
+      });
+
+      $("button[data-toggle='tab']").click(function(e) {
+        window.scrollTo(0,0);
       });
   }
 };
