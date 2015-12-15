@@ -179,7 +179,7 @@ function epe_cm_menu() {
   );
 
   $items['vocab'] = array(
-    'title' => t('Vocabulary'),
+    'title' => t('Vocabulary Navigator'),
     'page callback' => 'epe_cm_vocab',
     'file' => 'epe_cm.pages.inc',
     'file path' => drupal_get_path('module', 'epe_cm') . '/inc',

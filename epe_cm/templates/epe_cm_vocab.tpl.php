@@ -53,7 +53,9 @@ function loadFlash() {
 
 </script>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non aliquam enim. Donec commodo, velit dictum fringilla condimentum, lacus leo maximus nisi, ac tempor dui magna nec tortor. Donec eget tortor faucibus, tempor massa luctus, consectetur arcu. Curabitur vitae augue sem. Vestibulum iaculis nisl nunc, quis mattis lacus volutpat et. Nullam eget nunc vitae leo vestibulum ultricies. Nulla imperdiet commodo enim, in venenatis mauris maximus ultricies. Quisque dictum dolor vitae lacinia sollicitudin. Aliquam accumsan vel ex at rutrum. Maecenas eu finibus augue, a luctus turpis. Aliquam erat volutpat. Vivamus id vehicula turpis, tempus dictum nisl. Quisque rhoncus turpis lorem, at malesuada ipsum porttitor eget. </p>
+<p>Use the interactive Vocabulary Navigator to explore Ocean Observatory Initiative science, sites, platforms, instruments, and data products. You can type a term into the search field, or start exploring by clicking on terms (in squares) to reveal related concepts. </p>
+
+<p>Each term in the vocabulary has a definition, which is revealed when hovering over the concept's 'i' icon. Many concepts also contain images that can be viewed by clicking the camera icon. To return to the top of the vocabulary, click on the 'home' icon.</p>
 
 <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
 <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
