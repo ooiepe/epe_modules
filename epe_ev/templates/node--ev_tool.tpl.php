@@ -21,7 +21,25 @@
 
   <div class="resource-links">
     <ul>
-      <li><a href="../node/add/ev-tool-instance/?ev_toolid=<?php print $node->nid; ?>" class="links edit popover-link" title="Creative a Custom Visualization Instance.">CUSTOMIZE</a></li>
+      <li>
+      <!-- <a href="../node/add/ev-tool-instance/?ev_toolid=<?php print $node->nid; ?>" class="links edit popover-link" title="Creative a Custom Visualization Instance.">CUSTOMIZE</a> -->
+      <?php
+      echo l(t('CUSTOMIZE'),'node/add/ev-tool-instance',
+        array(
+          'attributes'=>array(
+            'data-placement'=>'bottom',
+            'rel'=>'tooltip',
+            'class'=>array('links','edit','popover-link'),
+            'id'=>'edit-btn',
+            'title'=>'Create a Custom Visualization Instance'
+          ),
+          'query'=>array(
+            'ev_toolid'=>$node->nid
+          )
+        )      
+      ); 
+      ?>      
+      </li>
     </ul>
   </div>
 
