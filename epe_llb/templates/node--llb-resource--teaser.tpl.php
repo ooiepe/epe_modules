@@ -31,13 +31,13 @@
     hide($content['field_tags']);
   ?>
   <div>
-    <div class="span7">
+    <div class="span6">
       <?php echo render($content['body']); ?>
       <?php unset($content['links']['node']['#links']['node-readmore']); ?>
       <?php unset($content['links']['comment']['#links']['comment-add']); ?>
       <?php echo render($content['links']); ?>
     </div>
-    <div class="span5">
+    <div class="span6">
       <div class="pull-right">
         <p>
           <?php //echo render($content['field_challenge_thumbnail']);

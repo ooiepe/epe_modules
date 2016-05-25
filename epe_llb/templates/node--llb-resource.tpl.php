@@ -121,7 +121,7 @@
   <ul class="thumbnails">
     <?php foreach($datasets as $key => $dataset): ?>
     <?php
-      $li_classes = array('dataset');
+      $li_classes = array('dataset','span4');
       if(($key + 1) % 3 == 1): $li_classes[] = 'first'; endif;
     ?>
     <li class="<?php echo implode(' ', $li_classes); ?>">
