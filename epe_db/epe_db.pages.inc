@@ -154,7 +154,3 @@ function epe_db_node_unfeature_function($node) {
 	// return to the view page
   	drupal_goto($path = "node/" . $node -> nid);
 }
-
-
-
-

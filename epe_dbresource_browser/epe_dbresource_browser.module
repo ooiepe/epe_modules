@@ -24,7 +24,7 @@ function epe_dbresource_browser_menu() {
     'page callback' => 'epe_dbresource_browser_pager_api',
     'file' => 'epe_dbresource_browser.rest.api.inc',
     'file path' => drupal_get_path('module', 'epe_dbresource_browser') . '/inc',
-    'access callback' => TRUE,
+    'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
 

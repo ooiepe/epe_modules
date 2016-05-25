@@ -23,7 +23,8 @@ function epe_db_menu() {
     'page callback' => 'epe_db_node_delete_function',
     'page arguments' => array(1),
     'file' => 'epe_db.pages.inc',
-    'access callback' => TRUE,
+    'access callback' => 'epe_db_resource_can_do_delete',
+    'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
 
@@ -32,7 +33,8 @@ function epe_db_menu() {
     'page callback' => 'epe_db_node_submit_public_function',
     'page arguments' => array(1),
     'file' => 'epe_db.pages.inc',
-    'access callback' => TRUE,
+    'access callback' => 'epe_db_resource_can_do_submitpublic',
+    'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
 
@@ -41,7 +43,8 @@ function epe_db_menu() {
     'page callback' => 'epe_db_node_unsubmit_public_function',
     'page arguments' => array(1),
     'file' => 'epe_db.pages.inc',
-    'access callback' => TRUE,
+    'access callback' => 'epe_db_resource_can_do_unsubmit',
+    'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
 
@@ -90,7 +93,8 @@ function epe_db_menu() {
     'page callback' => 'epe_db_node_share_function',
     'page arguments' => array(1),
     'file' => 'epe_db.pages.inc',
-    'access callback' => TRUE,
+    'access callback' => 'epe_db_resource_can_do_share',
+    'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
 
@@ -98,8 +102,8 @@ function epe_db_menu() {
     'title' => t('Unshare a resource'),
     'page callback' => 'epe_db_node_unshare_function',
     'page arguments' => array(1),
-    'file' => 'epe_db.pages.inc',
-    'access callback' => TRUE,
+    'access callback' => 'epe_db_resource_can_do_unshare',
+    'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
 
@@ -351,4 +355,29 @@ function _epe_db_insert_after_first_element(&$a, $element) {
     $first_element = array_shift($a);
     array_unshift($a, $first_element, $element);
   }
+}
+
+function epe_db_resource_can_do_submitpublic($node) {
+  global $user;  
+  return ($node->uid == $user->uid || in_array('administrator', $user->roles));
+}
+
+function epe_db_resource_can_do_delete($node) {
+  global $user;
+  return ($node->uid == $user->uid || in_array('administrator', $user->roles));
+}
+
+function epe_db_resource_can_do_unsubmit($node) {
+  global $user;
+  return ($node->uid == $user->uid || in_array('administrator', $user->roles));
+}
+
+function epe_db_resource_can_do_share($node) {
+  global $user;
+  return ($node->uid == $user->uid || in_array('administrator', $user->roles));
+}
+
+function epe_db_resource_can_do_unshare($node) {
+  global $user;
+  return ($node->uid == $user->uid || in_array('administrator', $user->roles));
 }
