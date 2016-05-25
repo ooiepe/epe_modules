@@ -8,6 +8,18 @@ define(['angularAMD','angularRoute','angularWebstorage','ngProgress','underscore
         controller: 'SearchCtrl'
       })).
       otherwise({redirectTo: '/search'});
+  }]).run(['$rootScope','$location',function($rootScope, $location) {
+    $rootScope.$on('$locationChangeSuccess', function(event, newurl, oldurl) {      
+      _.forEach(angular.element('.menu.nav .dropdown-menu li'), function(li, lindex) {
+        var href = angular.element(li)[0]['children'][0]['href'];        
+        if(angular.element(li).hasClass('active')) {
+          angular.element(li).removeClass('active');
+        }
+        if(newurl.indexOf(href) > -1) {
+          angular.element(li).addClass('active');
+        }
+      });
+    });
   }]);
 
 
