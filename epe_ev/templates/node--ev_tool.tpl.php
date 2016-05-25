@@ -31,7 +31,8 @@
             'rel'=>'tooltip',
             'class'=>array('links','edit','popover-link'),
             'id'=>'edit-btn',
-            'title'=>'Create a Custom Visualization Instance'
+            'title'=>'Create a Custom Visualization Instance',
+            'trigger'=>'manual'
           ),
           'query'=>array(
             'ev_toolid'=>$node->nid
