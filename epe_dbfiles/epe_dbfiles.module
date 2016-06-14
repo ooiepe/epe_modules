@@ -121,6 +121,7 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
     $resource_form['actions']['submit']['#attributes']['disabled']='disabled';
     $resource_form['author']['name']['#value'] = $user->name;
     $resource_form['author']['date']['#value'] = format_date(time(), 'custom', 'Y-m-d');
+    if($resource_form['field_resource_origin']) $resource_form['field_resource_origin']['#required'] = false;
     unset($resource_form['actions']['cancel']);
 
     /*if (!isset($resource_form['#attributes']['class'])) {
