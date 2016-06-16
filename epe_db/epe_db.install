@@ -931,3 +931,26 @@ function epe_db_update_7006(&$sandbox) {
   $view_definition = epe_db_views_default_views();
   views_save_view($view_definition['knowledge_base_view']);
 }
+
+/**
+ * EPE-11, cleaning up knowledge base node url
+ */
+function epe_db_update_7007(&$sandbox) {
+  $term_names = array('cm','db','ev','llb','wp');
+  foreach($term_names as $term_name) {
+    $term = taxonomy_get_term_by_name($term_name);
+    $term = reset($term); 
+    $nodeIds = taxonomy_select_nodes($term->tid, FALSE);  
+    foreach($nodeIds as $nodeId) {
+      $node = node_load($nodeId);
+      $node_title_path = strtolower(str_replace(" ","-",preg_replace("/[^A-Za-z0-9 ]/", "", $node->title)));
+      $alias = "help/$term_name/$node_title_path";            
+      $path = array(
+        'source' => 'node/' . $node->nid,
+        'alias' => $alias,
+        'language' => LANGUAGE_NONE
+      );
+      path_save($path);
+    } 
+  }
+}
