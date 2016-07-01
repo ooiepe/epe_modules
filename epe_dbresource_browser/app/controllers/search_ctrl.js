@@ -164,7 +164,13 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         $location.search(params);
       } else {
         if(!Drupal.settings.user.is_logged_in && typeof $routeParams['filter'] != 'undefined' && $routeParams['filter'] == 'author') {
-          $window.location.href=Drupal.settings.epe.base_path + 'user';
+        var destination = "resource-browser";
+        var keyvalpairs = [];
+        _.forEach($routeParams, function(prop,key) {
+          keyvalpairs.push(key + '=' + prop);
+        });
+        if(keyvalpairs.length > 0) destination += "#/search?" + keyvalpairs.join('&');        
+          $window.location.href=Drupal.settings.epe.base_path + 'user/login?destination='+destination;
         } else {
           $scope.fn.init();
         }        
