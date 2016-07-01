@@ -89,7 +89,7 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
     'document_resource'=>t('Document Resource'),
     'audio_resource'=>t('Audio Resource'),
     'video_resource'=>t('Video Resource'),
-    'web_resource'=>t('Web Resource'),
+    'web_resource'=>t('Web Multimedia'),
   );
 
   $form['type_select'] = array(

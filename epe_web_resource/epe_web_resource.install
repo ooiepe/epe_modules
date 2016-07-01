@@ -76,3 +76,13 @@ function epe_web_resource_uninstall() {
   node_types_rebuild();
   menu_rebuild();
 }
+
+/**
+ * EPE-47-acyu: update field label and description to be more descriptive of what the field requires.
+ */
+function epe_web_resource_update_7000(&$sandbox) {
+  $field = field_read_instance('node', 'field_resource_url','web_resource');
+  $field['label'] = 'Multimedia Link';
+  $field['description'] = 'Please enter the full web link for the YouTube, Vimeo or SlideShare multimedia resource you would like to include.';
+  field_update_instance($field);
+}

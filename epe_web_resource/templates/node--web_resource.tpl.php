@@ -32,13 +32,12 @@ $isDBFiles = 1;
   height: 100%;
 }
 </style>
-
 <?php
 $wrapper = entity_metadata_wrapper('node', node_load($nid));
 $resource_url = $wrapper->field_resource_url->raw();
 switch($wrapper->field_resource_origin->raw()) {
   case 'youtube':
-    $response = drupal_http_request('http://www.youtube.com/oembed?url=' . $resource_url['url'] .'&format=json');
+    $response = drupal_http_request('http://www.youtube.com/oembed?url=' . $resource_url['display_url'] .'&format=json');
   break;
   case 'vimeo':
     $response = drupal_http_request('http://vimeo.com/api/oembed.json?url=' . $resource_url['url']);

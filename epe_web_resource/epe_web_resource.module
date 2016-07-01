@@ -5,9 +5,9 @@
 function epe_web_resource_node_info() {
   $items = array(
     'web_resource' => array(
-      'name' => t('Web resource'),
+      'name' => t('Web Multimedia'),
       'base' => 'node_content',
-      'description' => t('Use <em>web resource</em> when creating web/internet resource object'),
+      'description' => t('Use <em>web multimedia</em> when creating web/internet multimedia object'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',
@@ -97,6 +97,7 @@ function epe_web_resource_form_alter(&$form, &$form_state, $form_id) {
     $form['field_featured_status']['#type'] = 'hidden';
     $form['field_public_status']['#type'] = 'hidden';
     $form['field_resource_url']['#weight'] = -10;    
+    //$form['field_resource_url'][LANGUAGE_NONE][0]['#description'] = t('Only Youtube, Vimeo, Slideshare.<br/>eg. https://www.youtube.com/watch?v=ymhdJDuGIBE or https://youtu.be/ymhdJDuGIBE');
     
     $form['#validate'][] = 'epe_web_resource_origin_validate';
     

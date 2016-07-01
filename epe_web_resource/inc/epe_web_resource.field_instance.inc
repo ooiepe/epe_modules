@@ -292,7 +292,7 @@ function _web_resource_installed_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_resource_url',
-    'label' => 'Resource URL',
+    'label' => 'Multimedia Link',
     'required' => 1,
     'settings' => array(
       'attributes' => array(
