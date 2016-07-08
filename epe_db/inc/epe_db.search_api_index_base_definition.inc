@@ -39,6 +39,7 @@ function _epe_db_search_api_index_base_definition($name, $machine_name, $bundles
         "author:field_account_fname" : { "type" : "string" },
         "author:field_account_lname" : { "type" : "string" },
         "author:field_account_organization" : { "type" : "text" },
+        "flag_favorite_resource_user" : { "type" : "integer", "entity_type" : "user" },
         "body:value" : { "type" : "text" },';
   if($extra_fields) {
     $search_index .= implode(',', $extra_fields) . ',';

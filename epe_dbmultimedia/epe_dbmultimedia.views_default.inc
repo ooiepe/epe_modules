@@ -68,26 +68,26 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-              $node = node_load($data->entity);
-              if($node->type == \'video_resource\') {
-                $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
-                //if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
-                if(!empty($image[0][\'thumbnailfile\'])) echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'thumbnailfile\']->uri);
-              } else {
-                $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
-                $output = \'\';
-                if($image) {
-                $output = field_view_value(\'node\', $node, \'field_audio_resource_image\', $image[0], array(
-                  \'type\' => \'image\',
-                  \'settings\' => array(
-                     \'image_style\' => \'resource_browser_thumbnail\',
-                  ),
-                ));
+                $node = node_load($data->entity);
+                if($node->type == \'video_resource\') {
+                  $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
+                  //if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
+                  if(!empty($image[0][\'thumbnailfile\'])) echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'thumbnailfile\']->uri);
+                } else {
+                  $image = field_get_items(\'node\', $node, \'field_audio_resource_image\');
+                  $output = \'\';
+                  if($image) {
+                  $output = field_view_value(\'node\', $node, \'field_audio_resource_image\', $image[0], array(
+                    \'type\' => \'image\',
+                    \'settings\' => array(
+                       \'image_style\' => \'resource_browser_thumbnail\',
+                    ),
+                  ));
+                  }
+                  //echo render($output);
+                  echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
                 }
-                //echo render($output);
-                echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
-              }
-            ?>';
+              ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Indexed Node: Title */
@@ -188,15 +188,15 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['php_1']['label'] = 'author';
   $handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php_1']['php_output'] = '<?php
-      $fullname = array();
-      if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
-        $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
-      }
-      if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
-        $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
-      }
-      echo implode(\' \',$fullname);
-      ?>';
+        $fullname = array();
+        if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
+          $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
+        }
+        if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
+          $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
+        }
+        echo implode(\' \',$fullname);
+        ?>';
   $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
   /* Field: Indexed Node: Credit */
@@ -211,7 +211,7 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['field_source_url']['label'] = 'source_url';
   $handler->display->display_options['fields']['field_source_url']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_source_url']['type'] = 'link_plain';
-  /* Field: Indexed Node: Resource URL */
+  /* Field: Indexed Node: Multimedia Link */
   $handler->display->display_options['fields']['field_resource_url']['id'] = 'field_resource_url';
   $handler->display->display_options['fields']['field_resource_url']['table'] = 'search_api_index_multimedia_resource_index';
   $handler->display->display_options['fields']['field_resource_url']['field'] = 'field_resource_url';
@@ -231,31 +231,39 @@ function epe_dbmultimedia_views_default_views() {
   $handler->display->display_options['fields']['php_2']['label'] = 'oembed_thumbnail';
   $handler->display->display_options['fields']['php_2']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php_2']['php_output'] = '<?php
-  $output = \'\';
-  if($data->_entity_properties[\'type\']==\'web_resource\') {
-    $wrapper = entity_metadata_wrapper(\'node\', node_load($data->entity));
-    $resource_url = $wrapper->field_resource_url->raw();
-    switch($wrapper->field_resource_origin->raw()) {
-      case \'youtube\':
-        $response = drupal_http_request(\'http://www.youtube.com/oembed?url=\' . $resource_url[\'url\'] .\'&format=json\');
-        if($response->code == 200) {
-          $oembed_data = json_decode($response->data);
-          $output = $oembed_data->thumbnail_url;
-        }
-      break;
-      case \'vimeo\':
-        $response = drupal_http_request(\'http://vimeo.com/api/oembed.json?url=\' . $resource_url[\'url\']);
-        if($response->code == 200) {
-          $oembed_data = json_decode($response->data);
-          $output = $oembed_data->thumbnail_url;
-        }
-      break;
+    $output = \'\';
+    if($data->_entity_properties[\'type\']==\'web_resource\') {
+      $wrapper = entity_metadata_wrapper(\'node\', node_load($data->entity));
+      $resource_url = $wrapper->field_resource_url->raw();
+      switch($wrapper->field_resource_origin->raw()) {
+        case \'youtube\':
+          $response = drupal_http_request(\'http://www.youtube.com/oembed?url=\' . $resource_url[\'url\'] .\'&format=json\');
+          if($response->code == 200) {
+            $oembed_data = json_decode($response->data);
+            $output = $oembed_data->thumbnail_url;
+          }
+        break;
+        case \'vimeo\':
+          $response = drupal_http_request(\'http://vimeo.com/api/oembed.json?url=\' . $resource_url[\'url\']);
+          if($response->code == 200) {
+            $oembed_data = json_decode($response->data);
+            $output = $oembed_data->thumbnail_url;
+          }
+        break;
+      }
     }
-  }
-  echo $output;
-  ?>';
+    echo $output;
+    ?>';
   $handler->display->display_options['fields']['php_2']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_2']['php_click_sortable'] = '';
+  /* Field: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['id'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['label'] = 'flag_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['link_to_entity'] = 1;
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['view_mode'] = 'full';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['bypass_access'] = 0;
   $handler->display->display_options['filter_groups']['operator'] = 'OR';
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'AND',
@@ -305,13 +313,18 @@ function epe_dbmultimedia_views_default_views() {
     'video_resource' => 'video_resource',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-    /* Filter criterion: Indexed Node: Public Status */
-    $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
-    $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_multimedia_resource_index';
-    $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
-    $handler->display->display_options['filters']['field_public_status']['value'] = array(
-      'Public' => 'Public',
-    );
+  /* Filter criterion: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['id'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['group'] = 1;
+  /* Filter criterion: Indexed Node: Public Status */
+  $handler->display->display_options['filters']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['filters']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['filters']['field_public_status']['value'] = array(
+    'Public' => 'Public',
+  );
   $handler->display->display_options['filters']['field_public_status']['group'] = 2;
   /* Filter criterion: Indexed Node: title_main_body_fulltext_search */
   $handler->display->display_options['filters']['search_api_aggregation_1_1']['id'] = 'search_api_aggregation_1_1';
@@ -360,6 +373,11 @@ function epe_dbmultimedia_views_default_views() {
     'video_resource' => 'video_resource',
   );
   $handler->display->display_options['filters']['type_2']['group'] = 2;
+  /* Filter criterion: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['filters']['flag_favorite_resource_user_1']['id'] = 'flag_favorite_resource_user_1';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_1']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_1']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_1']['group'] = 2;
   /* Filter criterion: Author: User ID (indexed) */
   $handler->display->display_options['filters']['author_uid_1']['id'] = 'author_uid_1';
   $handler->display->display_options['filters']['author_uid_1']['table'] = 'search_api_index_multimedia_resource_index';
@@ -411,6 +429,11 @@ function epe_dbmultimedia_views_default_views() {
     'vimeo' => 'vimeo',
   );
   $handler->display->display_options['filters']['field_resource_origin']['group'] = 3;
+  /* Filter criterion: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['filters']['flag_favorite_resource_user_2']['id'] = 'flag_favorite_resource_user_2';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_2']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_2']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_2']['group'] = 3;
   /* Filter criterion: Indexed Node: Public Status */
   $handler->display->display_options['filters']['field_public_status_1']['id'] = 'field_public_status_1';
   $handler->display->display_options['filters']['field_public_status_1']['table'] = 'search_api_index_multimedia_resource_index';
@@ -462,6 +485,11 @@ function epe_dbmultimedia_views_default_views() {
     'vimeo' => 'vimeo',
   );
   $handler->display->display_options['filters']['field_resource_origin_1']['group'] = 4;
+  /* Filter criterion: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['filters']['flag_favorite_resource_user_3']['id'] = 'flag_favorite_resource_user_3';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_3']['table'] = 'search_api_index_multimedia_resource_index';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_3']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user_3']['group'] = 4;
 
   /* Display: RESTful API Block */
   $handler = $view->new_display('block', 'RESTful API Block', 'all');

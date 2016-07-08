@@ -31,6 +31,27 @@ function epe_dbdocument_restful_api() {
     }
   }
 
+  if(isset($_GET['filter']) && $_GET['filter'] == 'favorited' && user_is_logged_in()) {
+    $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user');
+    $filter['value'] = array($user->uid);
+    $view->set_item($display_name, 'filter', 'flag_favorite_resource_user', $filter);          
+
+    for($i=1;$i<=3;$i++) {
+      $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user_' . $i);
+      if($filter) {
+        $filter['value'] = array($user->uid);
+        $view->set_item($display_name, 'filter', 'flag_favorite_resource_user_' . $i, $filter);
+      }
+    }
+  } else {      
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['flag_favorite_resource_user']);
+    for($i=1;$i<=3;$i++) {
+      unset($filters['flag_favorite_resource_user_' . $i]);
+    }
+    $view->display_handler->override_option('filters', $filters);
+  }
+
   if($display_name != 'author') {
     $featured_filter = array('Not-Featured'=>'Not-Featured','Featured'=>'Featured');
     if(isset($_GET['filter']) && $_GET['filter'] == 'featured') {

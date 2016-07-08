@@ -72,6 +72,27 @@ function epe_dbmultimedia_restful_api() {
     $view->display_handler->override_option('filter_groups', $filter_groups);
   }
 
+  if(isset($_GET['filter']) && $_GET['filter'] == 'favorited' && user_is_logged_in()) {
+    $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user');
+    $filter['value'] = array($user->uid);
+    $view->set_item($display_name, 'filter', 'flag_favorite_resource_user', $filter);          
+
+    for($i=1;$i<=3;$i++) {
+      $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user_' . $i);
+      if($filter) {
+        $filter['value'] = array($user->uid);
+        $view->set_item($display_name, 'filter', 'flag_favorite_resource_user_' . $i, $filter);
+      }
+    }
+  } else {      
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['flag_favorite_resource_user']);
+    for($i=1;$i<=3;$i++) {
+      unset($filters['flag_favorite_resource_user_' . $i]);
+    }
+    $view->display_handler->override_option('filters', $filters);
+  }
+
   $sort_filter = array(
     'table'=>'search_api_index_multimedia_resource_index',
     'relationship'=>'none',

@@ -187,6 +187,14 @@ function epe_cm_views_default_views() {
       ?>';
   $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
+  /* Field: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['id'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['table'] = 'search_api_index_epe_cm_search_index';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['label'] = 'flag_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['link_to_entity'] = 1;
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['view_mode'] = 'full';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['bypass_access'] = 0;
   /* Contextual filter: Indexed Node: Author */
   $handler->display->display_options['arguments']['author']['id'] = 'author';
   $handler->display->display_options['arguments']['author']['table'] = 'search_api_index_epe_cm_search_index';
@@ -261,6 +269,11 @@ function epe_cm_views_default_views() {
     5 => 0,
   );
   $handler->display->display_options['filters']['field_featured_status']['expose']['reduce'] = 0;
+  /* Filter criterion: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['id'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['table'] = 'search_api_index_epe_cm_search_index';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['group'] = 3;
 
   /* Display: RESTful API Block */
   $handler = $view->new_display('block', 'RESTful API Block', 'all');
