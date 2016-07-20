@@ -23,7 +23,7 @@ define(['angularAMD','angularRoute','angularWebstorage','ngProgress','underscore
         //param with type & filter, this is for "my" resource url
         if(newqueryparam != undefined && queryparams != undefined && queryparams.length == 2 && newqueryparam.indexOf(queryparams[0]) > -1 && newqueryparam.indexOf(queryparams[1]) > -1) {
           angular.element(li).addClass('active');        
-        } else if(newqueryparam != undefined && queryparams != undefined && queryparams.length == 1 && newqueryparam.indexOf(queryparams[0]) > -1 && newqueryparam.indexOf('filter') < 0) { //just type, make sure filter is not in param, this is for browser resource url
+        } else if(newqueryparam != undefined && queryparams != undefined && queryparams.length == 1 && newqueryparam.indexOf(queryparams[0]) > -1 && newqueryparam.indexOf('filter=') < 0) { //just type, make sure filter is not in param, this is for browser resource url
           angular.element(li).addClass('active');
         }
       });
