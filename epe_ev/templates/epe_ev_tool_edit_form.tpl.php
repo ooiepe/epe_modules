@@ -40,20 +40,7 @@
 
       <div class="field-container">
         <div>Published Status</div>
-        <?php echo render($form['status']); ?>
-      </div>
-
-      <div class="field-container">
-
-        <label class="option checkbox control-label" for="edit-status">
-        <input type="checkbox" id="edit-status" name="status" value="<?php echo $form["#node"]->status; ?>"
-        <?php
-
-          // checked published status.. if published (0), show checked
-          echo ($form["#node"]->status == 1 ? 'checked="checked"' : "");
-
-        ?> class="form-checkbox">Published</label>
-
+        <?php echo render($form['options']['status']); ?>        
       </div>
 
       <div class="field-container thumbnail">
@@ -72,8 +59,6 @@
     <?php else: ?>
       <input type="hidden" name="destination" value="node/<?php print $form['nid']['#value'] ?>">
     <?php endif; ?>
-
-    <?php echo render($form['options']['status']); ?>
 
     <?php echo render($form['actions']); ?>
 
