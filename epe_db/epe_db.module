@@ -102,6 +102,7 @@ function epe_db_menu() {
     'title' => t('Unshare a resource'),
     'page callback' => 'epe_db_node_unshare_function',
     'page arguments' => array(1),
+    'file' => 'epe_db.pages.inc',
     'access callback' => 'epe_db_resource_can_do_unshare',
     'access arguments' => array(1),
     'type' => MENU_CALLBACK,
