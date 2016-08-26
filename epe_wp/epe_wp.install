@@ -380,3 +380,12 @@ function epe_wp_update_7003(&$sandbox) {
   );
   variable_set('imce_profiles',$profiles);
 }
+
+/**
+ * epedev-30 change user published resource view
+ */
+function epe_wp_update_7004(&$sandbox) {
+  module_load_include('inc','epe_wp','epe_wp.views_default');
+  $view_definition = epe_wp_views_default_views();
+  views_save_view($view_definition['user_resources']);
+}

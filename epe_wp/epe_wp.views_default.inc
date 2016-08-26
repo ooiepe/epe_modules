@@ -294,11 +294,13 @@ function epe_wp_views_default_views() {
   $handler->display->display_options['fields']['type']['table'] = 'node';
   $handler->display->display_options['fields']['type']['field'] = 'type';
   $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Field: Global: PHP */
   $handler->display->display_options['fields']['php_1']['id'] = 'php_1';
   $handler->display->display_options['fields']['php_1']['table'] = 'views';
   $handler->display->display_options['fields']['php_1']['field'] = 'php';
   $handler->display->display_options['fields']['php_1']['label'] = '';
+  $handler->display->display_options['fields']['php_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['php_1']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php_1']['php_output'] = '<?php
@@ -356,19 +358,57 @@ function epe_wp_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Featured Status */
+  $handler->display->display_options['fields']['field_featured_status']['id'] = 'field_featured_status';
+  $handler->display->display_options['fields']['field_featured_status']['table'] = 'field_data_field_featured_status';
+  $handler->display->display_options['fields']['field_featured_status']['field'] = 'field_featured_status';
+  $handler->display->display_options['fields']['field_featured_status']['label'] = '';
+  $handler->display->display_options['fields']['field_featured_status']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_featured_status']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_featured_status']['type'] = 'list_key';
+  /* Field: Content: Public Status */
+  $handler->display->display_options['fields']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['table'] = 'field_data_field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_public_status']['type'] = 'list_key';
+  /* Field: Content: Published */
+  $handler->display->display_options['fields']['status']['id'] = 'status';
+  $handler->display->display_options['fields']['status']['table'] = 'node';
+  $handler->display->display_options['fields']['status']['field'] = 'status';
+  $handler->display->display_options['fields']['status']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['status']['not'] = 0;
   /* Field: Content: Description */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = 'Title / Info';
   $handler->display->display_options['fields']['body']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['body']['alter']['text'] = '<p>[title]</p>
-    <div><strong>[type]</strong></div>
-        [body]';
+  $handler->display->display_options['fields']['body']['alter']['text'] = '<div class="info-wrapper">
+  <div class="thumb">[php_1]</div>
+  <div class="info-content">
+  <div class="title">[title]</div>
+  <div class="desc">[body]</div>
+  <div class="type-[type]"></div>
+  <div class="resource-status">
+  <div class="feature-[field_featured_status]"></div>
+  <div class="public-[field_public_status]"></div>
+  <div class="share-[status]"></div>
+  </div>
+  </div>
+  </div>';
   $handler->display->display_options['fields']['body']['type'] = 'text_summary_or_trimmed';
   $handler->display->display_options['fields']['body']['settings'] = array(
     'trim_length' => '500',
   );
+  /* Field: Content: Updated date */
+  $handler->display->display_options['fields']['changed']['id'] = 'changed';
+  $handler->display->display_options['fields']['changed']['table'] = 'node';
+  $handler->display->display_options['fields']['changed']['field'] = 'changed';
+  $handler->display->display_options['fields']['changed']['label'] = 'Modified Date';
+  $handler->display->display_options['fields']['changed']['date_format'] = 'custom';
+  $handler->display->display_options['fields']['changed']['custom_date_format'] = 'M d, Y';
+  $handler->display->display_options['fields']['changed']['second_date_format'] = 'long';
   /* Sort criterion: Content: Type */
   $handler->display->display_options['sorts']['type']['id'] = 'type';
   $handler->display->display_options['sorts']['type']['table'] = 'node';
