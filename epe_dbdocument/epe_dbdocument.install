@@ -334,3 +334,14 @@ function epe_dbdocument_update_7011(&$sandbox) {
   $view_definition = epe_dbdocument_views_default_views();
   views_save_view($view_definition['document_resource_index']);
 }
+
+/**
+ * EPE-42: add flag (favorite) to search api index, also update cm search view with the new field and filter option
+ */
+function epe_dbdocument_update_7012(&$sandbox) {
+  entity_delete('search_api_index','document_resource_index');
+
+  module_load_include('inc','epe_dbdocument','epe_dbdocument.views_default');
+  $view_definition = epe_dbdocument_views_default_views();
+  views_save_view($view_definition['document_resource_index']);
+}

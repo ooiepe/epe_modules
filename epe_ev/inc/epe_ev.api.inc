@@ -98,6 +98,16 @@ function epe_ev_restful_api(){
     $view->display_handler->override_option('filters', $filters);
   }
 
+  if(isset($_GET['filter']) && $_GET['filter'] == 'favorited' && user_is_logged_in()) {
+    $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user');
+    $filter['value'] = array($user->uid);
+    $view->set_item($display_name, 'filter', 'flag_favorite_resource_user', $filter);          
+  } else {      
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['flag_favorite_resource_user']);
+    $view->display_handler->override_option('filters', $filters);
+  }
+
   $sort_filter = array(
     'table'=>'search_api_index_epe_ev_search_index',
     'relationship'=>'none',

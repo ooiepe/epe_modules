@@ -12,6 +12,10 @@ define(['app'], function(app) {
       },
       link: function (scope, elem, attrs) {
         var template = '', element_ck = '', link_target = '_self', row_status = '', date_sort_data = scope.row.last_updated;
+        var favorite_users = scope.row.flag_user.split(',');    
+        var is_favorite = _.find(favorite_users, function(user) {
+          return user.trim() == Drupal.settings.user.username; 
+        });
         if(Drupal.settings.resourceBrowser.editmode) {
           element_ck = '<div style="float:left;"><input type="checkbox" style="margin-right:0;position:absolute;" name="nid" ng-click="updateResourceSelection('+ scope.row.id +')" ng-checked="isChecked()" data-type="' + scope.type + '" value="' + scope.row.id + '"></div>';
           link_target = '_blank';
@@ -27,7 +31,9 @@ define(['app'], function(app) {
         if(scope.row.status == 'Published') row_status += '<span class="btn btn-default btn-sm disabled">Shared</span>&nbsp;';
         if(scope.row.public == 'Public') row_status += '<span class="btn btn-info btn-sm disabled">Public</span>&nbsp;';
         if(scope.row.featured == 'Featured') row_status += '<span class="btn btn-success btn-sm disabled">Featured</span>';
-        template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.row.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.row.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.row.url + '" target="' + link_target + '">' + scope.row.title + '</a><br/>' + row_status + '</p></div><div class="text" style="margin-left:160px;">';
+        template += '<td><div style="width:160px;height:99px;position:relative;float:left;">' + element_ck + '<a href="' + scope.row.url + '" target="' + link_target + '"><img width="133" height="99" style="margin-left:20px;" class="thumb" ng-src="' + scope.row.thumbnail + '" /></a></div><div class="author" style="margin-left:160px;"><p><a href="' + scope.row.url + '" target="' + link_target + '">' + scope.row.title + '</a>';
+        if(is_favorite) template += '<div class="marked_favorite"><img src="' + Drupal.settings.epe.theme_path + '/images/favorites-icon.png' + '" width="20" alt="Favorite Resource" title="Favorite Resource"></div>';
+        template += '<br/>' + row_status + '</p></div><div class="text" style="margin-left:160px;">';
         var credit = '', summary = '';
         if(scope.row.credit) credit = scope.row.credit;
         if(scope.row.sourceurl) credit = '<a href="'+ scope.row.sourceurl +'" target="_blank">'+ credit +'</a>';

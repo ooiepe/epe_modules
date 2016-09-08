@@ -367,6 +367,17 @@ function epe_ev_update_7012(&$sandbox) {
 }
 
 /**
+ * EPE-42: add flag (favorite) to search api index, also update cm search view with the new field and filter option
+ */
+function epe_ev_update_7013(&$sandbox) {
+  entity_delete('search_api_index','multimedia_resource_index');
+
+  module_load_include('inc','epe_ev','epe_ev.views_default');
+  $view_definition = epe_ev_views_default_views();
+  views_save_view($view_definition['epe_ev_search_view']);
+}
+
+/**
  * epe-7: update ev tool instance content type status and promote default value setting
  */
 function epe_ev_update_7014(&$sandbox) {
@@ -377,3 +388,4 @@ function epe_ev_update_7014(&$sandbox) {
 
   variable_set('node_submitted_ev_tool_instance',0);
 }
+

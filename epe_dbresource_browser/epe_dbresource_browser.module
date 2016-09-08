@@ -62,10 +62,13 @@ function epe_dbresource_browser_preload() {
   //setup filter
   $resource_filter = array(
     array('filter'=>'','label'=>'All Resources'),
-    array('filter'=>'featured','label'=>'Featured Resources'),
+    array('filter'=>'featured','label'=>'Featured Resources'),    
   );
   //add filter if not anonymous user
-  if($user->uid > 0) $resource_filter[] = array('filter'=>'author','label'=>'My Resources');
+  if($user->uid > 0) {
+    $resource_filter[] = array('filter'=>'favorited','label'=>'My Favorited Resources');
+    $resource_filter[] = array('filter'=>'author','label'=>'My Resources');
+  }
 
   $epe_modules = variable_get('EPE_CONTENT_MODULES',array());
   $resource_browser_enabled_modules = array();
@@ -118,6 +121,7 @@ function epe_dbresource_browser_preload() {
   )),'setting');
   drupal_add_js(array('user'=>array(
     'is_logged_in'=>user_is_logged_in(),
+    'username'=>$user->name,
   )),'setting');
 
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');

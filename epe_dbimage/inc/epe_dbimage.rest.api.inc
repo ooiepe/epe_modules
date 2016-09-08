@@ -27,6 +27,7 @@ function epe_dbimage_restful_api() {
     if(isset($_GET['filter']) && $_GET['filter'] == 'featured') {
       unset($featured_filter['Not-Featured']);
     }
+
     $filter = $view->get_item($display_name, 'filter', 'field_featured_status');
     $filter['value'] = $featured_filter;
     $view->set_item($display_name, 'filter', 'field_featured_status', $filter);
@@ -42,6 +43,16 @@ function epe_dbimage_restful_api() {
     unset($filters['author_uid']);
     $view->display_handler->override_option('filters', $filters);
   }
+
+  if(isset($_GET['filter']) && $_GET['filter'] == 'favorited' && user_is_logged_in()) {
+    $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user');
+    $filter['value'] = array($user->uid);
+    $view->set_item($display_name, 'filter', 'flag_favorite_resource_user', $filter);          
+  } else {      
+    $filters = $view->display_handler->get_option('filters');
+    unset($filters['flag_favorite_resource_user']);
+    $view->display_handler->override_option('filters', $filters);
+  }  
 
   $sort_filter = array(
     'table'=>'search_api_index_image_resource_index',
