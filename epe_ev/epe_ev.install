@@ -376,3 +376,16 @@ function epe_ev_update_7013(&$sandbox) {
   $view_definition = epe_ev_views_default_views();
   views_save_view($view_definition['epe_ev_search_view']);
 }
+
+/**
+ * epe-7: update ev tool instance content type status and promote default value setting
+ */
+function epe_ev_update_7014(&$sandbox) {
+  variable_set('node_options_ev_tool_instance', array(
+      'status' => 0,
+      'promote' => 0,
+  ));
+
+  variable_set('node_submitted_ev_tool_instance',0);
+}
+
