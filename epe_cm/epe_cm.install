@@ -324,3 +324,14 @@ function epe_cm_update_7012(&$sandbox) {
   $view_definition = epe_cm_views_default_views();
   views_save_view($view_definition['epe_cm_search_view']);
 }
+
+/**
+ * EPE-42: add flag (favorite) to search api index, also update cm search view with the new field and filter option
+ */
+function epe_cm_update_7013(&$sandbox) {
+  entity_delete('search_api_index','epe_cm_search_index');
+
+  module_load_include('inc','epe_cm','epe_cm.views_default');
+  $view_definition = epe_cm_views_default_views();
+  views_save_view($view_definition['epe_cm_search_view']);
+}

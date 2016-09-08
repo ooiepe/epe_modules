@@ -61,17 +61,17 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
-      $node = node_load($data->entity);
-      $field = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
-      $field_value = drupal_json_decode($field[0][\'value\']);
+        $node = node_load($data->entity);
+        $field = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
+        $field_value = drupal_json_decode($field[0][\'value\']);
 
-      $output = \'\';
-      if($field_value) {
-        //$output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' =>$field_value[0][\'uri\']));
-        $output = image_style_url(\'resource_browser_thumbnail\', $field_value[0][\'uri\']);
-      }
-      echo render($output);
-    ?>';
+        $output = \'\';
+        if($field_value) {
+          //$output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' =>$field_value[0][\'uri\']));
+          $output = image_style_url(\'resource_browser_thumbnail\', $field_value[0][\'uri\']);
+        }
+        echo render($output);
+      ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Field: Author: First Name (indexed) */
@@ -158,15 +158,15 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['php_1']['label'] = 'author';
   $handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php_1']['php_output'] = '<?php
-      $fullname = array();
-      if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
-        $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
-      }
-      if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
-        $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
-      }
-      echo implode(\' \',$fullname);
-      ?>';
+        $fullname = array();
+        if( !empty($data->_entity_properties[\'author:entity object\']->field_account_fname) ) {
+          $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_fname[\'und\'][0][\'value\'];
+        }
+        if( !empty($data->_entity_properties[\'author:entity object\']->field_account_lname) ) {
+          $fullname[] = $data->_entity_properties[\'author:entity object\']->field_account_lname[\'und\'][0][\'value\'];
+        }
+        echo implode(\' \',$fullname);
+        ?>';
   $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
   /* Field: Author: Name (indexed) */
@@ -185,8 +185,17 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['field_public_status']['table'] = 'search_api_index_llb_resource_index';
   $handler->display->display_options['fields']['field_public_status']['field'] = 'field_public_status';
   $handler->display->display_options['fields']['field_public_status']['label'] = 'public';
+  /* Field: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['id'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['label'] = 'flag_user';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['link_to_entity'] = 1;
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['view_mode'] = 'full';
+  $handler->display->display_options['fields']['flag_favorite_resource_user']['bypass_access'] = 0;
   $handler->display->display_options['filter_groups']['groups'] = array(
     1 => 'OR',
+    3 => 'AND',
     2 => 'AND',
   );
   /* Filter criterion: Author: User ID (indexed) */
@@ -251,6 +260,11 @@ function epe_llb_views_default_views() {
     5 => 0,
   );
   $handler->display->display_options['filters']['field_featured_status']['expose']['reduce'] = 0;
+  /* Filter criterion: Indexed Node: Users who flagged the entity with flag favorite_resource */
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['id'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['table'] = 'search_api_index_llb_resource_index';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['field'] = 'flag_favorite_resource_user';
+  $handler->display->display_options['filters']['flag_favorite_resource_user']['group'] = 3;
 
   /* Display: RESTful API Block */
   $handler = $view->new_display('block', 'RESTful API Block', 'all');
