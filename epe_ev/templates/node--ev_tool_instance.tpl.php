@@ -39,17 +39,23 @@
 
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-<?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
-
+<?php
+  if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
+  } else { ?>
+  <?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
   <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
     <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
-
+<?php } //end if vsembed  ?>
       <div id="vistool"></div>
 
+      <?php
+        if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
+        } else { ?>
       <div id="tool-functions">
         <button class="btn btn-primary" value="Export to Image" id="tool-function-export-image">Export to Image</button>
         <?php echo render($content['links']); ?>
       </div>
+      <?php } //end if vsembed  ?>
 
 
       <div style="display:none;">
@@ -61,12 +67,15 @@
   </div>
 
 <!-- display any places this item is included and any items copied from this item -->
+<?php
+  if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
+  } else { ?>
 <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
 <?php print render($content['field_instance_questions']); ?>
 
 <?php print render($content['comments']); ?>
-
+<?php } //end if vsembed ?>
 </article>
 
 <script type="text/javascript">
@@ -87,16 +96,16 @@
     var canvas = document.getElementById("canvas"),
     w = canvas.width,
     h = canvas.height;
-    
+
     //create a rectangle with the desired background color
     var destCtx = canvas.getContext('2d');
     destCtx.globalCompositeOperation = "destination-over";
     destCtx.fillStyle = "#FFFFFF";
     destCtx.fillRect(0,0,w,h);
-    
+
     dataURL = canvas.toDataURL('image/png');
     dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-    
+
     window.open(dataURL,"Visualization Image","location=0");
   }
 
