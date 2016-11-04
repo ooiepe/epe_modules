@@ -31,20 +31,20 @@
             'rel'=>'tooltip',
             'class'=>array('links','edit','popover-link'),
             'id'=>'edit-btn',
-            'title'=>'Create a Custom Visualization Instance',
+            'title'=>'Configure, Preview and Save your own instance of this data visualization tool',
             'trigger'=>'manual'
           ),
           'query'=>array(
             'ev_toolid'=>$node->nid
           )
-        )      
-      ); 
-      ?>      
+        )
+      );
+      ?>
       </li>
     </ul>
   </div>
 
-  <?php 
+  <?php
     $hideActionButtons = 1;
   ?>
 <?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
