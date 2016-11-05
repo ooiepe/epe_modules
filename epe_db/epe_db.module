@@ -114,14 +114,40 @@ function epe_db_menu() {
 
 function epe_db_node_view_alter(&$build) {
   $epe_help = variable_get('epe_help',array('path'=>array()));
+  $nodeurl = drupal_get_path_alias("node/{$build['#node']->nid}");
   if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page') {
     foreach($epe_help['path'] as $key => $id) {
       if($build['#node']->nid == $id) {
+        unset($build['field_tags']);
+        unset($build['links']);
         $build['post_render_param'] = $key;
         $build['#post_render'][] = 'epe_db_help_content_render';
       }
     }
+    //remove tag & link from individual kb page
+    if(explode('/',$nodeurl)[0] == 'help') {
+      if(isset($build['field_tags'])) unset($build['field_tags']);
+      if(isset($build['links'])) unset($build['links']);
+    }
   }
+}
+
+function epe_db_node_view($node, $view_mode) {
+  if($node->type == 'page' && $view_mode == 'full') {
+    $nodeurl = drupal_get_path_alias("node/{$node->nid}");
+    //this should only apply to section & individual kb page, skip main index page
+    if(explode('/',$nodeurl)[0] == 'help' && count(explode('/',$nodeurl)) > 1) {
+      $node->content['subtitle'] = array(
+        '#type' => 'item',
+        '#weight' => -10,
+        '#markup' => '<div class="subtitle">' . $node->title . '</div>'
+      );
+
+      $node->title = 'EPE Knowledge Base';
+      drupal_set_title($node->title);
+    }
+  }
+  return $node;
 }
 
 /*
@@ -359,7 +385,7 @@ function _epe_db_insert_after_first_element(&$a, $element) {
 }
 
 function epe_db_resource_can_do_submitpublic($node) {
-  global $user;  
+  global $user;
   return ($node->uid == $user->uid || in_array('administrator', $user->roles));
 }
 
