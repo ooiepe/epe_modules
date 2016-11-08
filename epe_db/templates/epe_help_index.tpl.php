@@ -3,14 +3,17 @@
 .tabledrag-toggle-weight-wrapper,
 .description,
 .tabledrag-handle,
-.form-actions { display: none; }
+.form-actions,
+footer { display: none; }
+label { padding-bottom: 0.5em; }
+label a { color: #ac7f25; }
 </style>
-<div>
-  <div class="span4">
+<div class="epe_help">
+  <div class="span8">
     <div class="control-group">
-      <label>Knowledge Base</label>      
+      <label><?php echo l('Investigation','help/llb'); ?></label>
       <?php
-      $display_name = 'kb';
+      $display_name = 'llb';
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
@@ -18,7 +21,7 @@
       $pager['type'] = 'some';
       $pager['options']['items_per_page'] = '5';
       $view->display_handler->override_option('pager', $pager);
-      
+
       $view->pre_execute();
       $view->execute();
 
@@ -26,7 +29,7 @@
       ?>
     </div>
     <div class="control-group">
-      <label>Concept Map</label>
+      <label><?php echo l('Concept Map','help/cm'); ?></label>
       <?php
       $display_name = 'cm';
       $remove_field = 'body';
@@ -36,17 +39,15 @@
       $pager['type'] = 'some';
       $pager['options']['items_per_page'] = '5';
       $view->display_handler->override_option('pager', $pager);
-      
+
       $view->pre_execute();
       $view->execute();
 
       echo $view->render();
       ?>
     </div>
-  </div>
-  <div class="span4">
     <div class="control-group">
-      <label>Visualization</label>
+      <label><?php echo l('Visualization','help/ev'); ?></label>
       <?php
       $display_name = 'ev';
       $remove_field = 'body';
@@ -56,7 +57,7 @@
       $pager['type'] = 'some';
       $pager['options']['items_per_page'] = '5';
       $view->display_handler->override_option('pager', $pager);
-      
+
       $view->pre_execute();
       $view->execute();
 
@@ -64,7 +65,7 @@
       ?>
     </div>
     <div class="control-group">
-      <label>Resources</label>
+      <label><?php echo l('Resources','help/db'); ?></label>
       <?php
       $display_name = 'db';
       $remove_field = 'body';
@@ -74,7 +75,7 @@
       $pager['type'] = 'some';
       $pager['options']['items_per_page'] = '5';
       $view->display_handler->override_option('pager', $pager);
-      
+
       $view->pre_execute();
       $view->execute();
 
@@ -89,9 +90,9 @@
       </form>
     </div>
     <div class="control-group">
-      <label>Lab Lessons</label>
+      <label><?php echo l('Common Issues','help'); ?></label>
       <?php
-      $display_name = 'llb';
+      $display_name = 'kb';
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
@@ -99,7 +100,7 @@
       $pager['type'] = 'some';
       $pager['options']['items_per_page'] = '5';
       $view->display_handler->override_option('pager', $pager);
-      
+
       $view->pre_execute();
       $view->execute();
 
