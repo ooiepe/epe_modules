@@ -260,3 +260,13 @@ function epe_ev_default_search_api_index() {
   $items['epe_ev_search_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('visualization instance resource index','epe_ev_search_index',array('ev_tool_instance')));
   return $items;
 }
+
+/**
+ * Implement hook_node_view to customize ev tool preview page
+ */
+ function epe_ev_node_view($node, $view_mode) {
+   if($node->type == 'ev_tool' && $view_mode == 'full') {
+     $node->title = $node->title . ' Preview';
+     drupal_set_title($node->title);
+   }
+ }
