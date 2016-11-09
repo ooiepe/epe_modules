@@ -1,8 +1,5 @@
-
-
-
 <?php
-
+drupal_add_js(drupal_get_path('module','epe_db') . '/js/resource_assoc.toggle.js');
 
 // determine if this resource is used in a concept map or lesson
 $used_in_results = db_select('resources_assoc', 'ra')
@@ -10,8 +7,14 @@ $used_in_results = db_select('resources_assoc', 'ra')
              ->condition('child', $node->nid)
              ->execute();
 $isUsedByOtherResources = 0;
-if ($used_in_results->rowCount() > 0)
-  $isUsedByOtherResources = 1;
+if ($used_in_results->rowCount() > 0) { $isUsedByOtherResources = 1; }
+
+$used_in_public_qry = db_select('field_data_field_public_status','ps');
+$used_in_public_qry->fields('ps',array('entity_id'));
+$used_in_public_qry->join('resources_assoc','ra','ps.entity_id = ra.parent');
+$used_in_public_qry->condition('child', $node->nid);
+$used_in_public_qry->condition('field_public_status_value','public');
+$used_in_public_qry_result = $used_in_public_qry->execute();
 
 // determine if this resource includes any other resources
 $child_resources_results = db_select('resources_assoc', 'ra')
@@ -19,9 +22,14 @@ $child_resources_results = db_select('resources_assoc', 'ra')
              ->condition('parent', $node->nid)
              ->execute();
 $hasChildResources = 0;
-if ($child_resources_results->rowCount() > 0)
-  $hasChildResources = 1;
+if ($child_resources_results->rowCount() > 0) { $hasChildResources = 1; }
 
+$child_resources_public_qry = db_select('field_data_field_public_status','ps');
+$child_resources_public_qry->fields('ps',array('entity_id'));
+$child_resources_public_qry->join('resources_assoc','ra','ra.child = ps.entity_id');
+$child_resources_public_qry->condition('parent', $node->nid);
+$child_resources_public_qry->condition('field_public_status_value','public');
+$child_resources_public_qry_result = $child_resources_public_qry->execute();
 
 // determine if items have been copied from this resource this resource is used in a concept map or lesson
 $copies_of_results = db_select('field_data_field_source_nid', 'sid')
@@ -29,122 +37,124 @@ $copies_of_results = db_select('field_data_field_source_nid', 'sid')
              ->condition('field_source_nid_value', $node->nid)
              ->execute();
 $hasCopiesOf = 0;
-if ($copies_of_results->rowCount() > 0)
-  $hasCopiesOf = 1;
+if ($copies_of_results->rowCount() > 0) { $hasCopiesOf = 1; }
 
+$copies_of_public_qry = db_select('field_data_field_public_status','ps');
+$copies_of_public_qry->fields('ps',array('entity_id'));
+$copies_of_public_qry->join('field_data_field_source_nid','sid','sid.entity_id = ps.entity_id');
+$copies_of_public_qry->condition('sid.entity_id', $node->nid);
+$copies_of_public_qry->condition('field_public_status_value','public');
+$copies_of_public_qry_result = $copies_of_public_qry->execute();
 ?>
 
 
 <?php if ($isUsedByOtherResources == 1 || $hasChildResources == 1 || $hasCopiesOf == 1): ?>
-
-    <div class="tabbable">
-    <ul class="nav nav-tabs">
-<?php if ($isUsedByOtherResources == 1): ?>
-    <li class="active"><a href="#tab_used_in" data-toggle="tab">Used in:</a></li>
-<?php endif; ?>
-<?php if ($hasChildResources == 1): ?>
-    <li><a href="#child_resources" data-toggle="tab">Resources included within this item:</a></li>
-<?php endif; ?>
-<?php if ($hasCopiesOf == 1): ?>
-    <li><a href="#copies_of" data-toggle="tab">Copies:</a></li>
-<?php endif; ?>
-    </ul>
-    <div class="tab-content">
-<?php if ($isUsedByOtherResources == 1): ?>
-    <div class="tab-pane active" id="tab_used_in">
-    <p>Below is a list of resources this item is used in:</p>
-
-    <table class="views-table cols-1 table">
-    	<tr>
-    		<th align="left">Resource</th>
-    		<!-- <th>Type</th> -->
-    	</tr>
-
-
-<?php
-
-	    foreach ($used_in_results as $result) {
-	    	// load the parent item
-	    	$parent_node = node_load($result->parent);
-
-        if(isset($parent_node->title)) {
-          //print('<tr><td><a href="' . base_path() . 'node/' . $result->parent . '">');
-          print('<tr><td><a href="' . base_path() . 'node/' . $result->parent . '">');
-          print_r($parent_node->title);
-          print('</a></td></tr>');
+<?php if($used_in_results->rowCount() > 0): ?>
+<div class="resource_assoc">
+  <label class="header">Resources</label>
+  <div class="section used_in clearfix">
+    <div class="assoc_type clearfix" onclick="resource_assoc_toggle('used_in');"><div class="arrow"></div><span>Used In</span></div>
+    <div class="count_label">
+      <?php echo $used_in_public_qry_result->rowCount(); ?> public items (<?php echo $used_in_results->rowCount(); ?> items)
+    </div>
+  </div>
+  <div class="list used_in hide clearfix" data-count="<?php echo $used_in_results->rowCount(); ?>">
+    <?php foreach($used_in_results as $result): ?>
+    <?php $resource = node_load($result->parent); ?>
+    <div class="span3">
+    <?php $thumbnail = base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg'; //default thumb ?>
+    <?php switch($resource->type) {
+      case 'llb_resource':
+        if(!empty($resource->field_challenge_thumbnail)) {
+          $thumbdata = drupal_json_decode($resource->field_challenge_thumbnail['und'][0]['value']);
+          $thumbnail = image_style_url('resource_browser_thumbnail', $thumbdata[0]['uri']);
         }
-	    }
-
-
-?>
-    </table>
+      break;
+    } ?>
+      <div class="thumbnail">
+        <img src="<?php echo $thumbnail; ?>" alt="Resource Image for <?php echo $resource->title; ?>" />
+      </div>
+      <div class="title"><?php echo l($resource->title,"node/{$resource->nid}"); ?></div>
+      <div class="author">
+        By: <?php $author = user_load($resource->uid);  echo $author->field_account_fname['und'][0]['value'] . ' ' . $author->field_account_lname['und'][0]['value']; ?>
+      </div>
+      <div class="date">
+        <?php echo format_date($resource->changed, 'custom','n-d-y') ?>
+      </div>
     </div>
-<?php endif; ?>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
 
-<?php if ($hasChildResources == 1): ?>
-    <div class="tab-pane" id="child_resources">
-    <p>Below is a list of resources included within this item:</p>
-
-    <table class="views-table cols-1 table">
-      <tr>
-        <th align="left">Resource</th>
-        <!-- <th>Type</th> -->
-      </tr>
-
-
-<?php
-
-      foreach ($child_resources_results as $result) {
-        // load the parent item
-        $child_node = node_load($result->child);
-
-        if(isset($child_node->title)) {
-          print('<tr><td><a href="' . base_path() . 'node/' . $result->child . '">');
-          print_r($child_node->title);
-          print('</a></td></tr>');
+  <?php if($child_resources_results->rowCount() > 0): ?>
+  <div class="section uses clearfix">
+    <div class="assoc_type clearfix" onclick="resource_assoc_toggle('uses');"><span>Uses</span></div>
+    <div class="count_label">
+      <?php echo $child_resources_public_qry_result->rowCount(); ?> public items (<?php echo $child_resources_results->rowCount(); ?> items)
+    </div>
+  </div>
+  <div class="list uses clearfix" data-count="<?php echo $child_resources_results->rowCount(); ?>">
+    <?php foreach($child_resources_results as $result): ?>
+    <?php $resource = node_load($result->parent); ?>
+    <div class="span3">
+    <?php $thumbnail = base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg'; //default thumb ?>
+    <?php switch($resource->type) {
+      case 'llb_resource':
+        if(!empty($resource->field_challenge_thumbnail)) {
+          $thumbdata = drupal_json_decode($resource->field_challenge_thumbnail['und'][0]['value']);
+          $thumbnail = image_style_url('resource_browser_thumbnail', $thumbdata[0]['uri']);
         }
-      }
-
-
-?>
-    </table>
+      break;
+    } ?>
+      <div class="thumbnail">
+        <img src="<?php echo $thumbnail; ?>" alt="Resource Image for <?php echo $resource->title; ?>" />
+      </div>
+      <div class="title"><?php echo l($resource->title,"node/{$resource->nid}"); ?></div>
+      <div class="author">
+        By: <?php $author = user_load($resource->uid);  echo $author->field_account_fname['und'][0]['value'] . ' ' . $author->field_account_lname['und'][0]['value']; ?>
+      </div>
+      <div class="date">
+        <?php echo format_date($resource->changed, 'custom','n-d-y') ?>
+      </div>
     </div>
-<?php endif; ?>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
 
-<?php if ($hasCopiesOf == 1): ?>
-    <div class="tab-pane" id="copies_of">
-    <p>Below is a list of resources that have been copied from this resource:</p>
-
-    <table class="views-table cols-1 table">
-    	<tr>
-    		<th align="left">Resource</th>
-    		<!-- <th>Type</th> -->
-    	</tr>
-
-
-<?php
-
-	    foreach ($copies_of_results as $result) {
-	    	// load the parent item
-	    	$copied_node = node_load($result->entity_id);
-
-        if(isset($copied_node->title)) {
-          print('<tr><td><a href="' . base_path() . 'node/' . $result->entity_id . '">');
-          print_r($copied_node->title);
-          print('</a></td></tr>');
+  <?php if($copies_of_results->rowCount() > 0): ?>
+  <div class="section copies clearfix">
+    <div class="assoc_type clearfix" onclick="resource_assoc_toggle('copies_of');"><span>Copies<span></div>
+    <div class="count_label">
+      <?php echo $copies_of_public_qry_result->rowCount(); ?> public items (<?php echo $copies_of_results->rowCount(); ?> items)
+    </div>
+  </div>
+  <div class="list copies_of clearfix" data-count="<?php echo $copies_of_results->rowCount(); ?>">
+    <?php foreach($copies_of_results as $result): ?>
+    <?php $resource = node_load($result->parent); ?>
+    <div class="span3">
+    <?php $thumbnail = base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg'; //default thumb ?>
+    <?php switch($resource->type) {
+      case 'llb_resource':
+        if(!empty($resource->field_challenge_thumbnail)) {
+          $thumbdata = drupal_json_decode($resource->field_challenge_thumbnail['und'][0]['value']);
+          $thumbnail = image_style_url('resource_browser_thumbnail', $thumbdata[0]['uri']);
         }
-	    }
-
-
-?>
-    </table>
-
+      break;
+    } ?>
+      <div class="thumbnail">
+        <img src="<?php echo $thumbnail; ?>" alt="Resource Image for <?php echo $resource->title; ?>" />
+      </div>
+      <div class="title"><?php echo l($resource->title,"node/{$resource->nid}"); ?></div>
+      <div class="author">
+        By: <?php $author = user_load($resource->uid);  echo $author->field_account_fname['und'][0]['value'] . ' ' . $author->field_account_lname['und'][0]['value']; ?>
+      </div>
+      <div class="date">
+        <?php echo format_date($resource->changed, 'custom','n-d-y') ?>
+      </div>
     </div>
+    <?php endforeach; ?>
+  </div>
+  <?php endif; ?>
+</div>
 
 <?php endif; ?>
-    </div>
-    </div>
-
-
-<?php endif; ?>
-

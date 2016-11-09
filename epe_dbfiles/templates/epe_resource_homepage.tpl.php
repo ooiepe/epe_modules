@@ -37,52 +37,20 @@
 
   <div class="span5">
     <div class="control-group featured-image">
-    <?php  
+    <?php
       $block = module_invoke('bean', 'block_view', 'file-resources-rotator');
       if(!empty($block['content']['bean']['file-resources-rotator']['field_rotator_content_fields']['#items'])) {
-        print render($block['content']);  
-      } else {  
+        print render($block['content']);
+      } else {
     ?>
     <img src="<?php echo base_path() . drupal_get_path('module','epe_dbfiles'); ?>/content/homepage/homepage.jpg" />
-    <?php 
+    <?php
       } //end if bean has item
     ?>
     </div>
   </div>
 </div>
 <br clear="all">
-
-<!-- <div id="tool-featured">
-  <h2>Featured Resources</h2>
-  <ul>
-    <li class="first">
-      <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_1.jpg" width="190" height="141"></a>
-      <div class="title">Sandy Wave Heights and Wind Speed</div>
-      <div class="author">by Sage Lichtenwalner</div>
-      <div class="summary">Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit.Suspendisse potenti. Donec ac tempus velit. </div>
-    </li>
-    <li>
-      <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_2.jpg" width="190" height="141"></a>
-      <div class="title">RU23 - Hurricane Sandy</div>
-      <div class="author">by Sage Lichtenwalner</div>
-      <div class="summary">Pellentesque potenti. Donec ac tempus velit. </div>
-    </li>
-    <li>
-      <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_3.jpg" width="190" height="141"></a>
-      <div class="title">Title of the item</div>
-      <div class="author">by Joe Wieclawek</div>
-      <div class="summary">Suspendisse potenti. Donec ac tempus velit. </div>
-    </li>
-    <li>
-      <a href=""><img src="<?php echo base_path() . drupal_get_path('theme','bootstrap') ?>/images/sample_thumb_4.jpg" width="190" height="141"></a>
-      <div class="title">Title of the item</div>
-      <div class="author">by Joe Wieclawek</div>
-      <div class="summary">Suspendisse potenti. Donec ac tempus velit. </div>
-    </li>
-  </ul>
-  <br clear="all">
-</div> -->
-
 
 <div class="control-group">
   <div class="span12">
@@ -99,5 +67,3 @@
 
 </div>
 </div>
-
-

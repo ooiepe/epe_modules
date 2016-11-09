@@ -471,7 +471,7 @@ function epe_wp_views_default_views() {
             if($image) {
               $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
             } else {
-              $thumbnail = base_path() . drupal_get_path(\'theme\',\'bootstrap\') . \'/images/no_thumb_small.jpg\';
+              $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
             }
             break;
 
@@ -480,7 +480,7 @@ function epe_wp_views_default_views() {
               if($image) {
                 $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
               } else {
-                $thumbnail = base_path() . drupal_get_path(\'theme\',\'bootstrap\') . \'/images/no_thumb_small.jpg\';
+                $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
               }
             break;
 
@@ -489,12 +489,12 @@ function epe_wp_views_default_views() {
               if($field) {
                 $thumbnail = image_style_url(\'resource_browser_thumbnail\', $field[0][\'thumbnailfile\']->uri);
               } else {
-                $thumbnail = base_path() . drupal_get_path(\'theme\',\'bootstrap\') . \'/images/no_thumb_small.jpg\';
+                $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
               }
             break;
           }
         } else {
-          $thumbnail = base_path() . drupal_get_path(\'theme\',\'bootstrap\') . \'/images/no_thumb_small.jpg\';
+          $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
         }
         ?>
 

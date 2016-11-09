@@ -41,8 +41,7 @@
 
 <?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
 
-  <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
-    <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
+  <div style="border: 1px solid #0195bd;padding:23px;margin-bottom:20px;" class="clearfix">
 
       <div id="vistool"></div>
 
@@ -55,8 +54,6 @@
       <div style="display:none;">
         <canvas id="canvas"></canvas>
       </div>
-
-    </div>
 
   </div>
 
@@ -87,16 +84,16 @@
     var canvas = document.getElementById("canvas"),
     w = canvas.width,
     h = canvas.height;
-    
+
     //create a rectangle with the desired background color
     var destCtx = canvas.getContext('2d');
     destCtx.globalCompositeOperation = "destination-over";
     destCtx.fillStyle = "#FFFFFF";
     destCtx.fillRect(0,0,w,h);
-    
+
     dataURL = canvas.toDataURL('image/png');
     dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-    
+
     window.open(dataURL,"Visualization Image","location=0");
   }
 

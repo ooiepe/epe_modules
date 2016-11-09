@@ -25,8 +25,7 @@
   </header> -->
 
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div style="border: 1px solid #0195bd;padding:23px;margin-bottom:20px;" class="clearfix">
 
 
   <?php
@@ -136,7 +135,7 @@
           elseif(isset($dataset->thumbnail) && !empty($dataset->thumbnail)) {
             echo '<img src="' . $dataset->thumbnail . '" width="270" height="116" alt="' . $dataset->title . '">';
           } else {
-            echo '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
+            echo '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
           }
         ?>
         </a>
@@ -305,7 +304,6 @@
 
   <?php //print render($content['comments']); ?>
 
-</div>
 </div>
 
 <p><?php echo l('About this Data Investigation', "node/" . arg(1)); ?></p>

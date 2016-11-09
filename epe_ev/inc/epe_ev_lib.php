@@ -7,10 +7,10 @@
 function epe_getFieldValue($str_field_name, $node){
 
   $field_items = field_get_items('node', $node, $str_field_name);
-  
+
   //$field = field_view_value('node', $node, $str_field_name, $field_items[0]);
-  
-  //return render($field);  
+
+  //return render($field);
   return $field_items[0]["value"];
 
 }
@@ -20,8 +20,8 @@ function epe_getFieldValue_render($str_field_name, $node){
 
   $field_items = field_get_items('node', $node, $str_field_name);
   $field = field_view_value('node', $node, $str_field_name, $field_items[0]);
-  
-  return render($field);  
+
+  return render($field);
 
 }
 
@@ -37,7 +37,7 @@ function epe_getNodeValues( $node_field_item_list, $node){
 
  		$node_field_values[$node_field_item] = $field_items[0]["value"];
 	}
-  
+
  	return $node_field_values;
 
 }
@@ -46,7 +46,7 @@ function epe_getNodeValues( $node_field_item_list, $node){
 // function epe_getParentFieldValues( $str_parent_field_name, $ary_field_item_list, $node ){
 
 //   $ary_parent_field_vals = array();
-  
+
 //   foreach( $ary_field_item_list as $field_item ){
 
 //     $field_items_parent = field_get_items( 'node', $node, $str_parent_field_name );
@@ -62,13 +62,13 @@ function epe_getNodeValues( $node_field_item_list, $node){
 function epe_EduVis_Paths(){
 
   $module_path = drupal_get_path('module', 'epe_ev');
-  
+
   $EduVis_Drupal_Paths["Drupal"]["base_url"] = $GLOBALS['base_url'];
   $EduVis_Drupal_Paths["Drupal"]["module"] = $module_path;
-  $EduVis_Drupal_Paths["Drupal"]["theme"] = drupal_get_path('theme', 'bootstrap');
+  $EduVis_Drupal_Paths["Drupal"]["theme"] = drupal_get_path('theme', 'epe_theme');
   $EduVis_Drupal_Paths["EduVis"]["root"] = $module_path;// $EduVis_root;
   $EduVis_Drupal_Paths["EduVis"]["javascript"] = $module_path . '/EduVis.js';
-  
+
   // removed relative tools path to files upload folder
   //$EduVis_Drupal_Paths["EduVis"]["tools"] = $GLOBALS['base_url'] . '/' . $module_path . '/tools/';
 
@@ -76,9 +76,7 @@ function epe_EduVis_Paths(){
 
   $EduVis_Drupal_Paths["EduVis"]["resources"] = $GLOBALS['base_url'] . '/' .$module_path . '/resources/';
 
-  return $EduVis_Drupal_Paths;  
+  return $EduVis_Drupal_Paths;
 }
 
 $tool_list_path = "ev/tools";
-
-
