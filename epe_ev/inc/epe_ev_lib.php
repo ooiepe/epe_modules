@@ -65,7 +65,7 @@ function epe_EduVis_Paths(){
   
   $EduVis_Drupal_Paths["Drupal"]["base_url"] = $GLOBALS['base_url'];
   $EduVis_Drupal_Paths["Drupal"]["module"] = $module_path;
-  $EduVis_Drupal_Paths["Drupal"]["theme"] = drupal_get_path('theme', 'bootstrap');
+  $EduVis_Drupal_Paths["Drupal"]["theme"] = drupal_get_path('theme', 'epe_theme');
   $EduVis_Drupal_Paths["EduVis"]["root"] = $module_path;// $EduVis_root;
   $EduVis_Drupal_Paths["EduVis"]["javascript"] = $module_path . '/EduVis.js';
   

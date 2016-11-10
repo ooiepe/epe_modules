@@ -20,7 +20,7 @@
   $thumbnail = '';
   if(in_array($wrapper->getBundle(),array('cm_resource'))) {
     /* temporary fix */
-    $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
+    $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg" width="190" height="141">';
   } else {
     switch($wrapper->getBundle()) {
       case 'image_resource':
@@ -54,7 +54,7 @@
         foreach($thumbnail_node_info as $info) {
           $node_info = epe_llb_dataset_query($info);          
           if(!isset($node_info->uri) || (isset($node_info->uri) &&!$node_info->uri)) {
-            $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
+            $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg" width="190" height="141">';
           } else {
             $thumbnail = '<img src="' . image_style_url('homepage_featured_image', $node_info->uri) . '">';
           }          
@@ -68,7 +68,7 @@
       }
       break;
     }
-    if(!$thumbnail) $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" width="190" height="141">';
+    if(!$thumbnail) $thumbnail = '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg" width="190" height="141">';
   }
 ?>
 <li <?php if($key == 0): echo 'class="first"'; endif; ?>>

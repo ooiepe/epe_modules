@@ -50,7 +50,7 @@
                   echo theme('image_style', $thumbnail);
                 }
               } catch (exception $e) {
-                $output = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg">';
+                $output = '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg">';
               }
             }
           ?>

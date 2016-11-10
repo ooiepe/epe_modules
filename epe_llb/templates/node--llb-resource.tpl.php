@@ -136,7 +136,7 @@
           elseif(isset($dataset->thumbnail) && !empty($dataset->thumbnail)) {
             echo '<img src="' . $dataset->thumbnail . '" width="270" height="116" alt="' . $dataset->title . '">';
           } else {
-            echo '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
+            echo '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
           }
         ?>
         </a>
