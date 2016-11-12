@@ -17,6 +17,7 @@ function epe_wp_ev_home() {
     ),
   );*/
   drupal_add_js(drupal_get_path('module','epe_wp') . '/js/epe_ev.homepage.js');
+  drupal_set_title('Educational Visualizations');
   return theme('epe_ev_homepage');
 }
 
@@ -48,4 +49,3 @@ function epe_wp_db_home() {
     ),
   );
 }
-

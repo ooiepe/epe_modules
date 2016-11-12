@@ -54,7 +54,7 @@ function epe_dbfiles_menu() {
     'access callback' => 'user_access',
     'access arguments' => array('epe dbfiles interface'),
     'type' => MENU_CALLBACK,
-  );  
+  );
 
   $items['dialog/resource/file/%/success'] = array(
     'title' => t('File Resource Added'),
@@ -72,6 +72,8 @@ function epe_dbfiles_menu() {
 
 function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
   global $user;
+
+  drupal_add_js(drupal_get_path('module','epe_wp') . '/js/epe_wp.form.js');
 
   $form = array();
 
@@ -103,12 +105,12 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
 
   drupal_add_js(drupal_get_path('module','epe_dbfiles') . '/js/epe_dbfiles.addresource.js');
 
-  if($form_name != NULL) {    
+  if($form_name != NULL) {
   $node_type = $form_name;
   $form['type_select']['#value'] = "{$form_name}";
   drupal_add_css('.form-item .help-block { clear: both; }','inline');
   drupal_add_css('label.control-label { float:left; width:168px; }','inline');
-  drupal_add_css('.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }','inline');  
+  drupal_add_css('.field-name-body .controls, .form-type-managed-file .controls { margin-left:168px; }','inline');
   module_load_include('inc', 'node', 'node.pages');
   //foreach(array('image_resource','document_resource','audio_resource','video_resource','web_resource') as $node_type) {
     $resource_form_id = $node_type . '_node_form';
@@ -151,14 +153,14 @@ function epe_dbfiles_dynamic_resource_form($form_name=NULL) {
 }
 
 function epe_dbfiles_node_presave($node) {
-  global $user;  
+  global $user;
 
   if($node->uid == drupal_anonymous_user()->uid && user_is_logged_in()) {
     $node->uid = $user->uid;
   }
 }
 
-function epe_dbfiles_node_insert($node) {  
+function epe_dbfiles_node_insert($node) {
   if(arg(0) == 'dialog') {
     drupal_goto("dialog/resource/file/{$node->nid}/success");
   }
@@ -194,6 +196,7 @@ function epe_dbfiles_requirements_validation() {
 function epe_dbfiles_node_view_alter(&$build) {
   $epe_menu = variable_get('epe_menu',array());
   if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page' && $build['#node']->nid == $epe_menu['db']['nid']) {
+    drupal_set_title('Other Resources');
     $build['#post_render'][] = 'epe_dbfiles_homepage_render';
   }
 }

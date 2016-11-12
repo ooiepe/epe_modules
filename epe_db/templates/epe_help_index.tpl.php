@@ -86,7 +86,7 @@ label a { color: #ac7f25; }
   <div class="span4">
     <div class="control-group">
       <form action="<?php echo base_path(); ?>help/search" method="get">
-        <input name="search" size="40" /><button class="btn btn-small btn-primary">Search</button>
+        <input name="search" class="search-field" size="30" placeholder="Search Knowledge Base" /><button class="btn btn-small btn-primary">Search</button>
       </form>
     </div>
     <div class="control-group">

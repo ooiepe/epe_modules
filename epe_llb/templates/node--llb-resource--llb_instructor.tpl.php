@@ -70,6 +70,6 @@
 
 </div>
 
-<p align="center"><?php echo l('Data Investigation Details', "node/" . arg(1)); ?> | <?php echo l('Begin this Investigation', "node/" . arg(1) . "/detail"); ?></p>
+<p align="center"><?php echo l('Data Investigation Details', "node/" . arg(1), array('attributes'=>array('class'=>'btn btn-primary'))); ?> &nbsp;&nbsp; <?php echo l('Begin this Investigation', "node/" . arg(1) . "/detail", array('attributes'=>array('class'=>'btn btn-primary'))); ?></p>
 
 </article> <!-- /.node -->

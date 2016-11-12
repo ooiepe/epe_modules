@@ -162,12 +162,7 @@
 
 <?php foreach($datasets as $key => $dataset): ?>
 <div class="tab-pane" id="dataset<?php echo $key; ?>">
-  <ul class="breadcrumb">
-    <li>
-      <a href="#exploration">
-      Exploration</a> <span class="divider">/</span></li>
-    <li class="active"><?php echo $dataset->title; ?></li>
-  </ul>
+  <button type="button" class="btn btn-success btn-success-green" data-toggle="tab" data-target="exploration" onclick="jQuery('#llb2 li:eq(0) a').tab('show');"><i class="icon-chevron-left icon-white"></i> Return to Exploration</button>
   <h3><?php echo $dataset->title; ?></h3>
 <p>
   <?php
@@ -240,7 +235,6 @@
     </div>
   </div>
   <?php endif; ?>
-  <button type="button" class="btn btn-success" data-toggle="tab" data-target="exploration" onclick="jQuery('#llb2 li:eq(0) a').tab('show');">Return to Exploration <i class="icon-chevron-right icon-white"></i></button>
 </div>
 <?php endforeach; ?>
 
@@ -306,6 +300,6 @@
 
 </div>
 
-<p><?php echo l('About this Data Investigation', "node/" . arg(1)); ?></p>
+<p><?php echo l('About this Data Investigation', "node/" . arg(1), array('attributes'=>array('class'=>'btn btn-primary'))); ?></p>
 
 </article> <!-- /.node -->

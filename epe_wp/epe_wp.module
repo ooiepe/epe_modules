@@ -138,7 +138,7 @@ function epe_wp_menu() {
 function epe_wp_moderate_view($delta) {
   switch ($delta) {
     case 'pending':
-      return views_embed_view('moderator_resource_list', $display_id = 'pending_block');
+      return '<div class="review desc">The following resources have been submitted by users for inclusion in the public database. Please review each item and approve or reject as appropriate. If you reject an item, please consider notifying the author with suggestions to improve their submission.</div>' . views_embed_view('moderator_resource_list', $display_id = 'pending_block');
       break;
 
     default:
