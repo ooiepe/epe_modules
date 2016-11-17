@@ -244,7 +244,7 @@ function epe_dbvideo_embed($nid) {
     }
     return theme('video_resource_embed',array('video_path'=>file_create_url($variables['video_path']),'poster'=>file_create_url($variables['poster'])));
   } else {
-    return '';
+    drupal_goto('node/' . $nid);
   }
 }
 
