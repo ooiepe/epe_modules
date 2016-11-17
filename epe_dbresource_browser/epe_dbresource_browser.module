@@ -62,13 +62,14 @@ function epe_dbresource_browser_preload() {
   //setup filter
   $resource_filter = array(
     array('filter'=>'','label'=>'All Resources'),
-    array('filter'=>'featured','label'=>'Featured Resources'),    
   );
   //add filter if not anonymous user
   if($user->uid > 0) {
-    $resource_filter[] = array('filter'=>'favorited','label'=>'My Favorited Resources');
     $resource_filter[] = array('filter'=>'author','label'=>'My Resources');
+    $resource_filter[] = array('filter'=>'favorited','label'=>'My Favorited Resources');
   }
+
+  $resource_filter[] = array('filter'=>'featured','label'=>'Featured Resources');
 
   $epe_modules = variable_get('EPE_CONTENT_MODULES',array());
   $resource_browser_enabled_modules = array();
@@ -107,6 +108,7 @@ function epe_dbresource_browser_preload() {
       'requirejs'=>base_path() . libraries_get_path('requirejs'),
       'angularAMD'=>base_path() . libraries_get_path('angularAMD'),
       'ngProgress'=>base_path() . libraries_get_path('ngProgress'),
+      'angularPaging'=>base_path() . libraries_get_path('angular-paging'),
       'angularUi'=>base_path() . libraries_get_path('angular-ui-bootstrap'),
       'angularWebstorage'=>base_path() . libraries_get_path('angular-webstorage'),
       'loadingBar'=>base_path() . libraries_get_path('angular-loading-bar'),
@@ -124,8 +126,10 @@ function epe_dbresource_browser_preload() {
     'username'=>$user->name,
   )),'setting');
 
+
   drupal_add_css('http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css','external');
   drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/epe_resource_browser.css');
+  drupal_add_css(drupal_get_path('module','epe_dbresource_browser') . '/css/bootstrap3_glyphicons/css/bootstrap.min.css');
   drupal_add_css(libraries_get_path('ngProgress') . '/ngProgress.css');
 }
 

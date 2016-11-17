@@ -13,7 +13,7 @@ if(isset($form["#node"]->field_parent_tool)){
   $ev_tool["instance_configuration"] = epe_getFieldValue("field_instance_configuration", $form["#node"]);
 
   $ev_tool["parent_tool_id"] = $form["#node"]->field_parent_tool["und"][0]["value"];
-  
+
   // load the parent node item
   $parentNode = node_load($ev_tool["parent_tool_id"]);
 
@@ -21,7 +21,7 @@ if(isset($form["#node"]->field_parent_tool)){
   $ev_tool["tool"] = epe_getNodeValues( array("field_tool_name"), $parentNode);
 
   $ev_tool["parentThumbnailId"] = $parentNode->field_tool_thumbnail["und"][0]["fid"];
-  
+
 }
 //do we have a query string? this indicates a new instance
 elseif(isset($_GET["ev_toolid"])){
@@ -50,7 +50,7 @@ elseif(isset($_GET["ev_toolid"])){
 }
 // we have nothing, send user to the tools list
 else{
-  
+
   drupal_goto( $tool_list_path, array('query'=>array(
     'toolname'=>'ev_tool'
   )));
@@ -69,7 +69,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
   }
 </style>
 
-<div class="form-help"><a href="<?php echo base_path() . "node/163" ?>" target="_blank">Help with this tool</a></div>
+<div class="form-help"><a href="<?php echo drupal_get_path_alias('node/163'); ?>" target="_blank">Help with this tool</a></div>
 
   <!-- content -->
   <p>Use the tabs to complete all three steps needed to create your custom visualization tool.</p>
@@ -97,7 +97,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
         <p><em>Here is a preview of the custom visualization tool you have made.  This is what others will see when you share it.</em></p>
         <div id="vistool"></div>
       </div>
-      
+
       <div class="tab-pane" id="ev-instance-save">
         <!-- tab info -->
         <p><em>Before saving your custom visualization tool, be sure to describe it appropriately using the fields below.</em></p>
@@ -140,7 +140,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
           </div>
 
         </div>
-         
+
          <?php if (empty($form['nid']['#value'])): ?>
           <input type="hidden" name="destination" value="ev/">
           <?php else: ?>
@@ -157,11 +157,11 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
             echo render($form['form_id']);
             echo render($form['form_token']);
           ?>
-        
+
       </div>
-      
+
     </div>
-      
+
   <!-- end content -->
 
 <script type="text/javascript">
@@ -171,7 +171,7 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
     // pull the configuration from the default tool instance
     var config = EduVis.tool.instances["<?php print $ev_tool['tool']['field_tool_name'];?>"]["default"].configuration,
         thumbnailId = $( "input[name='field_instance_thumbnail[und][0][fid]']" );
-      
+
     // update the configuration value of the form element
     $("#edit-field-instance-configuration-und-0-value")
       .val(JSON.stringify(config));
@@ -180,10 +180,10 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
     if(thumbnailId.val() == "0"){
       thumbnailId.val(<?php print $ev_tool["parentThumbnailId"];?>)
     }
-  
+
     return true;
   }
-  
+
   (function(){
 
     // update the parent tool ID form element
@@ -193,19 +193,19 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
     $('#edit-submit').click(function(){
       return EduVis_extract();
     });
-    
+
     // set the EduVis, tools, and resources paths
-    EduVis.Environment.setPaths( 
+    EduVis.Environment.setPaths(
       '<?php echo $EduVis_Paths["EduVis"]["root"];?>', // eduvis
       '<?php echo $EduVis_Paths["EduVis"]["tools"];?>', // tools
       '<?php echo $EduVis_Paths["EduVis"]["resources"];?>' // resources
     );
 
     EduVis.tool.load(
-      { 
-        "name" : "<?php print $ev_tool['tool']['field_tool_name'];?>", 
+      {
+        "name" : "<?php print $ev_tool['tool']['field_tool_name'];?>",
         "tool_container_div": "vistool",
-        "instance_config": <?php 
+        "instance_config": <?php
           if(isset($ev_tool["instance_configuration"]))
             print $ev_tool["instance_configuration"] . "\n";
           else

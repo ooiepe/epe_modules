@@ -17,10 +17,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -35,10 +31,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -53,10 +45,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -71,10 +59,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -96,10 +80,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();

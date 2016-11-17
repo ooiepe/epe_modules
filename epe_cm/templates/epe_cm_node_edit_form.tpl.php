@@ -23,7 +23,7 @@
 
 
 
-<div class="form-help"><a href="<?php echo base_path() . "node/178" ?>" target="_blank">Help with this tool</a></div>
+<div class="form-help"><a href="<?php echo drupal_get_path_alias('node/178'); ?>" target="_blank">Help with this tool</a></div>
 
 <div class="field-container">
 <label for="edit-title" class="field-label">* Title:</label>
@@ -88,7 +88,7 @@ function loadFlash() {
 
   // this line is unchanged from the mwsci website
   swfobject.embedSWF('<?php echo base_path() . drupal_get_path('module', 'epe_cm') ?>/swf/CMV_15_20150501_0839.swf', 'flashcontent', '100%', '700', '9', 'expressInstall.swf', flashvars, params, attributes);
-  
+
   return;
 }
 
@@ -117,7 +117,7 @@ function getMapTitleAndDesc() {
 }
 
 function doGetThumb() {
-  
+
   // get a reference to the flash object
   var swf = document.getElementById('conceptMapBuilderViewer');
   // get the thumb of the map

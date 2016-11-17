@@ -143,6 +143,9 @@ function giveXMLtoJS(value) {
 
 <textarea id="conceptMapContents" name="conceptMapContents" style="display: none; width:500px; height:100px;"><?php echo $field_out ?></textarea>
 
+</div>
+
+
 
   <?php
     // Hide comments, tags, and links now so that we can render them later.
@@ -167,9 +170,5 @@ function giveXMLtoJS(value) {
 
 
   <?php print render($content['comments']); ?>
-
-
-</div>
-
 
 </article> <!-- /.node -->

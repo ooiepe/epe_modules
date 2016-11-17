@@ -24,7 +24,7 @@
 </script>
 
 
-<div class="form-help"><a href="<?php echo base_path() . "node/214" ?>" target="_blank">Help with this form</a></div>
+<div class="form-help"><a href="<?php echo drupal_get_path_alias('node/214'); ?>" target="_blank">Help with this form</a></div>
 
 <div class="top">
 <?php echo render($form['actions']); ?>

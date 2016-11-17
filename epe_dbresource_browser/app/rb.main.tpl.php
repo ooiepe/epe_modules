@@ -1,4 +1,4 @@
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
+<div class="clearfix">
 <div ng-view></div>
 </div>
 
