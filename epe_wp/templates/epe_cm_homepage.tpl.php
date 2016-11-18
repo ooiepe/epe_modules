@@ -1,40 +1,24 @@
+<style>
+.node-tabs, .action-links {
+  display: none;
+}
+</style>
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div class="clearfix about content_wrapper">
 
-
-
-
-<div class="tool-home">
+<div class="tool-home clearfix">
   <div class="span7">
     <div class="control-group">
       <?php echo file_get_contents(drupal_get_path('module','epe_cm') . '/content/homepage/homepage.html'); ?>
     </div>
-    <div class="control-group">
-      <div>
-        <div class="clearbox">
-          <input type="radio" name="filter" value="" checked="checked">&nbsp;All Concept Maps<br>
-        </div>
-        <div class="<?php if(!user_is_logged_in()): echo 'graybox'; else: echo 'clearbox'; endif; ?>">
-          <input type="radio" name="filter" value="author" <?php if(!user_is_logged_in()): echo 'disabled'; endif; ?> >&nbsp;My Concept Maps Only
-          <?php if(!user_is_logged_in()): ?>
-            <div style="float:right;"><small>Not registered? <?php echo l('Click here','user'); ?></small></div>
-          <?php endif; ?>
-        </div>
-        <div class="form-horizontal">
-          <input type="text" name="search_cm" size="50"> <button type="button" id="cm_submit" class="btn btn-primary">Search</button>
-        </div>
-        <br><a href="<?php echo base_path() ?>node/add/cm-resource" class="btn btn-primary">Create a Concept Map<i class="icon-chevron-right icon-white"></i></a>
-      </div>
-    </div>
   </div>
   <div class="span5">
     <div class="control-group featured-image">
-    <?php  
+    <?php
       $block = module_invoke('bean', 'block_view', 'concept-maps-rotator');
       if(!empty($block['content']['bean']['concept-maps-rotator']['field_rotator_content_fields']['#items'])) {
-        print render($block['content']);  
-      } else {  
+        print render($block['content']);
+      } else {
     ?>
     <img src="<?php echo base_path() . drupal_get_path('module','epe_cm'); ?>/content/homepage/homepage.jpg" />
     <?php
@@ -45,7 +29,56 @@
 </div><!-- /tool-home  -->
 <br clear="all">
 
+<div class="control-group">
+  <div class="span7">
+    <div class="resource_option lib clearfix">
+      <div class="icon_thumb">
+        <img src="<?php echo drupal_get_path('theme','epe_theme'); ?>/images/about-investigation-icon.jpg" alt="Icon of Investigation Library">
+      </div>
+      <div class="info">
+        <div class="option_title">Investigation Library</div>
+        <div class="text">Search the library for Featured Investigations developed by your peers.  Here you will find an onine collection of data investigations to enrich your teaching and student learning.</div>
+      </div>
+    </div>
+    <div class="resource_option copy_mod clearfix">
+      <div class="icon_thumb">
+        <img src="<?php echo drupal_get_path('theme','epe_theme'); ?>/images/about-copy-modify-icon.jpg" alt="Icon of Copy and Modify">
+      </div>
+      <div class="info">
+        <div class="option_title">Copy and Modify</div>
+        <div class="text">Copy and modify an existing investigation to tailor your class needs.  When you copy an investigation, you can adjust the content to your specific classroom needs.</div>
+      </div>
+    </div>
+    <div class="resource_option create clearfix">
+      <div class="icon_thumb">
+        <img src="<?php echo drupal_get_path('theme','epe_theme'); ?>/images/about-create-icon.jpg" alt="Icon of Create your Own">
+      </div>
+      <div class="info">
+        <div class="option_title">Create your Own</div>
+        <div class="text">Create a New Investigation using novel data sets and topics.  Use our Data Investigation Wizard to create your own novel lesson.</div>
+      </div>
+    </div>
+  </div>
+  <div class="span5 kb">
+    <h4>Getting Started</h4>
+    <div class="description">Need help deciding what to do first?  Check out these common questions.</div>
+    <?php
+    $display_name = 'cm';
+    $remove_field = 'body';
+    $view = views_get_view('knowledge_base_view');
+    $view->set_display($display_name);
+    $pager = $view->display_handler->get_option('pager');
+    $pager['type'] = 'some';
+    $pager['options']['items_per_page'] = '5';
+    $view->display_handler->override_option('pager', $pager);
 
+    $view->pre_execute();
+    $view->execute();
+
+    echo $view->render();
+    ?>
+  </div>
+</div>
 
 <div class="control-group">
   <div class="span12">
@@ -60,9 +93,4 @@
 </div>
 <br clear="all">
 
-
-
-
-
-</div>
 </div>
