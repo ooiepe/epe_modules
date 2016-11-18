@@ -10,7 +10,7 @@ require.config({
     'angularResource': Drupal.settings.jslibraries.path.angular + '/angular-resource',
     'angularRoute': Drupal.settings.jslibraries.path.angular + '/angular-route',
     'angularSanitize': Drupal.settings.jslibraries.path.angular + '/angular-sanitize',
-    'angularAnimate': Drupal.settings.jslibraries.path.angular + '/angular-animate.js',
+    'angularAnimate': Drupal.settings.jslibraries.path.angular + '/angular-animate',
     /* 3rd party libraries */
     'angularAMD': Drupal.settings.jslibraries.path.angularAMD + '/angularAMD',
     'domReady': Drupal.settings.jslibraries.path.requirejs + '/domReady',
@@ -19,6 +19,7 @@ require.config({
     'angularUi': Drupal.settings.jslibraries.path.angularUi + '/ui-bootstrap-tpls-0.6.0.min',
     'angularWebstorage': Drupal.settings.jslibraries.path.angularWebstorage + '/angular-webstorage',
     'ngProgress': Drupal.settings.jslibraries.path.ngProgress + '/ngProgress.min',
+    'bw.paging': Drupal.settings.jslibraries.path.angularPaging + '/paging',
     /* app controllers */
     'SearchCtrl': Drupal.settings.resourceBrowser.appPath + '/controllers/search_ctrl',
     /* app services */
@@ -36,6 +37,10 @@ require.config({
     'angularWebstorage':['angular'],
     'ngProgress': {
       exports: 'ngProgress',
+      deps: ['angular']
+    },
+    'bw.paging': {
+      exports: 'paging',
       deps: ['angular']
     }
   },

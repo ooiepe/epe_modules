@@ -3,15 +3,14 @@
 
 
 
-<?php 
+<?php
 $isDBFiles = 1;
 ?>
 <?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
 
 
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div style="border: 1px solid #0195bd;padding:23px;margin-bottom:20px;" class="clearfix">
 
 <style type="text/css">
 .field-label {
@@ -53,10 +52,5 @@ $isDBFiles = 1;
 
 
 </div>
-</div>
-
 
 </article> <!-- /.node -->
-
-
-

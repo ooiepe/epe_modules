@@ -138,7 +138,7 @@ function epe_wp_menu() {
 function epe_wp_moderate_view($delta) {
   switch ($delta) {
     case 'pending':
-      return views_embed_view('moderator_resource_list', $display_id = 'pending_block');
+      return '<div class="review desc">The following resources have been submitted by users for inclusion in the public database. Please review each item and approve or reject as appropriate. If you reject an item, please consider notifying the author with suggestions to improve their submission.</div>' . views_embed_view('moderator_resource_list', $display_id = 'pending_block');
       break;
 
     default:
@@ -327,4 +327,22 @@ function epe_wp_image_default_styles() {
   );
 
   return $styles;
+}
+
+/**
+ * Helper function to find and render a block.
+ */
+function epe_wp_render_block_content($module, $delta) {
+  $output = '';
+  if ($block = block_load($module, $delta)) {
+    if ($build = module_invoke($module, 'block_view', $delta)) {
+      $delta = str_replace('-', '_', $delta);
+      drupal_alter(array('block_view', "block_view_{$module}_{$delta}"), $build, $block);
+
+      if (!empty($build['content'])) {
+        return is_array($build['content']) ? render($build['content']) : $build['content'];
+      }
+    }
+  }
+  return $output;
 }

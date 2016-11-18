@@ -142,13 +142,15 @@ function epe_dbimage_form_alter(&$form, &$form_state, $form_id) {
       $form['actions']['saveas'] = array(
         '#type'=>'submit',
         '#access'=>1,
-        '#value'=>t('Save As'),
+        '#value'=>t('Save As New'),
         '#weight'=>2,
-        '#submit'=>array(      
+        '#submit'=>array(
           'epe_dbimage_save_as_submit',
           'node_form_submit',
         ),
       );
+
+      $form['actions']['cancel']['#submit'] = array('epe_dbimage_cancel_from_edit_handler');
     }
   }
 }
@@ -160,9 +162,29 @@ function epe_dbimage_save_as_submit($form, &$form_state) {
   $form_state['node']->created = '';
   $form_state['node']->changed = '';
   $form_state['node']->is_new = 1;
+  $form_state['node']->date = '';
+  $form_state['node']->field_featured_status = array(
+    'und'=>array(
+      0=>array(
+        ['value'] => 'Not-Featured'
+      )
+    )
+  );
+  $form_state['node']->field_public_status = array(
+    'und'=>array(
+      0=>array(
+        ['value'] => 'Private'
+      )
+    )
+  );
   $form_state['values']['nid'] = '';
   $form_state['values']['vid'] = '';
 }
+
+function epe_dbimage_cancel_from_edit_handler($form, &$form_state) {
+  $form_state['redirect'] = 'node/' . $form['nid']['#value'];
+}
+
 
 /*
  * assign custom content type permission base on epe supported author roles

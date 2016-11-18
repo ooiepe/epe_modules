@@ -10,8 +10,7 @@ $isDBFiles = 1;
 
 
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div style="border: 1px solid #0195bd;padding:23px;margin-bottom:20px;" class="clearfix">
 
 <style type="text/css">
 .field-label {
@@ -22,7 +21,7 @@ $isDBFiles = 1;
   padding-bottom: 56.25%;
   padding-top: 35px;
   height: 0;
-  overflow: hidden;  
+  overflow: hidden;
 }
 .multimedia.embed iframe {
   position: absolute;
@@ -84,10 +83,6 @@ if($response->code == 200) {
 
 
 </div>
-</div>
 
 
 </article> <!-- /.node -->
-
-
-

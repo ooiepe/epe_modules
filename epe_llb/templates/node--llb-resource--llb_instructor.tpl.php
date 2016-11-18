@@ -7,8 +7,7 @@
   include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php';
 ?>
 
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px; position:relative;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px; position:relative;">
+<div style="border: 1px solid #0195bd;padding:23px;margin-bottom:20px;" class="clearfix">
 
   <?php
     // Hide comments, tags, and links now so that we can render them later.
@@ -70,8 +69,7 @@
   </div>
 
 </div>
-</div>
 
-<p align="center"><?php echo l('Data Investigation Details', "node/" . arg(1)); ?> | <?php echo l('Begin this Investigation', "node/" . arg(1) . "/detail"); ?></p>
+<p align="center"><?php echo l('Data Investigation Details', "node/" . arg(1), array('attributes'=>array('class'=>'btn btn-primary'))); ?> &nbsp;&nbsp; <?php echo l('Begin this Investigation', "node/" . arg(1) . "/detail", array('attributes'=>array('class'=>'btn btn-primary'))); ?></p>
 
 </article> <!-- /.node -->

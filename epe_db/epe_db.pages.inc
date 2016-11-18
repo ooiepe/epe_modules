@@ -124,6 +124,11 @@ function epe_db_node_share_function($node) {
 function epe_db_node_unshare_function($node) {
 	// update the published status to pending
 	$node->status = 0;
+	// make sure node is back to private status
+	$node->field_public_status[$node->language][0]['value'] = 'Private';
+  // make sure node is no longer featured
+	$node->field_featured_status[$node->language][0]['value'] = 'Not-Featured';
+
 	// save the node
 	node_save($node);
 	// set the message

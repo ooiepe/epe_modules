@@ -5,7 +5,6 @@
 
 .rb-type-selector {
   float: left;
-  padding-right: 25px;
 }
 
 
@@ -50,7 +49,7 @@ table.ng-scope td {
     color: #000;
 }
 table.ng-scope tr:hover td {
-    background-color: #ebf7fb;
+    background-color: #DCF0F7;
     border-color: #8fbbca;
 }
 
@@ -76,10 +75,14 @@ table.ng-scope td .title {
 
 table.ng-scope td .author {
   font-weight: bold;
-
 }
 
+table.ng-scope td .org {
+  font-weight: normal;
+  color: #BCBCBC;
+}
 
+.resource-row:hover .org { color: #92B9BF; }
 
 table.ng-scope td .thumb {
     border: 1px solid #c1c1c1;

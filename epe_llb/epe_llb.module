@@ -308,6 +308,8 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.tab-history.js');
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/epe_llb.form.js');
   drupal_add_js(drupal_get_path('module','epe_llb') . '/js/jquery.actual.js');
+  drupal_add_js(drupal_get_path('module','epe_wp') . '/js/epe_wp.form.js');
+
   if(isset($form_state['node']->nid)) {
     drupal_set_title('Edit your Data Investigation "' . $form['title']['#default_value'] . '"');
   } else {
@@ -461,17 +463,33 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   $form['options']['status']['#type'] = 'hidden';
 
+  $form['actions']['cancel']['#submit'] = 'epe_llb_node_form_cancel_handler';
+
+  $form['actions']['view'] = array(
+    '#type'=>'submit',
+    '#access'=>1,
+    '#value'=>t('View Investigation'),
+    '#weight'=>3,
+    '#submit'=>array(      
+      'epe_llb_save_as_submit',
+      'node_form_submit',
+      'epe_llb_custom_submission_handler',
+    ),
+  );
+
   if(is_numeric(arg(1))) {
     $form['actions']['saveas'] = array(
       '#type'=>'submit',
       '#access'=>1,
-      '#value'=>t('Save As'),
+      '#value'=>t('Save As New'),
       '#weight'=>2,
-      '#submit'=>array(      
-        'epe_llb_save_as_submit',
+      '#submit'=>array(
         'node_form_submit',
         'epe_llb_custom_submission_handler',
       ),
+    );
+    $form['actions']['cancel']['#submit'] = array(
+      'epe_llb_cancel_from_edit_handler'
     );
   }
 
@@ -491,16 +509,36 @@ function epe_llb_save_as_submit($form, &$form_state) {
   $form_state['node']->status = 0;
   $form_state['node']->created = '';
   $form_state['node']->changed = '';
+  $form_state['node']->revision_timestamp = '';
   $form_state['node']->is_new = 1;
+  $form_state['node']->date = '';
+  $form_state['node']->field_featured_status = array(
+    'und'=>array(
+      0=>array(
+        ['value'] => 'Not-Featured'
+      )
+    )
+  );
+  $form_state['node']->field_public_status = array(
+    'und'=>array(
+      0=>array(
+        ['value'] => 'Private'
+      )
+    )
+  );
   $form_state['values']['nid'] = '';
   $form_state['values']['vid'] = '';
 }
 
+function epe_llb_cancel_from_edit_handler($form, &$form_state) {
+  $form_state['redirect'] = 'node/' . $form['nid']['#value'] . '/detail';
+}
+
 function epe_llb_custom_submission_handler($form, &$form_state) {
   unset($_GET['destination']);
-  if($form_state['clicked_button']['#id'] == 'edit-submit' || $form_state['clicked_button']['#id'] == 'edit-saveas') {
+  if($form_state['clicked_button']['#id'] == 'edit-submit' || $form_state['clicked_button']['#id'] == 'edit-view' || $form_state['clicked_button']['#id'] == 'edit-saveas') {
     $form_state['redirect'] = 'node/' . $form_state['nid'] . '/detail';
-  }  
+  }
 }
 
 function epe_llb_field_widget_form_alter(&$element, &$form_state, $context) {
@@ -655,6 +693,7 @@ function epe_llb_node_view_alter(&$build) {
 
   $epe_menu = variable_get('epe_menu',array());
   if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page' && $build['#node']->nid == $epe_menu['llb']['nid']) {
+    drupal_set_title('Data Investigation');
     $build['#post_render'][] = 'epe_llb_homepage_render';
   }
 
@@ -954,4 +993,3 @@ function epe_llb_default_search_api_index() {
   $items['llb_resource_index'] = entity_import('search_api_index', _epe_db_search_api_index_base_definition('llb resource search index','llb_resource_index',array('llb_resource')));
   return $items;
 }
-
