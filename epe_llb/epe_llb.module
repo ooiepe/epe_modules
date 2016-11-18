@@ -463,6 +463,20 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   $form['options']['status']['#type'] = 'hidden';
 
+  $form['actions']['cancel']['#submit'] = 'epe_llb_node_form_cancel_handler';
+
+  $form['actions']['view'] = array(
+    '#type'=>'submit',
+    '#access'=>1,
+    '#value'=>t('View Investigation'),
+    '#weight'=>3,
+    '#submit'=>array(      
+      'epe_llb_save_as_submit',
+      'node_form_submit',
+      'epe_llb_custom_submission_handler',
+    ),
+  );
+
   if(is_numeric(arg(1))) {
     $form['actions']['saveas'] = array(
       '#type'=>'submit',
@@ -470,7 +484,6 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
       '#value'=>t('Save As New'),
       '#weight'=>2,
       '#submit'=>array(
-        'epe_llb_save_as_submit',
         'node_form_submit',
         'epe_llb_custom_submission_handler',
       ),
@@ -523,7 +536,7 @@ function epe_llb_cancel_from_edit_handler($form, &$form_state) {
 
 function epe_llb_custom_submission_handler($form, &$form_state) {
   unset($_GET['destination']);
-  if($form_state['clicked_button']['#id'] == 'edit-submit' || $form_state['clicked_button']['#id'] == 'edit-saveas') {
+  if($form_state['clicked_button']['#id'] == 'edit-submit' || $form_state['clicked_button']['#id'] == 'edit-view' || $form_state['clicked_button']['#id'] == 'edit-saveas') {
     $form_state['redirect'] = 'node/' . $form_state['nid'] . '/detail';
   }
 }

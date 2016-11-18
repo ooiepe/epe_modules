@@ -32,15 +32,15 @@
 
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
-  <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ececec;color:#606060;">Instructions</a></li>
-  <li><a href="#objectives" data-toggle="tab" style="background-color:#ececec;color:#606060;">Learning Objective</a></li>
+  <li class="active"><a href="#instruction" data-toggle="tab" class="infotab">Instructions</a></li>
+  <li><a href="#objectives" data-toggle="tab" class="infotab">Learning Objective</a></li>
   <li><a href="#motivation" data-toggle="tab">Introduction</a></li>
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
   <li><a href="#explanation" data-toggle="tab">Explanation</a></li>
-  <li class="pull-right"><a href="#setup" data-toggle="tab" style="background-color:#ececec;color:#606060;">Cover</a></li>
-  <li class="pull-right"><a href="#notes" data-toggle="tab" style="background-color:#ececec;color:#606060;">Instructor Notes</a></li>
+  <li class="pull-right"><a href="#setup" data-toggle="tab" class="infotab">Cover</a></li>
+  <li class="pull-right"><a href="#notes" data-toggle="tab" class="infotab">Instructor Notes</a></li>
 </ul>
 
 <div class="tab-content">
