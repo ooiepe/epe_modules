@@ -178,7 +178,7 @@
       $field_cm_data = field_view_value('node',$cm_resource,'field_cm_data', $field_cm_data_items[0]);
       $field_out = render($field_cm_data);
   ?>
-    <div style="border-bottom: 2px solid #338ea9;margin-bottom: 10px;">
+    <div style="margin-bottom: 10px;">
       <!-- <div id="flashcontent"><p>Please update your Flash Player</p></div> -->
        <iframe class="cmembed" width="100%" height="424" src="<?php echo base_path(); ?>node/<?php echo $dataset->nid; ?>/cmembed" frameborder="0" allowfullscreen></iframe>
     </div>

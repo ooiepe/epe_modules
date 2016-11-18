@@ -444,7 +444,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
       'default_background_slideshow'=>$default_background_slideshow,
       'default_challenge_thumbnail'=>$default_challenge_thumbnail,
       'llb'=> array(
-        'thumbnail_placeholder'=>drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg'
+        'thumbnail_placeholder'=>drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg'
       ),
       'epe_dbresource_browser'=>array(
         'modules' =>variable_get('EPE_CONTENT_MODULES',array()),
@@ -898,7 +898,7 @@ function epe_llb_theme_file_dataset_image($dataset, $image_style=NULL) {
     $thumbnail_image = array('style_name' => $image_style, 'path' => $data->uri, 'alt' => $dataset->title, 'title' => $dataset->title);
     $output = theme('image_style', $thumbnail_image);
   } elseif(!$data->uri) {
-    $output = '<img src="' . base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
+    $output = '<img src="' . base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg" alt="' . $dataset->title . '" title="' . $dataset->title . '">';
   } else {
     $output = '<img src="' . file_create_url($dataset->uri) .'"" width="886px" alt="' . $dataset->title . '" />';
   }
@@ -913,7 +913,7 @@ function epe_llb_theme_file_dataset($dataset) {
   if($dataset->uri) {
     $display_image = file_create_url($dataset->uri);
   } else {
-    $display_image = base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg';
+    $display_image = base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg';
   }
   $output = '<img src="' . $display_image .'"" width="886px" alt="' . $dataset->title . '" />';
   //$output = epe_llb_theme_file_dataset_image($dataset);
@@ -944,7 +944,7 @@ function epe_llb_reload_dataset($dataset, $assoc_resources) {
   if($dataset->nid != 'NULL') {
     $data = json_decode($assoc_resources[$dataset->nid]);
 
-    $dataset->thumbnail = base_path() . drupal_get_path('theme','bootstrap') . '/images/no_thumb_small.jpg';
+    $dataset->thumbnail = base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg';
     if(isset($data->thumbnail) && $data->thumbnail != ''): $dataset->thumbnail = $data->thumbnail; endif;
     if(isset($data->uri)): $dataset->uri = $data->uri; endif;
     if(isset($data->file)): $dataset->file = $data->file; endif;
