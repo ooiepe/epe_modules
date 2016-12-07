@@ -66,9 +66,10 @@
 <?php
   if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
   } else { ?>
-<?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
 <?php print render($content['field_instance_questions']); ?>
+
+<?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
 <?php print render($content['comments']); ?>
 <?php } //end if vsembed ?>

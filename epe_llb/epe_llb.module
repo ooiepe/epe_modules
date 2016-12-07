@@ -465,17 +465,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
 
   $form['actions']['cancel']['#submit'] = 'epe_llb_node_form_cancel_handler';
 
-  $form['actions']['view'] = array(
-    '#type'=>'submit',
-    '#access'=>1,
-    '#value'=>t('View Investigation'),
-    '#weight'=>3,
-    '#submit'=>array(      
-      'epe_llb_save_as_submit',
-      'node_form_submit',
-      'epe_llb_custom_submission_handler',
-    ),
-  );
+  $form['actions']['submit']['#value'] = t('Save and View');
 
   if(is_numeric(arg(1))) {
     $form['actions']['saveas'] = array(
@@ -484,6 +474,7 @@ function epe_llb_form_llb_resource_node_form_alter(&$form, &$form_state, $form_i
       '#value'=>t('Save As New'),
       '#weight'=>2,
       '#submit'=>array(
+        'epe_llb_save_as_submit',
         'node_form_submit',
         'epe_llb_custom_submission_handler',
       ),
@@ -693,7 +684,6 @@ function epe_llb_node_view_alter(&$build) {
 
   $epe_menu = variable_get('epe_menu',array());
   if($build['#view_mode'] == 'full' && $build['#entity_type'] == 'node' && $build['#bundle'] == 'page' && $build['#node']->nid == $epe_menu['llb']['nid']) {
-    drupal_set_title('Data Investigation');
     $build['#post_render'][] = 'epe_llb_homepage_render';
   }
 

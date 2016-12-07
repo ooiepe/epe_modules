@@ -128,7 +128,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
 
           if($scope.browser.data.length < 1) {
             $scope.browser.messages.show_progress_bar = false;
-            $scope.browser.messages.messages = "No items found in this category. Use the icons above to search other resource types";
+            $scope.browser.messages.messages = "No items found in this category. Use the icons above to search other resource types.";
           } else {
             $scope.browser.messages.show_messages = false;
             $scope.browser.messages.show_progress_bar = false;
@@ -331,13 +331,19 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       }
 
       function setPageHeader(type) {
-        var pageheader = type;
+        var pageheader = type, pageheadertext = 'Browse';
         if(pageheader == 'ev') { pageheader = 'Visualization'; }
         else if(pageheader == 'cm') { pageheader = 'Concept Map'; }
         else if(pageheader == 'llb') { pageheader = 'Investigation'; }
         else { pageheader = pageheader.toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase(); }); }
 
-        angular.element('.page-header').html('Browse ' + pageheader + 's');
+        pageheadertext += ' ' + pageheader;
+
+        if(pageheader != 'Multimedia') {
+          pageheadertext += 's';
+        }
+
+        angular.element('.page-header').html(pageheadertext);
       }
     }]); //end controller function
 }); //end define

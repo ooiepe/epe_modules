@@ -188,12 +188,12 @@ function epe_wp_block_view($delta = '') {
     break;
 
     case 'epe_cm_featured':
-      $block['title'] = t('Featured CM Resources');
+      $block['title'] = t('Featured Concept Maps');
       $block['content'] = theme('epe_featured_block', array('type'=>array('cm_resource')));
     break;
 
     case 'epe_ev_featured':
-      $block['title'] = t('Featured Visualization Resources');
+      $block['title'] = t('Featured Visualizations');
       $block['content'] = theme('epe_featured_block', array('type'=>array('ev_tool_instance')));
     break;
 

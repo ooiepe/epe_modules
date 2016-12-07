@@ -34,28 +34,34 @@
   <div class="span7">
     <div class="resource_option lib clearfix">
       <div class="icon_thumb">
+        <a href="<?php echo base_path(); ?>resource-browser#/search?type=image&page=1&filter=featured">
         <img src="<?php echo drupal_get_path('theme','epe_theme'); ?>/images/about-investigation-icon.jpg" alt="Icon of Investigation Library">
+        </a>
       </div>
       <div class="info">
-        <div class="option_title">Investigation Library</div>
+        <div class="option_title"><a href="<?php echo base_path(); ?>resource-browser#/search?type=image&page=1&filter=featured">Investigation Library</a></div>
         <div class="text">Search the library for Featured Investigations developed by your peers.  Here you will find an onine collection of data investigations to enrich your teaching and student learning.</div>
       </div>
     </div>
     <div class="resource_option copy_mod clearfix">
       <div class="icon_thumb">
+        <a href="<?php echo base_path(); ?>resource-browser#/search?type=image&page=1">
         <img src="<?php echo drupal_get_path('theme','epe_theme'); ?>/images/about-copy-modify-icon.jpg" alt="Icon of Copy and Modify">
+        </a>
       </div>
       <div class="info">
-        <div class="option_title">Copy and Modify</div>
+        <div class="option_title"><a href="<?php echo base_path(); ?>resource-browser#/search?type=image&page=1">Copy and Modify</a></div>
         <div class="text">Copy and modify an existing investigation to tailor your class needs.  When you copy an investigation, you can adjust the content to your specific classroom needs.</div>
       </div>
     </div>
     <div class="resource_option create clearfix">
       <div class="icon_thumb">
+        <a href="<?php echo base_path(); ?>resource/add">
         <img src="<?php echo drupal_get_path('theme','epe_theme'); ?>/images/about-create-icon.jpg" alt="Icon of Create your Own">
+        </a>
       </div>
       <div class="info">
-        <div class="option_title">Create your Own</div>
+        <div class="option_title"><a href="<?php echo base_path(); ?>resource/add">Create your Own</a></div>
         <div class="text">Create a New Investigation using novel data sets and topics.  Use our Data Investigation Wizard to create your own novel lesson.</div>
       </div>
     </div>
