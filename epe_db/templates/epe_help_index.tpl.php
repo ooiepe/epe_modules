@@ -74,7 +74,7 @@ label a { color: #ac7f25; }
       </form>
     </div>
     <div class="control-group">
-      <label><?php echo l('Common Issues','help'); ?></label>
+      <label><?php echo l('Common Issues','help/ci'); ?></label>
       <?php
       $display_name = 'kb';
       $remove_field = 'body';
