@@ -167,14 +167,14 @@ function epe_dbdocument_save_as_submit($form, &$form_state) {
   $form_state['node']->field_featured_status = array(
     'und'=>array(
       0=>array(
-        ['value'] => 'Not-Featured'
+        'value' => 'Not-Featured'
       )
     )
   );
   $form_state['node']->field_public_status = array(
     'und'=>array(
       0=>array(
-        ['value'] => 'Private'
+        'value' => 'Private'
       )
     )
   );
