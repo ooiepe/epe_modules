@@ -1,5 +1,5 @@
 <?php
-
+  
   // include php file for epe_ev functions.
   include($_SERVER["DOCUMENT_ROOT"] . $GLOBALS["base_path"] . drupal_get_path('module', 'epe_ev') . "/inc/epe_ev_lib.php");
 
@@ -67,7 +67,9 @@
   if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
   } else { ?>
 
-<?php print render($content['field_instance_questions']); ?>
+  <div class="h2-container">
+  <?php print render($content['field_instance_questions']); ?>
+  </div>
 
 <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 

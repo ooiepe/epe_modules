@@ -1170,5 +1170,189 @@ function epe_db_views_default_views() {
 
   $export['resource_view_stats'] = $view;
 
+  $view = new view();
+  $view->name = 'resource_usage';
+  $view->description = '';
+  $view->tag = 'default';
+  $view->base_table = 'node';
+  $view->human_name = 'Resource Usage';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Resource Usage';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'No public resource for listing.';
+  $handler->display->display_options['empty']['area']['format'] = 'full_html';
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['label'] = '';
+  $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_output'] = '<?php
+      $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
+      $node = node_load($data->nid);
+      $wrapper = entity_metadata_wrapper(\'node\',$node);
+      switch($data->node_type) {
+        case \'image_resource\':
+          $image = $wrapper->field_image_resource_file->value();
+          $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
+        break;
+
+        case \'document_resource\':
+        $image = $wrapper->field_document_resource_image->value();
+        if($image) {
+          $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
+        }
+        break;
+
+        case \'audio_resource\':
+          $image = $wrapper->field_audio_resource_image->value();
+          if($image) {
+            $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
+          }
+        break;
+
+        case \'video_resource\':
+          $field = field_get_items(\'node\', $node, \'field_video_resource_file\');
+          if($field) {
+            $thumbnail = image_style_url(\'resource_browser_thumbnail\', $field[0][\'thumbnailfile\']->uri);
+          }
+        break;
+
+        case \'llb_resource\':
+          $image = $wrapper->field_data_field_challenge_thumbnail->value();
+          if($image) {
+            $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
+          }
+        break;
+      }
+      ?>    
+      <img src="<?php echo $thumbnail; ?>" width="133" height="99" />';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: Author uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'node';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['label'] = '';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php_1']['id'] = 'php_1';
+  $handler->display->display_options['fields']['php_1']['table'] = 'views';
+  $handler->display->display_options['fields']['php_1']['field'] = 'php';
+  $handler->display->display_options['fields']['php_1']['label'] = '';
+  $handler->display->display_options['fields']['php_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['php_1']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_1']['php_output'] = '<?php
+              $fullname = array();
+      $author = user_load($row->uid);
+
+              if( !empty($author->field_account_fname) ) {
+                $fullname[] = $author->field_account_fname[\'und\'][0][\'value\'];
+              }
+              if( !empty($author->field_account_lname) ) {
+                $fullname[] = $author->field_account_lname[\'und\'][0][\'value\'];
+              }
+              echo \'By: \' . implode(\' \',$fullname);
+              ?>';
+  $handler->display->display_options['fields']['php_1']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_1']['php_click_sortable'] = '';
+  /* Field: Content: Public Status */
+  $handler->display->display_options['fields']['field_public_status']['id'] = 'field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['table'] = 'field_data_field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['field'] = 'field_public_status';
+  $handler->display->display_options['fields']['field_public_status']['label'] = '';
+  $handler->display->display_options['fields']['field_public_status']['element_label_colon'] = FALSE;
+  /* Sort criterion: Content: Title */
+  $handler->display->display_options['sorts']['title']['id'] = 'title';
+  $handler->display->display_options['sorts']['title']['table'] = 'node';
+  $handler->display->display_options['sorts']['title']['field'] = 'title';
+  $handler->display->display_options['filter_groups']['groups'] = array(
+    1 => 'AND',
+    2 => 'OR',
+  );
+  /* Filter criterion: Content: Author uid */
+  $handler->display->display_options['filters']['uid']['id'] = 'uid';
+  $handler->display->display_options['filters']['uid']['table'] = 'node';
+  $handler->display->display_options['filters']['uid']['field'] = 'uid';
+  $handler->display->display_options['filters']['uid']['value'] = '';
+  $handler->display->display_options['filters']['uid']['group'] = 1;
+  /* Filter criterion: Content: Nid */
+  $handler->display->display_options['filters']['nid']['id'] = 'nid';
+  $handler->display->display_options['filters']['nid']['table'] = 'node';
+  $handler->display->display_options['filters']['nid']['field'] = 'nid';
+  $handler->display->display_options['filters']['nid']['group'] = 2;
+  /* Filter criterion: Content: Public Status (field_public_status) */
+  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
+  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['operator'] = 'not';
+  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
+    'Public' => 'Public',
+  );
+
+  /* Display: By Author Not Public */
+  $handler = $view->new_display('block', 'By Author Not Public', 'by_author_not_public');
+
+  /* Display: All Public */
+  $handler = $view->new_display('block', 'All Public', 'all_public');
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['filter_groups']['groups'] = array(
+    1 => 'AND',
+    2 => 'OR',
+  );
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Public Status (field_public_status) */
+  $handler->display->display_options['filters']['field_public_status_value']['id'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['table'] = 'field_data_field_public_status';
+  $handler->display->display_options['filters']['field_public_status_value']['field'] = 'field_public_status_value';
+  $handler->display->display_options['filters']['field_public_status_value']['value'] = array(
+    'Public' => 'Public',
+  );
+  $handler->display->display_options['filters']['field_public_status_value']['group'] = 1;
+  /* Filter criterion: Content: Nid */
+  $handler->display->display_options['filters']['nid']['id'] = 'nid';
+  $handler->display->display_options['filters']['nid']['table'] = 'node';
+  $handler->display->display_options['filters']['nid']['field'] = 'nid';
+  $handler->display->display_options['filters']['nid']['group'] = 2;
+
+  /* Display: Copy Parent */
+  $handler = $view->new_display('block', 'Copy Parent', 'copy_parent');
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Nid */
+  $handler->display->display_options['filters']['nid']['id'] = 'nid';
+  $handler->display->display_options['filters']['nid']['table'] = 'node';
+  $handler->display->display_options['filters']['nid']['field'] = 'nid';
+  $handler->display->display_options['filters']['nid']['group'] = 1;
+
+  $export['resource_usage'] = $view;
+
   return $export;
 }
