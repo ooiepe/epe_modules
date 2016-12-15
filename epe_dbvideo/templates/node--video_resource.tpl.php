@@ -1,3 +1,10 @@
+<?php 
+drupal_add_js('http://getbootstrap.com/2.3.2/assets/js/bootstrap-tooltip.js','external');
+drupal_add_js('http://getbootstrap.com/2.3.2/assets/js/bootstrap-popover.js','external');
+
+global $base_url;
+?>
+
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
 
@@ -17,23 +24,59 @@ $isDBFiles = 1;
 .embed-wrapper.hidden {
   display: none;
 }
+.embed-container .popover { max-width: 100%; }
 </style>
 
 <?php print render($content['field_video_resource_file']) ?>
 
-<legend>
-  <label class="embed-toggle">Embed link</label>
-  <div class="embed-wrapper hidden">
-    &lt;iframe width="560" height="315" src="<?php echo base_path() . 'node/' . arg(1) . '/videoembed'; ?>" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
-  </div>
-</legend>
+<div class="embed-container">
+<?php 
+echo l(t('Embed Link'), '#',
+  array(
+    'attributes'=>array(
+      'data-placement'=>'bottom',
+      'rel'=>'tooltip',
+      'class'=>array('links','embed-link','popover-link'),
+      'id'=>'embed-link-btn',
+      'title'=>'Share this video',
+      'trigger'=>'manual'
+    ),
+    'external'=>true
+  )
+);
+?>
+</div>
 
 <script type="text/javascript">
 (function($){
+
+  $(function() {
+    $('#embed-link-btn')
+      .popover(
+        {
+          title: '<a style="float:right;margin-top:-9px;" href="#" onclick="closePopoverConfirm(\"embed-link-btn\"); return false;"><i class="icon-remove"></i></button>',
+          html: 'true',
+          placement: 'bottom',
+          content: 'Embed this video on your site using the following code.<br/><input type="text" class="input" style="width:100%;" value="<iframe width=\'560\' height=\'315\' src=\'<?php echo $base_url . '/node/' . arg(1) . '/videoembed'; ?>\' frameborder=\'0\' allowfullscreen></iframe>">'
+        }
+      );    
+
+      $('.popover-link').click(function(event) {
+        event.preventDefault();
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+      });
+    });
+
   $('.embed-toggle').click(function() {
     $('.embed-wrapper').toggleClass('hidden');
   });
 })(jQuery);
+
+function closePopoverConfirm(divid) {
+  jQuery(divid).popover('hide');
+}
 </script>
 
 

@@ -1210,7 +1210,7 @@ function epe_db_views_default_views() {
       $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
       $node = node_load($data->nid);
       $wrapper = entity_metadata_wrapper(\'node\',$node);
-      switch($data->node_type) {
+      switch($node->type) {
         case \'image_resource\':
           $image = $wrapper->field_image_resource_file->value();
           $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
@@ -1238,9 +1238,10 @@ function epe_db_views_default_views() {
         break;
 
         case \'llb_resource\':
-          $image = $wrapper->field_data_field_challenge_thumbnail->value();
-          if($image) {
-            $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
+          $challenge_images = $wrapper->field_challenge_thumbnail->value();
+          if($challenge_images) {
+            $images = json_decode($challenge_images);
+            if($images[0]) $thumbnail = $images[0]->thumbnail;
           }
         break;
       }

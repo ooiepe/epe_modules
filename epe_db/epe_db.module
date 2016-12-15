@@ -127,11 +127,11 @@ function epe_db_node_view_alter(&$build) {
     //remove tag & link from individual kb page
     $nodeurlarray = explode('/',$nodeurl);
     if($nodeurlarray[0] == 'help') {
-      if(isset($build['field_tags'])) unset($build['field_tags']);
-      if(isset($build['links'])) unset($build['links']);
+      if(isset($build['field_tags'])) unset($build['field_tags']);      
     }
   }
   if(isset($build['links']['statistics'])) unset($build['links']['statistics']);
+  if(isset($build['links'])) unset($build['links']);
 }
 
 function epe_db_node_view($node, $view_mode) {
@@ -454,4 +454,20 @@ function epe_db_block_view($delta='') {
   }
 
   return $block;
+}
+
+/**
+ * implement hook_flag_flag to reindex node when flag
+ */
+function epe_db_flag_flag($flag, $entity_id, $account, $flagging) {
+  cache_clear_all('field:node:' . $entity_id, 'cache_field');
+  search_api_track_item_change('node', array($entity_id));
+}
+
+/**
+ * implement hook_flag_flag to reindex node when unflag
+ */
+function epe_db_unflag_flag($flag, $entity_id, $account, $flagging) {
+  cache_clear_all('field:node:' . $entity_id, 'cache_field');
+  search_api_track_item_change('node', array($entity_id));
 }
