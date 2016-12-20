@@ -31,9 +31,9 @@
   drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
   // canvas export resources
-  drupal_add_js("http://canvg.googlecode.com/svn/trunk/rgbcolor.js");
-  drupal_add_js("http://canvg.googlecode.com/svn/trunk/StackBlur.js");
-  drupal_add_js("http://canvg.googlecode.com/svn/trunk/canvg.js");
+  drupal_add_js("http://canvg.github.io/canvg/rgbcolor.js",'external');
+  drupal_add_js("http://canvg.github.io/canvg/StackBlur.js",'external');
+  drupal_add_js("http://canvg.github.io/canvg/canvg.js",'external');
 
 ?>
 

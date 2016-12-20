@@ -70,6 +70,7 @@ function epe_cm_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
+          $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
           $node = node_load($data->entity);
           $image = field_get_items(\'node\', $node, \'field_instance_thumbnail\');
           $output = \'\';
@@ -80,9 +81,10 @@ function epe_cm_views_default_views() {
                \'image_style\' => \'resource_browser_thumbnail\',
             ),
           ));
+          $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
           }
-          //echo render($output);
-          echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
+          
+          echo $thumbnail;
       ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';

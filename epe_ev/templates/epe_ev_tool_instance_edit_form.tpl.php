@@ -1,4 +1,7 @@
 <?php
+drupal_add_js("http://canvg.github.io/canvg/rgbcolor.js",'external');
+drupal_add_js("http://canvg.github.io/canvg/StackBlur.js",'external');
+drupal_add_js("http://canvg.github.io/canvg/canvg.js",'external');
 
 module_load_include('php', 'epe_ev', 'inc/epe_ev_lib');
 
@@ -125,7 +128,13 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
           <div class="field-container" >
             <label for="edit-instance-thumbnail" class="field-label">Thumbnail</label>
             <div><?php // echo $ev_tool["default_thumb"]; ?></div>
-            <?php echo render($form['field_instance_thumbnail']); ?>
+            <?php //echo render($form['field_instance_thumbnail']); 
+              //echo render($form['instance_thumb_data']);
+            ?>
+            <div style="display:none;">
+              <canvas id="canvas"></canvas>
+            </div>            
+            <input type="hidden" id="instance_thumb_data" name="instance_thumb_data" value="" />
           </div>
 
           <div class="field-container">
@@ -184,13 +193,44 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
     return true;
   }
 
+  function svgToCanvas(){
+    //load an svg snippet in the canvas
+    canvg(
+      document.getElementById('canvas'),
+      $('<div>').append($("#vistool .svg_export").clone()).html(), // hack to pull html contents
+      { ignoreMouse: true, ignoreAnimation: true }
+    );
+  }
+
+  function canvasToImage(){
+    // save canvas image as data url (png format by default)
+    var canvas = document.getElementById("canvas"),
+    w = canvas.width,
+    h = canvas.height;
+
+    //create a rectangle with the desired background color
+    var destCtx = canvas.getContext('2d');
+    destCtx.globalCompositeOperation = "destination-over";
+    destCtx.fillStyle = "#FFFFFF";
+    destCtx.fillRect(0,0,w,h);
+    var thumb = new Image();
+    thumb.src = canvas.toDataURL('image/png');
+    dataURL = canvas.toDataURL('image/png');
+    document.getElementById('instance_thumb_data').value = dataURL;
+    //dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+
+    //window.open(dataURL,"Visualization Image","location=0");
+  }
+
   (function(){
 
     // update the parent tool ID form element
     $("#edit-field-parent-tool-und-0-value").val("<?php print $ev_tool["parent_tool_id"];?>");
 
     // add an event to the submit button
-    $('#edit-submit').click(function(){
+    $('#edit-submit').click(function(event){
+      svgToCanvas();
+      canvasToImage();  
       return EduVis_extract();
     });
 

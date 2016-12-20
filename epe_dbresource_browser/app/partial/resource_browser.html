@@ -13,12 +13,12 @@
     <ul ng-show="browser.enabled_modules.length > 1" class="clearfix">
       <li title="{{module.label}}" ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
     </ul>
-    <div class="rb-ads" ng-show="!browser.selected_module.editmode">
-      <a href="{{browser.selected_module.adurl}}">
-        <img ng-src="{{browser.selected_module.adimagepath}}" width="247" height="65">
-      </a>
-    </div>
   </div> <!-- /rb-type-selector -->
+  <div class="rb-ads" ng-show="!browser.selected_module.editmode">
+    <a href="{{browser.selected_module.adurl}}">
+      <img ng-src="{{browser.selected_module.adimagepath}}" width="247" height="65">
+    </a>
+  </div>  
 </div>
 
 <table>

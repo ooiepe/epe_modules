@@ -198,7 +198,7 @@
       $height_pattern = "/height=\"[0-9]*\"/";
       $dataset->html = preg_replace($height_pattern, "height='360'", $dataset->html);
       $width_pattern = "/width=\"[0-9]*\"/";
-      $dataset->html = preg_replace($width_pattern, "width='886'", $dataset->html);
+      $dataset->html = preg_replace($width_pattern, "width='868'", $dataset->html);
       $match_pattern = "#<iframe[^>]*>.*?</iframe>#i";
       preg_match_all($match_pattern, $dataset->html, $result);
       echo $result[0][0];

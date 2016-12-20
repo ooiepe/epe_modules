@@ -121,9 +121,11 @@ function epe_dbresource_browser_preload() {
     'page_size'=>10,
     'editmode'=>false,
   )),'setting');
+  $username = 'anonymous';
+  if(isset($user->name)) $username = $user->name;
   drupal_add_js(array('user'=>array(
     'is_logged_in'=>user_is_logged_in(),
-    'username'=>$user->name,
+    'username'=>$username,
   )),'setting');
 
 

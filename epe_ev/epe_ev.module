@@ -166,6 +166,9 @@ function epe_ev_form_alter(&$form, &$form_state, $form_id) {
     $form['field_source_nid']['#type'] = 'hidden';
     $form['#attached']['js'][] = libraries_get_path('formSavior') . '/jquery.formSavior.min.js';
     $form['#attached']['js']['jQuery(document).ready(function($) { $("form#ev-tool-instance-node-form").formSavior(); });'] = array( 'type' => 'inline');
+    unset($form['field_instance_thumbnail']);
+
+    $form['#submit'] = array('ev_resource_node_form_submit_custom');
 
     if(is_numeric(arg(1))) {
       $form['actions']['saveas'] = array(
@@ -186,6 +189,52 @@ function epe_ev_form_alter(&$form, &$form_state, $form_id) {
   if($form_id == 'ev_tool_node_form') {
     //$form['options']['status']['#type'] = 'hidden';
   }
+}
+
+function ev_resource_node_form_submit_custom($form, &$form_state) {
+  global $user;
+  
+  $node = $form_state['node'];
+  entity_form_submit_build_entity('node', $node, $form, $form_state);
+  $insert = empty($node->nid);
+  node_save($node);
+
+  $file_destination = 'private://' . $user->uid . '/' . $form_state['values']['type'];
+  file_prepare_directory($file_destination, FILE_CREATE_DIRECTORY);
+
+  $thumb_data = explode(',', $form_state['input']['instance_thumb_data']);
+
+  $file = file_save_data(base64_decode($thumb_data[1]), $file_destination . "/thumb_" . $node->nid . ".png", FILE_EXISTS_REPLACE);
+
+  $newnode = node_load($node->nid);
+  $newnode->field_instance_thumbnail['und'][0] = (array)$file;
+  node_save($newnode);
+
+
+  $node_link = l(t('view'), 'node/' . $node->nid);
+  $watchdog_args = array(
+    '@type' => $node->type,
+    '%title' => $node->title,
+  );
+  $t_args = array(
+    '@type' => node_type_get_name($node),
+    '%title' => $node->title,
+  );
+
+  if ($insert) {
+    watchdog('content', '@type: added %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been created.', $t_args));
+  }
+  else {
+    watchdog('content', '@type: updated %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been updated.', $t_args));
+  }
+
+  cache_clear_all();
+
+  drupal_goto('node/' . $node->nid);
+
+  return;
 }
 
 function epe_ev_save_as_submit($form, &$form_state) {

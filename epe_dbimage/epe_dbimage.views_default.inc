@@ -72,7 +72,6 @@ function epe_dbimage_views_default_views() {
                 \'image_link\' => \'content\',
               ),
             ));
-            //echo render($output);
             echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'uri\']);
             ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';

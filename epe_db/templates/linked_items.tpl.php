@@ -144,7 +144,7 @@ if($isCopyFrom) {
     $resource_usage_view_all_public->result = array_merge($resource_usage_view_all_public->result,$resource_usage_view_author_not_public->result);
   }
 
-  echo $resource_usage_view_all_public->render();  
+  echo $resource_usage_view_all_public->preview();  
     ?>
   </div>
   <?php endif; ?>
