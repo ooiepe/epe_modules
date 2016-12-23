@@ -69,6 +69,8 @@ function epe_web_resource_node_type_insert($content_type) {
 
 function epe_web_resource_form_alter(&$form, &$form_state, $form_id) {
   if($form_id == 'web_resource_node_form') {
+    drupal_add_js(drupal_get_path('module','epe_wp') . '/js/epe_wp.form.js');
+    
     if(is_numeric(arg(1)) && arg(2) == 'edit') {
     $form['header'] = array(
       '#type'=>'container',
@@ -96,11 +98,11 @@ function epe_web_resource_form_alter(&$form, &$form_state, $form_id) {
 
     $form['field_featured_status']['#type'] = 'hidden';
     $form['field_public_status']['#type'] = 'hidden';
-    $form['field_resource_url']['#weight'] = -10;    
+    $form['field_resource_url']['#weight'] = -10;
     //$form['field_resource_url'][LANGUAGE_NONE][0]['#description'] = t('Only Youtube, Vimeo, Slideshare.<br/>eg. https://www.youtube.com/watch?v=ymhdJDuGIBE or https://youtu.be/ymhdJDuGIBE');
-    
+
     $form['#validate'][] = 'epe_web_resource_origin_validate';
-    
+
     $form['#attached']['css'] = array(
       drupal_get_path('module', 'epe_web_resource') . '/epe_web_resource_form.css',
     );
@@ -112,13 +114,14 @@ function epe_web_resource_form_alter(&$form, &$form_state, $form_id) {
       $form['actions']['saveas'] = array(
         '#type'=>'submit',
         '#access'=>1,
-        '#value'=>t('Save As'),
+        '#value'=>t('Save As New'),
         '#weight'=>2,
-        '#submit'=>array(      
+        '#submit'=>array(
           'epe_web_resource_save_as_submit',
           'node_form_submit',
         ),
       );
+      $form['actions']['cancel']['#submit'] = array('epe_web_resource_cancel_from_edit_handler');
     }
   }
 }
@@ -130,8 +133,27 @@ function epe_web_resource_save_as_submit($form, &$form_state) {
   $form_state['node']->created = '';
   $form_state['node']->changed = '';
   $form_state['node']->is_new = 1;
+  $form_state['node']->date = '';
+  $form_state['node']->field_featured_status = array(
+    'und'=>array(
+      0=>array(
+        'value' => 'Not-Featured'
+      )
+    )
+  );
+  $form_state['node']->field_public_status = array(
+    'und'=>array(
+      0=>array(
+        'value' => 'Private'
+      )
+    )
+  );
   $form_state['values']['nid'] = '';
   $form_state['values']['vid'] = '';
+}
+
+function epe_web_resource_cancel_from_edit_handler($form, &$form_state) {
+  $form_state['redirect'] = 'node/' . $form['nid']['#value'] . '/detail';
 }
 
 function epe_web_resource_origin_validate($form, &$form_state) {
@@ -147,7 +169,7 @@ function epe_web_resource_origin_validate($form, &$form_state) {
 
   if($form_state['values']['field_resource_origin']['und'][0]['value'] == '') {
     form_set_error('url',t('Please provide embeddable url of supported webistes'));
-  }  
+  }
 }
 
 /*

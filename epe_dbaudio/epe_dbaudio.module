@@ -124,24 +124,30 @@ function epe_dbaudio_form_alter(&$form, &$form_state, $form_id) {
     $form['field_audio_resource_file']['#weight'] = -10;
     $form['field_audio_resource_file']['und'][0]['#title'] = 'Audio Resource File';
     $form['field_audio_resource_image']['und'][0]['#title'] = 'Audio Thumbnail';
-    
+
     $form['#attached']['css'] = array(
       drupal_get_path('module', 'epe_dbaudio') . '/epe_dbaudio_form.css',
-    );    
+    );
 
     if(is_numeric(arg(1))) {
       $form['actions']['saveas'] = array(
         '#type'=>'submit',
         '#access'=>1,
-        '#value'=>t('Save As'),
+        '#value'=>t('Save As New'),
         '#weight'=>2,
-        '#submit'=>array(      
+        '#submit'=>array(
           'epe_dbaudio_save_as_submit',
           'node_form_submit',
         ),
       );
+
+      $form['actions']['submit']['#submit'][] = 'epe_dbaudio_cancel_from_edit_handler';
     }
   }
+}
+
+function epe_dbaudio_cancel_from_edit_handler($form, &$form_state) {
+  $form_state['redirect'] = 'node/' . $form['nid']['#value'] . '/detail';
 }
 
 function epe_dbaudio_save_as_submit($form, &$form_state) {
@@ -151,6 +157,21 @@ function epe_dbaudio_save_as_submit($form, &$form_state) {
   $form_state['node']->created = '';
   $form_state['node']->changed = '';
   $form_state['node']->is_new = 1;
+  $form_state['node']->date = '';
+  $form_state['node']->field_featured_status = array(
+    'und'=>array(
+      0=>array(
+        'value' => 'Not-Featured'
+      )
+    )
+  );
+  $form_state['node']->field_public_status = array(
+    'und'=>array(
+      0=>array(
+        'value' => 'Private'
+      )
+    )
+  );
   $form_state['values']['nid'] = '';
   $form_state['values']['vid'] = '';
 }

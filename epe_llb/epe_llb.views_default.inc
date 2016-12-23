@@ -61,16 +61,17 @@ function epe_llb_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
+        $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
         $node = node_load($data->entity);
         $field = field_get_items(\'node\', $node, \'field_challenge_thumbnail\');
         $field_value = drupal_json_decode($field[0][\'value\']);
 
-        $output = \'\';
         if($field_value) {
           //$output = theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' =>$field_value[0][\'uri\']));
           $output = image_style_url(\'resource_browser_thumbnail\', $field_value[0][\'uri\']);
+          $thumbnail = render($output);
         }
-        echo render($output);
+        echo $thumbnail;      
       ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';

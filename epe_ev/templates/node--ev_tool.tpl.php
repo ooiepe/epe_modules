@@ -131,8 +131,10 @@ if(count($result)>0){
 
 <?php
 }
-
 ?>
+<div class="nav-button">
+<a href="<?php echo base_path() . 'ev/tools'; ?>" class="btn btn-primary"><i class="icon-chevron-left icon-white"></i> Return to Visualization Tool List</a>
+</div>
 
 </article>
 

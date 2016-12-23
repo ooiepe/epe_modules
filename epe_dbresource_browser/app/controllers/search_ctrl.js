@@ -1,6 +1,6 @@
 define(['app','ngload!services/dataServices','directives/tabularData','ngload!filters/range','ngProgress'], function(app) {
   app.controller('SearchCtrl', ['$scope','$window','$routeParams', '$location', '$filter', '_','epeDataService', 'webStorage', 'ngProgress',
-    function($scope,$window,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {      
+    function($scope,$window,$routeParams,$location,$filter,_,epeDataService,webStorage,ngProgress) {
       //init scope params
       $scope.fn = {};
       $scope.resources = {};
@@ -24,6 +24,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       $scope.browser.messages.show_messages = true;
       $scope.browser.messages.messages = "Loading Resources";
       $scope.browser.date_sort = 'last_updated';
+      $scope.browser.currentPage = 1;
 
       //set additional settings for each module view
       angular.forEach($scope.browser.modules, function(module, index) {
@@ -37,7 +38,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
           active: false,
           activeClass: '',
           showad: false,
-          currentPage: 0,
+          currentPage: 1,
           pageSize: Drupal.settings.resourceBrowser.page_size,
           adurl: module.adurl,
           adimagepath: module.adimagepath,
@@ -57,6 +58,14 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
       });
 
+      $scope.fn.setModuleCurrentPage = function(selected_module, page) {
+        _.each($scope.browser.enabled_modules, function(module) {
+          if(module.api == selected_module.api) {
+            module['currentPage'] = page;
+          }
+        });
+      }
+
       //define init function
       $scope.fn.init = function() {
         //filter enabled modules and load ony module that's allowed in resource browser
@@ -74,6 +83,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         $scope.fn.serviceParams = {};
         $scope.fn.serviceParams['resource_type'] = $scope.browser.selected_module.api;
         if(typeof $routeParams['page'] != 'undefined') {
+          $scope.fn.setModuleCurrentPage($scope.browser.selected_module, $routeParams['page']);
           $scope.fn.serviceParams['page'] = $routeParams['page'] - 1;
         }
         if(typeof $routeParams['search'] != 'undefined') {
@@ -91,7 +101,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         } else {
           $scope.browser.date_sort = $routeParams['sort'];
         }
-        
+
         if(typeof $routeParams['sort_mode'] == 'undefined') {
           $routeParams['sort_mode'] = 'desc';
         }
@@ -105,6 +115,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
             });
             module['total_rows'] = pager_data['total_rows'];
             module['numberofpages'] = pager_data['total_pages'];
+            if(module.api == $scope.browser.selected_module.api) module['currentPage'] = $routeParams['page'];
           });
         });
 
@@ -117,7 +128,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
 
           if($scope.browser.data.length < 1) {
             $scope.browser.messages.show_progress_bar = false;
-            $scope.browser.messages.messages = "No " + $scope.browser.selected_module.type + " Found";
+            $scope.browser.messages.messages = "No items found in this category. Use the icons above to search other resource types.";
           } else {
             $scope.browser.messages.show_messages = false;
             $scope.browser.messages.show_progress_bar = false;
@@ -128,6 +139,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         var params = {};
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = $routeParams['page'];
+        $scope.browser.selected_module.currentPage = params['page'];
         if(typeof $routeParams['search'] != 'undefined') {
           params['search'] = $routeParams['search'];
         }
@@ -161,6 +173,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         var params = {};
         params['type'] = $scope.browser.enabled_modules[0].api;
         params['page'] = 1;
+        $scope.browser.selected_module.currentPage = params['page'];
         $location.search(params);
       } else {
         if(!Drupal.settings.user.is_logged_in && typeof $routeParams['filter'] != 'undefined' && $routeParams['filter'] == 'author') {
@@ -169,18 +182,20 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         _.forEach($routeParams, function(prop,key) {
           keyvalpairs.push(key + '=' + prop);
         });
-        if(keyvalpairs.length > 0) destination += "#/search?" + keyvalpairs.join('&');        
+        if(keyvalpairs.length > 0) destination += "#/search?" + keyvalpairs.join('&');
           $window.location.href=Drupal.settings.epe.base_path + 'user/login?destination='+destination;
         } else {
           $scope.fn.init();
-        }        
-      }   
+          console.log($scope.browser.selected_module);
+        }
+      }
 
       $scope.search.term = $routeParams['search'];
       $scope.fn.searchTerm = function() {
         var params = {};
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = 1; //turn search should reset all paging back to first page
+        $scope.browser.selected_module.currentPage = params['page'];
         if($scope.search.term != '') {
           params['search'] = $scope.search.term;
         }
@@ -198,11 +213,13 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         if(typeof $scope.browser.queryparams[module.api] == 'undefined') {
           params['type'] = module.api;
           params['page'] = 1;
+          $scope.browser.selected_module.currentPage = params['page'];
         } else {
           params = $scope.browser.queryparams[module.api];
         }
         if($routeParams['search'] != params['search'] || $routeParams['filter'] != params['filter']) {
           params['page'] = 1
+          $scope.browser.selected_module.currentPage = params['page'];
         }
         if(typeof $routeParams['search'] != 'undefined') {
           params['search'] = $routeParams['search'];
@@ -228,6 +245,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         var params = {};
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = 1;
+        $scope.browser.selected_module.currentPage = params['page'];
         if(typeof $routeParams['search'] != 'undefined') {
           params['search'] = $routeParams['search'];
         }
@@ -242,6 +260,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         var params = {};
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = page;
+        $scope.browser.selected_module.currentPage = params['page'];
         if(typeof $routeParams['search'] != 'undefined') {
           params['search'] = $routeParams['search'];
         }
@@ -278,6 +297,7 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
         }
         params['type'] = $scope.browser.selected_module.api;
         params['page'] = $routeParams['page'];
+        $scope.browser.selected_module.currentPage = params['page'];
         if(typeof $routeParams['search'] != 'undefined') {
           params['search'] = $routeParams['search'];
         }
@@ -311,13 +331,19 @@ define(['app','ngload!services/dataServices','directives/tabularData','ngload!fi
       }
 
       function setPageHeader(type) {
-        var pageheader = type;
+        var pageheader = type, pageheadertext = 'Browse';
         if(pageheader == 'ev') { pageheader = 'Visualization'; }
         else if(pageheader == 'cm') { pageheader = 'Concept Map'; }
         else if(pageheader == 'llb') { pageheader = 'Investigation'; }
         else { pageheader = pageheader.toLowerCase().replace(/\b[a-z]/g, function(letter) { return letter.toUpperCase(); }); }
 
-        angular.element('.page-header').html('Browse ' + pageheader + 's');        
+        pageheadertext += ' ' + pageheader;
+
+        if(pageheader != 'Multimedia') {
+          pageheadertext += 's';
+        }
+
+        angular.element('.page-header').html(pageheadertext);
       }
     }]); //end controller function
 }); //end define

@@ -1,5 +1,6 @@
 <?php
-
+global $base_url;
+  
   // include php file for epe_ev functions.
   include($_SERVER["DOCUMENT_ROOT"] . $GLOBALS["base_path"] . drupal_get_path('module', 'epe_ev') . "/inc/epe_ev_lib.php");
 
@@ -31,47 +32,93 @@
   drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
 
   // canvas export resources
-  drupal_add_js("http://canvg.googlecode.com/svn/trunk/rgbcolor.js");
-  drupal_add_js("http://canvg.googlecode.com/svn/trunk/StackBlur.js");
-  drupal_add_js("http://canvg.googlecode.com/svn/trunk/canvg.js");
+  drupal_add_js("http://canvg.github.io/canvg/rgbcolor.js",'external');
+  drupal_add_js("http://canvg.github.io/canvg/StackBlur.js",'external');
+  drupal_add_js("http://canvg.github.io/canvg/canvg.js",'external');
 
 ?>
 
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-<?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
-
-  <div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;" class="clearfix">
-    <div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;" class="clearfix">
-
+<?php
+  if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
+  } else { ?>
+  <?php include realpath(drupal_get_path('theme','epe_theme')) . '/templates/viewpage.tpl.php'; ?>
+  <div style="border: 1px solid #0195bd;padding:23px;margin-bottom:20px;" class="clearfix">
+<?php } //end if vsembed  ?>
       <div id="vistool"></div>
 
+      <?php
+        if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
+        } else { ?>
       <div id="tool-functions">
+        <div class="clearfix">
         <button class="btn btn-primary" value="Export to Image" id="tool-function-export-image">Export to Image</button>
+        <div class="embed-container" style="float:right;">
+        <?php 
+        echo l(t('Embed Link'), '#',
+          array(
+            'attributes'=>array(
+              'data-placement'=>'bottom',
+              'rel'=>'tooltip',
+              'class'=>array('btn','embed-link','popover-link','btn-primary'),
+              'id'=>'embed-link-btn',
+              'title'=>'Share this visualization',
+              'trigger'=>'manual'
+            ),
+            'external'=>true
+          )
+        );
+        ?>
+        </div>
+        </div>
         <?php echo render($content['links']); ?>
       </div>
+      <?php } //end if vsembed  ?>
 
 
       <div style="display:none;">
         <canvas id="canvas"></canvas>
       </div>
-
-    </div>
-
   </div>
 
 <!-- display any places this item is included and any items copied from this item -->
+<?php
+  if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
+  } else { ?>
+
+  <div class="h2-container">
+  <?php print render($content['field_instance_questions']); ?>
+  </div>
+
 <?php include realpath(drupal_get_path('module', 'epe_db')) . '/templates/linked_items.tpl.php'; ?>
 
-<?php print render($content['field_instance_questions']); ?>
-
 <?php print render($content['comments']); ?>
-
+<?php } //end if vsembed ?>
 </article>
 
 <script type="text/javascript">
 
 (function(){
+
+  $(function() {
+    $('#embed-link-btn')
+      .popover(
+        {
+          title: '<a style="float:right;margin-top:-9px;" href="#" onclick="closePopoverConfirm(\"embed-link-btn\"); return false;"><i class="icon-remove"></i></button>',
+          html: 'true',
+          placement: 'bottom',
+          content: 'Embed this visualization on your site using the following code.<br/><input type="text" class="input" style="width:100%;" value="<iframe width=\'560\' height=\'315\' src=\'<?php echo $base_url . '/ev/embed/' . arg(1); ?>\' frameborder=\'0\' allowfullscreen></iframe>">'
+        }
+      );    
+
+      $('.popover-link').click(function(event) {
+        event.preventDefault();
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+      });
+    });
 
   function svgToCanvas(){
     //load an svg snippet in the canvas
@@ -87,16 +134,16 @@
     var canvas = document.getElementById("canvas"),
     w = canvas.width,
     h = canvas.height;
-    
+
     //create a rectangle with the desired background color
     var destCtx = canvas.getContext('2d');
     destCtx.globalCompositeOperation = "destination-over";
     destCtx.fillStyle = "#FFFFFF";
     destCtx.fillRect(0,0,w,h);
-    
+
     dataURL = canvas.toDataURL('image/png');
     dataURL.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-    
+
     window.open(dataURL,"Visualization Image","location=0");
   }
 

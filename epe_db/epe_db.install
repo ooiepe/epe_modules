@@ -954,3 +954,46 @@ function epe_db_update_7007(&$sandbox) {
     } 
   }
 }
+
+/**
+ * EPE-13, add new taxonomy category for common issues
+ */
+function epe_db_update_7008(&$sandbox) {
+  $term = new stdClass();
+  $term->name = "ci";
+  $term->vid = 1; // ??1?? is a vocabulary id you wish this term to assign to
+  taxonomy_term_save($term); // Finally, save our term
+
+  $kb = array(
+    'kb_ci_index' => array(
+      'page_title' => 'Common Issues',
+      'alias' => 'help/ci',
+    ),
+  );
+
+  foreach ($kb as $key => $item) {
+    $node = new stdClass();
+    $node->type = "page";
+    $node->title = $item['page_title'];
+    $node->language = LANGUAGE_NONE;
+    $node->path = array('alias' => $item['alias']);
+    node_object_prepare($node);
+    $node->uid = 1;
+    $o = taxonomy_get_term_by_name('kb');
+    $o = array_values($o);
+    $o = array_shift($o);
+    $node->field_tags[$node->language][]['tid'] = $o->tid;
+
+    $o = taxonomy_get_term_by_name('ci');
+    $o = array_values($o);
+    $o = array_shift($o);
+    $node->field_tags[$node->language][]['tid'] = $o->tid;
+
+    $node = node_submit($node);
+    node_save($node);
+
+    $epe_help = variable_get('epe_help',array());
+    $epe_help['path']['ci'] = $node->nid;
+    variable_set('epe_help', $epe_help);
+  }
+}

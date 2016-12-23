@@ -125,22 +125,31 @@ function epe_db_node_view_alter(&$build) {
       }
     }
     //remove tag & link from individual kb page
-    if(explode('/',$nodeurl)[0] == 'help') {
-      if(isset($build['field_tags'])) unset($build['field_tags']);
-      if(isset($build['links'])) unset($build['links']);
+    $nodeurlarray = explode('/',$nodeurl);
+    if($nodeurlarray[0] == 'help') {
+      if(isset($build['field_tags'])) unset($build['field_tags']);      
     }
   }
+  if(isset($build['links']['statistics'])) unset($build['links']['statistics']);
+  if(isset($build['links'])) unset($build['links']);
 }
 
 function epe_db_node_view($node, $view_mode) {
   if($node->type == 'page' && $view_mode == 'full') {
     $nodeurl = drupal_get_path_alias("node/{$node->nid}");
     //this should only apply to section & individual kb page, skip main index page
-    if(explode('/',$nodeurl)[0] == 'help' && count(explode('/',$nodeurl)) > 1) {
+    $nodeurlarray = explode('/',$nodeurl);
+    if($nodeurlarray[0] == 'help' && count($nodeurlarray) > 1) {
+      $node->content['breadcrumb'] = array(
+        '#type' => 'item',
+        '#weight' => -11,
+        '#markup' => '<div class="epe_help">' . epe_wp_render_block_content('epe_db', 'epe_kb_breadcrumb') . '</div>'
+      );
+
       $node->content['subtitle'] = array(
         '#type' => 'item',
         '#weight' => -10,
-        '#markup' => '<div class="subtitle">' . $node->title . '</div>'
+        '#markup' => '<div class="epe_help subtitle">' . $node->title . '</div>'
       );
 
       $node->title = 'EPE Knowledge Base';
@@ -407,4 +416,58 @@ function epe_db_resource_can_do_share($node) {
 function epe_db_resource_can_do_unshare($node) {
   global $user;
   return ($node->uid == $user->uid || in_array('administrator', $user->roles));
+}
+
+function epe_db_block_info()  {
+  $blocks = array();
+
+  $blocks['epe_kb_breadcrumb'] = array(
+    'info' => t('EPE Knowledge Base Breadcrumb'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+function epe_db_block_view($delta='') {
+  $block = array();
+
+  switch($delta) {
+    case 'epe_kb_breadcrumb':
+      $epe_help = variable_get('epe_help',array('path'=>array()));
+      $node = node_load(arg(1));
+      $nodeurl = drupal_get_path_alias('node/' . arg(1));
+      $nodeurlarray = explode('/',$nodeurl);
+      $breadcrumb = '<div class="breadcrumb">' . l('EPE Knowledge Base',$nodeurlarray[0]);
+      if(count($nodeurlarray) > 2) {
+        $alias = "{$nodeurlarray[0]}/{$nodeurlarray[1]}";
+        $path = drupal_lookup_path("source", $alias);
+        $bc_node = menu_get_object("node", 1, $path);
+        $breadcrumb .= " >> " . l($bc_node->title, $alias);
+      }
+      $breadcrumb .= " >> " . $node->title;
+      $breadcrumb .= '</div>';
+
+      $block['title'] = '';
+      $block['content'] = $breadcrumb;
+    break;
+  }
+
+  return $block;
+}
+
+/**
+ * implement hook_flag_flag to reindex node when flag
+ */
+function epe_db_flag_flag($flag, $entity_id, $account, $flagging) {
+  cache_clear_all('field:node:' . $entity_id, 'cache_field');
+  search_api_track_item_change('node', array($entity_id));
+}
+
+/**
+ * implement hook_flag_flag to reindex node when unflag
+ */
+function epe_db_unflag_flag($flag, $entity_id, $account, $flagging) {
+  cache_clear_all('field:node:' . $entity_id, 'cache_field');
+  search_api_track_item_change('node', array($entity_id));
 }

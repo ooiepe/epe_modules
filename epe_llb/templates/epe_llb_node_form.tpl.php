@@ -23,51 +23,8 @@
     });
 </script>
 
-<style>
-.nav-tabs > li > a, .nav-pills > li > a {
 
-  padding-right: 8px;
-  padding-left: 8px;
-  font-weight: bold;
-}
-
-.nav-tabs > li > a {
-  line-height: 16px;
-  background-color: #e1edf1;
-  color: #06698e;
-  font-size: 13px;
-  border-bottom: 1px solid #2094bf;
-}
-
-.nav-tabs {
-  border-bottom: 1px solid #2094bf;
-}
-
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
-  color: #06698e;
-  background-color: #fff;
-  border-color: #2094bf #2094bf transparent #2094bf;
-}
-
-.nav-tabs .pull-right {
-  margin-left: 5px;
-}
-
-
-.top .form-actions {
-    float: right;
-    padding: 0;
-    margin-top: 0px;
-    margin-bottom: 10px;
-    background-color: none;
-    border-top: none;
-}
-
-
-</style>
-
-
-<div class="form-help"><a href="<?php echo base_path() . "node/214" ?>" target="_blank">Help with this form</a></div>
+<div class="form-help"><a href="<?php echo drupal_get_path_alias('node/214'); ?>" target="_blank">Help with this form</a></div>
 
 <div class="top">
 <?php echo render($form['actions']); ?>
@@ -75,15 +32,15 @@
 
 <div class="tabbable">
 <ul id="llbnav" class="nav nav-tabs">
-  <li class="active"><a href="#instruction" data-toggle="tab" style="background-color:#ececec;color:#606060;">Instructions</a></li>
-  <li><a href="#objectives" data-toggle="tab" style="background-color:#ececec;color:#606060;">Learning Objective</a></li>
+  <li class="active"><a href="#instruction" data-toggle="tab" class="infotab">Instructions</a></li>
+  <li><a href="#objectives" data-toggle="tab" class="infotab">Learning Objective</a></li>
   <li><a href="#motivation" data-toggle="tab">Introduction</a></li>
   <li><a href="#background" data-toggle="tab">Background</a></li>
   <li><a href="#challenge" data-toggle="tab">Challenge</a></li>
   <li><a href="#exploration" data-toggle="tab">Exploration</a></li>
   <li><a href="#explanation" data-toggle="tab">Explanation</a></li>
-  <li class="pull-right"><a href="#setup" data-toggle="tab" style="background-color:#ececec;color:#606060;">Cover</a></li>
-  <li class="pull-right"><a href="#notes" data-toggle="tab" style="background-color:#ececec;color:#606060;">Instructor Notes</a></li>
+  <li class="pull-right"><a href="#setup" data-toggle="tab" class="infotab">Cover</a></li>
+  <li class="pull-right"><a href="#notes" data-toggle="tab" class="infotab">Instructor Notes</a></li>
 </ul>
 
 <div class="tab-content">
@@ -548,17 +505,6 @@
   <label class="control-label"><strong>Supporting Documents</strong></label>
   <p>If you have any additional documents that would help other professors implement this investigation in their classroom, please add them here.  This might include worksheets, answer keys, or additional readings. </p>
   <?php echo render($form['field_resource_file']); ?>
-  </div>
-
-  <div class="control-group">
-  <label class="control-label"><strong>Supporting Documents</strong></label>
-  <p>Please choose which type of supporting document you are adding</p>
-  <?php echo render($form['field_resource_file_type']); ?>
-  </div>
-
-  <div class="control-group">
-  <p>Please include a short description that describes what's included in the supporting document.</p>
-  <?php echo render($form['field_resource_file_note']); ?>
   </div>
 
 <!--   <button type="button" class="btn btn-success" data-toggle="tab" data-target="setup" onclick="jQuery('#llbnav li:eq(7) a').tab('show');">Next <i class="icon-chevron-right icon-white"></i></button> -->

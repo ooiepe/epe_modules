@@ -75,7 +75,7 @@ function epe_dbmultimedia_restful_api() {
   if(isset($_GET['filter']) && $_GET['filter'] == 'favorited' && user_is_logged_in()) {
     $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user');
     $filter['value'] = array($user->uid);
-    $view->set_item($display_name, 'filter', 'flag_favorite_resource_user', $filter);          
+    $view->set_item($display_name, 'filter', 'flag_favorite_resource_user', $filter);
 
     for($i=1;$i<=3;$i++) {
       $filter = $view->get_item($display_name, 'filter', 'flag_favorite_resource_user_' . $i);
@@ -84,7 +84,7 @@ function epe_dbmultimedia_restful_api() {
         $view->set_item($display_name, 'filter', 'flag_favorite_resource_user_' . $i, $filter);
       }
     }
-  } else {      
+  } else {
     $filters = $view->display_handler->get_option('filters');
     unset($filters['flag_favorite_resource_user']);
     for($i=1;$i<=3;$i++) {

@@ -3,11 +3,10 @@
   padding-right: 25px;
 }
 
-.rb-type-selector {
+.rb-type-selector,
+.rb-ads {
   float: left;
-  padding-right: 25px;
 }
-
 
 .rb-table-wrapper {
   border: 1px solid #0094bb;
@@ -50,7 +49,7 @@ table.ng-scope td {
     color: #000;
 }
 table.ng-scope tr:hover td {
-    background-color: #ebf7fb;
+    background-color: #DCF0F7;
     border-color: #8fbbca;
 }
 
@@ -76,10 +75,14 @@ table.ng-scope td .title {
 
 table.ng-scope td .author {
   font-weight: bold;
-
 }
 
+table.ng-scope td .org {
+  font-weight: normal;
+  color: #BCBCBC;
+}
 
+.resource-row:hover .org { color: #92B9BF; }
 
 table.ng-scope td .thumb {
     border: 1px solid #c1c1c1;
@@ -88,7 +91,6 @@ table.ng-scope td .thumb {
     height: 89px;
 }
 
-.rb-type-selector { width: 600px; }
 .rb-type-selector ul {
   list-style: none;
   margin: 0;

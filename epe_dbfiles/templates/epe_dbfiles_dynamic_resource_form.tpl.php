@@ -1,5 +1,6 @@
-<div style="background-color: #c8d5de;padding:23px;margin-bottom:20px;">
-<div style="border: 1px solid #0195bd;background-color: #fff;padding:20px 31px;">
+<div class="clearfix">
+
+<div class="form-help"><a href="<?php echo drupal_get_path_alias('node/51'); ?>" target="_blank">Help with this form</a></div>
 
 <?php echo drupal_render($form['mode']); ?>
 
@@ -11,5 +12,4 @@
   </div>
 <?php endforeach; ?>
 
-</div>
 </div>

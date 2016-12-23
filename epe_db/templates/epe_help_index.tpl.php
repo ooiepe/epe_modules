@@ -17,10 +17,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -35,10 +31,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -53,10 +45,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -71,10 +59,6 @@ label a { color: #ac7f25; }
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();
@@ -86,20 +70,16 @@ label a { color: #ac7f25; }
   <div class="span4">
     <div class="control-group">
       <form action="<?php echo base_path(); ?>help/search" method="get">
-        <input name="search" size="40" /><button class="btn btn-small btn-primary">Search</button>
+        <input name="search" class="search-field" size="30" placeholder="Search Knowledge Base" /><button class="btn btn-small btn-primary">Search</button>
       </form>
     </div>
     <div class="control-group">
-      <label><?php echo l('Common Issues','help'); ?></label>
+      <label><?php echo l('Common Issues','help/ci'); ?></label>
       <?php
-      $display_name = 'kb';
+      $display_name = 'ci';
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
-      $pager = $view->display_handler->get_option('pager');
-      $pager['type'] = 'some';
-      $pager['options']['items_per_page'] = '5';
-      $view->display_handler->override_option('pager', $pager);
 
       $view->pre_execute();
       $view->execute();

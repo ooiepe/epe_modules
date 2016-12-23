@@ -12,9 +12,9 @@ define(['app'], function(app) {
       },
       link: function (scope, elem, attrs) {
         var template = '', element_ck = '', link_target = '_self', row_status = '', date_sort_data = scope.row.last_updated;
-        var favorite_users = scope.row.flag_user.split(',');    
+        var favorite_users = scope.row.flag_user.split(',');
         var is_favorite = _.find(favorite_users, function(user) {
-          return user.trim() == Drupal.settings.user.username; 
+          return user.trim() == Drupal.settings.user.username;
         });
         if(Drupal.settings.resourceBrowser.editmode) {
           element_ck = '<div style="float:left;"><input type="checkbox" style="margin-right:0;position:absolute;" name="nid" ng-click="updateResourceSelection('+ scope.row.id +')" ng-checked="isChecked()" data-type="' + scope.type + '" value="' + scope.row.id + '"></div>';
@@ -56,7 +56,7 @@ define(['app'], function(app) {
         template += '</a>';
 
         if (scope.row.org)
-          template += '<br/>(' + scope.row.org + ')';
+          template += '<div class="org">' + scope.row.org + '</div>';
 
         // end the author cell
         template += '</div></td>';

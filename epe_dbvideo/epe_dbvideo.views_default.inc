@@ -57,10 +57,12 @@ function epe_dbvideo_views_default_views() {
   $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php']['php_output'] = '<?php
+          $thumbnail = base_path() . drupal_get_path(\'theme\',\'epe_theme\') . \'/images/no_thumb_small.jpg\';
           $node = node_load($data->entity);
           $image = field_get_items(\'node\', $node, \'field_video_resource_file\');
           //if(!empty($image[0][\'thumbnailfile\'])) echo theme(\'image_style\', array(\'style_name\' => \'resource_browser_thumbnail\', \'path\' => $image[0][\'thumbnailfile\']->uri));
-          if(!empty($image[0][\'thumbnailfile\'])) echo image_style_url(\'resource_browser_thumbnail\', $image[0][\'thumbnailfile\']->uri);
+          if(!empty($image[0][\'thumbnailfile\'])) $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[0][\'thumbnailfile\']->uri);
+          echo $thumbnail;
       ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';

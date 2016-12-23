@@ -133,23 +133,25 @@ function epe_dbdocument_form_alter(&$form, &$form_state, $form_id) {
     $form['field_public_status']['#type'] = 'hidden';
     $form['field_document_resource_file']['#weight'] = -10;
     $form['field_document_resource_file']['und'][0]['#title'] = 'Document Resource File';
-    $form['field_document_resource_image']['und'][0]['#title'] = 'Document Thumbnail'; 
-    
+    $form['field_document_resource_image']['und'][0]['#title'] = 'Document Thumbnail';
+
     $form['#attached']['css'] = array(
       drupal_get_path('module', 'epe_dbdocument') . '/epe_dbdocument_form.css',
-    );    
+    );
 
     if(is_numeric(arg(1))) {
       $form['actions']['saveas'] = array(
         '#type'=>'submit',
         '#access'=>1,
-        '#value'=>t('Save As'),
+        '#value'=>t('Save As New'),
         '#weight'=>2,
-        '#submit'=>array(      
+        '#submit'=>array(
           'epe_dbdocument_save_as_submit',
           'node_form_submit',
         ),
       );
+
+      $form['actions']['submit']['#submit'][] = 'epe_dbdocument_custom_submission_handler';
     }
   }
 }
@@ -161,8 +163,27 @@ function epe_dbdocument_save_as_submit($form, &$form_state) {
   $form_state['node']->created = '';
   $form_state['node']->changed = '';
   $form_state['node']->is_new = 1;
+  $form_state['node']->date = '';
+  $form_state['node']->field_featured_status = array(
+    'und'=>array(
+      0=>array(
+        'value' => 'Not-Featured'
+      )
+    )
+  );
+  $form_state['node']->field_public_status = array(
+    'und'=>array(
+      0=>array(
+        'value' => 'Private'
+      )
+    )
+  );
   $form_state['values']['nid'] = '';
   $form_state['values']['vid'] = '';
+}
+
+function epe_dbdocument_custom_submission_handler($form, &$form_state) {
+  $form_state['redirect'] = 'node/' . $form['nid']['#value'];
 }
 
 /*

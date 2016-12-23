@@ -1,33 +1,32 @@
-<div class="rb-search-filter">
-<select ng-options="filter.label for filter in browser.resource_filters" ng-model="browser.resource_filter" ng-change="fn.changeViewMode()"></select>
+<div class="search_filter_options clearfix">
+  <div class="rb-search-filter clearfix">
+    <select ng-options="filter.label for filter in browser.resource_filters" ng-model="browser.resource_filter" ng-change="fn.changeViewMode()"></select>
 
-<form ng-submit="fn.searchTerm()">
-<div class="form-horizontal">
-<input type="text" ng-model="search.term" value="" placeholder="Search by Keyword"> <input type="submit" class="btn" value="Search">
+    <form ng-submit="fn.searchTerm()">
+    <div class="form-horizontal">
+    <input type="text" ng-model="search.term" value="" placeholder="Search by Keyword"> <input type="submit" class="btn" value="Search">
+    </div>
+    </form>
+  </div>
+
+  <div class="rb-type-selector clearfix">
+    <ul ng-show="browser.enabled_modules.length > 1" class="clearfix">
+      <li title="{{module.label}}" ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
+    </ul>
+  </div> <!-- /rb-type-selector -->
+  <div class="rb-ads" ng-show="!browser.selected_module.editmode">
+    <a href="{{browser.selected_module.adurl}}">
+      <img ng-src="{{browser.selected_module.adimagepath}}" width="247" height="65">
+    </a>
+  </div>  
 </div>
-</form>
-</div>
-
-<div class="rb-type-selector">
-  <ul ng-show="browser.enabled_modules.length > 1" class="clearfix">
-    <li title="{{module.label}}" ng-repeat="module in browser.enabled_modules" data-api="{{module.api}}" class="{{module.api}} {{module.activeClass}}" ng-click="fn.setActiveModule(module);"><span>({{module.total_rows}})</span></li>
-  </ul>
-
-<div class="rb-ads" ng-show="!browser.selected_module.editmode">
-  <a href="{{browser.selected_module.adurl}}">
-    <img ng-src="{{browser.selected_module.adimagepath}}" width="247" height="65">
-  </a>
-</div>
-</div> <!-- /rb-type-selector -->
-
-<br clear="all">
 
 <table>
   <thead>
-    <th><a ng-click="fn.sortResults('title')" ng-class="fn.selectedClass('title')">Title/Info</a></th>
+    <th><a ng-click="fn.sortResults('title')" ng-class="fn.selectedClass('title')">{{browser.selected_module.type}} Title/Info</a></th>
     <th width="134"><a ng-click="fn.sortResults('author')" ng-class="fn.selectedClass('author')">Author</a></th>
     <th width="134">
-      <a ng-click="fn.sortResults('created')" ng-class="fn.selectedClass('created')">Create Date</a> | <a ng-click="fn.sortResults('last_updated')" ng-class="fn.selectedClass('last_updated')">Modify Date</a>
+      <a ng-click="fn.sortResults('created')" ng-class="fn.selectedClass('created')">Create Date</a> <a ng-click="fn.sortResults('last_updated')" ng-class="fn.selectedClass('last_updated')">Modify Date</a>
     </th>
   </thead>
   <tbody>
@@ -38,11 +37,23 @@
       </td>
     </tr>
     <tr tabular-data ng-repeat="data in browser.data" date-sort="browser.date_sort"
-      row="data" type="browser.selected_module.api">
+      row="data" type="browser.selected_module.api" ng-class="['resource-row']">
     </tr>
   </tbody>
 </table>
 
 <div class="paging" ng-show="browser.selected_module.numberofpages > 1">
-  <span ng-repeat="n in [] | range:browser.selected_module.numberofpages"><a ng-click="fn.setCurrentPage(n+1)" ng-class="fn.setPageClass(n+1)">{{n+1}}</a></span>
+  <paging
+    class="small"
+    page="browser.selected_module.currentPage"
+    page-size="10"
+    total="browser.selected_module.total_rows"
+    show-prev-next="true"
+    show-first-last="true"
+    text-next-class="glyphicon glyphicon-chevron-right"
+    text-prev-class="glyphicon glyphicon-chevron-left"
+    text-first-class="glyphicon glyphicon-backward"
+    text-last-class="glyphicon glyphicon-forward"
+    paging-action="fn.setCurrentPage(page)">
+  </paging>
 </div>
