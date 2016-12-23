@@ -36,7 +36,7 @@ echo l(t('Embed Link'), '#',
     'attributes'=>array(
       'data-placement'=>'bottom',
       'rel'=>'tooltip',
-      'class'=>array('links','embed-link','popover-link'),
+      'class'=>array('btn','btn-primary','links','embed-link','popover-link'),
       'id'=>'embed-link-btn',
       'title'=>'Share this video',
       'trigger'=>'manual'

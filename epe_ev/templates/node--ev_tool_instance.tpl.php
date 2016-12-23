@@ -1,4 +1,5 @@
 <?php
+global $base_url;
   
   // include php file for epe_ev functions.
   include($_SERVER["DOCUMENT_ROOT"] . $GLOBALS["base_path"] . drupal_get_path('module', 'epe_ev') . "/inc/epe_ev_lib.php");
@@ -51,7 +52,26 @@
         if(arg(2) && arg(2) == 'vsembed') { /*if embed url hide */
         } else { ?>
       <div id="tool-functions">
+        <div class="clearfix">
         <button class="btn btn-primary" value="Export to Image" id="tool-function-export-image">Export to Image</button>
+        <div class="embed-container" style="float:right;">
+        <?php 
+        echo l(t('Embed Link'), '#',
+          array(
+            'attributes'=>array(
+              'data-placement'=>'bottom',
+              'rel'=>'tooltip',
+              'class'=>array('btn','embed-link','popover-link','btn-primary'),
+              'id'=>'embed-link-btn',
+              'title'=>'Share this visualization',
+              'trigger'=>'manual'
+            ),
+            'external'=>true
+          )
+        );
+        ?>
+        </div>
+        </div>
         <?php echo render($content['links']); ?>
       </div>
       <?php } //end if vsembed  ?>
@@ -80,6 +100,25 @@
 <script type="text/javascript">
 
 (function(){
+
+  $(function() {
+    $('#embed-link-btn')
+      .popover(
+        {
+          title: '<a style="float:right;margin-top:-9px;" href="#" onclick="closePopoverConfirm(\"embed-link-btn\"); return false;"><i class="icon-remove"></i></button>',
+          html: 'true',
+          placement: 'bottom',
+          content: 'Embed this visualization on your site using the following code.<br/><input type="text" class="input" style="width:100%;" value="<iframe width=\'560\' height=\'315\' src=\'<?php echo $base_url . '/ev/embed/' . arg(1); ?>\' frameborder=\'0\' allowfullscreen></iframe>">'
+        }
+      );    
+
+      $('.popover-link').click(function(event) {
+        event.preventDefault();
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+      });
+    });
 
   function svgToCanvas(){
     //load an svg snippet in the canvas

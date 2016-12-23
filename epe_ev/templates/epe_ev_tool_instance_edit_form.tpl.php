@@ -234,6 +234,12 @@ drupal_add_js( $EduVis_Paths["EduVis"]["javascript"]);
       return EduVis_extract();
     });
 
+    $('#edit-saveas').click(function(event) {
+      svgToCanvas();
+      canvasToImage();  
+      return EduVis_extract();
+    });
+
     // set the EduVis, tools, and resources paths
     EduVis.Environment.setPaths(
       '<?php echo $EduVis_Paths["EduVis"]["root"];?>', // eduvis

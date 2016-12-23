@@ -1244,6 +1244,13 @@ function epe_db_views_default_views() {
             if($images[0]) $thumbnail = $images[0]->thumbnail;
           }
         break;
+
+        case \'ev_tool_instance\':
+        $image = $wrapper->field_instance_thumbnail->value();
+        if($image) {
+          $thumbnail = image_style_url(\'resource_browser_thumbnail\', $image[\'uri\']);
+        }
+        break;
       }
       ?>    
       <img src="<?php echo $thumbnail; ?>" width="133" height="99" />';

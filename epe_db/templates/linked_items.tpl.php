@@ -78,7 +78,7 @@ if($isCopyFrom) {
 <?php if ($isUsedByOtherResources == 1 || $hasChildResources == 1 || $hasCopiesOf == 1 || $isCopyFrom == true): ?>
 <?php if($isCopyFrom == true): ?>
 <div class="section is_copy_from clearfix">
-  <div class="assoc_type clearfix" onclick="resource_assoc_toggle('is_copy_from');"><div class="arrow"></div><span>Is Copy From</span></div>
+  <div class="assoc_type clearfix" onclick="resource_assoc_toggle('is_copy_from');"><div class="arrow"></div><span>Parent Resource</span></div>
 </div>
 <div class="list is_copy_from row hide clearfix">
 <?php echo $resource_usage_view_copy_from->render(); ?>
@@ -151,13 +151,44 @@ if($isCopyFrom) {
 
   <?php if($copies_of_results->rowCount() > 0): ?>
   <div class="section copies clearfix">
-    <div class="assoc_type clearfix" onclick="resource_assoc_toggle('copies_of');"><div class="arrow"></div><span>Copies<span></div>
+    <div class="assoc_type clearfix" onclick="resource_assoc_toggle('copies_of');"><div class="arrow"></div><span>Adapted Resources<span></div>
     <div class="count_label">
       <?php echo $copies_of_public_qry_result->rowCount(); ?> public items (<?php echo $copies_of_results->rowCount(); ?> items)
     </div>
   </div>
   <div class="list copies_of row hide clearfix" data-count="<?php echo $copies_of_results->rowCount(); ?>">
-    <?php foreach($copies_of_results as $result): ?>
+    <?php
+  if($user->uid == $node->uid) {
+    $resource_usage_view_copy_from_not_public = views_get_view('resource_usage');
+    $resource_usage_view_copy_from_not_public->set_display('copy_from_nonpublic');
+
+    $filters = $resource_usage_view_copy_from_not_public->display_handler->get_option('filters');  
+    $filters['uid']['value'][] = $node->uid;
+    $filters['field_source_nid_value']['value']['value'] = $node->nid;
+    
+    $resource_usage_view_copy_from_not_public->display_handler->override_option('filters', $filters);
+
+    $resource_usage_view_copy_from_not_public->execute();
+  }
+  
+
+  $resource_usage_view_copy_from_public = views_get_view('resource_usage');
+  $resource_usage_view_copy_from_public->set_display('copy_from_public');
+
+  $filters = $resource_usage_view_copy_from_public->display_handler->get_option('filters');
+  $filters['field_source_nid_value']['value']['value'] = $node->nid;
+  
+  $resource_usage_view_copy_from_public->display_handler->override_option('filters', $filters);
+  
+  $resource_usage_view_copy_from_public->execute();
+
+  if(isset($resource_usage_view_copy_from_not_public) && count($resource_usage_view_copy_from_not_public->result) > 0) {
+    $resource_usage_view_copy_from_public->result = array_merge($resource_usage_view_copy_from_public->result,$resource_usage_view_copy_from_not_public->result);
+  }
+
+  echo $resource_usage_view_copy_from_public->preview();  
+    ?>
+    <?php /*foreach($copies_of_results as $result): ?>
     <?php $resource = node_load($result->parent); ?>
     <div class="span3 resource_item">
     <?php $thumbnail = base_path() . drupal_get_path('theme','epe_theme') . '/images/no_thumb_small.jpg'; //default thumb ?>
@@ -180,7 +211,7 @@ if($isCopyFrom) {
         <?php echo format_date($resource->changed, 'custom','n-d-y') ?>
       </div>
     </div>
-    <?php endforeach; ?>
+    <?php endforeach; */?>
   </div>
   <?php endif; ?>
 </div>

@@ -31,7 +31,7 @@ function epe_dbfiles_menu() {
   );
 
   $items['resource/add/%'] = array(
-    'title' => t('Create EPE File Resource'),
+    'title' => t('Add a New Resource'),
     'page callback' => 'epe_dbfiles_dynamic_resource_form',
     'page arguments' => array(2),
     'access callback' => 'user_access',
@@ -40,7 +40,7 @@ function epe_dbfiles_menu() {
   );
 
   $items['dialog/resource/add'] = array(
-    'title' => t('Create EPE File Resource'),
+    'title' => t('Add a New Resource'),
     'page callback' => 'epe_dbfiles_dynamic_resource_form',
     'access callback' => 'user_access',
     'access arguments' => array('epe dbfiles interface'),
@@ -48,7 +48,7 @@ function epe_dbfiles_menu() {
   );
 
   $items['dialog/resource/add/%'] = array(
-    'title' => t('Create EPE File Resource'),
+    'title' => t('Add a New Resource'),
     'page callback' => 'epe_dbfiles_dynamic_resource_form',
     'page arguments' => array(3),
     'access callback' => 'user_access',
@@ -57,7 +57,7 @@ function epe_dbfiles_menu() {
   );
 
   $items['dialog/resource/file/%/success'] = array(
-    'title' => t('File Resource Added'),
+    'title' => t('New Resource Added'),
     'page callback' => 'epe_dbfiles_adhoc_response',
     'page arguments' => array(3),
     'file' => 'epe_dbfiles.form.inc',

@@ -76,7 +76,7 @@ label a { color: #ac7f25; }
     <div class="control-group">
       <label><?php echo l('Common Issues','help/ci'); ?></label>
       <?php
-      $display_name = 'kb';
+      $display_name = 'ci';
       $remove_field = 'body';
       $view = views_get_view('knowledge_base_view');
       $view->set_display($display_name);
